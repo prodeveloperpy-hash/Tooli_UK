@@ -1,0 +1,216 @@
+import { Supplier, Product, Pricing, SearchResult } from '../types';
+
+export const suppliers: Supplier[] = [
+  {
+    id: '1',
+    name: 'London Plant Hire',
+    description: 'Leading equipment supplier in Greater London',
+    location: 'London',
+    rating: 4.8,
+    reviewCount: 247,
+    verified: true,
+    contactEmail: 'hire@londonplant.co.uk',
+    contactPhone: '020 7946 0958',
+    website: 'www.londonplant.co.uk',
+    yearEstablished: 2005,
+  },
+  {
+    id: '2',
+    name: 'Birmingham Equipment Solutions',
+    description: 'Premium construction equipment for the Midlands',
+    location: 'Birmingham',
+    rating: 4.6,
+    reviewCount: 189,
+    verified: true,
+    contactEmail: 'info@birminghamequip.co.uk',
+    contactPhone: '0121 496 0234',
+    website: 'www.birminghamequip.co.uk',
+    yearEstablished: 2010,
+  },
+  {
+    id: '3',
+    name: 'Manchester Machinery',
+    description: 'Reliable equipment hire across the North West',
+    location: 'Manchester',
+    rating: 4.7,
+    reviewCount: 312,
+    verified: true,
+    contactEmail: 'rentals@manchestermachinery.co.uk',
+    contactPhone: '0161 496 0789',
+    yearEstablished: 1998,
+  },
+  {
+    id: '4',
+    name: 'Bristol Plant & Tool Hire',
+    description: 'Southwest specialist equipment provider',
+    location: 'Bristol',
+    rating: 4.5,
+    reviewCount: 156,
+    verified: true,
+    contactEmail: 'hire@bristolplant.co.uk',
+    contactPhone: '0117 496 0321',
+    yearEstablished: 2012,
+  },
+  {
+    id: '5',
+    name: 'Leeds Equipment Rentals',
+    description: 'Yorkshire\'s trusted equipment hire partner',
+    location: 'Leeds',
+    rating: 4.9,
+    reviewCount: 298,
+    verified: true,
+    contactEmail: 'rentals@leedsequipment.co.uk',
+    contactPhone: '0113 496 0654',
+    yearEstablished: 2003,
+  },
+];
+
+export const products: Product[] = [
+  {
+    id: 'p1',
+    name: '1.5 Ton Mini Digger',
+    category: 'Mini Diggers',
+    description: 'Compact excavator perfect for small construction sites',
+    image: 'https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=800&q=80',
+    specifications: {
+      weight: '1.5 tons',
+      digDepth: '2.3m',
+      reach: '3.8m',
+    },
+    supplierId: '1',
+  },
+  {
+    id: 'p2',
+    name: '3 Ton Mini Digger',
+    category: 'Mini Diggers',
+    description: 'Versatile mini excavator for medium projects',
+    image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80',
+    specifications: {
+      weight: '3 tons',
+      digDepth: '2.9m',
+      reach: '4.5m',
+    },
+    supplierId: '2',
+  },
+  {
+    id: 'p3',
+    name: '13 Ton Excavator',
+    category: 'Excavators',
+    description: 'Heavy-duty excavator for large construction sites',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80',
+    specifications: {
+      weight: '13 tons',
+      digDepth: '4.2m',
+      reach: '6.8m',
+    },
+    supplierId: '3',
+  },
+  {
+    id: 'p4',
+    name: '6 Ton Dumper',
+    category: 'Dumpers',
+    description: 'Robust site dumper for material transport',
+    image: 'https://images.unsplash.com/photo-1581093458791-9d42e1b6b7d6?w=800&q=80',
+    specifications: {
+      capacity: '6 tons',
+      skip: '2.5m³',
+      power: '68hp',
+    },
+    supplierId: '4',
+  },
+  {
+    id: 'p5',
+    name: '20kVA Generator',
+    category: 'Generators',
+    description: 'Portable diesel generator for site power',
+    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80',
+    specifications: {
+      output: '20kVA',
+      fuel: 'Diesel',
+      runtime: '10 hours',
+    },
+    supplierId: '5',
+  },
+  {
+    id: 'p6',
+    name: '100kVA Generator',
+    category: 'Generators',
+    description: 'Industrial generator for large projects',
+    image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?w=800&q=80',
+    specifications: {
+      output: '100kVA',
+      fuel: 'Diesel',
+      runtime: '24 hours',
+    },
+    supplierId: '1',
+  },
+  {
+    id: 'p7',
+    name: 'Scaffolding Tower (5m)',
+    category: 'Scaffolding',
+    description: 'Mobile aluminium scaffolding tower',
+    image: 'https://images.unsplash.com/photo-1597476554842-f5f7c2f8b0f2?w=800&q=80',
+    specifications: {
+      height: '5m',
+      platform: '1.8m x 0.7m',
+      material: 'Aluminium',
+    },
+    supplierId: '2',
+  },
+  {
+    id: 'p8',
+    name: 'Telehandler 17m',
+    category: 'Telehandlers',
+    description: 'High-reach telehandler with 3-ton capacity',
+    image: 'https://images.unsplash.com/photo-1581093196867-ca3dba3c846b?w=800&q=80',
+    specifications: {
+      lift: '17m',
+      capacity: '3 tons',
+      power: '100hp',
+    },
+    supplierId: '3',
+  },
+];
+
+export const pricing: Pricing[] = [
+  { id: 'pr1', productId: 'p1', supplierId: '1', dailyRate: 65, weeklyRate: 280, monthlyRate: 950, deliveryFee: 45, location: 'London', available: true },
+  { id: 'pr2', productId: 'p2', supplierId: '2', dailyRate: 85, weeklyRate: 350, monthlyRate: 1200, deliveryFee: 50, location: 'Birmingham', available: true },
+  { id: 'pr3', productId: 'p3', supplierId: '3', dailyRate: 180, weeklyRate: 750, monthlyRate: 2800, deliveryFee: 120, location: 'Manchester', available: true },
+  { id: 'pr4', productId: 'p4', supplierId: '4', dailyRate: 95, weeklyRate: 380, monthlyRate: 1350, deliveryFee: 60, location: 'Bristol', available: true },
+  { id: 'pr5', productId: 'p5', supplierId: '5', dailyRate: 55, weeklyRate: 220, monthlyRate: 750, deliveryFee: 35, location: 'Leeds', available: true },
+  { id: 'pr6', productId: 'p6', supplierId: '1', dailyRate: 145, weeklyRate: 580, monthlyRate: 2100, deliveryFee: 85, location: 'London', available: true },
+  { id: 'pr7', productId: 'p7', supplierId: '2', dailyRate: 35, weeklyRate: 140, monthlyRate: 480, deliveryFee: 25, location: 'Birmingham', available: true },
+  { id: 'pr8', productId: 'p8', supplierId: '3', dailyRate: 165, weeklyRate: 660, monthlyRate: 2400, deliveryFee: 95, location: 'Manchester', available: true },
+  { id: 'pr9', productId: 'p1', supplierId: '2', dailyRate: 68, weeklyRate: 295, monthlyRate: 980, deliveryFee: 45, location: 'Birmingham', available: true },
+  { id: 'pr10', productId: 'p2', supplierId: '3', dailyRate: 82, weeklyRate: 340, monthlyRate: 1150, deliveryFee: 48, location: 'Manchester', available: true },
+];
+
+export const searchResults: SearchResult[] = pricing.map((price) => {
+  const product = products.find((p) => p.id === price.productId)!;
+  const supplier = suppliers.find((s) => s.id === price.supplierId)!;
+
+  return {
+    id: price.id,
+    productName: product.name,
+    productImage: product.image,
+    category: product.category,
+    weeklyPrice: price.weeklyRate,
+    dailyPrice: price.dailyRate,
+    supplierName: supplier.name,
+    supplierLocation: price.location,
+    supplierRating: supplier.rating,
+    supplierId: supplier.id,
+    productId: product.id,
+    verified: supplier.verified,
+    deliveryFee: price.deliveryFee,
+  };
+});
+
+export const categories = [
+  { name: 'Mini Diggers', icon: '🚜', count: 45 },
+  { name: 'Excavators', icon: '⚒️', count: 38 },
+  { name: 'Dumpers', icon: '🚛', count: 29 },
+  { name: 'Generators', icon: '⚡', count: 52 },
+  { name: 'Scaffolding', icon: '🏗️', count: 67 },
+  { name: 'Telehandlers', icon: '🏋️', count: 24 },
+];
