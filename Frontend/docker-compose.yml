@@ -1,12 +1,39 @@
-version: '3.8'
+name: Deploy to Cloud Run
 
-services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  REGION: asia-south1
+  SERVICE: frontend-service
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_KEY }}
+
+      - name: Setup GCloud
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Build & Push Docker Image
+        run: |
+          gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy $SERVICE \
+            --image gcr.io/$PROJECT_ID/$SERVICE \
+            --region $REGION \
+            --platform managed \
+            --allow-unauthenticated
