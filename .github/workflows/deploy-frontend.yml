@@ -9,6 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      GCP_KEY: ${{ secrets.GCP_KEY }}
       WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
       WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}
     permissions:
@@ -19,40 +20,59 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Validate Workload Identity configuration
+      - name: Validate GCP auth configuration
         run: |
-          if [ -z "$WIF_PROVIDER" ] || [ -z "$WIF_SERVICE_ACCOUNT" ]; then
-            echo "Missing WIF config. Set both WIF_PROVIDER and WIF_SERVICE_ACCOUNT secrets."
+          if [ -z "$GCP_KEY" ] && { [ -z "$WIF_PROVIDER" ] || [ -z "$WIF_SERVICE_ACCOUNT" ]; }; then
+            echo "Missing auth config. Set GCP_KEY or set both WIF_PROVIDER and WIF_SERVICE_ACCOUNT."
             exit 1
           fi
 
       - name: Authenticate to GCP (Workload Identity)
+        if: ${{ env.WIF_PROVIDER != '' && env.WIF_SERVICE_ACCOUNT != '' }}
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ env.WIF_PROVIDER }}
           service_account: ${{ env.WIF_SERVICE_ACCOUNT }}
+
+      - name: Authenticate to GCP (Service Account Key fallback)
+        if: ${{ env.WIF_PROVIDER == '' && env.WIF_SERVICE_ACCOUNT == '' && env.GCP_KEY != '' }}
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ env.GCP_KEY }}
 
       - name: Setup GCloud
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: tooli-uk
 
-      - name: Login to GCR
+      - name: Ensure Artifact Registry repository exists
         run: |
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
+          gcloud artifacts repositories describe frontend-repo \
+            --location=asia-south1 \
+            --project=tooli-uk \
+            >/dev/null 2>&1 || \
+          gcloud artifacts repositories create frontend-repo \
+            --repository-format=docker \
+            --location=asia-south1 \
+            --description="Frontend Docker images" \
+            --project=tooli-uk
+
+      - name: Login to Artifact Registry
+        run: |
+          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-south1-docker.pkg.dev
 
       - name: Build Docker Image
         run: |
-          docker build -t gcr.io/tooli-uk/frontend-service Frontend
+          docker build -t asia-south1-docker.pkg.dev/tooli-uk/frontend-repo/frontend-service:latest Frontend
 
       - name: Push Docker Image
         run: |
-          docker push gcr.io/tooli-uk/frontend-service
+          docker push asia-south1-docker.pkg.dev/tooli-uk/frontend-repo/frontend-service:latest
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy frontend-service \
-            --image gcr.io/tooli-uk/frontend-service \
+            --image asia-south1-docker.pkg.dev/tooli-uk/frontend-repo/frontend-service:latest \
             --region asia-south1 \
             --platform managed \
             --allow-unauthenticated
