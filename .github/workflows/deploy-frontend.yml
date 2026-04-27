@@ -9,7 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      GCP_KEY: ${{ secrets.GCP_KEY }}
       WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
       WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}
     permissions:
@@ -20,21 +19,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Validate GCP auth configuration
+      - name: Validate Workload Identity configuration
         run: |
-          if [ -z "$GCP_KEY" ] && [ -z "$WIF_PROVIDER" ]; then
-            echo "Missing auth secrets. Set GCP_KEY OR set both WIF_PROVIDER and WIF_SERVICE_ACCOUNT."
+          if [ -z "$WIF_PROVIDER" ] || [ -z "$WIF_SERVICE_ACCOUNT" ]; then
+            echo "Missing WIF config. Set both WIF_PROVIDER and WIF_SERVICE_ACCOUNT secrets."
             exit 1
           fi
 
-      - name: Authenticate to GCP (Service Account Key)
-        if: ${{ env.GCP_KEY != '' }}
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ env.GCP_KEY }}
-
       - name: Authenticate to GCP (Workload Identity)
-        if: ${{ env.GCP_KEY == '' && env.WIF_PROVIDER != '' && env.WIF_SERVICE_ACCOUNT != '' }}
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ env.WIF_PROVIDER }}
@@ -45,9 +37,9 @@ jobs:
         with:
           project_id: tooli-uk
 
-      - name: Configure Docker for GCR
+      - name: Login to GCR
         run: |
-          gcloud auth configure-docker --quiet
+          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
 
       - name: Build Docker Image
         run: |
