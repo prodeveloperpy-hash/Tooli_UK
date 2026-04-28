@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 
 from tooli_uk_app.views.auth import LoginAPIView, SignupAPIView
+from tooli_uk_app.views.equipment_create import CreateEquipmentAPIView
 from tooli_uk_app.views.interval import IntervalViewSet
 
 
@@ -13,4 +14,5 @@ __all__ = (
     "IntervalViewSet",
     "SignupAPIView",
     "LoginAPIView",
+    "CreateEquipmentAPIView",
 )

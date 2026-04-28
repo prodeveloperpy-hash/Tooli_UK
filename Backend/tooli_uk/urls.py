@@ -11,6 +11,7 @@ from tooli_uk_app.views.equipment_availablility import EquipmentAvailabilityView
 from tooli_uk_app.views.equipment_image import EquipmentImageViewSet
 from tooli_uk_app.views.equipment_location import EquipmentLocationViewSet
 from tooli_uk_app.views.equipment_price import EquipmentPriceViewSet
+from tooli_uk_app.views.equipment_create import CreateEquipmentAPIView
 from tooli_uk_app.views.interval import IntervalViewSet
 from tooli_uk_app.views.location import LocationViewSet
 from tooli_uk_app.views.organization import OrganizationViewSet
@@ -38,5 +39,6 @@ urlpatterns = [
     path("health/", health, name="health"),
     path("signup/", SignupAPIView.as_view(), name="signup"),
     path("login/", LoginAPIView.as_view(), name="login"),
+    path("create_equipment/", CreateEquipmentAPIView.as_view(), name="create_equipment"),
     path("", include(router.urls)),
 ]

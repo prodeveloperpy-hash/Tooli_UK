@@ -29,7 +29,12 @@ class SignupSerializer(serializers.Serializer):
     organization_country = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=100)
     organization_is_active = serializers.BooleanField(required=False, default=True)
 
-    user_organization_role_id = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=100)
+    user_organization_role_id = serializers.IntegerField(required=False, allow_null=True)
+    def validate_user_organization_role_id(self, value):
+        if value is not None and not Role.objects.filter(role_id=value).exists():
+            raise serializers.ValidationError("Invalid user_organization_role_id.")
+        return value
+
 
     def validate_email(self, value: str) -> str:
         if User.objects.filter(email__iexact=value).exists():
@@ -94,7 +99,7 @@ class SignupSerializer(serializers.Serializer):
         UserOrganization.objects.create(
             user_id_id=user.user_id,
             organization_id_id=organization.organization_id,
-            role_id=user_org_role if user_org_role else str(resolved_role_id),
+            role_id_id=user_org_role if user_org_role is not None else resolved_role_id,
             is_active=True,
             created_datetime=now,
             updated_datetime=now,

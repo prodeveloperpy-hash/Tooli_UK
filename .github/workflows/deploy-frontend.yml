@@ -15,6 +15,11 @@ jobs:
       GCP_KEY: ${{ secrets.GCP_KEY }}
       WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
       WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      PROJECT_ID: project-ad3f785e-ea3f-4bb9-927
+      REGION: us-central1
+      REPOSITORY: frontend-repo
+      SERVICE_NAME: frontend-service
+      IMAGE_NAME: frontend-service
     permissions:
       contents: read
       id-token: write
@@ -46,36 +51,36 @@ jobs:
       - name: Setup GCloud
         uses: google-github-actions/setup-gcloud@v1
         with:
-          project_id: tooli-uk
+          project_id: ${{ env.PROJECT_ID }}
 
       - name: Ensure Artifact Registry repository exists
         run: |
-          gcloud artifacts repositories describe frontend-repo \
-            --location=asia-south1 \
-            --project=tooli-uk \
+          gcloud artifacts repositories describe "$REPOSITORY" \
+            --location="$REGION" \
+            --project="$PROJECT_ID" \
             >/dev/null 2>&1 || \
-          gcloud artifacts repositories create frontend-repo \
+          gcloud artifacts repositories create "$REPOSITORY" \
             --repository-format=docker \
-            --location=asia-south1 \
+            --location="$REGION" \
             --description="Frontend Docker images" \
-            --project=tooli-uk
+            --project="$PROJECT_ID"
 
       - name: Login to Artifact Registry
         run: |
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-south1-docker.pkg.dev
+          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin "https://$REGION-docker.pkg.dev"
 
       - name: Build Docker Image
         run: |
-          docker build -t asia-south1-docker.pkg.dev/tooli-uk/frontend-repo/frontend-service:latest Frontend
+          docker build -t "$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME:latest" Frontend
 
       - name: Push Docker Image
         run: |
-          docker push asia-south1-docker.pkg.dev/tooli-uk/frontend-repo/frontend-service:latest
+          docker push "$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME:latest"
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy frontend-service \
-            --image asia-south1-docker.pkg.dev/tooli-uk/frontend-repo/frontend-service:latest \
-            --region asia-south1 \
+          gcloud run deploy "$SERVICE_NAME" \
+            --image "$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME:latest" \
+            --region "$REGION" \
             --platform managed \
             --allow-unauthenticated

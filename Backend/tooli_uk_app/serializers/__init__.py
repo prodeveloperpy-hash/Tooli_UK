@@ -1,5 +1,6 @@
 from tooli_uk_app.serializers.category import CategorySerializer
 from tooli_uk_app.serializers.equipment import EquipmentSerializer
+from tooli_uk_app.serializers.equipment_create import CreateEquipmentSerializer
 from tooli_uk_app.serializers.equipment_availablility import EquipmentAvailabilitySerializer
 from tooli_uk_app.serializers.equipment_image import EquipmentImageSerializer
 from tooli_uk_app.serializers.equipment_location import EquipmentLocationSerializer
@@ -15,6 +16,7 @@ from tooli_uk_app.serializers.user_organization import UserOrganizationSerialize
 __all__ = (
     "CategorySerializer",
     "EquipmentSerializer",
+    "CreateEquipmentSerializer",
     "EquipmentAvailabilitySerializer",
     "EquipmentImageSerializer",
     "EquipmentLocationSerializer",

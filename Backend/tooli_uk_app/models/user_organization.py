@@ -2,13 +2,14 @@ from django.db import models
 
 from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.user import User
+from tooli_uk_app.models.role import Role
 
 
 class UserOrganization(models.Model):
     user_organization_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="user_id", related_name="organization_links")
     organization_id = models.ForeignKey(Organization, on_delete=models.DO_NOTHING, db_column="organization_id", related_name="user_links")
-    role_id = models.CharField(max_length=100, null=True, blank=True)
+    role_id = models.ForeignKey(Role, on_delete=models.DO_NOTHING, db_column="role_id", related_name="user_organizations")
     created_datetime = models.DateTimeField(null=True, blank=True)
     updated_datetime = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="created_by", null=True, blank=True, related_name="user_organizations_created")
