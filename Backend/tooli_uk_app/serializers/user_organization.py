@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from tooli_uk_app.models import UserOrganization
 class UserOrganizationUserDetailSerializer(serializers.Serializer):
-    user_id = serializers.IntegerField(read_only=True)
     first_name = serializers.CharField(read_only=True)
     last_name = serializers.CharField(read_only=True)
     email = serializers.EmailField(read_only=True)
@@ -11,7 +10,6 @@ class UserOrganizationUserDetailSerializer(serializers.Serializer):
 
 
 class UserOrganizationOrganizationDetailSerializer(serializers.Serializer):
-    organization_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(read_only=True)
     domain = serializers.CharField(read_only=True, allow_null=True)
     city = serializers.CharField(read_only=True, allow_null=True)
@@ -21,7 +19,6 @@ class UserOrganizationOrganizationDetailSerializer(serializers.Serializer):
 
 
 class UserOrganizationRoleDetailSerializer(serializers.Serializer):
-    role_id = serializers.IntegerField(read_only=True)
     role_key = serializers.CharField(read_only=True)
     role_display_name = serializers.CharField(read_only=True)
 
