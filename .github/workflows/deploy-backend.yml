@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GCP_KEY: ${{ secrets.GCP_KEY }}
-      WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
-      WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      WIF_PROVIDER: projects/961815749151/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+      WIF_SERVICE_ACCOUNT: deploy-service-account@project-ad3f785e-ea3f-4bb9-927.iam.gserviceaccount.com
       PROJECT_ID: project-ad3f785e-ea3f-4bb9-927
       REGION: us-central1
       REPOSITORY: backend-repo
