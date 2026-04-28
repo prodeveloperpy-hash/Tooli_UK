@@ -15,6 +15,7 @@ from tooli_uk_app.views.interval import IntervalViewSet
 from tooli_uk_app.views.location import LocationViewSet
 from tooli_uk_app.views.organization import OrganizationViewSet
 from tooli_uk_app.views.role import RoleViewSet
+from tooli_uk_app.views.auth import LoginAPIView, SignupAPIView
 from tooli_uk_app.views.user import UserViewSet
 from tooli_uk_app.views.user_organization import UserOrganizationViewSet
 
@@ -35,5 +36,7 @@ router.register("equipment-price", EquipmentPriceViewSet, basename="equipment-pr
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("health/", health, name="health"),
+    path("signup/", SignupAPIView.as_view(), name="signup"),
+    path("login/", LoginAPIView.as_view(), name="login"),
     path("", include(router.urls)),
 ]

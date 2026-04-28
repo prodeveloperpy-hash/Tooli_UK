@@ -8,6 +8,7 @@ from tooli_uk_app.serializers.interval import IntervalSerializer
 from tooli_uk_app.serializers.location import LocationSerializer
 from tooli_uk_app.serializers.organization import OrganizationSerializer
 from tooli_uk_app.serializers.role import RoleSerializer
+from tooli_uk_app.serializers.auth import LoginSerializer, SignupSerializer
 from tooli_uk_app.serializers.user import UserSerializer
 from tooli_uk_app.serializers.user_organization import UserOrganizationSerializer
 
@@ -22,6 +23,8 @@ __all__ = (
     "LocationSerializer",
     "OrganizationSerializer",
     "RoleSerializer",
+    "SignupSerializer",
+    "LoginSerializer",
     "UserSerializer",
     "UserOrganizationSerializer",
 )
