@@ -7,19 +7,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
-    "dev-only-change-in-production-not-secret",
+    "replace-this-with-a-strong-static-secret-key",
 )
 
-DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() in ("1", "true", "yes")
+DEBUG = False
 
-ALLOWED_HOSTS = [
-    h.strip()
-    for h in os.environ.get(
-        "DJANGO_ALLOWED_HOSTS",
-        "localhost,127.0.0.1,testserver",
-    ).split(",")
-    if h.strip()
-]
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
