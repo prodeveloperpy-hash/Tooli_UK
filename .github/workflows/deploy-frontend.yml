@@ -8,6 +8,7 @@ on:
       - "Frontend/**"
       - ".github/workflows/deploy-frontend.yml"
 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

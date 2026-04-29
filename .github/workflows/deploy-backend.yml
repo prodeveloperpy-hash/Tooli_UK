@@ -39,7 +39,6 @@ jobs:
         with:
           workload_identity_provider: ${{ env.WIF_PROVIDER }}
           service_account: ${{ env.WIF_SERVICE_ACCOUNT }}
-
       - name: Authenticate to GCP (Service Account Key fallback)
         if: ${{ env.WIF_PROVIDER == '' && env.WIF_SERVICE_ACCOUNT == '' && env.GCP_KEY != '' }}
         uses: google-github-actions/auth@v2
