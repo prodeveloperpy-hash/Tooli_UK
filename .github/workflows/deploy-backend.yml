@@ -69,3 +69,7 @@ jobs:
             --region "$REGION" \
             --platform managed \
             --allow-unauthenticated
+
+
+
+

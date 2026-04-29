@@ -70,3 +70,6 @@ jobs:
             --platform managed \
             --port 80 \
             --allow-unauthenticated
+
+
+
