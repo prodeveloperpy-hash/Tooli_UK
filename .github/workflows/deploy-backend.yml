@@ -61,12 +61,6 @@ jobs:
           docker push "$IMAGE_BASE:$GITHUB_SHA"
           docker push "$IMAGE_BASE:latest"
 
-      - name: Run Django migrations
-        run: |
-          IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME:$GITHUB_SHA"
-          docker pull "$IMAGE"
-          docker run --rm "$IMAGE" python manage.py migrate --noinput
-
       - name: Deploy to Cloud Run
         run: |
           IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME:$GITHUB_SHA"
