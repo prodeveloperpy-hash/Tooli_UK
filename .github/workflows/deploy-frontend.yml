@@ -64,7 +64,6 @@ jobs:
             --location="$REGION" \
             --description="Frontend Docker images" \
             --project="$PROJECT_ID"
-
       - name: Login to Artifact Registry
         run: |
           gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin "https://$REGION-docker.pkg.dev"
