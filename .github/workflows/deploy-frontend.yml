@@ -82,3 +82,5 @@ jobs:
             --region "$REGION" \
             --platform managed \
             --allow-unauthenticated
+
+# Trigger manual deploy
