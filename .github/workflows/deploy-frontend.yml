@@ -8,13 +8,18 @@ on:
       - "Frontend/**"
       - ".github/workflows/deploy-frontend.yml"
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
+    env:
+      PROJECT_ID: project-ad3f785e-ea3f-4bb9-927
+      REGION: us-central1
+      REPOSITORY: frontend-repo
+      SERVICE_NAME: frontend-service
+      IMAGE_NAME: frontend-service
 
     steps:
       - name: Checkout Code
@@ -23,18 +28,45 @@ jobs:
       - name: Authenticate to GCP (Workload Identity)
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/961815749151/locations/global/workloadIdentityPools/github-pool/providers/github'
-          service_account: 'deploy-service-account@project-ad3f785e-ea3f-4bb9-927.iam.gserviceaccount.com'
+          workload_identity_provider: projects/961815749151/locations/global/workloadIdentityPools/github-pool/providers/github
+          service_account: deploy-service-account@project-ad3f785e-ea3f-4bb9-927.iam.gserviceaccount.com
 
       - name: Setup GCloud
-        uses: google-github-actions/setup-gcloud@v1
+        uses: google-github-actions/setup-gcloud@v2
         with:
-          project_id: 'project-ad3f785e-ea3f-4bb9-927'
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Ensure Artifact Registry repository exists
+        run: |
+          gcloud artifacts repositories describe "$REPOSITORY" \
+            --location="$REGION" \
+            --project="$PROJECT_ID" \
+            >/dev/null 2>&1 || \
+          gcloud artifacts repositories create "$REPOSITORY" \
+            --repository-format=docker \
+            --location="$REGION" \
+            --description="Frontend Docker images" \
+            --project="$PROJECT_ID"
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
+
+      - name: Build and push image
+        run: |
+          IMAGE_BASE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME"
+          docker build \
+            -t "$IMAGE_BASE:$GITHUB_SHA" \
+            -t "$IMAGE_BASE:latest" \
+            Frontend
+          docker push "$IMAGE_BASE:$GITHUB_SHA"
+          docker push "$IMAGE_BASE:latest"
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy frontend-service \
-            --image us-central1-docker.pkg.dev/project-ad3f785e-ea3f-4bb9-927/frontend-repo/frontend-service:latest \
-            --region us-central1 \
+          IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME:$GITHUB_SHA"
+          gcloud run deploy "$SERVICE_NAME" \
+            --image "$IMAGE" \
+            --region "$REGION" \
             --platform managed \
+            --port 80 \
             --allow-unauthenticated
