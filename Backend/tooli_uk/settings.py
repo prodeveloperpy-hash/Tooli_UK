@@ -67,7 +67,7 @@ DATABASES = {
         "HOST": "35.239.103.53",
         "PORT": "5432",
         "OPTIONS": {
-            "options": "-c search_path=portal,public",
+            "options": "-c search_path=portal",
             "connect_timeout": 50,
         },
     }
