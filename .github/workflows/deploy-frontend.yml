@@ -55,6 +55,7 @@ jobs:
         run: |
           IMAGE_BASE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME"
           docker build \
+            --build-arg VITE_API_URL="https://backend-service-961815749151.us-central1.run.app/" \
             -t "$IMAGE_BASE:$GITHUB_SHA" \
             -t "$IMAGE_BASE:latest" \
             Frontend

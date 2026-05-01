@@ -79,3 +79,35 @@ export interface SearchFilters {
   verified?: boolean;
   categories?: string[];
 }
+
+export interface SignupRequest {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  avatar_url: string | null;
+  is_active: boolean;
+  organization_name: string;
+  organization_domain: string;
+  organization_logo: string | null;
+  organization_address1: string;
+  organization_address2: string;
+  organization_city: string;
+  organization_state: string;
+  organization_postal_code: string;
+  organization_country: string;
+  organization_is_active: boolean;
+  user_organization_role_id: number;
+}
+
+export interface AuthResponse {
+  message: string;
+  user: User;
+  access_token?: string;
+  token_type?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}

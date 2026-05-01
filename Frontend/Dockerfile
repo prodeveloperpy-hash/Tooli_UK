@@ -12,6 +12,10 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
+# Pass backend URL as a build argument
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+
 # Build the application
 RUN npm run build
 
