@@ -1,22 +1,52 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Eye, EyeOff } from 'lucide-react';
-import { useState } from 'react';
+import { authApi } from '../../context/auth.api';
 
 export function LoginPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(location.state?.message || null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
+    setError(null);
+    setSuccessMessage(null);
+    setIsLoading(true);
+
+    try {
+      const response = await authApi.login(formData);
+      // Store token if returned
+      if (response.access_token) {
+        localStorage.setItem('token', response.access_token);
+      }
+      navigate('/dashboard'); // Or wherever after login
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-background relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col items-center justify-start bg-background relative py-12 px-4 overflow-x-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/10 rounded-full blur-[120px]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-primary/5 rounded-full blur-[120px]" />
@@ -36,6 +66,16 @@ export function LoginPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-3 rounded-md animate-in fade-in zoom-in duration-300">
+                {error}
+              </div>
+            )}
+            {successMessage && (
+              <div className="bg-brand-success/10 border border-brand-success/20 text-brand-success text-sm p-3 rounded-md animate-in fade-in zoom-in duration-300">
+                {successMessage}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email">Email address</Label>
               <div className="relative">
@@ -43,6 +83,8 @@ export function LoginPage() {
                   id="email" 
                   type="email" 
                   placeholder="name@example.com" 
+                  value={formData.email}
+                  onChange={handleChange}
                   className="bg-background/50 border-border/50 focus-visible:ring-brand-primary transition-all duration-200"
                   required 
                 />
@@ -59,6 +101,8 @@ export function LoginPage() {
                 <Input 
                   id="password" 
                   type={showPassword ? "text" : "password"} 
+                  value={formData.password}
+                  onChange={handleChange}
                   className="bg-background/50 border-border/50 focus-visible:ring-brand-primary transition-all duration-200 pr-10"
                   required 
                 />
@@ -71,8 +115,17 @@ export function LoginPage() {
                 </button>
               </div>
             </div>
-            <Button type="submit" className="w-full bg-brand-primary hover:bg-brand-primary-hover text-white h-11 text-base font-semibold transition-all duration-300 shadow-lg shadow-brand-primary/20">
-              Sign In
+            <Button 
+              type="submit" 
+              disabled={isLoading}
+              className="w-full bg-brand-primary hover:bg-brand-primary-hover text-white h-11 text-base font-semibold transition-all duration-300 shadow-lg shadow-brand-primary/20"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Signing In...
+                </div>
+              ) : 'Sign In'}
             </Button>
           </form>
         </CardContent>
