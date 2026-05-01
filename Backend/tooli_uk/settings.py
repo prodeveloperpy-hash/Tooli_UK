@@ -68,7 +68,7 @@ DATABASES = {
         "PORT": "5432",
         "OPTIONS": {
             "options": "-c search_path=portal,public",
-            "connect_timeout": 5,
+            "connect_timeout": 50,
         },
     }
 }
