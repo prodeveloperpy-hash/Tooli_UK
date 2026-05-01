@@ -29,11 +29,16 @@ export function Navbar() {
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            {/* <Link to="/supplier">
+            <Link to="/login">
               <Button variant="ghost" size="sm">
-                Supplier Login
+                Login
               </Button>
-            </Link> */}
+            </Link>
+            <Link to="/signup">
+              <Button variant="outline" size="sm" className="border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white">
+                Sign Up
+              </Button>
+            </Link>
             <Link to="/admin">
               <Button variant="ghost" size="sm">
                 <User className="w-4 h-4 mr-2" />
@@ -65,9 +70,12 @@ export function Navbar() {
               <Link to="/about" className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
                 How It Works
               </Link>
-              {/* <Link to="/supplier" className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
-                Supplier Login
-              </Link> */}
+              <Link to="/login" className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
+                Login
+              </Link>
+              <Link to="/signup" className="text-sm font-medium text-brand-primary" onClick={() => setMobileMenuOpen(false)}>
+                Sign Up
+              </Link>
               <Link to="/admin" className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
                 Admin
               </Link>
