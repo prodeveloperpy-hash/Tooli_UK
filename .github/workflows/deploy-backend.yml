@@ -70,5 +70,5 @@ jobs:
             --region "$REGION" \
             --platform managed \
             --port 8080 \
-            --add-cloudsql-instances "$CLOUD_SQL_INSTANCE" \
+            --set-cloudsql-instances "$CLOUD_SQL_INSTANCE" \
             --allow-unauthenticated
