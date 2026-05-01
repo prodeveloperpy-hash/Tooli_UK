@@ -58,18 +58,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "tooli_uk.wsgi.application"
 
+# Cloud Run: attach Cloud SQL in the service, then use the Unix socket (not the public IP).
+# https://cloud.google.com/sql/docs/postgres/connect-run
+_CLOUD_SQL_CONN = "project-ad3f785e-ea3f-4bb9-927:us-central1:tooli-db"
+_use_cloud_sql_socket = os.environ.get("K_SERVICE") is not None
+
+if _use_cloud_sql_socket:
+    _db_host = f"/cloudsql/{_CLOUD_SQL_CONN}"
+    _db_port = ""
+    _db_options = {"options": "-c search_path=portal"}
+else:
+    _db_host = "35.239.103.53"
+    _db_port = "5432"
+    _db_options = {
+        "options": "-c search_path=portal",
+        "connect_timeout": 50,
+    }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "tooli_db",
         "USER": "app_user",
         "PASSWORD": "P@ncake2026",
-        "HOST": "35.239.103.53",
-        "PORT": "5432",
-        "OPTIONS": {
-            "options": "-c search_path=portal",
-            "connect_timeout": 50,
-        },
+        "HOST": _db_host,
+        "PORT": _db_port,
+        "OPTIONS": _db_options,
     }
 }
 
