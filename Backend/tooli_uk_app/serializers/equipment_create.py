@@ -12,6 +12,7 @@ from tooli_uk_app.models.interval import Interval
 from tooli_uk_app.models.location import Location
 from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.user import User
+from tooli_uk_app.services import gcs_images
 
 
 class CreateEquipmentLocationSerializer(serializers.Serializer):
@@ -43,7 +44,9 @@ class CreateEquipmentPriceSerializer(serializers.Serializer):
 
 
 class CreateEquipmentImageSerializer(serializers.Serializer):
-    image_url = serializers.CharField()
+    """``image_url`` optional when a file is supplied at the same index (multipart ``images``)."""
+
+    image_url = serializers.CharField(required=False, allow_blank=True, default="")
     is_active = serializers.BooleanField(required=False, default=True)
     sort_order = serializers.IntegerField(required=False, default=0)
     organization_id = serializers.IntegerField(required=False, allow_null=True)
@@ -68,6 +71,8 @@ class CreateEquipmentAvailabilitySerializer(serializers.Serializer):
 
 
 class CreateEquipmentSerializer(serializers.Serializer):
+    """Equipment ``organization_id`` is optional; images inherit it unless an image sets its own."""
+
     name = serializers.CharField(max_length=200)
     description = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     is_active = serializers.BooleanField(required=False, default=True)
@@ -100,6 +105,22 @@ class CreateEquipmentSerializer(serializers.Serializer):
         if value is not None and not User.objects.filter(user_id=value).exists():
             raise serializers.ValidationError("Invalid updated_by.")
         return value
+
+    def validate(self, attrs):
+        images = attrs.get("images") or []
+        image_files = self.context.get("image_files") or []
+        if len(image_files) > len(images):
+            raise serializers.ValidationError(
+                {"images": "Include one images[] entry for each uploaded file (metadata only is ok)."}
+            )
+        for i, img in enumerate(images):
+            url = (img.get("image_url") or "").strip()
+            has_file = i < len(image_files) and bool(image_files[i])
+            if not url and not has_file:
+                raise serializers.ValidationError(
+                    {"images": f"images[{i}] needs image_url or an uploaded file at the same index."}
+                )
+        return attrs
 
     @transaction.atomic
     def create(self, validated_data):
@@ -143,15 +164,31 @@ class CreateEquipmentSerializer(serializers.Serializer):
                 )
             )
 
+        image_files = self.context.get("image_files") or []
+        default_image_org_id = equipment.organization_id_id
         created_images = []
-        for item in images_data:
+        for i, item in enumerate(images_data):
+            file_obj = image_files[i] if i < len(image_files) else None
+            stored_url = (item.get("image_url") or "").strip()
+            if file_obj:
+                try:
+                    stored_url = gcs_images.upload_equipment_image(
+                        file_obj, equipment.equipment_id
+                    )
+                except RuntimeError as exc:
+                    raise serializers.ValidationError(
+                        {"images": f"Could not store image: {exc}"}
+                    ) from exc
+            image_org_id = item.get("organization_id")
+            if image_org_id is None:
+                image_org_id = default_image_org_id
             created_images.append(
                 EquipmentImage.objects.create(
                     equipment_id_id=equipment.equipment_id,
-                    image_url=item["image_url"],
+                    image_url=stored_url,
                     is_active=item.get("is_active", True),
                     sort_order=item.get("sort_order", 0),
-                    organization_id=item.get("organization_id"),
+                    organization_id=image_org_id,
                     created_datetime=now,
                 )
             )
