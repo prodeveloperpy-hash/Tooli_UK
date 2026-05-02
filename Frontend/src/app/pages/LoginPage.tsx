@@ -148,10 +148,11 @@ export function LoginPage() {
         </CardContent>
         <CardFooter className="flex justify-center border-t border-border/20 pt-6">
           <p className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
+            Don't have an account? Contact support to request access
+            {/* Don't have an account?{' '}
             <Link to="/signup" className="text-brand-primary hover:underline font-bold transition-all duration-200">
               Create an account
-            </Link>
+            </Link> */}
           </p>
         </CardFooter>
       </Card>
