@@ -1,3 +1,4 @@
+from django.contrib.auth import logout as django_auth_logout
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -43,6 +44,20 @@ class LoginAPIView(APIView):
                     "role_key": role_key,
                     "organization_id": organization_id,
                 },
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class LogoutAPIView(APIView):
+    """Clear the server session; clients should also drop stored auth (e.g. localStorage)."""
+
+    def post(self, request):
+        django_auth_logout(request)
+        return Response(
+            {
+                "message": "Logout successful.",
+                "data": {},
             },
             status=status.HTTP_200_OK,
         )
