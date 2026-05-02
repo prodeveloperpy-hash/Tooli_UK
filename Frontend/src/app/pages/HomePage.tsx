@@ -61,9 +61,9 @@ export function HomePage() {
 
             {/* Search Bar Component */}
             <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-3xl">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
-                <div className="md:col-span-4">
-                  <Label className="text-gray-700 font-bold text-sm mb-3 block">What equipment do you need?</Label>
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+                <div className="md:col-span-4 space-y-3">
+                  <Label className="text-gray-700 font-bold text-sm block">What equipment do you need?</Label>
                   <Select>
                     <SelectTrigger className="h-12 bg-white border-gray-200 rounded-lg">
                       <div className="flex items-center gap-2">
@@ -77,13 +77,10 @@ export function HomePage() {
                       <SelectItem value="roller">Roller</SelectItem>
                     </SelectContent>
                   </Select>
-                  <button className="text-[var(--brand-primary)] text-sm font-bold mt-3 hover:underline flex items-center">
-                    <span className="text-xl mr-1">+</span> Add more equipment
-                  </button>
                 </div>
 
-                <div className="md:col-span-3">
-                  <Label className="text-gray-700 font-bold text-sm mb-3 block">Location</Label>
+                <div className="md:col-span-3 space-y-3">
+                  <Label className="text-gray-700 font-bold text-sm block">Location</Label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
                     <Input
@@ -93,8 +90,8 @@ export function HomePage() {
                   </div>
                 </div>
 
-                <div className="md:col-span-3">
-                  <Label className="text-gray-700 font-bold text-sm mb-3 block">Dates</Label>
+                <div className="md:col-span-3 space-y-3">
+                  <Label className="text-gray-700 font-bold text-sm block">Dates</Label>
                   <div className="relative">
                     <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
                     <Input
@@ -104,11 +101,17 @@ export function HomePage() {
                   </div>
                 </div>
 
-                <div className="md:col-span-2">
+                <div className="md:col-span-2 pt-[31px]">
                   <Button className="h-12 w-full bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-lg shadow-lg">
                     Search
                   </Button>
                 </div>
+              </div>
+              
+              <div className="mt-3 md:w-1/3">
+                <button className="text-[var(--brand-primary)] text-sm font-bold hover:underline flex items-center transition-colors">
+                  <span className="text-xl mr-1">+</span> Add more equipment
+                </button>
               </div>
             </div>
           </motion.div>

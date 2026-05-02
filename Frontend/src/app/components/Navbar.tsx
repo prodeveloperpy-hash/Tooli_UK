@@ -113,14 +113,11 @@ export function Navbar() {
               </div>
             ) : (
               <>
-                <Button variant="outline" className="border-gray-200 text-gray-900 font-bold hover:bg-gray-50 h-10 px-6 rounded-lg cursor-default">
-                  List Your Equipment
-                </Button>
-                {/* <Link to="/signup">
+                <Link to="/search">
                   <Button variant="outline" className="border-gray-200 text-gray-900 font-bold hover:bg-gray-50 h-10 px-6 rounded-lg">
                     List Your Equipment
                   </Button>
-                </Link> */}
+                </Link>
                 <Link to="/login">
                   <Button className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold h-10 px-8 rounded-lg shadow-sm">
                     Log in

@@ -7,6 +7,8 @@ import { SupplierDashboard } from './pages/SupplierDashboard';
 import { AboutPage } from './pages/AboutPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
+import { SuppliersPage } from './pages/SuppliersPage';
+import { HelpPage } from './pages/HelpPage';
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/suppliers" element={<SuppliersPage />} />
+          <Route path="/help" element={<HelpPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
