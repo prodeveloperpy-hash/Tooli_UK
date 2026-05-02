@@ -20,6 +20,8 @@ jobs:
       REPOSITORY: backend-repo
       SERVICE_NAME: backend-service
       IMAGE_NAME: backend-service
+      CLOUD_SQL_INSTANCE: project-ad3f785e-ea3f-4bb9-927:us-central1:tooli-db
+      RUNTIME_SERVICE_ACCOUNT: deploy-service-account@project-ad3f785e-ea3f-4bb9-927.iam.gserviceaccount.com
 
     steps:
       - name: Checkout code
@@ -69,4 +71,6 @@ jobs:
             --region "$REGION" \
             --platform managed \
             --port 8080 \
+            --service-account "$RUNTIME_SERVICE_ACCOUNT" \
+            --add-cloudsql-instances "$CLOUD_SQL_INSTANCE" \
             --allow-unauthenticated

@@ -5,6 +5,27 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+}
+
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
     "replace-this-with-a-strong-static-secret-key",
@@ -58,20 +79,39 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "tooli_uk.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "tooli_db",
-        "USER": "app_user",
-        "PASSWORD": "P@ncake2026",
-        "HOST": "35.239.103.53",
-        "PORT": "5432",
-        "OPTIONS": {
-            "options": "-c search_path=portal,public",
-            "connect_timeout": 5,
-        },
+# Cloud Run: attach Cloud SQL in the service, then use the Unix socket (not the public IP).
+# https://cloud.google.com/sql/docs/postgres/connect-run
+_CLOUD_SQL_CONN = "project-ad3f785e-ea3f-4bb9-927:us-central1:tooli-db"
+_use_cloud_sql_socket = os.environ.get("K_SERVICE") is not None
+
+if _use_cloud_sql_socket:
+    _db_host = f"/cloudsql/{_CLOUD_SQL_CONN}"
+    _db_options = {"options": "-c search_path=portal"}
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "tooli_db",
+            "USER": "app_user",
+            "PASSWORD": "P@ncake2026",
+            "HOST": _db_host,
+            "OPTIONS": _db_options,
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "tooli_db",
+            "USER": "app_user",
+            "PASSWORD": "P@ncake2026",
+            "HOST": "35.239.103.53",
+            "PORT": "5432",
+            "OPTIONS": {
+                "options": "-c search_path=portal",
+                "connect_timeout": 50,
+            },
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
