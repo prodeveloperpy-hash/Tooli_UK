@@ -128,6 +128,9 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Private GCS bucket for equipment images; Cloud Run uses the service account (ADC).
+GCS_IMAGE_BUCKET = os.environ.get("GCS_IMAGE_BUCKET", "tooli-uk-images")
+
 # API supports JSON and DRF Browsable API form testing.
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],

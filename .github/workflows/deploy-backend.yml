@@ -73,4 +73,5 @@ jobs:
             --port 8080 \
             --service-account "$RUNTIME_SERVICE_ACCOUNT" \
             --add-cloudsql-instances "$CLOUD_SQL_INSTANCE" \
+            --set-env-vars "GCS_IMAGE_BUCKET=tooli-uk-images" \
             --allow-unauthenticated
