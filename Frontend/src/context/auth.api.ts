@@ -35,4 +35,14 @@ export const authApi = {
 
     return response.json();
   },
+  
+  logout: async (): Promise<void> => {
+    const token = localStorage.getItem('token');
+    await fetch(`${API_URL}/logout/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  },
 };

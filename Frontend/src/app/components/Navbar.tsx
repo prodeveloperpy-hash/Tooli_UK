@@ -1,8 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
-import { Menu, Search, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Menu, Search, User, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
+import { authApi } from '../../context/auth.api';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -20,10 +29,16 @@ export function Navbar() {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    setUser(null);
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.clear();
+      setUser(null);
+      navigate('/login');
+    }
   };
 
   return (
@@ -53,28 +68,48 @@ export function Navbar() {
 
           <div className="hidden lg:flex items-center gap-4">
             {user ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <Link to={user.role === 'SUPERADMIN' ? '/admin' : '/supplier'}>
                   <Button variant="ghost" size="sm" className="flex items-center gap-2">
                     <LayoutDashboard className="w-4 h-4" />
                     Dashboard
                   </Button>
                 </Link>
-                <div className="flex items-center gap-3 pl-4 border-l border-border/50">
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-gray-900 leading-none">{user.name}</p>
-                    <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">{user.role}</p>
-                  </div>
-                  <Avatar className="h-9 w-9 border-2 border-brand-primary/20 shadow-sm">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="bg-brand-primary/10 text-brand-primary font-bold">
-                      {user.name.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Button variant="ghost" size="icon" onClick={handleLogout} className="text-muted-foreground hover:text-destructive">
-                    <LogOut className="w-4 h-4" />
-                  </Button>
-                </div>
+                <div className="h-8 w-px bg-border/50 mx-2" />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-3 p-1 rounded-full hover:bg-gray-50 transition-colors focus:outline-none group">
+                      <div className="text-right hidden sm:block">
+                        <p className="text-sm font-bold text-gray-900 leading-none">{user.name}</p>
+                        <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">{user.role}</p>
+                      </div>
+                      <Avatar className="h-9 w-9 border-2 border-brand-primary/20 shadow-sm transition-transform group-hover:scale-105">
+                        <AvatarImage src={user.avatar} alt={user.name} />
+                        <AvatarFallback className="bg-brand-primary/10 text-brand-primary font-bold">
+                          {user.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <ChevronDown className="w-4 h-4 text-gray-400" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 mt-2">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => navigate(user.role === 'SUPERADMIN' ? '/admin' : '/supplier')}>
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile')}>
+                      <User className="w-4 h-4 mr-2" />
+                      Profile Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-destructive focus:bg-destructive/10 cursor-pointer" onClick={handleLogout}>
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             ) : (
               <>
@@ -111,7 +146,8 @@ export function Navbar() {
                   <Link to={user.role === 'SUPERADMIN' ? '/admin' : '/supplier'} className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
                     Dashboard
                   </Link>
-                  <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-sm font-medium text-destructive text-left">
+                  <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-sm font-medium text-destructive text-left flex items-center gap-2">
+                    <LogOut className="w-4 h-4" />
                     Logout
                   </button>
                 </>
