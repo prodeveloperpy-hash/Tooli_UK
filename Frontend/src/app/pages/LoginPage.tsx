@@ -33,11 +33,28 @@ export function LoginPage() {
 
     try {
       const response = await authApi.login(formData);
-      // Store token if returned
+      
+      // Store token
       if (response.access_token) {
         localStorage.setItem('token', response.access_token);
       }
-      navigate('/dashboard'); // Or wherever after login
+
+      // Store user details
+      const { user, role_key, organization_id } = response.data;
+      localStorage.setItem('user_id', user.user_id.toString());
+      localStorage.setItem('name', `${user.first_name} ${user.last_name}`);
+      localStorage.setItem('role_key', role_key);
+      localStorage.setItem('organization_id', organization_id || '');
+      localStorage.setItem('avatar_url', user.avatar_url || '');
+
+      // Navigate based on role
+      if (role_key === 'SUPERADMIN') {
+        navigate('/admin');
+      } else if (role_key === 'SUPPLIER') {
+        navigate('/supplier');
+      } else {
+        navigate('/');
+      }
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {
@@ -131,10 +148,11 @@ export function LoginPage() {
         </CardContent>
         <CardFooter className="flex justify-center border-t border-border/20 pt-6">
           <p className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
+            Don't have an account? Contact support to request access
+            {/* Don't have an account?{' '}
             <Link to="/signup" className="text-brand-primary hover:underline font-bold transition-all duration-200">
               Create an account
-            </Link>
+            </Link> */}
           </p>
         </CardFooter>
       </Card>

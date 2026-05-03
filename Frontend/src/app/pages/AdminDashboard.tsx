@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
+import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
 import {
   Table,
   TableBody,
@@ -31,11 +32,40 @@ import {
   Plus,
   Edit,
   Trash2,
+  Building2,
+  Mail,
+  User,
+  MapPin,
 } from 'lucide-react';
-import { suppliers, products, searchResults } from '../../data/mockData';
+import { products } from '../../data/mockData';
+import { userApi, UserOrganization } from '../../context/user.api';
 
 export function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const data = await userApi.getUserOrganizations();
+        // Filter for suppliers
+        const filtered = data.filter(item => item.role_details.role_key === 'SUPPLIER');
+        setSuppliers(filtered);
+      } catch (error) {
+        console.error('Error fetching suppliers:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSuppliers();
+  }, []);
+
+  const filteredSuppliers = suppliers.filter(s => 
+    s.organization_details.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    s.user_details.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    s.user_details.last_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const stats = [
     {
@@ -166,34 +196,66 @@ export function AdminDashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Supplier Name</TableHead>
+                          <TableHead>Supplier</TableHead>
+                          <TableHead>Company</TableHead>
+                          <TableHead>Email</TableHead>
                           <TableHead>Location</TableHead>
-                          <TableHead>Rating</TableHead>
-                          <TableHead>Listings</TableHead>
                           <TableHead>Status</TableHead>
                           <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {suppliers.map((supplier) => (
-                          <TableRow key={supplier.id}>
-                            <TableCell className="font-medium">
-                              {supplier.name}
+                        {isLoading ? (
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center py-10">
+                              <div className="h-6 w-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
                             </TableCell>
-                            <TableCell>{supplier.location}</TableCell>
+                          </TableRow>
+                        ) : filteredSuppliers.map((s) => (
+                          <TableRow key={s.user_organization_id}>
                             <TableCell>
-                              <Badge variant="secondary">
-                                ⭐ {supplier.rating}
-                              </Badge>
+                              <div className="flex items-center gap-2">
+                                <Avatar className="h-7 w-7">
+                                  <AvatarImage src={s.user_details.avatar_url || ''} />
+                                  <AvatarFallback className="text-[10px] bg-brand-primary/10 text-brand-primary">
+                                    {s.user_details.first_name[0]}{s.user_details.last_name[0]}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span className="font-medium">{s.user_details.first_name} {s.user_details.last_name}</span>
+                              </div>
                             </TableCell>
                             <TableCell>
-                              {products.filter((p) => p.supplierId === supplier.id).length}
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded bg-gray-50 p-1 border flex items-center justify-center shrink-0">
+                                  {s.organization_details.logo ? (
+                                    <img src={s.organization_details.logo} alt="" className="max-h-full max-w-full object-contain" />
+                                  ) : (
+                                    <Building2 className="w-5 h-5 text-gray-300" />
+                                  )}
+                                </div>
+                                <div>
+                                  <div className="font-bold text-gray-900">{s.organization_details.name}</div>
+                                  <div className="text-xs text-muted-foreground">{s.organization_details.domain}</div>
+                                </div>
+                              </div>
                             </TableCell>
                             <TableCell>
-                              {supplier.verified ? (
-                                <Badge className="bg-green-500">Verified</Badge>
+                              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                <Mail className="w-3 h-3" />
+                                {s.user_details.email}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-1 text-sm">
+                                <MapPin className="w-3 h-3 text-gray-400" />
+                                {s.organization_details.city}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {s.is_active ? (
+                                <Badge className="bg-green-500">Active</Badge>
                               ) : (
-                                <Badge variant="secondary">Pending</Badge>
+                                <Badge variant="secondary">Inactive</Badge>
                               )}
                             </TableCell>
                             <TableCell className="text-right">
@@ -201,7 +263,7 @@ export function AdminDashboard() {
                                 <Button size="sm" variant="ghost">
                                   <Edit className="w-4 h-4" />
                                 </Button>
-                                <Button size="sm" variant="ghost">
+                                <Button size="sm" variant="ghost" className="text-destructive">
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
                               </div>
