@@ -119,25 +119,21 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
     def _validate_create(self, attrs):
         uid = attrs.get("user_id")
         oid = attrs.get("organization_id")
-        user_payload = attrs.get("user") or {}
-        org_payload = attrs.get("organization") or {}
+        user_payload = attrs.get("user")
+        org_payload = attrs.get("organization")
 
         if uid is not None and user_payload:
-            raise serializers.ValidationError(
-                "Provide either user_id or user, not both."
-            )
+            raise serializers.ValidationError("Provide either user_id or user object, not both.")
         if oid is not None and org_payload:
-            raise serializers.ValidationError(
-                "Provide either organization_id or organization, not both."
-            )
+            raise serializers.ValidationError("Provide either organization_id or organization object, not both.")
+
         if uid is None and not user_payload:
             raise serializers.ValidationError(
-                "Create requires user_id or a user object "
-                "(first_name, last_name, email, password)."
+                "Create requires user_id (existing) or a user object (new user details)."
             )
         if oid is None and not org_payload:
             raise serializers.ValidationError(
-                "Create requires organization_id or an organization object (name required)."
+                "Create requires organization_id (existing) or an organization object (new org details)."
             )
 
         if user_payload:
@@ -173,11 +169,10 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         return attrs
 
     def _validate_update(self, attrs):
-        if attrs.get("role_id") is not None and not Role.objects.filter(
-            role_id=attrs["role_id"]
-        ).exists():
+        if attrs.get("role_id") is not None and not Role.objects.filter(role_id=attrs["role_id"]).exists():
             raise serializers.ValidationError({"role_id": "Invalid role_id."})
 
+<<<<<<< Updated upstream
         uid = attrs.get("user_id")
         oid = attrs.get("organization_id")
         if uid is not None and not User.objects.filter(pk=uid).exists():
@@ -191,6 +186,22 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             # Check if this email is used by ANOTHER user
             linked_user_id = self.instance.user_id_id
             other = User.objects.filter(email__iexact=email).exclude(pk=linked_user_id).exists()
+=======
+        # Allow validating user_id/organization_id if they are being updated
+        uid = attrs.get("user_id")
+        if uid is not None and not User.objects.filter(pk=uid).exists():
+            raise serializers.ValidationError({"user_id": "Invalid user_id."})
+
+        oid = attrs.get("organization_id")
+        if oid is not None and not Organization.objects.filter(pk=oid).exists():
+            raise serializers.ValidationError({"organization_id": "Invalid organization_id."})
+
+        user_payload = attrs.get("user")
+        if user_payload and user_payload.get("email"):
+            email = user_payload["email"]
+            # Check if email is taken by someone else
+            other = User.objects.filter(email__iexact=email).exclude(pk=self.instance.user_id_id).exists()
+>>>>>>> Stashed changes
             if other:
                 raise serializers.ValidationError({"user": "A user with this email already exists."})
         return attrs
@@ -283,6 +294,13 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         now = timezone.now()
         user_payload = validated_data.pop("user", None)
         org_payload = validated_data.pop("organization", None)
+<<<<<<< Updated upstream
+=======
+        updated_by = validated_data.pop("updated_by", None)
+        validated_data.pop("created_by", None)
+
+        # Update membership fields
+>>>>>>> Stashed changes
         if "user_id" in validated_data:
             instance.user_id_id = validated_data.pop("user_id")
         if "organization_id" in validated_data:
