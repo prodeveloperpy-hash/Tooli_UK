@@ -39,9 +39,9 @@ class UserViewSet(viewsets.ModelViewSet):
             return HttpResponseRedirect(raw)
         try:
             payload = gcs_images.download_blob(raw)
-        except RuntimeError:
+        except Exception as exc:
             return HttpResponse(
-                "Image storage is not configured.",
+                f"Image storage error: {exc}",
                 status=503,
                 content_type="text/plain",
             )
