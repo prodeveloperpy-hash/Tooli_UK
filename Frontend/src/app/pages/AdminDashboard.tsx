@@ -100,25 +100,48 @@ export function AdminDashboard() {
   };
 
   const handleAddEditSubmit = async (data: any) => {
-    // Map form data to backend structure
-    const payload = {
-      user_details: {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        email: data.email,
-        avatar_url: data.avatarUrl,
-      },
-      organization_details: {
-        name: data.companyName,
-        domain: data.domain,
-        city: data.city,
-        logo: data.logoUrl,
-      },
-    };
+    let payload: any = {};
+
+    if (selectedSupplier) {
+      // Partial update for PATCH
+      const userUpdates: any = {};
+      const orgUpdates: any = {};
+
+      if (data.firstName !== selectedSupplier.user_details.first_name) userUpdates.first_name = data.firstName;
+      if (data.lastName !== selectedSupplier.user_details.last_name) userUpdates.last_name = data.lastName;
+      if (data.email !== selectedSupplier.user_details.email) userUpdates.email = data.email;
+      if (data.avatarUrl !== selectedSupplier.user_details.avatar_url) userUpdates.avatar_url = data.avatarUrl;
+
+      if (data.companyName !== selectedSupplier.organization_details.name) orgUpdates.name = data.companyName;
+      if (data.domain !== selectedSupplier.organization_details.domain) orgUpdates.domain = data.domain;
+      if (data.city !== selectedSupplier.organization_details.city) orgUpdates.city = data.city;
+      if (data.logoUrl !== selectedSupplier.organization_details.logo) orgUpdates.logo = data.logoUrl;
+
+      if (Object.keys(userUpdates).length > 0) payload.user_details = userUpdates;
+      if (Object.keys(orgUpdates).length > 0) payload.organization_details = orgUpdates;
+    } else {
+      // Full payload for POST
+      payload = {
+        user_details: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          email: data.email,
+          avatar_url: data.avatarUrl,
+        },
+        organization_details: {
+          name: data.companyName,
+          domain: data.domain,
+          city: data.city,
+          logo: data.logoUrl,
+        },
+      };
+    }
 
     try {
       if (selectedSupplier) {
-        await userApi.updateUserOrganization(selectedSupplier.user_organization_id, payload);
+        if (Object.keys(payload).length > 0) {
+          await userApi.updateUserOrganization(selectedSupplier.user_organization_id, payload);
+        }
       } else {
         await userApi.createUserOrganization(payload);
       }
