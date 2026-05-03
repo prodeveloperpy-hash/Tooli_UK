@@ -107,15 +107,21 @@ export function AdminDashboard() {
       const userUpdates: any = {};
       const orgUpdates: any = {};
 
-      if (data.firstName !== selectedSupplier.user_details.first_name) userUpdates.first_name = data.firstName;
-      if (data.lastName !== selectedSupplier.user_details.last_name) userUpdates.last_name = data.lastName;
-      if (data.email !== selectedSupplier.user_details.email) userUpdates.email = data.email;
-      if (data.avatarUrl !== selectedSupplier.user_details.avatar_url) userUpdates.avatar_url = data.avatarUrl;
+      const compare = (val1: any, val2: any) => {
+        const v1 = (val1 || '').toString().trim();
+        const v2 = (val2 || '').toString().trim();
+        return v1 !== v2;
+      };
 
-      if (data.companyName !== selectedSupplier.organization_details.name) orgUpdates.name = data.companyName;
-      if (data.domain !== selectedSupplier.organization_details.domain) orgUpdates.domain = data.domain;
-      if (data.city !== selectedSupplier.organization_details.city) orgUpdates.city = data.city;
-      if (data.logoUrl !== selectedSupplier.organization_details.logo) orgUpdates.logo = data.logoUrl;
+      if (compare(data.firstName, selectedSupplier.user_details.first_name)) userUpdates.first_name = data.firstName;
+      if (compare(data.lastName, selectedSupplier.user_details.last_name)) userUpdates.last_name = data.lastName;
+      if (compare(data.email, selectedSupplier.user_details.email)) userUpdates.email = data.email;
+      if (compare(data.avatarUrl, selectedSupplier.user_details.avatar_url)) userUpdates.avatar_url = data.avatarUrl;
+
+      if (compare(data.companyName, selectedSupplier.organization_details.name)) orgUpdates.name = data.companyName;
+      if (compare(data.domain, selectedSupplier.organization_details.domain)) orgUpdates.domain = data.domain;
+      if (compare(data.city, selectedSupplier.organization_details.city)) orgUpdates.city = data.city;
+      if (compare(data.logoUrl, selectedSupplier.organization_details.logo)) orgUpdates.logo = data.logoUrl;
 
       if (Object.keys(userUpdates).length > 0) payload.user_details = userUpdates;
       if (Object.keys(orgUpdates).length > 0) payload.organization_details = orgUpdates;
