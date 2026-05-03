@@ -56,11 +56,7 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
             )
         else:
             data = request.data
-<<<<<<< Updated upstream
-            # Support both flat JSON and JSON wrapped in "payload"
-=======
             # Handle cases where JSON might be wrapped in a "payload" key (matching multipart pattern)
->>>>>>> Stashed changes
             if isinstance(data, dict) and "payload" in data and len(data) == 1:
                 data = data["payload"]
             serializer = self.get_serializer(
@@ -97,11 +93,7 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
                 )
             avatar_file = request.FILES.get("avatar")
         else:
-<<<<<<< Updated upstream
-            # Support both flat JSON and JSON wrapped in "payload"
-=======
             # Handle cases where JSON might be wrapped in a "payload" key
->>>>>>> Stashed changes
             if isinstance(data, dict) and "payload" in data and len(data) == 1:
                 data = data["payload"]
 
