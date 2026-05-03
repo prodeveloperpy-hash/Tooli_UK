@@ -25,7 +25,7 @@ class SignupAPIView(APIView):
                 return Response(
                     {
                         "detail": 'Multipart signup requires a JSON string field "payload" '
-                        "(same fields as JSON signup). Optional file field "avatar".'
+                        '(same fields as JSON signup). Optional file field "avatar".'
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )

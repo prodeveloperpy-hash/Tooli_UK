@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -34,32 +34,111 @@ import {
   Trash2,
   Building2,
   Mail,
-  User,
   MapPin,
 } from 'lucide-react';
-import { products } from '../../data/mockData';
+import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
+import { equipmentApi, Equipment } from '../../context/equipment.api';
+import { SupplierForm } from '../components/SupplierForm';
+import { DeleteConfirmation } from '../components/DeleteConfirmation';
 
 export function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
+  const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEquipmentLoading, setIsEquipmentLoading] = useState(true);
+  
+  // Modal states
+  const [isAddEditOpen, setIsAddEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedSupplier, setSelectedSupplier] = useState<UserOrganization | null>(null);
+
+  const fetchSuppliers = async () => {
+    setIsLoading(true);
+    try {
+      const data = await userApi.getUserOrganizations();
+      const filtered = data.filter(item => item.role_details.role_key === 'SUPPLIER');
+      setSuppliers(filtered);
+    } catch (error) {
+      console.error('Error fetching suppliers:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchEquipment = async () => {
+    setIsEquipmentLoading(true);
+    try {
+      const response = await equipmentApi.getEquipment();
+      setEquipment(response.results);
+    } catch (error) {
+      console.error('Error fetching equipment:', error);
+    } finally {
+      setIsEquipmentLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchSuppliers = async () => {
-      try {
-        const data = await userApi.getUserOrganizations();
-        // Filter for suppliers
-        const filtered = data.filter(item => item.role_details.role_key === 'SUPPLIER');
-        setSuppliers(filtered);
-      } catch (error) {
-        console.error('Error fetching suppliers:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
     fetchSuppliers();
+    fetchEquipment();
   }, []);
+
+  const handleOpenAdd = () => {
+    setSelectedSupplier(null);
+    setIsAddEditOpen(true);
+  };
+
+  const handleOpenEdit = (supplier: UserOrganization) => {
+    setSelectedSupplier(supplier);
+    setIsAddEditOpen(true);
+  };
+
+  const handleOpenDelete = (supplier: UserOrganization) => {
+    setSelectedSupplier(supplier);
+    setIsDeleteOpen(true);
+  };
+
+  const handleAddEditSubmit = async (data: any) => {
+    // Map form data to backend structure
+    const payload = {
+      user_details: {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        avatar_url: data.avatarUrl,
+      },
+      organization_details: {
+        name: data.companyName,
+        domain: data.domain,
+        city: data.city,
+        logo: data.logoUrl,
+      },
+    };
+
+    try {
+      if (selectedSupplier) {
+        await userApi.updateUserOrganization(selectedSupplier.user_organization_id, payload);
+      } else {
+        await userApi.createUserOrganization(payload);
+      }
+      await fetchSuppliers();
+    } catch (error) {
+      console.error('Error saving supplier:', error);
+      throw error;
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedSupplier) return;
+    try {
+      await userApi.deleteUserOrganization(selectedSupplier.user_organization_id);
+      await fetchSuppliers();
+    } catch (error) {
+      console.error('Error deleting supplier:', error);
+      throw error;
+    }
+  };
 
   const filteredSuppliers = suppliers.filter(s => 
     s.organization_details.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -67,35 +146,14 @@ export function AdminDashboard() {
     s.user_details.last_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const filteredEquipment = equipment.filter(e => 
+    e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    e.organization_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const stats = [
-    {
-      title: 'Total Suppliers',
-      value: suppliers.length,
-      change: '+12%',
-      icon: Users,
-      gradient: 'from-blue-500 to-indigo-600',
-    },
-    {
-      title: 'Active Listings',
-      value: products.length,
-      change: '+18%',
-      icon: Package,
-      gradient: 'from-purple-500 to-pink-600',
-    },
-    {
-      title: 'Total Clicks',
-      value: '2,847',
-      change: '+23%',
-      icon: Eye,
-      gradient: 'from-cyan-500 to-teal-600',
-    },
-    {
-      title: 'Revenue',
-      value: '£45,231',
-      change: '+31%',
-      icon: TrendingUp,
-      gradient: 'from-orange-500 to-red-600',
-    },
+    { title: 'Total Suppliers', value: suppliers.length, change: '+12%', icon: Users, gradient: 'from-blue-500 to-indigo-600' },
+    { title: 'Total Equipment', value: equipment.length, change: '+18%', icon: Package, gradient: 'from-purple-500 to-pink-600' },
   ];
 
   return (
@@ -107,11 +165,9 @@ export function AdminDashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
-                <p className="text-muted-foreground">
-                  Manage suppliers, products, and platform analytics
-                </p>
+                <p className="text-muted-foreground">Manage suppliers and product listings</p>
               </div>
-              <Button className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)]">
+              <Button className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)] shadow-md">
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
               </Button>
@@ -120,7 +176,7 @@ export function AdminDashboard() {
         </div>
 
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.title}
@@ -128,20 +184,18 @@ export function AdminDashboard() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="border-2 hover:shadow-lg transition-shadow">
+                <Card className="border-none shadow-sm hover:shadow-md transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <div
-                        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center`}
-                      >
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-inner`}>
                         <stat.icon className="w-6 h-6 text-white" />
                       </div>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs font-bold text-green-600 bg-green-50 border-green-100">
                         {stat.change}
                       </Badge>
                     </div>
-                    <div className="text-3xl font-bold mb-1">{stat.value}</div>
-                    <p className="text-sm text-muted-foreground">{stat.title}</p>
+                    <div className="text-3xl font-bold mb-1 tracking-tight">{stat.value}</div>
+                    <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">{stat.title}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -149,84 +203,79 @@ export function AdminDashboard() {
           </div>
 
           <Tabs defaultValue="suppliers" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
-              <TabsTrigger value="suppliers">
+            <TabsList className="bg-white p-1 rounded-xl shadow-sm border">
+              <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Users className="w-4 h-4 mr-2" />
                 Suppliers
               </TabsTrigger>
-              <TabsTrigger value="products">
+              <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Package className="w-4 h-4 mr-2" />
                 Products
-              </TabsTrigger>
-              <TabsTrigger value="analytics">
-                <TrendingUp className="w-4 h-4 mr-2" />
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger value="overview">
-                <LayoutDashboard className="w-4 h-4 mr-2" />
-                Overview
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="suppliers" className="space-y-6">
-              <Card>
-                <CardHeader>
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-white border-b py-6">
                   <div className="flex items-center justify-between">
-                    <CardTitle>Manage Suppliers</CardTitle>
-                    <Button size="sm" className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)]">
+                    <div>
+                      <CardTitle className="text-xl">Manage Suppliers</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Review and update supplier accounts</p>
+                    </div>
+                    <Button onClick={handleOpenAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Supplier
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="mb-4">
-                    <div className="relative">
+                <CardContent className="p-0">
+                  <div className="p-6 border-b bg-gray-50/50">
+                    <div className="relative max-w-sm">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
-                        placeholder="Search suppliers..."
+                        placeholder="Search by company or name..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 bg-white border-gray-200"
                       />
                     </div>
                   </div>
 
-                  <div className="rounded-lg border overflow-hidden">
+                  <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader>
+                      <TableHeader className="bg-gray-50">
                         <TableRow>
-                          <TableHead>Supplier</TableHead>
-                          <TableHead>Company</TableHead>
-                          <TableHead>Email</TableHead>
-                          <TableHead>Location</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                          <TableHead className="font-bold py-4">Supplier</TableHead>
+                          <TableHead className="font-bold">Company</TableHead>
+                          <TableHead className="font-bold">Email</TableHead>
+                          <TableHead className="font-bold">Location</TableHead>
+                          <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {isLoading ? (
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center py-10">
-                              <div className="h-6 w-6 border-2 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                            <TableCell colSpan={6} className="text-center py-20">
+                              <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
                             </TableCell>
                           </TableRow>
                         ) : filteredSuppliers.map((s) => (
-                          <TableRow key={s.user_organization_id}>
-                            <TableCell>
-                              <div className="flex items-center gap-2">
-                                <Avatar className="h-7 w-7">
+                          <TableRow key={s.user_organization_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4">
+                              <div className="flex items-center gap-3">
+                                <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
                                   <AvatarImage src={s.user_details.avatar_url || ''} />
-                                  <AvatarFallback className="text-[10px] bg-brand-primary/10 text-brand-primary">
+                                  <AvatarFallback className="text-xs bg-brand-primary/10 text-brand-primary font-bold">
                                     {s.user_details.first_name[0]}{s.user_details.last_name[0]}
                                   </AvatarFallback>
                                 </Avatar>
-                                <span className="font-medium">{s.user_details.first_name} {s.user_details.last_name}</span>
+                                <span className="font-bold text-gray-900">{s.user_details.first_name} {s.user_details.last_name}</span>
                               </div>
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded bg-gray-50 p-1 border flex items-center justify-center shrink-0">
+                                <div className="w-10 h-10 rounded-lg bg-white p-1.5 border border-gray-100 flex items-center justify-center shrink-0 shadow-sm">
                                   {s.organization_details.logo ? (
                                     <img src={s.organization_details.logo} alt="" className="max-h-full max-w-full object-contain" />
                                   ) : (
@@ -234,36 +283,36 @@ export function AdminDashboard() {
                                   )}
                                 </div>
                                 <div>
-                                  <div className="font-bold text-gray-900">{s.organization_details.name}</div>
-                                  <div className="text-xs text-muted-foreground">{s.organization_details.domain}</div>
+                                  <div className="font-bold text-gray-900 leading-none mb-1">{s.organization_details.name}</div>
+                                  <div className="text-[11px] text-muted-foreground font-medium">{s.organization_details.domain}</div>
                                 </div>
                               </div>
                             </TableCell>
                             <TableCell>
-                              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                <Mail className="w-3 h-3" />
+                              <div className="flex items-center gap-1.5 text-sm text-muted-foreground font-medium">
+                                <Mail className="w-3.5 h-3.5" />
                                 {s.user_details.email}
                               </div>
                             </TableCell>
                             <TableCell>
-                              <div className="flex items-center gap-1 text-sm">
-                                <MapPin className="w-3 h-3 text-gray-400" />
+                              <div className="flex items-center gap-1.5 text-sm font-medium">
+                                <MapPin className="w-3.5 h-3.5 text-gray-400" />
                                 {s.organization_details.city}
                               </div>
                             </TableCell>
                             <TableCell>
                               {s.is_active ? (
-                                <Badge className="bg-green-500">Active</Badge>
+                                <Badge className="bg-green-500 hover:bg-green-600 font-bold px-3">Active</Badge>
                               ) : (
-                                <Badge variant="secondary">Inactive</Badge>
+                                <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
                               )}
                             </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button size="sm" variant="ghost">
+                            <TableCell className="text-right pr-6">
+                              <div className="flex justify-end gap-1">
+                                <Button size="icon" variant="ghost" onClick={() => handleOpenEdit(s)} className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
                                   <Edit className="w-4 h-4" />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="text-destructive">
+                                <Button size="icon" variant="ghost" onClick={() => handleOpenDelete(s)} className="text-destructive hover:text-destructive hover:bg-destructive/10">
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
                               </div>
@@ -276,141 +325,121 @@ export function AdminDashboard() {
                 </CardContent>
               </Card>
             </TabsContent>
-
+            
             <TabsContent value="products" className="space-y-6">
-              <Card>
-                <CardHeader>
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-white border-b py-6">
                   <div className="flex items-center justify-between">
-                    <CardTitle>Manage Products</CardTitle>
-                    <Button size="sm" className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)]">
+                    <div>
+                      <CardTitle className="text-xl">Manage Equipment</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
+                    </div>
+                    <Button className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
                       <Plus className="w-4 h-4 mr-2" />
-                      Add Product
+                      Add Equipment
                     </Button>
                   </div>
                 </CardHeader>
-                <CardContent>
-                  <div className="rounded-lg border overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="p-6 border-b bg-gray-50/50">
+                    <div className="relative max-w-sm">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search equipment..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10 bg-white border-gray-200"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader>
+                      <TableHeader className="bg-gray-50">
                         <TableRow>
-                          <TableHead>Product</TableHead>
-                          <TableHead>Category</TableHead>
-                          <TableHead>Supplier</TableHead>
-                          <TableHead>Price Range</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
+                          <TableHead className="font-bold py-4">Equipment</TableHead>
+                          <TableHead className="font-bold">Supplier</TableHead>
+                          <TableHead className="font-bold">Price</TableHead>
+                          <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {products.map((product) => {
-                          const supplier = suppliers.find(
-                            (s) => s.id === product.supplierId
-                          );
-                          return (
-                            <TableRow key={product.id}>
-                              <TableCell className="font-medium">
-                                {product.name}
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant="secondary">{product.category}</Badge>
-                              </TableCell>
-                              <TableCell>{supplier?.name}</TableCell>
-                              <TableCell>£280 - £950/week</TableCell>
-                              <TableCell className="text-right">
-                                <div className="flex justify-end gap-2">
-                                  <Button size="sm" variant="ghost">
-                                    <Edit className="w-4 h-4" />
-                                  </Button>
-                                  <Button size="sm" variant="ghost">
-                                    <Trash2 className="w-4 h-4" />
-                                  </Button>
+                        {isEquipmentLoading ? (
+                          <TableRow>
+                            <TableCell colSpan={5} className="text-center py-20">
+                              <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                            </TableCell>
+                          </TableRow>
+                        ) : filteredEquipment.map((item) => (
+                          <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-100 shadow-sm shrink-0">
+                                  {item.images[0] ? (
+                                    <img src={item.images[0].image_url} alt="" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <Package className="w-6 h-6 m-3 text-gray-300" />
+                                  )}
                                 </div>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
+                                <div>
+                                  <div className="font-bold text-gray-900 leading-none mb-1">{item.name}</div>
+                                  <div className="text-xs text-muted-foreground line-clamp-1">{item.description}</div>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-medium text-gray-700">
+                              {item.organization_name}
+                            </TableCell>
+                            <TableCell>
+                              <div className="font-bold text-brand-primary">
+                                {item.prices[0] ? `${item.prices[0].currency} ${item.prices[0].price}` : 'N/A'}
+                                {item.prices.length > 1 && <span className="text-[10px] text-muted-foreground ml-1">+{item.prices.length - 1} more</span>}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {item.is_active ? (
+                                <Badge className="bg-green-500 font-bold px-3">Active</Badge>
+                              ) : (
+                                <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-right pr-6">
+                              <div className="flex justify-end gap-1">
+                                <Button size="icon" variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                       </TableBody>
                     </Table>
                   </div>
                 </CardContent>
               </Card>
             </TabsContent>
-
-            <TabsContent value="analytics" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Top Performing Equipment</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {products.slice(0, 5).map((product, index) => (
-                        <div key={product.id} className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold text-sm">
-                              {index + 1}
-                            </div>
-                            <div>
-                              <div className="font-medium">{product.name}</div>
-                              <div className="text-sm text-muted-foreground">
-                                {product.category}
-                              </div>
-                            </div>
-                          </div>
-                          <Badge>{Math.floor(Math.random() * 200) + 50} views</Badge>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Recent Activity</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                        <div>
-                          <div className="font-medium">New supplier registered</div>
-                          <div className="text-sm text-muted-foreground">2 hours ago</div>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-blue-500 mt-2"></div>
-                        <div>
-                          <div className="font-medium">Product listing updated</div>
-                          <div className="text-sm text-muted-foreground">5 hours ago</div>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-purple-500 mt-2"></div>
-                        <div>
-                          <div className="font-medium">New booking completed</div>
-                          <div className="text-sm text-muted-foreground">1 day ago</div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="overview" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Platform Overview</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Platform overview and key metrics dashboard coming soon...
-                  </p>
-                </CardContent>
-              </Card>
-            </TabsContent>
           </Tabs>
         </div>
       </div>
+
+      <SupplierForm 
+        isOpen={isAddEditOpen} 
+        onClose={() => setIsAddEditOpen(false)} 
+        onSubmit={handleAddEditSubmit} 
+        supplier={selectedSupplier} 
+      />
+
+      <DeleteConfirmation 
+        isOpen={isDeleteOpen} 
+        onClose={() => setIsDeleteOpen(false)} 
+        onConfirm={handleDeleteConfirm} 
+        supplier={selectedSupplier} 
+      />
+
       <Footer />
     </div>
   );

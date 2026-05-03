@@ -42,4 +42,57 @@ export const userApi = {
 
     return response.json();
   },
+
+  createUserOrganization: async (data: any): Promise<UserOrganization> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user-organization/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...data,
+        role_key: 'SUPPLIER',
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create supplier');
+    }
+
+    return response.json();
+  },
+
+  updateUserOrganization: async (id: number, data: any): Promise<UserOrganization> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user-organization/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update supplier');
+    }
+
+    return response.json();
+  },
+
+  deleteUserOrganization: async (id: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user-organization/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete supplier');
+    }
+  },
 };
