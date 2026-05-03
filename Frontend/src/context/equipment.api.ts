@@ -43,4 +43,53 @@ export const equipmentApi = {
 
     return response.json();
   },
+
+  createEquipment: async (data: FormData): Promise<Equipment> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/equipment/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        // Browser sets Content-Type to multipart/form-data with boundary
+      },
+      body: data,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create equipment');
+    }
+
+    return response.json();
+  },
+
+  updateEquipment: async (id: number, data: FormData): Promise<Equipment> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/equipment/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: data,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update equipment');
+    }
+
+    return response.json();
+  },
+
+  deleteEquipment: async (id: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/equipment/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete equipment');
+    }
+  },
 };
