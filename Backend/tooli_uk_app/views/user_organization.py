@@ -55,8 +55,12 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
                 },
             )
         else:
+            data = request.data
+            # Support both flat JSON and JSON wrapped in "payload"
+            if isinstance(data, dict) and "payload" in data and len(data) == 1:
+                data = data["payload"]
             serializer = self.get_serializer(
-                data=request.data,
+                data=data,
                 context=self.get_serializer_context(),
             )
         serializer.is_valid(raise_exception=True)
@@ -88,6 +92,11 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             avatar_file = request.FILES.get("avatar")
+        else:
+            # Support both flat JSON and JSON wrapped in "payload"
+            if isinstance(data, dict) and "payload" in data and len(data) == 1:
+                data = data["payload"]
+
         serializer = self.get_serializer(
             instance,
             data=data,

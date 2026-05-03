@@ -107,7 +107,7 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
     user = UserOrganizationUserNestedSerializer(required=False)
     organization = UserOrganizationOrganizationNestedSerializer(required=False)
     role_id = serializers.IntegerField(required=False, allow_null=True)
-    is_active = serializers.BooleanField(required=False, default=True)
+    is_active = serializers.BooleanField(required=False)
     created_by = serializers.IntegerField(required=False, allow_null=True)
     updated_by = serializers.IntegerField(required=False, allow_null=True)
 
@@ -178,17 +178,21 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         ).exists():
             raise serializers.ValidationError({"role_id": "Invalid role_id."})
 
+        uid = attrs.get("user_id")
+        oid = attrs.get("organization_id")
+        if uid is not None and not User.objects.filter(pk=uid).exists():
+            raise serializers.ValidationError({"user_id": "Invalid user_id."})
+        if oid is not None and not Organization.objects.filter(pk=oid).exists():
+            raise serializers.ValidationError({"organization_id": "Invalid organization_id."})
+
         user_payload = attrs.get("user") or {}
         if user_payload.get("email"):
-            other = (
-                User.objects.filter(email__iexact=user_payload["email"])
-                .exclude(pk=self.instance.user_id_id)
-                .exists()
-            )
+            email = user_payload["email"]
+            # Check if this email is used by ANOTHER user
+            linked_user_id = self.instance.user_id_id
+            other = User.objects.filter(email__iexact=email).exclude(pk=linked_user_id).exists()
             if other:
-                raise serializers.ValidationError(
-                    {"user": "A user with this email already exists."}
-                )
+                raise serializers.ValidationError({"user": "A user with this email already exists."})
         return attrs
 
     @transaction.atomic
@@ -279,17 +283,16 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         now = timezone.now()
         user_payload = validated_data.pop("user", None)
         org_payload = validated_data.pop("organization", None)
-        validated_data.pop("user_id", None)
-        validated_data.pop("organization_id", None)
-        updated_by = validated_data.pop("updated_by", None)
-        validated_data.pop("created_by", None)
-
+        if "user_id" in validated_data:
+            instance.user_id_id = validated_data.pop("user_id")
+        if "organization_id" in validated_data:
+            instance.organization_id_id = validated_data.pop("organization_id")
         if "role_id" in validated_data:
-            rid = validated_data.pop("role_id")
-            if rid is not None:
-                instance.role_id_id = rid
+            instance.role_id_id = validated_data.pop("role_id")
         if "is_active" in validated_data:
             instance.is_active = validated_data.pop("is_active")
+        updated_by = validated_data.pop("updated_by", None)
+        validated_data.pop("created_by", None)
 
         if user_payload:
             u = User.objects.get(pk=instance.user_id_id)
