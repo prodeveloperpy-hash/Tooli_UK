@@ -119,9 +119,6 @@ export function AdminDashboard() {
       if (compare(data.lastName, selectedSupplier.user_details.last_name)) userUpdates.last_name = data.lastName;
       if (compare(data.email, selectedSupplier.user_details.email)) userUpdates.email = data.email;
       if (compare(data.avatarUrl, selectedSupplier.user_details.avatar_url)) userUpdates.avatar_url = data.avatarUrl;
-      
-      // Temporary hardcoded password
-      userUpdates.password = 'TooliSupplier123!';
 
       if (compare(data.companyName, selectedSupplier.organization_details.name)) orgUpdates.name = data.companyName;
       if (compare(data.domain, selectedSupplier.organization_details.domain)) orgUpdates.domain = data.domain;
@@ -129,14 +126,7 @@ export function AdminDashboard() {
       if (compare(data.logoUrl, selectedSupplier.organization_details.logo)) orgUpdates.logo = data.logoUrl;
 
       if (Object.keys(userUpdates).length > 0) payload.user = userUpdates;
-      if (Object.keys(orgUpdates).length > 0) {
-        payload.organization = {
-          ...orgUpdates,
-          country: 'United Kingdom'
-        };
-      }
-      payload.is_active = true;
-      payload.role_id = 3;
+      if (Object.keys(orgUpdates).length > 0) payload.organization = orgUpdates;
     } else {
       // Full payload for POST
       payload = {
@@ -145,7 +135,7 @@ export function AdminDashboard() {
           last_name: data.lastName,
           email: data.email,
           avatar_url: data.avatarUrl,
-          password: 'TooliSupplier123!', // Temporary hardcoded password
+          password: 'TooliSupplier123!',
         },
         organization: {
           name: data.companyName,
@@ -161,7 +151,7 @@ export function AdminDashboard() {
 
     try {
       if (selectedSupplier) {
-        if (Object.keys(payload).length > 1) { // >1 because is_active is always there now
+        if (Object.keys(payload).length > 0) {
           await userApi.updateUserOrganization(selectedSupplier.user_organization_id, payload);
         }
       } else {

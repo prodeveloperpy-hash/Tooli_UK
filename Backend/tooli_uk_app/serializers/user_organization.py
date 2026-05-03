@@ -29,6 +29,7 @@ class UserOrganizationUserDetailSerializer(serializers.Serializer):
 class UserOrganizationOrganizationDetailSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
     domain = serializers.CharField(read_only=True, allow_null=True)
+    logo = serializers.CharField(read_only=True, allow_null=True)
     city = serializers.CharField(read_only=True, allow_null=True)
     state = serializers.CharField(read_only=True, allow_null=True)
     country = serializers.CharField(read_only=True, allow_null=True)
