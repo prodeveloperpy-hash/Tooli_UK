@@ -95,6 +95,13 @@ class SignupSerializer(serializers.Serializer):
         user.updated_by_id = user.user_id
         user.save(update_fields=["created_by", "updated_by"])
 
+        avatar_file = self.context.get("avatar_file")
+        if avatar_file:
+            from tooli_uk_app.services import gcs_images
+
+            user.avatar_url = gcs_images.upload_user_avatar(avatar_file, user.user_id)
+            user.save(update_fields=["avatar_url", "updated_datetime"])
+
         user_org_role = validated_data.get("user_organization_role_id")
         UserOrganization.objects.create(
             user_id_id=user.user_id,

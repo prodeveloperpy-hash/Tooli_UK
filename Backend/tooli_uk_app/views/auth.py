@@ -1,18 +1,54 @@
+import json
+
 from django.contrib.auth import logout as django_auth_logout
-from rest_framework import status
+from rest_framework import parsers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from tooli_uk_app.models import User
 from tooli_uk_app.models.user_organization import UserOrganization
 from tooli_uk_app.serializers.auth import LoginSerializer, SignupSerializer
 from tooli_uk_app.serializers.user import UserSerializer
 
 
 class SignupAPIView(APIView):
+    parser_classes = [
+        parsers.JSONParser,
+        parsers.MultiPartParser,
+        parsers.FormParser,
+    ]
+
     def post(self, request):
-        serializer = SignupSerializer(data=request.data)
+        if request.content_type and "multipart/form-data" in request.content_type:
+            raw = request.data.get("payload")
+            if raw is None:
+                return Response(
+                    {
+                        "detail": 'Multipart signup requires a JSON string field "payload" '
+                        "(same fields as JSON signup). Optional file field "avatar".'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if isinstance(raw, (bytes, bytearray)):
+                raw = raw.decode()
+            try:
+                body = json.loads(raw)
+            except json.JSONDecodeError as exc:
+                return Response(
+                    {"detail": f"Invalid payload JSON: {exc}"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            avatar_file = request.FILES.get("avatar")
+            serializer = SignupSerializer(
+                data=body,
+                context={"request": request, "avatar_file": avatar_file},
+            )
+        else:
+            serializer = SignupSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         result = serializer.save()
+        user = User.objects.get(pk=result["user_id"])
+        result["user"] = UserSerializer(user, context={"request": request}).data
         return Response(
             {
                 "message": "Signup successful.",
@@ -40,7 +76,7 @@ class LoginAPIView(APIView):
             {
                 "message": "Login successful.",
                 "data": {
-                    "user": UserSerializer(user).data,
+                    "user": UserSerializer(user, context={"request": request}).data,
                     "role_key": role_key,
                     "organization_id": organization_id,
                 },
