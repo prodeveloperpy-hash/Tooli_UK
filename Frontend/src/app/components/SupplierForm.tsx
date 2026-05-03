@@ -21,10 +21,12 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
     lastName: '',
     email: '',
     avatarUrl: '',
+    avatarFile: null as File | null,
     companyName: '',
     domain: '',
     city: '',
     logoUrl: '',
+    logoFile: null as File | null,
   });
 
   useEffect(() => {
@@ -34,10 +36,12 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
         lastName: supplier.user_details.last_name,
         email: supplier.user_details.email,
         avatarUrl: supplier.user_details.avatar_url || '',
+        avatarFile: null,
         companyName: supplier.organization_details.name,
         domain: supplier.organization_details.domain,
         city: supplier.organization_details.city,
         logoUrl: supplier.organization_details.logo || '',
+        logoFile: null,
       });
     } else {
       setFormData({
@@ -45,10 +49,12 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
         lastName: '',
         email: '',
         avatarUrl: '',
+        avatarFile: null,
         companyName: '',
         domain: '',
         city: '',
         logoUrl: '',
+        logoFile: null,
       });
     }
   }, [supplier, isOpen]);
@@ -105,7 +111,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
                       const file = e.target.files?.[0];
                       if (file) {
                         const url = URL.createObjectURL(file);
-                        setFormData({...formData, avatarUrl: url});
+                        setFormData({...formData, avatarUrl: url, avatarFile: file});
                       }
                     }}
                   />
@@ -200,7 +206,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
                       const file = e.target.files?.[0];
                       if (file) {
                         const url = URL.createObjectURL(file);
-                        setFormData({...formData, logoUrl: url});
+                        setFormData({...formData, logoUrl: url, logoFile: file});
                       }
                     }}
                   />

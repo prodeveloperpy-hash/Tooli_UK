@@ -1,54 +1,74 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { SearchBar } from '../components/SearchBar';
 import { EquipmentCard } from '../components/EquipmentCard';
-import { FilterSidebar } from '../components/FilterSidebar';
 import { Button } from '../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { LayoutGrid, LayoutList, SlidersHorizontal } from 'lucide-react';
-import { searchResults } from '../../data/mockData';
-import { Skeleton } from '../components/ui/skeleton';
-import { Sheet, SheetContent, SheetTrigger } from '../components/ui/sheet';
+import { LayoutGrid, LayoutList, Loader2 } from 'lucide-react';
+import { equipmentApi, Equipment } from '../../context/equipment.api';
 
 type SortOption = 'price-asc' | 'price-desc' | 'rating-desc';
 
 export function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const [view, setView] = useState<'grid' | 'list'>('grid');
-  const [sortBy, setSortBy] = useState<SortOption>('price-asc');
+  const [sortBy, setSortBy] = useState<SortOption>('price-desc');
+  const [equipment, setEquipment] = useState<Equipment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const equipmentType = searchParams.get('type');
   const city = searchParams.get('city');
 
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      setIsLoading(true);
+      try {
+        const response = await equipmentApi.getEquipment();
+        setEquipment(response.results);
+      } catch (error) {
+        console.error('Error fetching equipment:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchEquipment();
+  }, []);
+
   const filteredAndSortedResults = useMemo(() => {
-    let results = [...searchResults];
+    let results = [...equipment];
 
     if (equipmentType) {
-      results = results.filter((r) => r.category === equipmentType);
+      // Assuming category search for now, could be improved based on schema
+      results = results.filter((r) => r.category_id === parseInt(equipmentType) || r.name.toLowerCase().includes(equipmentType.toLowerCase()));
     }
 
     if (city) {
+      // Basic filtering by organization name as proxy for location if location data is nested/complex
       results = results.filter((r) =>
-        r.supplierLocation.toLowerCase().includes(city.toLowerCase())
+        r.organization_name.toLowerCase().includes(city.toLowerCase())
       );
     }
 
     results.sort((a, b) => {
+      const priceA = parseFloat(a.prices[0]?.price || '0');
+      const priceB = parseFloat(b.prices[0]?.price || '0');
+      
       switch (sortBy) {
         case 'price-asc':
-          return a.weeklyPrice - b.weeklyPrice;
+          return priceA - priceB;
         case 'price-desc':
-          return b.weeklyPrice - a.weeklyPrice;
+          return priceB - priceA;
         case 'rating-desc':
-          return b.supplierRating - a.supplierRating;
+          // Mock rating sorting as API doesn't have it yet
+          return 0;
         default:
           return 0;
       }
     });
 
     return results;
-  }, [equipmentType, city, sortBy]);
+  }, [equipment, equipmentType, city, sortBy]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -65,7 +85,7 @@ export function SearchResultsPage() {
               {equipmentType || 'All Equipment'}
             </h1>
             <p className="text-muted-foreground">
-              {filteredAndSortedResults.length} results found
+              {isLoading ? 'Searching...' : `${filteredAndSortedResults.length} results found`}
               {city && ` in ${city}`}
             </p>
           </div>
@@ -76,7 +96,6 @@ export function SearchResultsPage() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="price-asc">Price: Low to High</SelectItem>
                 <SelectItem value="price-desc">Price: High to Low</SelectItem>
                 <SelectItem value="rating-desc">Highest Rated</SelectItem>
               </SelectContent>
@@ -98,48 +117,39 @@ export function SearchResultsPage() {
                 <LayoutList className="w-4 h-4" />
               </Button>
             </div>
-
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="md:hidden">
-                  <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filters
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <FilterSidebar />
-              </SheetContent>
-            </Sheet>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[280px_1fr] gap-8">
-          <aside className="hidden lg:block">
-            <FilterSidebar />
-          </aside>
-
-          <div>
-            {filteredAndSortedResults.length === 0 ? (
-              <div className="text-center py-20">
-                <h3 className="text-xl font-semibold mb-2">No results found</h3>
-                <p className="text-muted-foreground">
-                  Try adjusting your search criteria or filters
-                </p>
-              </div>
-            ) : (
-              <div
-                className={
-                  view === 'grid'
-                    ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
-                    : 'flex flex-col gap-6'
-                }
-              >
-                {filteredAndSortedResults.map((result) => (
-                  <EquipmentCard key={result.id} result={result} view={view} />
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="w-full">
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="w-10 h-10 text-brand-primary animate-spin mb-4" />
+              <p className="text-muted-foreground font-medium">Fetching the best deals for you...</p>
+            </div>
+          ) : (
+            <div>
+              {filteredAndSortedResults.length === 0 ? (
+                <div className="text-center py-20">
+                  <h3 className="text-xl font-semibold mb-2">No results found</h3>
+                  <p className="text-muted-foreground">
+                    Try adjusting your search criteria or explore other categories
+                  </p>
+                </div>
+              ) : (
+                <div
+                  className={
+                    view === 'grid'
+                      ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
+                      : 'flex flex-col gap-6'
+                  }
+                >
+                  {filteredAndSortedResults.map((result) => (
+                    <EquipmentCard key={result.equipment_id} equipment={result} view={view} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

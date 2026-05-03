@@ -8,6 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ArrowRight, CheckCircle, Search, BarChart3, Handshake, MapPin, Calendar as CalendarIcon } from 'lucide-react';
 import { categories } from '../../data/mockData';
 import { Link } from 'react-router-dom';
+import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
+import { Calendar } from '../components/ui/calendar';
+import { format } from 'date-fns';
+import { useState } from 'react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,6 +29,7 @@ const itemVariants = {
 };
 
 export function HomePage() {
+  const [date, setDate] = useState<Date>();
   const suppliers = [
     { name: 'RapidHire', logo: '/images/suppliers/rapidhire.png', price: '150', available: true },
     { name: 'PlantRoll', logo: '/images/suppliers/plantroll.png', price: '175', available: true },
@@ -92,13 +97,25 @@ export function HomePage() {
 
                 <div className="md:col-span-3 space-y-3">
                   <Label className="text-gray-700 font-bold text-sm block">Dates</Label>
-                  <div className="relative">
-                    <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
-                    <Input
-                      placeholder="Start date — End date"
-                      className="h-12 bg-white border-gray-200 pl-10 rounded-lg"
-                    />
-                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className="h-12 w-full justify-start text-left font-normal bg-white border-gray-200 pl-10 rounded-lg relative"
+                      >
+                        <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
+                        {date ? format(date, "PPP") : <span className="text-gray-400">Start date — End date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className="md:col-span-2 pt-[31px]">
@@ -173,7 +190,7 @@ export function HomePage() {
               <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-50">
                 <h2 className="text-xl font-bold">Mini Excavator near Bristol</h2>
                 <div className="flex items-center gap-3 w-full md:w-auto">
-                  <Select defaultValue="price-low">
+                  <Select defaultValue="price-high">
                     <SelectTrigger className="h-10 bg-white border-gray-200 rounded-lg text-sm w-full md:w-48">
                       <div className="flex items-center gap-2">
                         <span className="text-gray-400">Sort by:</span>
@@ -181,7 +198,6 @@ export function HomePage() {
                       </div>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="price-low">Price (Low)</SelectItem>
                       <SelectItem value="price-high">Price (High)</SelectItem>
                       <SelectItem value="distance">Distance</SelectItem>
                     </SelectContent>

@@ -40,6 +40,7 @@ import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
 import { equipmentApi, Equipment } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
+import { EquipmentForm } from '../components/EquipmentForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
 
 export function AdminDashboard() {
@@ -54,11 +55,14 @@ export function AdminDashboard() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<UserOrganization | null>(null);
 
+  const [isEquipFormOpen, setIsEquipFormOpen] = useState(false);
+  const [isEquipDeleteOpen, setIsEquipDeleteOpen] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+
   const fetchSuppliers = async () => {
     setIsLoading(true);
     try {
       const data = await userApi.getUserOrganizations();
-      // Handle both direct array response and paginated object { results: [] }
       const supplierList = Array.isArray(data) ? data : (data as any).results || [];
       const filtered = supplierList.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
       setSuppliers(filtered);
@@ -101,34 +105,110 @@ export function AdminDashboard() {
     setIsDeleteOpen(true);
   };
 
+  const handleOpenEquipAdd = () => {
+    setSelectedEquipment(null);
+    setIsEquipFormOpen(true);
+  };
+
+  const handleOpenEquipEdit = (e: Equipment) => {
+    setSelectedEquipment(e);
+    setIsEquipFormOpen(true);
+  };
+
+  const handleOpenEquipDelete = (e: Equipment) => {
+    setSelectedEquipment(e);
+    setIsEquipDeleteOpen(true);
+  };
+
+  const handleEquipSubmit = async (data: any) => {
+    const formData = new FormData();
+    const payload = {
+      name: data.name,
+      description: data.description,
+      is_active: true,
+      category_id: parseInt(data.categoryId),
+      organization_id: parseInt(data.supplierId),
+      created_by: 10,
+      updated_by: 10,
+      location: {
+        location_id: 3,
+        is_active: true
+      },
+      prices: [
+        {
+          location_id: 3,
+          interval_id: 1,
+          is_active: true,
+          price: data.price,
+          currency: data.currency
+        }
+      ],
+      images: data.imagePreviews.map((url: string, index: number) => ({
+        image_url: url.startsWith('blob:') ? null : url,
+        is_active: true,
+        sort_order: index
+      })),
+      availabilities: [
+        {
+          availability_from: data.availableFrom ? new Date(data.availableFrom).toISOString() : "2026-06-01T08:00:00Z",
+          availability_to: data.availableTo ? new Date(data.availableTo).toISOString() : "2026-08-31T18:00:00Z",
+          is_active: true
+        }
+      ]
+    };
+
+    formData.append('payload', JSON.stringify(payload));
+    data.imageFiles.forEach((file: File) => {
+      formData.append('images', file);
+    });
+
+    try {
+      if (selectedEquipment) {
+        await equipmentApi.updateEquipment(selectedEquipment.equipment_id, formData);
+      } else {
+        await equipmentApi.createEquipment(formData);
+      }
+      await fetchEquipment();
+      setIsEquipFormOpen(false);
+    } catch (error) {
+      console.error('Error saving equipment:', error);
+      throw error;
+    }
+  };
+
+  const handleEquipDeleteConfirm = async () => {
+    if (!selectedEquipment) return;
+    try {
+      await equipmentApi.deleteEquipment(selectedEquipment.equipment_id);
+      await fetchEquipment();
+      setIsEquipDeleteOpen(false);
+    } catch (error) {
+      console.error('Error deleting equipment:', error);
+      throw error;
+    }
+  };
+
   const handleAddEditSubmit = async (data: any) => {
     let payload: any = {};
-
     if (selectedSupplier) {
-      // Partial update for PATCH
       const userUpdates: any = {};
       const orgUpdates: any = {};
-
       const compare = (val1: any, val2: any) => {
         const v1 = (val1 || '').toString().trim();
         const v2 = (val2 || '').toString().trim();
         return v1 !== v2;
       };
-
       if (compare(data.firstName, selectedSupplier.user_details.first_name)) userUpdates.first_name = data.firstName;
       if (compare(data.lastName, selectedSupplier.user_details.last_name)) userUpdates.last_name = data.lastName;
       if (compare(data.email, selectedSupplier.user_details.email)) userUpdates.email = data.email;
       if (compare(data.avatarUrl, selectedSupplier.user_details.avatar_url)) userUpdates.avatar_url = data.avatarUrl;
-
       if (compare(data.companyName, selectedSupplier.organization_details.name)) orgUpdates.name = data.companyName;
       if (compare(data.domain, selectedSupplier.organization_details.domain)) orgUpdates.domain = data.domain;
       if (compare(data.city, selectedSupplier.organization_details.city)) orgUpdates.city = data.city;
       if (compare(data.logoUrl, selectedSupplier.organization_details.logo)) orgUpdates.logo = data.logoUrl;
-
       if (Object.keys(userUpdates).length > 0) payload.user = userUpdates;
       if (Object.keys(orgUpdates).length > 0) payload.organization = orgUpdates;
     } else {
-      // Full payload for POST
       payload = {
         user: {
           first_name: data.firstName,
@@ -148,7 +228,6 @@ export function AdminDashboard() {
         role_id: 3,
       };
     }
-
     try {
       if (selectedSupplier) {
         if (Object.keys(payload).length > 0) {
@@ -231,8 +310,7 @@ export function AdminDashboard() {
                     </div>
                     <div className="text-3xl font-bold mb-1 tracking-tight">{stat.value}</div>
                     <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">{stat.title}</p>
-                  </CardContent>
-                </Card>
+                  </CardContent>                </Card>
               </motion.div>
             ))}
           </div>
@@ -286,8 +364,7 @@ export function AdminDashboard() {
                           <TableHead className="font-bold">Location</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
                           <TableHead className="text-right font-bold pr-6">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
+                        </TableRow>                      </TableHeader>
                       <TableBody>
                         {isLoading ? (
                           <TableRow>
@@ -366,10 +443,9 @@ export function AdminDashboard() {
                 <CardHeader className="bg-white border-b py-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-xl">Manage Equipment</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
+                      <CardTitle className="text-xl">Manage Equipment</CardTitle>                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
                     </div>
-                    <Button className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                    <Button onClick={handleOpenEquipAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Equipment
                     </Button>
@@ -441,10 +517,10 @@ export function AdminDashboard() {
                             </TableCell>
                             <TableCell className="text-right pr-6">
                               <div className="flex justify-end gap-1">
-                                <Button size="icon" variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                                <Button size="icon" variant="ghost" onClick={() => handleOpenEquipEdit(item)} className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
                                   <Edit className="w-4 h-4" />
                                 </Button>
-                                <Button size="icon" variant="ghost" className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                                <Button size="icon" variant="ghost" onClick={() => handleOpenEquipDelete(item)} className="text-destructive hover:text-destructive hover:bg-destructive/10">
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
                               </div>
@@ -468,11 +544,28 @@ export function AdminDashboard() {
         supplier={selectedSupplier} 
       />
 
+      <EquipmentForm 
+        isOpen={isEquipFormOpen}
+        onClose={() => setIsEquipFormOpen(false)}
+        onSubmit={handleEquipSubmit}
+        equipment={selectedEquipment}
+        suppliers={suppliers}
+      />
+
       <DeleteConfirmation 
         isOpen={isDeleteOpen} 
         onClose={() => setIsDeleteOpen(false)} 
         onConfirm={handleDeleteConfirm} 
-        supplier={selectedSupplier} 
+        title="Delete Supplier"
+        description={`Are you sure you want to delete ${selectedSupplier?.user_details.first_name} ${selectedSupplier?.user_details.last_name}? This action cannot be undone.`}
+      />
+
+      <DeleteConfirmation 
+        isOpen={isEquipDeleteOpen}
+        onClose={() => setIsEquipDeleteOpen(false)}
+        onConfirm={handleEquipDeleteConfirm}
+        title="Delete Equipment"
+        description={`Are you sure you want to delete ${selectedEquipment?.name}? This action will remove the listing from the marketplace.`}
       />
 
       <Footer />
