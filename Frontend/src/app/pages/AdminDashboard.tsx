@@ -58,7 +58,9 @@ export function AdminDashboard() {
     setIsLoading(true);
     try {
       const data = await userApi.getUserOrganizations();
-      const filtered = data.filter(item => item.role_details.role_key === 'SUPPLIER');
+      // Handle both direct array response and paginated object { results: [] }
+      const supplierList = Array.isArray(data) ? data : (data as any).results || [];
+      const filtered = supplierList.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
       setSuppliers(filtered);
     } catch (error) {
       console.error('Error fetching suppliers:', error);
@@ -123,23 +125,27 @@ export function AdminDashboard() {
       if (compare(data.city, selectedSupplier.organization_details.city)) orgUpdates.city = data.city;
       if (compare(data.logoUrl, selectedSupplier.organization_details.logo)) orgUpdates.logo = data.logoUrl;
 
-      if (Object.keys(userUpdates).length > 0) payload.user_details = userUpdates;
-      if (Object.keys(orgUpdates).length > 0) payload.organization_details = orgUpdates;
+      if (Object.keys(userUpdates).length > 0) payload.user = userUpdates;
+      if (Object.keys(orgUpdates).length > 0) payload.organization = orgUpdates;
     } else {
       // Full payload for POST
       payload = {
-        user_details: {
+        user: {
           first_name: data.firstName,
           last_name: data.lastName,
           email: data.email,
           avatar_url: data.avatarUrl,
+          password: 'TooliSupplier123!',
         },
-        organization_details: {
+        organization: {
           name: data.companyName,
           domain: data.domain,
           city: data.city,
+          country: 'United Kingdom',
           logo: data.logoUrl,
         },
+        is_active: true,
+        role_id: 3,
       };
     }
 
