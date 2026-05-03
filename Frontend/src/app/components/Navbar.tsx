@@ -12,20 +12,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
+import { ProfileModal } from './ProfileModal';
 
 export function Navbar() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<{ name: string; avatar: string; role: string } | null>(null);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [user, setUser] = useState<{ name: string; avatar: string; role: string; email?: string } | null>(null);
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
     const name = localStorage.getItem('name');
     const avatar = localStorage.getItem('avatar_url');
     const role = localStorage.getItem('role_key');
+    const email = localStorage.getItem('email');
 
     if (userId && name) {
-      setUser({ name, avatar: avatar || '', role: role || '' });
+      setUser({ name, avatar: avatar || '', role: role || '', email: email || '' });
     }
   }, []);
 
@@ -99,7 +102,7 @@ export function Navbar() {
                       <LayoutDashboard className="w-4 h-4 mr-2" />
                       Dashboard
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile')}>
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => setProfileModalOpen(true)}>
                       <User className="w-4 h-4 mr-2" />
                       Profile Settings
                     </DropdownMenuItem>
@@ -156,15 +159,18 @@ export function Navbar() {
                   <Link to="/login" className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
                     Login
                   </Link>
-                  {/* <Link to="/signup" className="text-sm font-medium text-brand-primary" onClick={() => setMobileMenuOpen(false)}>
-                    Sign Up
-                  </Link> */}
                 </>
               )}
             </div>
           </div>
         )}
       </div>
+      <ProfileModal 
+        isOpen={profileModalOpen} 
+        onClose={() => setProfileModalOpen(false)} 
+        user={user}
+        onUpdate={(updatedUser) => setUser({...user, ...updatedUser})}
+      />
     </nav>
   );
 }

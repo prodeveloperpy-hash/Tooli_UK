@@ -28,6 +28,21 @@ export interface UserOrganization {
 }
 
 export const userApi = {
+  getUser: async (id: number): Promise<any> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}user/${id}/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user');
+    }
+
+    return response.json();
+  },
+
   getUserOrganizations: async (): Promise<UserOrganization[]> => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}user-organization/`, {
