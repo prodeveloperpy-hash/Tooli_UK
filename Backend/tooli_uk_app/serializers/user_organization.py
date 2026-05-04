@@ -29,11 +29,21 @@ class UserOrganizationUserDetailSerializer(serializers.Serializer):
 class UserOrganizationOrganizationDetailSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
     domain = serializers.CharField(read_only=True, allow_null=True)
-    logo = serializers.CharField(read_only=True, allow_null=True)
+    logo = serializers.SerializerMethodField()
     city = serializers.CharField(read_only=True, allow_null=True)
     state = serializers.CharField(read_only=True, allow_null=True)
     country = serializers.CharField(read_only=True, allow_null=True)
     is_active = serializers.BooleanField(read_only=True)
+
+    def get_logo(self, obj):
+        raw = (obj.logo or "").strip() if obj else ""
+        if not raw or _is_public_http_url(raw):
+            return raw or None
+        request = self.context.get("request")
+        if request is None:
+            return raw
+        path = reverse("organization-logo", kwargs={"pk": obj.pk})
+        return request.build_absolute_uri(path)
 
 
 class UserOrganizationRoleDetailSerializer(serializers.Serializer):
@@ -255,6 +265,22 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             except RuntimeError as exc:
                 raise serializers.ValidationError({"avatar": str(exc)}) from exc
 
+        org_logo_file = self.context.get("organization_logo")
+        if org_logo_file and organization_id:
+            from tooli_uk_app.services import gcs_images
+
+            org_obj = Organization.objects.get(pk=organization_id)
+            try:
+                org_obj.logo = gcs_images.upload_organization_logo(
+                    org_logo_file, organization_id
+                )
+                org_obj.updated_datetime = now
+                org_obj.save(update_fields=["logo", "updated_datetime"])
+            except RuntimeError as exc:
+                raise serializers.ValidationError(
+                    {"organization_logo": str(exc)}
+                ) from exc
+
         if UserOrganization.objects.filter(
             user_id_id=user_id, organization_id_id=organization_id
         ).exists():
@@ -279,10 +305,9 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         now = timezone.now()
         user_payload = validated_data.pop("user", None)
         org_payload = validated_data.pop("organization", None)
-        updated_by = validated_data.pop("updated_by", None)
         validated_data.pop("created_by", None)
+        updated_by = validated_data.pop("updated_by", None)
 
-        # Update membership fields
         if "user_id" in validated_data:
             instance.user_id_id = validated_data.pop("user_id")
         if "organization_id" in validated_data:
@@ -291,8 +316,6 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             instance.role_id_id = validated_data.pop("role_id")
         if "is_active" in validated_data:
             instance.is_active = validated_data.pop("is_active")
-        updated_by = validated_data.pop("updated_by", None)
-        validated_data.pop("created_by", None)
 
         if user_payload:
             u = User.objects.get(pk=instance.user_id_id)
@@ -351,5 +374,21 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
                 u.save(update_fields=["avatar_url", "updated_datetime"])
             except RuntimeError as exc:
                 raise serializers.ValidationError({"avatar": str(exc)}) from exc
+
+        org_logo_file = self.context.get("organization_logo")
+        if org_logo_file:
+            from tooli_uk_app.services import gcs_images
+
+            o = Organization.objects.get(pk=instance.organization_id_id)
+            try:
+                o.logo = gcs_images.upload_organization_logo(
+                    org_logo_file, o.organization_id
+                )
+                o.updated_datetime = now
+                o.save(update_fields=["logo", "updated_datetime"])
+            except RuntimeError as exc:
+                raise serializers.ValidationError(
+                    {"organization_logo": str(exc)}
+                ) from exc
 
         return instance
