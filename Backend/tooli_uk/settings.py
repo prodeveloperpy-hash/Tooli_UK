@@ -31,9 +31,13 @@ SECRET_KEY = os.environ.get(
     "replace-this-with-a-strong-static-secret-key",
 )
 
-DEBUG = False
+DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = ["*"]
+# Comma-separated hostnames, no scheme (e.g. "api.example.com,.run.app"). Empty = allow all (dev only).
+_allowed = os.environ.get("DJANGO_ALLOWED_HOSTS", "").strip()
+ALLOWED_HOSTS = (
+    [h.strip() for h in _allowed.split(",") if h.strip()] if _allowed else ["*"]
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -179,12 +183,33 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://frontend-service-961815749151.us-central1.run.app",
-    "http://localhost:5173",
-]
+# Browser origins allowed to call the API (scheme + host + port). Override in production via env.
+_cors = os.environ.get("CORS_ALLOWED_ORIGINS", "").strip()
+if _cors:
+    CORS_ALLOWED_ORIGINS = [x.strip() for x in _cors.split(",") if x.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "https://frontend-service-961815749151.us-central1.run.app",
+        "http://localhost:5173",
+    ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://frontend-service-961815749151.us-central1.run.app",
-    "http://localhost:5173",
-]
+_csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "").strip()
+if _csrf:
+    CSRF_TRUSTED_ORIGINS = [x.strip() for x in _csrf.split(",") if x.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = list(CORS_ALLOWED_ORIGINS)
+
+CORS_ALLOW_CREDENTIALS = os.environ.get("CORS_ALLOW_CREDENTIALS", "false").lower() in (
+    "1",
+    "true",
+    "yes",
+)
+
+# Cloud Run / reverse proxy: correct scheme and host for absolute URLs (e.g. avatar links) and CSRF.
+if os.environ.get("K_SERVICE") or os.environ.get("USE_CLOUD_RUN_PROXY_HEADERS", "").lower() in (
+    "1",
+    "true",
+    "yes",
+):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    USE_X_FORWARDED_HOST = True

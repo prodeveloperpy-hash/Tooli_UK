@@ -439,8 +439,34 @@ python manage.py create_superadmin       # superadmin@gmail.com / superadmin + S
 
 ## Environment
 
-- **GCS file uploads** (signup avatar, user-org files, org logo, equipment images): set `GCS_IMAGE_BUCKET` (default `tooli-uk-images`) and run with a service account that can read/write the bucket (e.g. Cloud Run runtime SA).
-- **JSON-only URLs** for logos/avatars/images work without GCS.
+### Django / deployment (`tooli_uk/settings.py`)
+
+| Variable | Purpose |
+|----------|---------|
+| `DJANGO_SECRET_KEY` | Production secret (required for real deploys). |
+| `DJANGO_DEBUG` | `true` only for local debugging (default off). |
+| `DJANGO_ALLOWED_HOSTS` | Comma-separated hosts (no `https://`), e.g. `backend-xxx.run.app,api.example.com`. Empty = `*` (dev). |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated **browser** origins that may call the API, e.g. `https://your-frontend.run.app,http://localhost:5173`. If unset, built-in Tooli defaults are used. |
+| `CSRF_TRUSTED_ORIGINS` | Same style as CORS; for cookie/CSRF. If unset, matches `CORS_ALLOWED_ORIGINS`. |
+| `CORS_ALLOW_CREDENTIALS` | `true` if the SPA sends cookies (`fetch` with `credentials: 'include'`). |
+| `USE_CLOUD_RUN_PROXY_HEADERS` | Set `true` if not on Cloud Run but behind a proxy that sets `X-Forwarded-Proto` (optional). On Cloud Run, `K_SERVICE` enables this automatically. |
+| `GCS_IMAGE_BUCKET` | Private bucket name (default `tooli-uk-images`). |
+| `GCS_UPLOAD_ENABLED` | `false` = store uploads under `media/` only (no GCP auth). |
+| `GCS_HTTP_TIMEOUT_SECONDS` | GCS HTTP timeout (default `300`). |
+| `GCS_SERVICE_ACCOUNT_FILE` / `GOOGLE_APPLICATION_CREDENTIALS` | Optional SA JSON path; Cloud Run uses runtime SA if unset. |
+| `GCP_PROJECT_ID` | Optional explicit GCP project for the Storage client. |
+
+**GCS file uploads** (avatars, org logos, equipment images) use the bucket above with **ADC** on Cloud Run. **JSON `https://...` image URLs** work without uploading to GCS.
+
+### Frontend (Vite) — must match backend
+
+| Variable | Purpose |
+|----------|---------|
+| `VITE_API_URL` | Base URL of this Django API (e.g. `https://your-backend.run.app`). Defaults to `http://localhost:8000` in `Frontend/src/api-config.ts`. |
+
+**CORS:** every production frontend origin must appear in **`CORS_ALLOWED_ORIGINS`** (and usually **`CSRF_TRUSTED_ORIGINS`**).
+
+**Multipart uploads** (user-org `avatar` / `organization_logo`, equipment `images` files) must use **`FormData`** in the browser; JSON-only requests cannot attach files. See signup and equipment sections above.
 
 ### Local development — `DefaultCredentialsError` (Python cannot reach GCS)
 
