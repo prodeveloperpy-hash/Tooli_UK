@@ -5,6 +5,7 @@ import { SearchResultsPage } from './pages/SearchResultsPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { SupplierDashboard } from './pages/SupplierDashboard';
 import { AboutPage } from './pages/AboutPage';
+import { HowItWorksPage } from './pages/HowItWorksPage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { SuppliersPage } from './pages/SuppliersPage';
@@ -17,6 +18,7 @@ export default function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/suppliers" element={<SuppliersPage />} />
           <Route path="/help" element={<HelpPage />} />
