@@ -3,19 +3,46 @@ import { Button } from '../components/ui/button';
 import { Label } from '../components/ui/label';
 import { Input } from '../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { CheckCircle, Search, BarChart3, MapPin, Calendar as CalendarIcon, ChevronRight } from 'lucide-react';
+import { CheckCircle, Search, BarChart3, MapPin, Calendar as CalendarIcon, ChevronRight, X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import { Calendar } from '../components/ui/calendar';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { equipmentApi, Category, Location } from '../../context/equipment.api';
 
 export function HomePage() {
   const navigate = useNavigate();
   const [date, setDate] = useState<Date>();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [searchData, setSearchData] = useState({
+    categoryId: '',
+    locationId: '',
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [catData, locData] = await Promise.all([
+          equipmentApi.getCategories(),
+          equipmentApi.getLocations()
+        ]);
+        setCategories(catData);
+        setLocations(locData);
+      } catch (error) {
+        console.error('Error fetching search data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSearch = () => {
-    navigate('/search');
+    const params = new URLSearchParams();
+    if (searchData.categoryId) params.append('category', searchData.categoryId);
+    if (searchData.locationId) params.append('location', searchData.locationId);
+    if (date) params.append('date', format(date, 'yyyy-MM-dd'));
+    navigate(`/search?${params.toString()}`);
   };
 
   return (
@@ -49,41 +76,66 @@ export function HomePage() {
 
             {/* Search Bar Component */}
             <div className="bg-white rounded-[24px] shadow-2xl p-2 max-w-4xl">
-              <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1.5fr_auto] gap-1 items-center">
-                <div className="px-5 py-3 md:border-r border-gray-100">
+              <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1.5fr_1.5fr_auto] gap-1 items-center">
+                <div className="px-5 py-3 md:border-r border-gray-100 relative group/field">
                   <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">What equipment do you need?</Label>
-                  <Select>
-                    <SelectTrigger className="h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-base font-bold">
+                  <Select value={searchData.categoryId} onValueChange={(v) => setSearchData({...searchData, categoryId: v})}>
+                    <SelectTrigger className="h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-base font-bold pr-8">
                       <div className="flex items-center gap-2">
                         <Search className="w-4 h-4 text-gray-400" />
                         <SelectValue placeholder="e.g. Mini Excavator" />
                       </div>
                     </SelectTrigger>
-                    <SelectContent className="rounded-xl border-gray-100">
-                      <SelectItem value="mini-excavator">Mini Excavator</SelectItem>
-                      <SelectItem value="dumper">Dumper</SelectItem>
-                      <SelectItem value="roller">Roller</SelectItem>
-                      <SelectItem value="telehandler">Telehandler</SelectItem>
+                    <SelectContent className="rounded-xl border-gray-100 max-h-[300px]">
+                      {categories.map(cat => (
+                        <SelectItem key={cat.category_id} value={cat.category_id.toString()}>
+                          {cat.category_display_name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                  {searchData.categoryId && (
+                    <button 
+                      onClick={() => setSearchData({...searchData, categoryId: ''})}
+                      className="absolute right-4 top-[60%] -translate-y-1/2 p-1 text-gray-300 hover:text-brand-primary transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
 
-                <div className="px-5 py-3 md:border-r border-gray-100">
+                <div className="px-5 py-3 md:border-r border-gray-100 relative group/field">
                   <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Location</Label>
-                  <div className="relative flex items-center">
-                    <MapPin className="w-4 h-4 text-gray-400 mr-2" />
-                    <Input
-                      placeholder="Enter postcode"
-                      className="h-9 bg-transparent border-none p-0 focus-visible:ring-0 shadow-none text-base font-bold placeholder:text-gray-300"
-                    />
-                  </div>
+                  <Select value={searchData.locationId} onValueChange={(v) => setSearchData({...searchData, locationId: v})}>
+                    <SelectTrigger className="h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-base font-bold pr-8">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <SelectValue placeholder="Select Location" />
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl border-gray-100 max-h-[300px]">
+                      {locations.map(loc => (
+                        <SelectItem key={loc.location_id} value={loc.location_id.toString()}>
+                          {loc.city_name}, {loc.country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {searchData.locationId && (
+                    <button 
+                      onClick={() => setSearchData({...searchData, locationId: ''})}
+                      className="absolute right-4 top-[60%] -translate-y-1/2 p-1 text-gray-300 hover:text-brand-primary transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
 
-                <div className="px-5 py-3">
+                <div className="px-5 py-3 relative group/field">
                   <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Dates</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <button className="flex items-center w-full h-9 text-left font-bold text-base bg-transparent">
+                      <button className="flex items-center w-full h-9 text-left font-bold text-base bg-transparent pr-8">
                         <CalendarIcon className="w-4 h-4 text-gray-400 mr-2" />
                         {date ? format(date, "PPP") : <span className="text-gray-300">Start — End date</span>}
                       </button>
@@ -92,6 +144,14 @@ export function HomePage() {
                       <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
                     </PopoverContent>
                   </Popover>
+                  {date && (
+                    <button 
+                      onClick={() => setDate(undefined)}
+                      className="absolute right-4 top-[60%] -translate-y-1/2 p-1 text-gray-300 hover:text-brand-primary transition-colors"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
 
                 <div className="p-1">

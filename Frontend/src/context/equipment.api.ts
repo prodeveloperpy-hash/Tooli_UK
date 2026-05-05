@@ -29,9 +29,15 @@ export interface EquipmentResponse {
 }
 
 export const equipmentApi = {
-  getEquipment: async (): Promise<EquipmentResponse> => {
+  getEquipment: async (categoryId?: string, locationId?: string, availabilityFrom?: string, page: number = 1): Promise<EquipmentResponse> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/equipment/`, {
+    const params = new URLSearchParams();
+    if (categoryId) params.append('category_id', categoryId);
+    if (locationId) params.append('location_id', locationId);
+    if (availabilityFrom) params.append('availability_from', availabilityFrom);
+    params.append('page', page.toString());
+
+    const response = await fetch(`${API_URL}/equipment/?${params.toString()}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -46,7 +52,7 @@ export const equipmentApi = {
 
   createEquipment: async (data: any): Promise<Equipment> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/equipment/`, {
+    const response = await fetch(`${API_URL}/create-equipment/`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -64,7 +70,7 @@ export const equipmentApi = {
 
   updateEquipment: async (id: number, data: any): Promise<Equipment> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/equipment/${id}/`, {
+    const response = await fetch(`${API_URL}/create-equipment/${id}/`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
