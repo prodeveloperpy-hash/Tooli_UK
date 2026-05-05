@@ -201,11 +201,10 @@ export function AdminDashboard() {
       if (compare(data.firstName, selectedSupplier.user_details.first_name)) userUpdates.first_name = data.firstName;
       if (compare(data.lastName, selectedSupplier.user_details.last_name)) userUpdates.last_name = data.lastName;
       if (compare(data.email, selectedSupplier.user_details.email)) userUpdates.email = data.email;
-      if (compare(data.avatarUrl, selectedSupplier.user_details.avatar_url)) userUpdates.avatar_url = data.avatarUrl;
       if (compare(data.companyName, selectedSupplier.organization_details.name)) orgUpdates.name = data.companyName;
       if (compare(data.domain, selectedSupplier.organization_details.domain)) orgUpdates.domain = data.domain;
       if (compare(data.city, selectedSupplier.organization_details.city)) orgUpdates.city = data.city;
-      if (compare(data.logoUrl, selectedSupplier.organization_details.logo)) orgUpdates.logo = data.logoUrl;
+      
       if (Object.keys(userUpdates).length > 0) payload.user = userUpdates;
       if (Object.keys(orgUpdates).length > 0) payload.organization = orgUpdates;
     } else {
@@ -214,7 +213,6 @@ export function AdminDashboard() {
           first_name: data.firstName,
           last_name: data.lastName,
           email: data.email,
-          avatar_url: data.avatarUrl,
           password: 'TooliSupplier123!',
         },
         organization: {
@@ -222,19 +220,29 @@ export function AdminDashboard() {
           domain: data.domain,
           city: data.city,
           country: 'United Kingdom',
-          logo: data.logoUrl,
         },
         is_active: true,
         role_id: 3,
       };
     }
+
     try {
       if (selectedSupplier) {
-        if (Object.keys(payload).length > 0) {
-          await userApi.updateUserOrganization(selectedSupplier.user_organization_id, payload);
+        // If we have updates OR files to upload
+        if (Object.keys(payload).length > 0 || data.avatarFile || data.logoFile) {
+          await userApi.updateUserOrganizationFiles(
+            selectedSupplier.user_organization_id, 
+            payload, 
+            data.avatarFile || undefined, 
+            data.logoFile || undefined
+          );
         }
       } else {
-        await userApi.createUserOrganization(payload);
+        await userApi.createUserOrganizationFiles(
+          payload, 
+          data.avatarFile || undefined, 
+          data.logoFile || undefined
+        );
       }
       await fetchSuppliers();
     } catch (error) {

@@ -54,6 +54,9 @@ export function Navbar() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-8">
+              <Link to="/" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
+                Home
+              </Link>
               <Link to="/how-it-works" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
                 How It Works
               </Link>
@@ -141,6 +144,9 @@ export function Navbar() {
         {mobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-50">
             <div className="flex flex-col gap-4">
+              <Link to="/" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
+                Home
+              </Link>
               <Link to="/how-it-works" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
                 How It Works
               </Link>

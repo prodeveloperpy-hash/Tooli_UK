@@ -110,4 +110,59 @@ export const userApi = {
       throw new Error('Failed to delete supplier');
     }
   },
+
+  createUserOrganizationFiles: async (payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    
+    // Add the payload as a JSON string
+    formData.append('payload', JSON.stringify(payload));
+    
+    // Add files if they exist
+    if (avatar) formData.append('avatar', avatar);
+    if (logo) formData.append('organization_logo', logo);
+
+    const response = await fetch(`${API_URL}user-organization/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to create user/organization files');
+    }
+
+    return response.json();
+  },
+
+  updateUserOrganizationFiles: async (id: number, payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    
+    // Add the payload as a JSON string
+    formData.append('payload', JSON.stringify(payload));
+    
+    // Add files if they exist
+    if (avatar) formData.append('avatar', avatar);
+    if (logo) formData.append('organization_logo', logo);
+
+    const response = await fetch(`${API_URL}user-organization/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        // Browser will automatically set multipart/form-data and the boundary
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to update user/organization files');
+    }
+
+    return response.json();
+  },
 };
