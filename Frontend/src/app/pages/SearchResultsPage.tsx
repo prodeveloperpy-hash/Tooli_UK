@@ -68,7 +68,7 @@ export function SearchResultsPage() {
   return (
     <div className="min-h-screen bg-[#F8F9FC]">
       {/* Sticky Sub-Header with SearchBar */}
-      <div className="bg-white border-b sticky top-16 z-40 shadow-sm">
+      <div className="bg-white border-b shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <SearchBar className="shadow-none border-none bg-transparent p-0" />
         </div>

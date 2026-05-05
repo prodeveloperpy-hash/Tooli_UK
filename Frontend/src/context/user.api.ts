@@ -30,7 +30,7 @@ export interface UserOrganization {
 export const userApi = {
   getUser: async (id: number): Promise<any> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}user/${id}/`, {
+    const response = await fetch(`${API_URL}/user/${id}/`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -45,7 +45,7 @@ export const userApi = {
 
   getUserOrganizations: async (): Promise<UserOrganization[]> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}user-organization/`, {
+    const response = await fetch(`${API_URL}/user-organization/`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -60,7 +60,7 @@ export const userApi = {
 
   createUserOrganization: async (data: any): Promise<UserOrganization> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}user-organization/`, {
+    const response = await fetch(`${API_URL}/user-organization/`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -81,7 +81,7 @@ export const userApi = {
 
   updateUserOrganization: async (id: number, data: any): Promise<UserOrganization> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}user-organization/${id}/`, {
+    const response = await fetch(`${API_URL}/user-organization/${id}/`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -99,7 +99,7 @@ export const userApi = {
 
   deleteUserOrganization: async (id: number): Promise<void> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}user-organization/${id}/`, {
+    const response = await fetch(`${API_URL}/user-organization/${id}/`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -109,5 +109,60 @@ export const userApi = {
     if (!response.ok) {
       throw new Error('Failed to delete supplier');
     }
+  },
+
+  createUserOrganizationFiles: async (payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    
+    // Add the payload as a JSON string
+    formData.append('payload', JSON.stringify(payload));
+    
+    // Add files if they exist
+    if (avatar) formData.append('avatar', avatar);
+    if (logo) formData.append('organization_logo', logo);
+
+    const response = await fetch(`${API_URL}/user-organization/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to create user/organization files');
+    }
+
+    return response.json();
+  },
+
+  updateUserOrganizationFiles: async (id: number, payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    
+    // Add the payload as a JSON string
+    formData.append('payload', JSON.stringify(payload));
+    
+    // Add files if they exist
+    if (avatar) formData.append('avatar', avatar);
+    if (logo) formData.append('organization_logo', logo);
+
+    const response = await fetch(`${API_URL}/user-organization/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        // Browser will automatically set multipart/form-data and the boundary
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to update user/organization files');
+    }
+
+    return response.json();
   },
 };
