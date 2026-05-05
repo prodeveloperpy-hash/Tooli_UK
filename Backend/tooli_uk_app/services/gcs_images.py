@@ -10,6 +10,11 @@ from urllib.parse import unquote, urlparse
 
 from django.conf import settings
 
+try:
+    import requests
+except ImportError:  # pragma: no cover
+    requests = None  # type: ignore[assignment]
+
 if TYPE_CHECKING:
     from django.core.files.uploadedfile import UploadedFile
 
@@ -26,6 +31,35 @@ def _bucket_name() -> str:
     if not name:
         raise RuntimeError("GCS_IMAGE_BUCKET is not configured.")
     return name
+
+
+def _gcs_http_timeout_seconds() -> float:
+    return float(getattr(settings, "GCS_HTTP_TIMEOUT_SECONDS", 300) or 300)
+
+
+def _upload_blob_from_bytes(blob, data: bytes, content_type: str) -> None:
+    """Upload with configurable timeout; map network timeouts to ``RuntimeError`` for API layers."""
+    timeout = _gcs_http_timeout_seconds()
+    try:
+        blob.upload_from_string(data, content_type=content_type, timeout=timeout)
+    except TypeError:
+        blob.upload_from_string(data, content_type=content_type)
+    except Exception as exc:
+        if requests is not None and isinstance(
+            exc,
+            (
+                TimeoutError,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.Timeout,
+                requests.exceptions.ChunkedEncodingError,
+            ),
+        ):
+            raise RuntimeError(
+                "Google Cloud Storage upload timed out or the connection dropped. "
+                "Try a smaller file, a stable network (or VPN off/on), or increase "
+                f"GCS_HTTP_TIMEOUT_SECONDS (seconds; currently {int(timeout)})."
+            ) from exc
+        raise
 
 
 def _client():
@@ -178,7 +212,7 @@ def upload_user_avatar(uploaded_file: UploadedFile, user_id: int) -> str:
     bucket = _client().bucket(_bucket_name())
     blob = bucket.blob(object_name)
     data = uploaded_file.read()
-    blob.upload_from_string(data, content_type=content_type)
+    _upload_blob_from_bytes(blob, data, content_type)
     return object_name
 
 
@@ -198,7 +232,7 @@ def upload_organization_logo(uploaded_file: UploadedFile, organization_id: int) 
     bucket = _client().bucket(_bucket_name())
     blob = bucket.blob(object_name)
     data = uploaded_file.read()
-    blob.upload_from_string(data, content_type=content_type)
+    _upload_blob_from_bytes(blob, data, content_type)
     return object_name
 
 
@@ -216,7 +250,7 @@ def upload_equipment_image(uploaded_file: UploadedFile, equipment_id: int) -> st
     bucket = _client().bucket(_bucket_name())
     blob = bucket.blob(object_name)
     data = uploaded_file.read()
-    blob.upload_from_string(data, content_type=content_type)
+    _upload_blob_from_bytes(blob, data, content_type)
     return object_name
 
 
@@ -254,4 +288,9 @@ def download_blob(object_name: str) -> tuple[bytes, str] | None:
         return None
     blob.reload()
     content_type = blob.content_type or "application/octet-stream"
-    return blob.download_as_bytes(), content_type
+    timeout = _gcs_http_timeout_seconds()
+    try:
+        body = blob.download_as_bytes(timeout=timeout)
+    except TypeError:
+        body = blob.download_as_bytes()
+    return body, content_type

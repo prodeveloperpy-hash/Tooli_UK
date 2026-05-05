@@ -132,6 +132,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
 
+# --- Image storage (shared): user avatars, org logos, equipment images — all via
+# tooli_uk_app.services.gcs_images (POST/PATCH /equipment/, /create_equipment/, etc.).
 # Private GCS bucket for images; Cloud Run should use the runtime service account (ADC).
 GCS_IMAGE_BUCKET = os.environ.get("GCS_IMAGE_BUCKET", "tooli-uk-images")
 
@@ -150,6 +152,12 @@ GCS_UPLOAD_ENABLED = os.environ.get("GCS_UPLOAD_ENABLED", "true").lower() in (
     "true",
     "yes",
 )
+
+# Per-request timeout (seconds) for GCS JSON API (upload/download). Increase on slow links.
+try:
+    GCS_HTTP_TIMEOUT_SECONDS = float(os.environ.get("GCS_HTTP_TIMEOUT_SECONDS", "300"))
+except ValueError:
+    GCS_HTTP_TIMEOUT_SECONDS = 300.0
 
 # API supports JSON and DRF Browsable API form testing.
 REST_FRAMEWORK = {

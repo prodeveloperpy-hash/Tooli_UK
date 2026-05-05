@@ -179,6 +179,29 @@ curl -sS -X DELETE "${BASE}/user-organization/12/"
 
 ---
 
+## Equipment images — one setup for all upload paths
+
+All **equipment** picture uploads use the same storage layer (`tooli_uk_app.services.gcs_images`):
+
+| Flow | Route | Multipart pattern |
+|------|--------|-------------------|
+| Standard API | `POST` / `PATCH` **`/equipment/`** | Form field **`payload`** (JSON) + repeated **`images`** files; `images[]` in JSON one entry per file |
+| Legacy full create/update | `POST` / `PUT` / `PATCH` **`/create_equipment/`** | Same: **`payload`** + **`images`** files |
+| Direct rows (advanced) | `POST` **`/equipment-image/`** | JSON body; file bytes still typically go through equipment create or `/equipment/` multipart |
+
+**After save**, private objects are stored in **`GCS_IMAGE_BUCKET`** (or `local:` under `media/` if `GCS_UPLOAD_ENABLED=false`). List/detail JSON rewrites `image_url` to **`GET /equipment-image/{id}/content/`** (same host as the API).
+
+**Shared environment variables** (see [Environment](#environment) below):
+
+- `GCS_IMAGE_BUCKET` — bucket name  
+- `GCS_UPLOAD_ENABLED` — `true` = GCS (default), `false` = local `media/` only  
+- `GCS_HTTP_TIMEOUT_SECONDS` — upload/download HTTP timeout (slow networks)  
+- `GCS_SERVICE_ACCOUNT_FILE` / `GOOGLE_APPLICATION_CREDENTIALS` — optional key path; Cloud Run uses the runtime SA  
+
+**Behaviour note:** **`/equipment/`** PATCH/PUT **appends** new images. **`/create_equipment/`** **PUT** / **PATCH** can **replace** the whole `images` list when you send `images` in the payload (see that section).
+
+---
+
 ## Equipment
 
 ### List (with filters — combine as needed)
