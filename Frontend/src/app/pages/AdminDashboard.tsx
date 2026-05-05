@@ -245,20 +245,18 @@ export function AdminDashboard() {
       if (Object.keys(orgUpdates).length > 0) payload.organization = orgUpdates;
     } else {
       payload = {
+        role_id: 1,
         user: {
           first_name: data.firstName,
           last_name: data.lastName,
           email: data.email,
-          password: 'TooliSupplier123!',
+          password: data.password || "SecurePass12"
         },
         organization: {
           name: data.companyName,
           domain: data.domain,
-          city: data.city,
-          country: 'United Kingdom',
-        },
-        is_active: true,
-        role_id: 3,
+          city: data.city
+        }
       };
     }
 

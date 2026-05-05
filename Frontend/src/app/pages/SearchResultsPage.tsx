@@ -15,14 +15,15 @@ export function SearchResultsPage() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const equipmentType = searchParams.get('type');
-  const city = searchParams.get('city');
+  const categoryId = searchParams.get('category') || '';
+  const locationId = searchParams.get('location') || '';
+  const date = searchParams.get('date') || '';
 
   useEffect(() => {
     const fetchEquipment = async () => {
       setIsLoading(true);
       try {
-        const response = await equipmentApi.getEquipment();
+        const response = await equipmentApi.getEquipment(categoryId, locationId, date, 1);
         setEquipment(response.results);
       } catch (error) {
         console.error('Error fetching equipment:', error);
@@ -31,20 +32,10 @@ export function SearchResultsPage() {
       }
     };
     fetchEquipment();
-  }, []);
+  }, [categoryId, locationId, date]);
 
-  const filteredAndSortedResults = useMemo(() => {
+  const sortedResults = useMemo(() => {
     let results = [...equipment];
-
-    if (equipmentType) {
-      results = results.filter((r) => r.category_id === parseInt(equipmentType) || r.name.toLowerCase().includes(equipmentType.toLowerCase()));
-    }
-
-    if (city) {
-      results = results.filter((r) =>
-        r.organization_name.toLowerCase().includes(city.toLowerCase())
-      );
-    }
 
     results.sort((a, b) => {
       const priceA = parseFloat(a.prices[0]?.price || '0');
@@ -55,15 +46,13 @@ export function SearchResultsPage() {
           return priceA - priceB;
         case 'price-desc':
           return priceB - priceA;
-        case 'rating-desc':
-          return 0;
         default:
           return 0;
       }
     });
 
     return results;
-  }, [equipment, equipmentType, city, sortBy]);
+  }, [equipment, sortBy]);
 
   return (
     <div className="min-h-screen bg-[#F8F9FC]">
@@ -156,7 +145,7 @@ export function SearchResultsPage() {
               <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-50">
                 <div>
                   <h1 className="text-2xl font-bold text-[#030213]">
-                    {equipmentType || 'Equipment'} near {city || 'United Kingdom'}
+                    Available Equipment
                   </h1>
                 </div>
                 
@@ -171,7 +160,6 @@ export function SearchResultsPage() {
                     <SelectContent>
                       <SelectItem value="price-desc">Price (High)</SelectItem>
                       <SelectItem value="price-asc">Price (Low)</SelectItem>
-                      <SelectItem value="rating-desc">Highest Rated</SelectItem>
                     </SelectContent>
                   </Select>
                   
@@ -201,7 +189,7 @@ export function SearchResultsPage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-50">
-                        {filteredAndSortedResults.length === 0 ? (
+                        {sortedResults.length === 0 ? (
                           <tr>
                             <td colSpan={5} className="text-center py-20">
                               <h3 className="text-lg font-semibold mb-2">No results found</h3>
@@ -209,7 +197,7 @@ export function SearchResultsPage() {
                             </td>
                           </tr>
                         ) : (
-                          filteredAndSortedResults.map((result) => {
+                          sortedResults.map((result) => {
                             const weeklyPrice = parseFloat(result.prices[0]?.price || '0');
                             const dailyPrice = (weeklyPrice / 7).toFixed(0);
                             return (
@@ -217,10 +205,10 @@ export function SearchResultsPage() {
                                 <td className="px-8 py-6">
                                   <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 rounded-md bg-gray-900 flex items-center justify-center text-white font-bold text-xs">
-                                      {result.organization_name.substring(0, 2).toUpperCase()}
+                                      {(result.organization_name || 'Supplier').substring(0, 2).toUpperCase()}
                                     </div>
                                     <div className="flex items-center gap-1.5">
-                                      <span className="font-bold text-gray-900">{result.organization_name}</span>
+                                      <span className="font-bold text-gray-900">{result.organization_name || 'Unknown Supplier'}</span>
                                       <CheckCircle className="w-3.5 h-3.5 text-brand-success fill-brand-success text-white" />
                                     </div>
                                   </div>
@@ -269,7 +257,7 @@ export function SearchResultsPage() {
                 </div>
                 <div className="flex items-center gap-8">
                   <span className="text-[13px] font-medium text-gray-400">
-                    Showing {filteredAndSortedResults.length} results
+                    Showing {sortedResults.length} results
                   </span>
                   <Link to="/search" className="text-brand-primary font-bold text-sm hover:underline flex items-center gap-1 group">
                     View all results <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
