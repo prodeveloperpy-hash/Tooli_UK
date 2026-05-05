@@ -86,6 +86,12 @@ class CreateEquipmentSerializer(serializers.Serializer):
     images = CreateEquipmentImageSerializer(many=True, required=False)
     availabilities = CreateEquipmentAvailabilitySerializer(many=True, required=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance is not None and self.partial:
+            self.fields["name"].required = False
+            self.fields["location"].required = False
+
     def validate_category_id(self, value):
         if value is not None and not Category.objects.filter(category_id=value).exists():
             raise serializers.ValidationError("Invalid category_id.")
@@ -107,7 +113,12 @@ class CreateEquipmentSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
-        images = attrs.get("images") or []
+        if self.instance is None:
+            images = attrs.get("images") or []
+        elif "images" not in attrs:
+            return attrs
+        else:
+            images = attrs.get("images") or []
         image_files = self.context.get("image_files") or []
         if len(image_files) > len(images):
             raise serializers.ValidationError(
@@ -143,30 +154,34 @@ class CreateEquipmentSerializer(serializers.Serializer):
             updated_datetime=now,
         )
 
-        equipment_location = EquipmentLocation.objects.create(
+        EquipmentLocation.objects.create(
             equipment_id_id=equipment.equipment_id,
             location_id_id=location_data["location_id"],
             is_active=location_data.get("is_active", True),
             created_datetime=now,
         )
 
-        created_prices = []
+        self._apply_prices(equipment.equipment_id, prices_data, now)
+        self._apply_images(equipment, images_data, now)
+        self._apply_availabilities(equipment.equipment_id, availabilities_data, now)
+
+        return equipment
+
+    def _apply_prices(self, equipment_id: int, prices_data: list, now) -> None:
         for item in prices_data:
-            created_prices.append(
-                EquipmentPrice.objects.create(
-                    equipment_id_id=equipment.equipment_id,
-                    location_id_id=item.get("location_id"),
-                    interval_id_id=item.get("interval_id"),
-                    is_active=item.get("is_active", True),
-                    price=item["price"],
-                    currency=item["currency"],
-                    created_datetime=now,
-                )
+            EquipmentPrice.objects.create(
+                equipment_id_id=equipment_id,
+                location_id_id=item.get("location_id"),
+                interval_id_id=item.get("interval_id"),
+                is_active=item.get("is_active", True),
+                price=item["price"],
+                currency=item["currency"],
+                created_datetime=now,
             )
 
+    def _apply_images(self, equipment: Equipment, images_data: list, now) -> None:
         image_files = self.context.get("image_files") or []
         default_image_org_id = equipment.organization_id_id
-        created_images = []
         for i, item in enumerate(images_data):
             file_obj = image_files[i] if i < len(image_files) else None
             stored_url = (item.get("image_url") or "").strip()
@@ -182,27 +197,77 @@ class CreateEquipmentSerializer(serializers.Serializer):
             image_org_id = item.get("organization_id")
             if image_org_id is None:
                 image_org_id = default_image_org_id
-            created_images.append(
-                EquipmentImage.objects.create(
-                    equipment_id_id=equipment.equipment_id,
-                    image_url=stored_url,
-                    is_active=item.get("is_active", True),
-                    sort_order=item.get("sort_order", 0),
-                    organization_id=image_org_id,
-                    created_datetime=now,
-                )
+            EquipmentImage.objects.create(
+                equipment_id_id=equipment.equipment_id,
+                image_url=stored_url,
+                is_active=item.get("is_active", True),
+                sort_order=item.get("sort_order", 0),
+                organization_id=image_org_id,
+                created_datetime=now,
             )
 
-        created_availabilities = []
+    def _apply_availabilities(self, equipment_id: int, availabilities_data: list, now) -> None:
         for item in availabilities_data:
-            created_availabilities.append(
-                EquipmentAvailability.objects.create(
-                    equipment_id_id=equipment.equipment_id,
-                    availability_from=item["availability_from"],
-                    availability_to=item["availability_to"],
-                    is_active=item.get("is_active", True),
-                    created_datetime=now,
-                )
+            EquipmentAvailability.objects.create(
+                equipment_id_id=equipment_id,
+                availability_from=item["availability_from"],
+                availability_to=item["availability_to"],
+                is_active=item.get("is_active", True),
+                created_datetime=now,
             )
 
-        return equipment
+    @transaction.atomic
+    def update(self, instance: Equipment, validated_data):
+        now = timezone.now()
+        partial = self.partial
+
+        location_data = validated_data.pop("location", None)
+        prices_data = validated_data.pop("prices", None)
+        images_data = validated_data.pop("images", None)
+        availabilities_data = validated_data.pop("availabilities", None)
+
+        if "name" in validated_data:
+            instance.name = validated_data["name"]
+        if "description" in validated_data:
+            instance.description = validated_data.get("description")
+        if "is_active" in validated_data:
+            instance.is_active = validated_data.get("is_active")
+        if "category_id" in validated_data:
+            instance.category_id_id = validated_data.get("category_id")
+        if "organization_id" in validated_data:
+            instance.organization_id_id = validated_data.get("organization_id")
+        if "created_by" in validated_data:
+            instance.created_by_id = validated_data.get("created_by")
+        if "updated_by" in validated_data:
+            instance.updated_by_id = validated_data.get("updated_by")
+
+        if location_data is not None:
+            EquipmentLocation.objects.filter(equipment_id_id=instance.equipment_id).delete()
+            EquipmentLocation.objects.create(
+                equipment_id_id=instance.equipment_id,
+                location_id_id=location_data["location_id"],
+                is_active=location_data.get("is_active", True),
+                created_datetime=now,
+            )
+        elif not partial:
+            raise serializers.ValidationError(
+                {"location": "This field is required for full (PUT) updates."}
+            )
+
+        if prices_data is not None:
+            EquipmentPrice.objects.filter(equipment_id_id=instance.equipment_id).delete()
+            self._apply_prices(instance.equipment_id, prices_data, now)
+
+        if images_data is not None:
+            EquipmentImage.objects.filter(equipment_id_id=instance.equipment_id).delete()
+            self._apply_images(instance, images_data, now)
+
+        if availabilities_data is not None:
+            EquipmentAvailability.objects.filter(
+                equipment_id_id=instance.equipment_id
+            ).delete()
+            self._apply_availabilities(instance.equipment_id, availabilities_data, now)
+
+        instance.updated_datetime = now
+        instance.save()
+        return instance
