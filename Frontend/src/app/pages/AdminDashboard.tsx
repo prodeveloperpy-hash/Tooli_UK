@@ -38,7 +38,7 @@ import {
 } from 'lucide-react';
 import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
-import { equipmentApi, Equipment } from '../../context/equipment.api';
+import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
 import { EquipmentForm } from '../components/EquipmentForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
@@ -57,6 +57,9 @@ export function AdminDashboard() {
 
   const [isEquipFormOpen, setIsEquipFormOpen] = useState(false);
   const [isEquipDeleteOpen, setIsEquipDeleteOpen] = useState(false);
+  const [intervals, setIntervals] = useState<Interval[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
 
   const fetchSuppliers = async () => {
@@ -78,6 +81,15 @@ export function AdminDashboard() {
     try {
       const response = await equipmentApi.getEquipment();
       setEquipment(response.results);
+      
+      const intervalData = await equipmentApi.getIntervals();
+      setIntervals(intervalData);
+
+      const categoryData = await equipmentApi.getCategories();
+      setCategories(categoryData);
+
+      const locationData = await equipmentApi.getLocations();
+      setLocations(locationData);
     } catch (error) {
       console.error('Error fetching equipment:', error);
     } finally {
@@ -121,52 +133,76 @@ export function AdminDashboard() {
   };
 
   const handleEquipSubmit = async (data: any) => {
-    const formData = new FormData();
+    // Helper to convert File to Base64
+    const fileToBase64 = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+      });
+    };
+
+    // Process images: if it's a blob URL, find the matching File and convert to Base64
+    const processedImages = await Promise.all(data.imagePreviews.map(async (url: string, index: number) => {
+      if (url.startsWith('blob:')) {
+        // Find the file that matches this preview index
+        // imagePreviews and imageFiles are added in sync in EquipmentForm
+        // But we need to be careful with the indexing if images were removed
+        // Actually, let's just find the file from the imageFiles array
+        // In EquipmentForm, when a file is added, both arrays are updated.
+        // We'll use the index from the map if it corresponds to a new file.
+        // Better: let's assume the user just wants the URLs if they exist, 
+        // and for new files, we use the File objects we have.
+        
+        // Simple approach: if it's a blob, it's a new file. 
+        // We need to find which File it is.
+        // Let's look at how EquipmentForm handles this.
+        const fileIndex = data.imagePreviews.filter((u: string, i: number) => i < index && u.startsWith('blob:')).length;
+        const file = data.imageFiles[fileIndex];
+        if (file) {
+          const base64 = await fileToBase64(file);
+          return { image_url: base64, sort_order: index };
+        }
+      }
+      return { image_url: url, sort_order: index };
+    }));
+
     const payload = {
       name: data.name,
       description: data.description,
-      is_active: true,
+      is_active: data.isActive,
       category_id: parseInt(data.categoryId),
       organization_id: parseInt(data.supplierId),
       created_by: 10,
       updated_by: 10,
       location: {
-        location_id: 3,
+        location_id: parseInt(data.locationId),
         is_active: true
       },
-      prices: [
-        {
-          location_id: 3,
-          interval_id: 1,
-          is_active: true,
-          price: data.price,
-          currency: data.currency
-        }
-      ],
-      images: data.imagePreviews.map((url: string, index: number) => ({
-        image_url: url.startsWith('blob:') ? null : url,
+      prices: data.prices.map((p: any) => ({
+        location_id: parseInt(data.locationId),
+        interval_id: p.interval_id,
         is_active: true,
-        sort_order: index
+        price: p.price,
+        currency: p.currency
       })),
-      availabilities: [
-        {
-          availability_from: data.availableFrom ? new Date(data.availableFrom).toISOString() : "2026-06-01T08:00:00Z",
-          availability_to: data.availableTo ? new Date(data.availableTo).toISOString() : "2026-08-31T18:00:00Z",
-          is_active: true
-        }
-      ]
+      images: processedImages.map(img => ({
+        ...img,
+        is_active: true
+      })),
+      availabilities: data.availabilities.map((a: any) => ({
+        availability_from: a.from ? new Date(a.from).toISOString() : "2026-06-01T08:00:00Z",
+        availability_to: a.to ? new Date(a.to).toISOString() : "2026-08-31T18:00:00Z",
+        is_active: true
+      }))
     };
-
-    formData.append('payload', JSON.stringify(payload));
-    data.imageFiles.forEach((file: File) => {
-      formData.append('images', file);
-    });
 
     try {
       if (selectedEquipment) {
-        await equipmentApi.updateEquipment(selectedEquipment.equipment_id, formData);
+        await equipmentApi.updateEquipment(selectedEquipment.equipment_id, payload);
       } else {
-        await equipmentApi.createEquipment(formData);
+        await equipmentApi.createEquipment(payload);
       }
       await fetchEquipment();
       setIsEquipFormOpen(false);
@@ -372,7 +408,8 @@ export function AdminDashboard() {
                           <TableHead className="font-bold">Location</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
                           <TableHead className="text-right font-bold pr-6">Actions</TableHead>
-                        </TableRow>                      </TableHeader>
+                        </TableRow>
+                      </TableHeader>
                       <TableBody>
                         {isLoading ? (
                           <TableRow>
@@ -558,6 +595,9 @@ export function AdminDashboard() {
         onSubmit={handleEquipSubmit}
         equipment={selectedEquipment}
         suppliers={suppliers}
+        intervals={intervals}
+        categories={categories}
+        locations={locations}
       />
 
       <DeleteConfirmation 
