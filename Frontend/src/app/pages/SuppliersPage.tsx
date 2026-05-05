@@ -1,128 +1,207 @@
-import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Search, MapPin, Star, ShieldCheck, Mail, Building2 } from 'lucide-react';
-import { Input } from '../components/ui/input';
-import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
-import { userApi, UserOrganization } from '../../context/user.api';
+import { CheckCircle, Calendar, PoundSterling, Clock, BarChart3, Settings, CreditCard, Truck, Hammer } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function SuppliersPage() {
-  const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await userApi.getUserOrganizations();
-        // Filter for suppliers
-        const filtered = data.filter(item => item.role_details.role_key === 'SUPPLIER');
-        setSuppliers(filtered);
-      } catch (error) {
-        console.error('Error fetching suppliers:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const filteredSuppliers = suppliers.filter(s => 
-    s.organization_details.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    s.user_details.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    s.user_details.last_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   return (
-    <div className="w-full bg-[#f8f9fc] min-h-screen py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Our Trusted Suppliers</h1>
-          <p className="text-lg text-gray-600">
-            We partner with the UK's most reliable plant hire companies to ensure you get the best equipment and service.
-          </p>
+    <div className="w-full bg-white">
+      {/* Hero Section */}
+      <section className="relative h-[600px] flex items-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="container mx-auto px-4 h-full flex items-center justify-end">
+            <div className="w-full md:w-3/5 h-full relative">
+              <img
+                src="/images/hero.jpg"
+                alt="Construction Equipment"
+                className="w-full h-full object-cover opacity-90"
+                style={{ maskImage: 'linear-gradient(to left, black 70%, transparent)' }}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 mb-12 max-w-2xl mx-auto">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <Input 
-              placeholder="Search suppliers or companies..." 
-              className="pl-10 h-12 bg-white border-gray-200 rounded-xl"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <Button className="h-12 px-8 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-lg">
-            Find Supplier
-          </Button>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-2xl"
+          >
+            <h1 className="text-6xl font-extrabold text-[#030213] mb-8 leading-tight">
+              Get More Bookings,<br />Not Enquiries.
+            </h1>
+            <p className="text-xl text-gray-500 font-medium mb-10 max-w-lg leading-relaxed">
+              List your equipment with live weekly prices and get booked directly by contractors online.
+            </p>
+
+            <div className="mb-6">
+              <Link to="/signup">
+                <Button className="h-16 px-10 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-lg transition-all shadow-lg shadow-orange-500/20">
+                  List Your Equipment
+                </Button>
+              </Link>
+            </div>
+            <p className="text-sm text-gray-400 font-bold mb-10 italic">Free for early partners before launch</p>
+
+            <div className="flex flex-wrap gap-8">
+              <div className="flex items-center gap-2 text-brand-success font-bold">
+                <CheckCircle className="w-5 h-5" />
+                No enquiries
+              </div>
+              <div className="flex items-center gap-2 text-brand-success font-bold">
+                <CheckCircle className="w-5 h-5" />
+                Live bookings
+              </div>
+              <div className="flex items-center gap-2 text-brand-success font-bold">
+                <CheckCircle className="w-5 h-5" />
+                Paid upfront
+              </div>
+            </div>
+          </motion.div>
         </div>
+      </section>
 
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="h-8 w-8 border-4 border-brand-primary border-t-transparent rounded-full animate-spin" />
+      {/* Why List on Tooli Section */}
+      <section className="py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl font-extrabold text-[#030213]">Why List on Tooli?</h2>
           </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredSuppliers.map((s, i) => (
-              <motion.div
-                key={s.user_organization_id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <Card className="border-none shadow-sm hover:shadow-md transition-all rounded-2xl overflow-hidden group h-full">
-                  <CardContent className="p-8 flex flex-col h-full">
-                    <div className="flex items-start justify-between mb-8">
-                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-50 p-2 border border-gray-100 flex items-center justify-center">
-                        {s.organization_details.logo ? (
-                          <img src={s.organization_details.logo} alt={s.organization_details.name} className="max-h-full max-w-full object-contain" />
-                        ) : (
-                          <Building2 className="w-8 h-8 text-gray-300" />
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1 text-brand-primary font-bold text-[10px] uppercase tracking-wider bg-brand-accent/30 px-3 py-1 rounded-full border border-brand-accent/50">
-                        <ShieldCheck className="w-3 h-3" />
-                        Verified
-                      </div>
-                    </div>
-                    
-                    <div className="mb-6 flex-grow">
-                      <h3 className="text-xl font-bold text-gray-900 mb-1 group-hover:text-brand-primary transition-colors">{s.organization_details.name}</h3>
-                      <div className="flex items-center gap-2 text-gray-500 text-sm mb-4 font-medium">
-                        <MapPin className="w-4 h-4" />
-                        {s.organization_details.city}, {s.organization_details.country}
-                      </div>
-                    </div>
 
-                    <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl mb-6">
-                      <Avatar className="h-10 w-10 border-2 border-white">
-                        <AvatarImage src={s.user_details.avatar_url || ''} />
-                        <AvatarFallback className="bg-brand-primary/10 text-brand-primary text-xs font-bold">
-                          {s.user_details.first_name[0]}{s.user_details.last_name[0]}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="overflow-hidden">
-                        <p className="text-sm font-bold text-gray-900 truncate">{s.user_details.first_name} {s.user_details.last_name}</p>
-                        <div className="flex items-center gap-1.5 text-xs text-gray-500 truncate">
-                          <Mail className="w-3 h-3" />
-                          {s.user_details.email}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <Button variant="outline" className="w-full border-brand-primary/20 text-brand-primary font-bold hover:bg-brand-primary hover:text-white transition-all rounded-xl py-6">
-                      View Inventory
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+          <div className="grid md:grid-cols-4 gap-12">
+            <div className="text-center flex flex-col items-center">
+              <Calendar className="w-12 h-12 text-brand-primary mb-6" />
+              <h3 className="text-xl font-bold mb-4">More Bookings</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                Get booked directly by contractors actively looking for equipment.
+              </p>
+            </div>
+
+            <div className="text-center flex flex-col items-center">
+              <PoundSterling className="w-12 h-12 text-brand-primary mb-6" />
+              <h3 className="text-xl font-bold mb-4">Live Weekly Prices</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                Set your weekly prices. Contractors book and pay online instantly.
+              </p>
+            </div>
+
+            <div className="text-center flex flex-col items-center">
+              <Clock className="w-12 h-12 text-brand-primary mb-6" />
+              <h3 className="text-xl font-bold mb-4">Fill Your Machines</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                Keep your equipment busy and maximise your utilisation.
+              </p>
+            </div>
+
+            <div className="text-center flex flex-col items-center">
+              <BarChart3 className="w-12 h-12 text-brand-primary mb-6" />
+              <h3 className="text-xl font-bold mb-4">No Time Wasted</h3>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                No back-and-forth. Just confirmed bookings and happy customers.
+              </p>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-24 bg-[#F8F9FC]">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl font-extrabold text-[#030213]">How It Works</h2>
+          </div>
+
+          <div className="bg-white rounded-[40px] p-12 md:p-16 shadow-sm border border-gray-100 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-8 relative">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mb-6">
+                  <Settings className="w-8 h-8 text-brand-primary" />
+                </div>
+                <h4 className="font-bold text-lg mb-2">1. List Your Equipment</h4>
+                <p className="text-gray-500 text-sm font-medium leading-relaxed">Add your machines, photos, availability and live weekly price.</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mb-6">
+                  <Calendar className="w-8 h-8 text-brand-primary" />
+                </div>
+                <h4 className="font-bold text-lg mb-2">2. Get Booked</h4>
+                <p className="text-gray-500 text-sm font-medium leading-relaxed">Contractors find your equipment and book instantly online.</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mb-6">
+                  <CreditCard className="w-8 h-8 text-brand-primary" />
+                </div>
+                <h4 className="font-bold text-lg mb-2">3. Get Paid Upfront</h4>
+                <p className="text-gray-500 text-sm font-medium leading-relaxed">Payment is taken securely at the time of booking.</p>
+              </div>
+
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center mb-6">
+                  <Truck className="w-8 h-8 text-brand-primary" />
+                </div>
+                <h4 className="font-bold text-lg mb-2">4. Deliver & Get to Work</h4>
+                <p className="text-gray-500 text-sm font-medium leading-relaxed">Deliver the equipment and complete the hire.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What You Can List Section */}
+      <section className="py-24">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-extrabold text-[#030213] mb-20">What You Can List</h2>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-12 max-w-5xl mx-auto">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 text-brand-primary"><Truck className="w-12 h-12" /></div>
+              <span className="font-bold text-sm text-gray-900">Excavators</span>
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 text-brand-primary"><Truck className="w-12 h-12" /></div>
+              <span className="font-bold text-sm text-gray-900">Dumpers</span>
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 text-brand-primary"><Truck className="w-12 h-12" /></div>
+              <span className="font-bold text-sm text-gray-900">Rollers</span>
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 text-brand-primary"><Truck className="w-12 h-12" /></div>
+              <span className="font-bold text-sm text-gray-900">Telehandlers</span>
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 text-brand-primary"><Truck className="w-12 h-12" /></div>
+              <span className="font-bold text-sm text-gray-900">Access Equipment</span>
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 text-brand-primary"><Hammer className="w-12 h-12" /></div>
+              <span className="font-bold text-sm text-gray-900">Tools & More</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-24">
+        <div className="container mx-auto px-4">
+          <div className="bg-[#FFF7F2] rounded-[40px] p-12 md:p-20 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div>
+              <h2 className="text-4xl font-extrabold text-[#030213] mb-4">Start Getting More Bookings Today</h2>
+              <p className="text-xl text-gray-500 font-medium">Join Tooli and get your equipment booked by contractors in your area.</p>
+            </div>
+            <div className="text-center md:text-right">
+              <Link to="/signup">
+                <Button className="h-16 px-10 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-lg transition-all shadow-lg shadow-orange-500/20 mb-4">
+                  List Your Equipment
+                </Button>
+              </Link>
+              <p className="text-sm text-gray-400 font-bold italic">Free for early partners before launch</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
-
