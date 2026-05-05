@@ -21,7 +21,7 @@ export function HomePage() {
   return (
     <div className="w-full bg-white">
       {/* Hero Section */}
-      <section className="relative h-[700px] flex items-center overflow-hidden">
+      <section className="relative h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/images/hero.jpg"
@@ -38,28 +38,28 @@ export function HomePage() {
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <h1 className="text-6xl md:text-7xl font-extrabold mb-8 text-white leading-[1.1]">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-white leading-[1.2]">
               Find <span className="text-brand-primary">Available</span><br />
               Construction Equipment<br />
               Near Your Site
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl font-medium leading-relaxed">
+            <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl font-medium leading-relaxed">
               Compare local plant hire suppliers, check availability, and get equipment delivered fast.
             </p>
 
             {/* Search Bar Component */}
-            <div className="bg-white rounded-[32px] shadow-2xl p-3 max-w-5xl">
-              <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1.5fr_auto] gap-2 items-center">
-                <div className="px-6 py-4 md:border-r border-gray-100">
-                  <Label className="text-gray-900 font-extrabold text-[10px] uppercase tracking-[0.15em] mb-3 block">What equipment do you need?</Label>
+            <div className="bg-white rounded-[24px] shadow-2xl p-2 max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1.5fr_auto] gap-1 items-center">
+                <div className="px-5 py-3 md:border-r border-gray-100">
+                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">What equipment do you need?</Label>
                   <Select>
-                    <SelectTrigger className="h-10 bg-transparent border-none p-0 focus:ring-0 shadow-none text-lg font-bold">
-                      <div className="flex items-center gap-3">
-                        <Search className="w-5 h-5 text-gray-400" />
+                    <SelectTrigger className="h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-base font-bold">
+                      <div className="flex items-center gap-2">
+                        <Search className="w-4 h-4 text-gray-400" />
                         <SelectValue placeholder="e.g. Mini Excavator" />
                       </div>
                     </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-gray-100">
+                    <SelectContent className="rounded-xl border-gray-100">
                       <SelectItem value="mini-excavator">Mini Excavator</SelectItem>
                       <SelectItem value="dumper">Dumper</SelectItem>
                       <SelectItem value="roller">Roller</SelectItem>
@@ -68,27 +68,27 @@ export function HomePage() {
                   </Select>
                 </div>
 
-                <div className="px-6 py-4 md:border-r border-gray-100">
-                  <Label className="text-gray-900 font-extrabold text-[10px] uppercase tracking-[0.15em] mb-3 block">Location</Label>
+                <div className="px-5 py-3 md:border-r border-gray-100">
+                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Location</Label>
                   <div className="relative flex items-center">
-                    <MapPin className="w-5 h-5 text-gray-400 mr-3" />
+                    <MapPin className="w-4 h-4 text-gray-400 mr-2" />
                     <Input
                       placeholder="Enter postcode"
-                      className="h-10 bg-transparent border-none p-0 focus-visible:ring-0 shadow-none text-lg font-bold placeholder:text-gray-300"
+                      className="h-9 bg-transparent border-none p-0 focus-visible:ring-0 shadow-none text-base font-bold placeholder:text-gray-300"
                     />
                   </div>
                 </div>
 
-                <div className="px-6 py-4">
-                  <Label className="text-gray-900 font-extrabold text-[10px] uppercase tracking-[0.15em] mb-3 block">Dates</Label>
+                <div className="px-5 py-3">
+                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Dates</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <button className="flex items-center w-full h-10 text-left font-bold text-lg bg-transparent">
-                        <CalendarIcon className="w-5 h-5 text-gray-400 mr-3" />
+                      <button className="flex items-center w-full h-9 text-left font-bold text-base bg-transparent">
+                        <CalendarIcon className="w-4 h-4 text-gray-400 mr-2" />
                         {date ? format(date, "PPP") : <span className="text-gray-300">Start — End date</span>}
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 rounded-2xl border-gray-100" align="start">
+                    <PopoverContent className="w-auto p-0 rounded-xl border-gray-100" align="start">
                       <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
                     </PopoverContent>
                   </Popover>
@@ -97,7 +97,7 @@ export function HomePage() {
                 <div className="p-1">
                   <Button 
                     onClick={handleSearch}
-                    className="h-16 px-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-[22px] text-xl transition-all shadow-lg shadow-orange-500/20"
+                    className="h-14 px-10 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-[18px] text-lg transition-all shadow-lg shadow-orange-500/20"
                   >
                     Search
                   </Button>
@@ -106,22 +106,22 @@ export function HomePage() {
             </div>
 
             {/* Badges below search */}
-            <div className="flex flex-wrap gap-10 mt-10 ml-2">
-              <div className="flex items-center gap-3 text-white font-bold">
-                <div className="w-6 h-6 rounded-full bg-brand-success flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-white" />
+            <div className="flex flex-wrap gap-8 mt-8 ml-1">
+              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
+                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
+                  <CheckCircle className="w-3.5 h-3.5 text-white" />
                 </div>
                 Available today
               </div>
-              <div className="flex items-center gap-3 text-white font-bold">
-                <div className="w-6 h-6 rounded-full bg-brand-success flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
+                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
+                  <CheckCircle className="w-3.5 h-3.5 text-white" />
                 </div>
                 Local suppliers
               </div>
-              <div className="flex items-center gap-3 text-white font-bold">
-                <div className="w-6 h-6 rounded-full bg-brand-success flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
+                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
+                  <CheckCircle className="w-3.5 h-3.5 text-white" />
                 </div>
                 Fast delivery
               </div>

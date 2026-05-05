@@ -5,17 +5,17 @@ export function HelpPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-[#F8F9FC]">
+      <section className="pt-24 pb-16 bg-[#F8F9FC]">
         <div className="container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-6xl font-extrabold text-[#030213] mb-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#030213] mb-4">
               Help & Support
             </h1>
-            <p className="text-xl text-gray-500 font-medium">
+            <p className="text-lg text-gray-500 font-medium">
               Find answers quickly or get in touch with us.
             </p>
           </motion.div>

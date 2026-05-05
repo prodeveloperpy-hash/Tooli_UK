@@ -7,17 +7,17 @@ export function HowItWorksPage() {
   return (
     <div className="w-full bg-white">
       {/* Hero Section */}
-      <section className="pt-32 pb-24 bg-[#F8F9FC] text-center">
+      <section className="pt-24 pb-16 bg-[#F8F9FC] text-center">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-6xl font-extrabold text-[#030213] mb-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#030213] mb-4">
               How Tooli Works
             </h1>
-            <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-gray-500 font-medium max-w-xl mx-auto leading-relaxed">
               Find and hire construction equipment in minutes.<br />It's fast, simple and reliable.
             </p>
           </motion.div>

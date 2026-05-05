@@ -5,7 +5,7 @@ export function AboutPage() {
   return (
     <div className="w-full bg-white">
       {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center overflow-hidden">
+      <section className="relative h-[500px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="container mx-auto px-4 h-full flex items-center justify-end">
             <div className="w-full md:w-1/2 h-full relative">
@@ -26,10 +26,10 @@ export function AboutPage() {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <h1 className="text-6xl font-extrabold text-[#030213] mb-8">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#030213] mb-6">
               About Tooli
             </h1>
-            <div className="space-y-6 text-xl text-gray-500 font-medium leading-relaxed">
+            <div className="space-y-4 text-lg text-gray-500 font-medium leading-relaxed">
               <p>
                 Tooli is a platform that makes hiring construction equipment faster, easier and more efficient.
               </p>

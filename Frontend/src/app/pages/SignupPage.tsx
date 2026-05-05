@@ -80,17 +80,23 @@ export function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FC] py-16">
+    <div className="min-h-screen bg-[#F8F9FC] py-12">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-extrabold text-[#030213] mb-4">List Your Equipment on Tooli</h1>
-          <p className="text-xl text-gray-500 font-medium">Register first to list your equipment and start receiving bookings.</p>
+        <div className="mb-14 text-center lg:text-left">
+          <Link to="/">
+            <img src="/images/logo.png" alt="Tooli.uk" className="h-16 w-auto inline-block" />
+          </Link>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-12 items-start">
-          <div className="lg:col-span-2 space-y-8">
-            <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[32px] overflow-hidden">
-              <CardContent className="p-10 md:p-16">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-extrabold text-[#030213] mb-3">List Your Equipment on Tooli</h1>
+          <p className="text-lg text-gray-500 font-medium">Register first to list your equipment and start receiving bookings.</p>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8 items-start">
+          <div className="lg:col-span-2 space-y-6">
+            <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[24px] overflow-hidden">
+              <CardContent className="p-8 md:p-12">
                 <form onSubmit={handleSubmit} className="space-y-10">
                   {error && (
                     <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-4 rounded-xl">

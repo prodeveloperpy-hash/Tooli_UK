@@ -7,7 +7,7 @@ export function SuppliersPage() {
   return (
     <div className="w-full bg-white">
       {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center overflow-hidden">
+      <section className="relative h-[500px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="container mx-auto px-4 h-full flex items-center justify-end">
             <div className="w-full md:w-3/5 h-full relative">
@@ -28,10 +28,10 @@ export function SuppliersPage() {
             transition={{ duration: 0.8 }}
             className="max-w-2xl"
           >
-            <h1 className="text-6xl font-extrabold text-[#030213] mb-8 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-[#030213] mb-6 leading-tight">
               Get More Bookings,<br />Not Enquiries.
             </h1>
-            <p className="text-xl text-gray-500 font-medium mb-10 max-w-lg leading-relaxed">
+            <p className="text-lg text-gray-500 font-medium mb-8 max-w-md leading-relaxed">
               List your equipment with live weekly prices and get booked directly by contractors online.
             </p>
 
