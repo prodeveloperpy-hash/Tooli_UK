@@ -116,7 +116,7 @@ export function Navbar() {
               </div>
             ) : (
               <>
-                <Link to="/search">
+                <Link to="/signup">
                   <Button variant="outline" className="border-gray-200 text-gray-900 font-bold hover:bg-gray-50 h-11 px-6 rounded-xl transition-all">
                     List Your Equipment
                   </Button>

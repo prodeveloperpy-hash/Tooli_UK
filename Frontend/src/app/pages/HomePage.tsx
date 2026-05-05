@@ -8,9 +8,15 @@ import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popove
 import { Calendar } from '../components/ui/calendar';
 import { format } from 'date-fns';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function HomePage() {
+  const navigate = useNavigate();
   const [date, setDate] = useState<Date>();
+
+  const handleSearch = () => {
+    navigate('/search');
+  };
 
   return (
     <div className="w-full bg-white">
@@ -89,7 +95,10 @@ export function HomePage() {
                 </div>
 
                 <div className="p-1">
-                  <Button className="h-16 px-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-[22px] text-xl transition-all shadow-lg shadow-orange-500/20">
+                  <Button 
+                    onClick={handleSearch}
+                    className="h-16 px-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-[22px] text-xl transition-all shadow-lg shadow-orange-500/20"
+                  >
                     Search
                   </Button>
                 </div>
