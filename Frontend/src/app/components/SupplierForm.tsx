@@ -27,6 +27,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
     city: '',
     logoUrl: '',
     logoFile: null as File | null,
+    password: '',
   });
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
         city: supplier.organization_details.city,
         logoUrl: supplier.organization_details.logo || '',
         logoFile: null,
+        password: '',
       });
     } else {
       setFormData({
@@ -55,6 +57,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
         city: '',
         logoUrl: '',
         logoFile: null,
+        password: '',
       });
     }
   }, [supplier, isOpen]);
@@ -168,6 +171,20 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
                   />
                 </div>
               </div>
+
+              {!supplier && (
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="font-bold">Password</Label>
+                  <Input 
+                    id="password" 
+                    type="password"
+                    value={formData.password} 
+                    onChange={(e) => setFormData({...formData, password: e.target.value})} 
+                    className="border-gray-200 focus:ring-brand-primary rounded-lg"
+                    required
+                  />
+                </div>
+              )}
             </div>
 
             <div className="h-px bg-gray-100" />
