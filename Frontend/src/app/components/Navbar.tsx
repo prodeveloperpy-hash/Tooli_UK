@@ -45,25 +45,25 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <nav className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-8">
+        <div className="flex h-20 items-center justify-between">
+          <div className="flex items-center gap-12">
             <Link to="/" className="flex items-center group">
               <img src="/images/logo.png" alt="Tooli.uk" className="h-10 w-auto" />
             </Link>
 
-            <div className="hidden lg:flex items-center gap-6">
-              <Link to="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <div className="hidden lg:flex items-center gap-8">
+              <Link to="/how-it-works" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
                 How It Works
               </Link>
-              <Link to="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/about" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
                 About Us
               </Link>
-              <Link to="/suppliers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/suppliers" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
                 Suppliers
               </Link>
-              <Link to="/help" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/help" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
                 Help
               </Link>
             </div>
@@ -71,14 +71,14 @@ export function Navbar() {
 
           <div className="hidden lg:flex items-center gap-4">
             {user ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <Link to={user.role === 'SUPERADMIN' ? '/admin' : '/supplier'}>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm" className="flex items-center gap-2 font-bold">
                     <LayoutDashboard className="w-4 h-4" />
                     Dashboard
                   </Button>
                 </Link>
-                <div className="h-8 w-px bg-border/50 mx-2" />
+                <div className="h-8 w-px bg-gray-100 mx-2" />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-3 p-1 rounded-full hover:bg-gray-50 transition-colors focus:outline-none group">
@@ -116,13 +116,13 @@ export function Navbar() {
               </div>
             ) : (
               <>
-                <Link to="/search">
-                  <Button variant="outline" className="border-gray-200 text-gray-900 font-bold hover:bg-gray-50 h-10 px-6 rounded-lg">
+                <Link to="/signup">
+                  <Button variant="outline" className="border-gray-200 text-gray-900 font-bold hover:bg-gray-50 h-11 px-6 rounded-xl transition-all">
                     List Your Equipment
                   </Button>
                 </Link>
                 <Link to="/login">
-                  <Button className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold h-10 px-8 rounded-lg shadow-sm">
+                  <Button className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold h-11 px-8 rounded-xl shadow-lg shadow-orange-500/10 transition-all">
                     Log in
                   </Button>
                 </Link>
@@ -139,25 +139,34 @@ export function Navbar() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t">
+          <div className="lg:hidden py-4 border-t border-gray-50">
             <div className="flex flex-col gap-4">
-              <Link to="/about" className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/how-it-works" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
                 How It Works
+              </Link>
+              <Link to="/about" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
+                About Us
+              </Link>
+              <Link to="/suppliers" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
+                Suppliers
+              </Link>
+              <Link to="/help" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
+                Help
               </Link>
               {user ? (
                 <>
-                  <Link to={user.role === 'SUPERADMIN' ? '/admin' : '/supplier'} className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to={user.role === 'SUPERADMIN' ? '/admin' : '/supplier'} className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
                     Dashboard
                   </Link>
-                  <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-sm font-medium text-destructive text-left flex items-center gap-2">
+                  <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-sm font-bold text-destructive text-left flex items-center gap-2">
                     <LogOut className="w-4 h-4" />
                     Logout
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
-                    Login
+                  <Link to="/login" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
+                    Log in
                   </Link>
                 </>
               )}

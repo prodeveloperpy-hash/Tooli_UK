@@ -3,8 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
-import { Eye, EyeOff } from 'lucide-react';
+import { Card, CardContent } from '../components/ui/card';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { authApi } from '../../context/auth.api';
 
 export function LoginPage() {
@@ -34,12 +34,10 @@ export function LoginPage() {
     try {
       const response = await authApi.login(formData);
       
-      // Store token
       if (response.access_token) {
         localStorage.setItem('token', response.access_token);
       }
 
-      // Store user details
       const { user, role_key, organization_id } = response.data;
       localStorage.setItem('user_id', user.user_id.toString());
       localStorage.setItem('name', `${user.first_name} ${user.last_name}`);
@@ -47,7 +45,6 @@ export function LoginPage() {
       localStorage.setItem('organization_id', organization_id || '');
       localStorage.setItem('avatar_url', user.avatar_url || '');
 
-      // Navigate based on role
       if (role_key === 'SUPERADMIN') {
         navigate('/admin');
       } else if (role_key === 'SUPPLIER') {
@@ -63,98 +60,94 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-start bg-background relative py-12 px-4 overflow-x-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-primary/5 rounded-full blur-[120px]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-grid-slate-100 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] pointer-events-none opacity-50" />
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#F8F9FC] py-12 px-4">
+      <div className="mb-12">
+        <Link to="/">
+          <img src="/images/logo.png" alt="Tooli.uk" className="h-16 w-auto" />
+        </Link>
+      </div>
 
-      <Card className="w-full max-w-md border-border/40 bg-card/60 backdrop-blur-xl shadow-2xl relative z-10 animate-in fade-in zoom-in duration-500">
-        <CardHeader className="space-y-2 text-center pt-8">
-          <div className="flex justify-center mb-6">
-            <Link to="/">
-              <img src="/images/logo.png" alt="Tooli.uk" className="h-12 w-auto" />
-            </Link>
-          </div>
-          <CardTitle className="text-3xl font-bold tracking-tight">Welcome back</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Enter your credentials to access your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-3 rounded-md animate-in fade-in zoom-in duration-300">
-                {error}
-              </div>
-            )}
-            {successMessage && (
-              <div className="bg-brand-success/10 border border-brand-success/20 text-brand-success text-sm p-3 rounded-md animate-in fade-in zoom-in duration-300">
-                {successMessage}
-              </div>
-            )}
+      <Card className="w-full max-w-[500px] border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-3xl p-8 md:p-12">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-extrabold text-[#030213] mb-2">Welcome back</h1>
+          <p className="text-gray-500 font-medium">Log in to manage your equipment</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-4 rounded-xl">
+              {error}
+            </div>
+          )}
+          {successMessage && (
+            <div className="bg-brand-success/10 border border-brand-success/20 text-brand-success text-sm p-4 rounded-xl">
+              {successMessage}
+            </div>
+          )}
+
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
+              <Label htmlFor="email" className="text-sm font-bold text-gray-900">Email Address</Label>
               <div className="relative">
-                <Input 
-                  id="email" 
-                  type="email" 
-                  placeholder="name@example.com" 
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="name@company.com"
                   value={formData.email}
                   onChange={handleChange}
-                  className="bg-background/50 border-border/50 focus-visible:ring-brand-primary transition-all duration-200"
-                  required 
+                  className="h-14 pl-12 bg-gray-50 border-none rounded-2xl focus-visible:ring-brand-primary font-medium"
+                  required
                 />
               </div>
             </div>
+
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link to="#" className="text-sm text-brand-primary hover:underline font-medium">
-                  Forgot password?
-                </Link>
+                <Label htmlFor="password" className="text-sm font-bold text-gray-900">Password</Label>
+                <Link to="#" className="text-xs font-bold text-brand-primary hover:underline">Forgot password?</Link>
               </div>
               <div className="relative">
-                <Input 
-                  id="password" 
-                  type={showPassword ? "text" : "password"} 
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
-                  className="bg-background/50 border-border/50 focus-visible:ring-brand-primary transition-all duration-200 pr-10"
-                  required 
+                  className="h-14 pl-12 pr-12 bg-gray-50 border-none rounded-2xl focus-visible:ring-brand-primary font-medium"
+                  required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
-            <Button 
-              type="submit" 
-              disabled={isLoading}
-              className="w-full bg-brand-primary hover:bg-brand-primary-hover text-white h-11 text-base font-semibold transition-all duration-300 shadow-lg shadow-brand-primary/20"
-            >
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Signing In...
-                </div>
-              ) : 'Sign In'}
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <Button type="submit" disabled={isLoading} className="w-full h-14 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-2xl shadow-lg shadow-orange-500/20 transition-all text-lg">
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </Button>
-          </form>
-        </CardContent>
-        <CardFooter className="flex justify-center border-t border-border/20 pt-6">
-          <p className="text-sm text-muted-foreground">
-            Don't have an account? Contact support to request access
-            {/* Don't have an account?{' '}
-            <Link to="/signup" className="text-brand-primary hover:underline font-bold transition-all duration-200">
-              Create an account
-            </Link> */}
-          </p>
-        </CardFooter>
+
+            <div className="relative py-1">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-100"></div>
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white px-4 text-gray-400 font-medium">Or</span>
+              </div>
+            </div>
+
+            <p className="text-center text-sm text-gray-500 font-medium">
+              Don't have an account? <Link to="/signup" className="text-brand-primary font-bold hover:underline">Sign up</Link>
+            </p>
+          </div>
+        </form>
       </Card>
     </div>
   );

@@ -1,318 +1,211 @@
 import { motion } from 'motion/react';
-import { SearchBar } from '../components/SearchBar';
 import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
 import { Label } from '../components/ui/label';
 import { Input } from '../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { ArrowRight, CheckCircle, Search, BarChart3, Handshake, MapPin, Calendar as CalendarIcon } from 'lucide-react';
-import { categories } from '../../data/mockData';
-import { Link } from 'react-router-dom';
+import { CheckCircle, Search, BarChart3, MapPin, Calendar as CalendarIcon, ChevronRight } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import { Calendar } from '../components/ui/calendar';
 import { format } from 'date-fns';
 import { useState } from 'react';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
+import { useNavigate } from 'react-router-dom';
 
 export function HomePage() {
+  const navigate = useNavigate();
   const [date, setDate] = useState<Date>();
-  const suppliers = [
-    { name: 'RapidHire', logo: '/images/suppliers/rapidhire.png', price: '150', available: true },
-    { name: 'PlantRoll', logo: '/images/suppliers/plantroll.png', price: '175', available: true },
-    { name: 'CityHire', logo: '/images/suppliers/cityhire.png', price: '210', available: false },
-    { name: 'MetroHire', logo: '/images/suppliers/metrohire.png', price: '240', available: false },
-  ];
+
+  const handleSearch = () => {
+    navigate('/search');
+  };
 
   return (
-    <div className="w-full bg-[#f8f9fc]">
+    <div className="w-full bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[500px] flex items-center overflow-hidden py-16">
+      <section className="relative h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/images/hero.jpg"
             alt="Construction Equipment"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="max-w-4xl"
           >
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-white leading-tight drop-shadow-lg">
-              Find Construction Equipment<br />Near Your Site
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-white leading-[1.2]">
+              Find <span className="text-brand-primary">Available</span><br />
+              Construction Equipment<br />
+              Near Your Site
             </h1>
-            <p className="text-xl text-white/90 mb-10 max-w-lg font-medium drop-shadow-md">
-              Compare local plant hire suppliers and<br />find the right equipment at the best price.
+            <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl font-medium leading-relaxed">
+              Compare local plant hire suppliers, check availability, and get equipment delivered fast.
             </p>
 
             {/* Search Bar Component */}
-            <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-3xl">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                <div className="md:col-span-4 space-y-3">
-                  <Label className="text-gray-700 font-bold text-sm block">What equipment do you need?</Label>
+            <div className="bg-white rounded-[24px] shadow-2xl p-2 max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1.5fr_auto] gap-1 items-center">
+                <div className="px-5 py-3 md:border-r border-gray-100">
+                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">What equipment do you need?</Label>
                   <Select>
-                    <SelectTrigger className="h-12 bg-white border-gray-200 rounded-lg">
+                    <SelectTrigger className="h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-base font-bold">
                       <div className="flex items-center gap-2">
-                        <img src="/images/icons/excavator-icon.png" alt="" className="w-5 h-5 opacity-50" />
+                        <Search className="w-4 h-4 text-gray-400" />
                         <SelectValue placeholder="e.g. Mini Excavator" />
                       </div>
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="rounded-xl border-gray-100">
                       <SelectItem value="mini-excavator">Mini Excavator</SelectItem>
                       <SelectItem value="dumper">Dumper</SelectItem>
                       <SelectItem value="roller">Roller</SelectItem>
+                      <SelectItem value="telehandler">Telehandler</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <div className="md:col-span-3 space-y-3">
-                  <Label className="text-gray-700 font-bold text-sm block">Location</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
+                <div className="px-5 py-3 md:border-r border-gray-100">
+                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Location</Label>
+                  <div className="relative flex items-center">
+                    <MapPin className="w-4 h-4 text-gray-400 mr-2" />
                     <Input
-                      placeholder="Enter postcode or city"
-                      className="h-12 bg-white border-gray-200 pl-10 rounded-lg"
+                      placeholder="Enter postcode"
+                      className="h-9 bg-transparent border-none p-0 focus-visible:ring-0 shadow-none text-base font-bold placeholder:text-gray-300"
                     />
                   </div>
                 </div>
 
-                <div className="md:col-span-3 space-y-3">
-                  <Label className="text-gray-700 font-bold text-sm block">Dates</Label>
+                <div className="px-5 py-3">
+                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Dates</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className="h-12 w-full justify-start text-left font-normal bg-white border-gray-200 pl-10 rounded-lg relative"
-                      >
-                        <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 z-10" />
-                        {date ? format(date, "PPP") : <span className="text-gray-400">Start date — End date</span>}
-                      </Button>
+                      <button className="flex items-center w-full h-9 text-left font-bold text-base bg-transparent">
+                        <CalendarIcon className="w-4 h-4 text-gray-400 mr-2" />
+                        {date ? format(date, "PPP") : <span className="text-gray-300">Start — End date</span>}
+                      </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
+                    <PopoverContent className="w-auto p-0 rounded-xl border-gray-100" align="start">
+                      <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
                     </PopoverContent>
                   </Popover>
                 </div>
 
-                <div className="md:col-span-2 pt-[31px]">
-                  <Button className="h-12 w-full bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-lg shadow-lg">
+                <div className="p-1">
+                  <Button 
+                    onClick={handleSearch}
+                    className="h-14 px-10 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-[18px] text-lg transition-all shadow-lg shadow-orange-500/20"
+                  >
                     Search
                   </Button>
                 </div>
               </div>
-              
-              <div className="mt-3 md:w-1/3">
-                <button className="text-[var(--brand-primary)] text-sm font-bold hover:underline flex items-center transition-colors">
-                  <span className="text-xl mr-1">+</span> Add more equipment
-                </button>
+            </div>
+
+            {/* Badges below search */}
+            <div className="flex flex-wrap gap-8 mt-8 ml-1">
+              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
+                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
+                  <CheckCircle className="w-3.5 h-3.5 text-white" />
+                </div>
+                Available today
+              </div>
+              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
+                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
+                  <CheckCircle className="w-3.5 h-3.5 text-white" />
+                </div>
+                Local suppliers
+              </div>
+              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
+                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
+                  <CheckCircle className="w-3.5 h-3.5 text-white" />
+                </div>
+                Fast delivery
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Main Content Grid */}
-      <section className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
-          {/* How It Works Sidebar */}
-          <div className="lg:col-span-3">
-            <Card className="border-none shadow-sm rounded-2xl overflow-hidden">
-              <CardContent className="p-8">
-                <h2 className="text-xl font-bold mb-8">How It Works</h2>
-                <div className="space-y-10">
-                  <div className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full border border-gray-100 flex items-center justify-center text-brand-primary shadow-sm bg-white">
-                        <Search className="w-4 h-4" />
-                      </div>
-                      <div className="w-px h-full bg-gray-100 mt-2" />
-                    </div>
-                    <div className="pb-2">
-                      <h3 className="font-bold text-base mb-1">1. Search</h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">Enter your equipment, location and dates to see what's available.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full border border-gray-100 flex items-center justify-center text-brand-primary shadow-sm bg-white">
-                        <BarChart3 className="w-4 h-4" />
-                      </div>
-                      <div className="w-px h-full bg-gray-100 mt-2" />
-                    </div>
-                    <div className="pb-2">
-                      <h3 className="font-bold text-base mb-1">2. Compare</h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">Compare prices and delivery options from trusted local suppliers.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full border border-gray-100 flex items-center justify-center text-brand-primary shadow-sm bg-white flex-shrink-0">
-                      <CheckCircle className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-base mb-1">3. Book</h3>
-                      <p className="text-sm text-gray-500 leading-relaxed">Choose the best deal and book directly with the supplier.</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+      {/* How It Works Section */}
+      <section className="bg-white py-32">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-24">
+            <h2 className="text-4xl font-extrabold text-[#030213] mb-4">How It Works</h2>
+            <div className="w-12 h-1 bg-brand-primary rounded-full mx-auto" />
           </div>
 
-          {/* Results Section */}
-          <div className="lg:col-span-9">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-50">
-                <h2 className="text-xl font-bold">Mini Excavator near Bristol</h2>
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                  <Select defaultValue="price-high">
-                    <SelectTrigger className="h-10 bg-white border-gray-200 rounded-lg text-sm w-full md:w-48">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-400">Sort by:</span>
-                        <SelectValue />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="price-high">Price (High)</SelectItem>
-                      <SelectItem value="distance">Distance</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Button variant="outline" className="h-10 border-gray-200 text-sm font-bold flex items-center gap-2 rounded-lg">
-                    <div className="flex flex-col gap-0.5">
-                      <div className="w-3 h-0.5 bg-gray-900" />
-                      <div className="w-2 h-0.5 bg-gray-900" />
-                      <div className="w-1 h-0.5 bg-gray-900" />
-                    </div>
-                    Filters
-                  </Button>
-                </div>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 max-w-6xl mx-auto">
+            {/* Step 1 */}
+            <div className="flex-1 flex flex-col items-center text-center group">
+              <div className="w-24 h-24 rounded-[32px] bg-orange-50 flex items-center justify-center mb-8 transition-transform group-hover:scale-110 duration-300">
+                <Search className="w-10 h-10 text-brand-primary" />
               </div>
+              <h3 className="text-2xl font-bold text-[#030213] mb-4">1. Search</h3>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-xs">
+                Enter your equipment, location and dates to see what's available.
+              </p>
+            </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/50">
-                      <th className="px-8 py-4">Supplier</th>
-                      <th className="px-8 py-4">Price / Day <span className="text-[9px] font-normal lowercase">(ex. VAT)</span></th>
-                      <th className="px-8 py-4">Delivery</th>
-                      <th className="px-8 py-4">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-50">
-                    {suppliers.map((s, i) => (
-                      <tr key={i} className="group hover:bg-gray-50/30 transition-colors">
-                        <td className="px-8 py-5">
-                          <div className="flex items-center gap-6">
-                            <div className="w-20 h-8 flex items-center">
-                              <img src={s.logo} alt={s.name} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all" />
-                            </div>
-                            <span className="font-bold text-gray-900">{s.name}</span>
-                          </div>
-                        </td>
-                        <td className="px-8 py-5 font-extrabold text-brand-primary text-xl">
-                          £{s.price}
-                        </td>
-                        <td className="px-8 py-5">
-                          <div className="flex items-center gap-2">
-                            {s.available ? (
-                              <>
-                                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center text-white">
-                                  <CheckCircle className="w-3 h-3" />
-                                </div>
-                                <span className="text-sm font-bold text-gray-900">Available</span>
-                              </>
-                            ) : (
-                              <>
-                                <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                  <span className="text-xs font-bold">?</span>
-                                </div>
-                                <span className="text-sm font-bold text-gray-900">Ask</span>
-                              </>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-8 py-5">
-                          <Button className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold h-10 px-6 rounded-lg text-sm transition-all shadow-sm">
-                            View Deal
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <ChevronRight className="hidden md:block w-8 h-8 text-gray-100" />
+
+            {/* Step 2 */}
+            <div className="flex-1 flex flex-col items-center text-center group">
+              <div className="w-24 h-24 rounded-[32px] bg-orange-50 flex items-center justify-center mb-8 transition-transform group-hover:scale-110 duration-300">
+                <BarChart3 className="w-10 h-10 text-brand-primary" />
               </div>
-              
-              <div className="p-6 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex items-center gap-2 text-[13px] font-medium text-gray-500">
-                  <CheckCircle className="w-4 h-4 text-gray-400" />
-                  All suppliers are vetted and trusted
-                </div>
-                <div className="flex items-center gap-8">
-                  <span className="text-[13px] font-medium text-gray-500">Showing 4 of 12 results</span>
-                  <Link to="/search" className="text-brand-primary font-bold text-sm hover:underline flex items-center gap-1 group">
-                    View all results <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </div>
+              <h3 className="text-2xl font-bold text-[#030213] mb-4">2. Compare</h3>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-xs">
+                Compare prices and delivery options from trusted local suppliers.
+              </p>
+            </div>
+
+            <ChevronRight className="hidden md:block w-8 h-8 text-gray-100" />
+
+            {/* Step 3 */}
+            <div className="flex-1 flex flex-col items-center text-center group">
+              <div className="w-24 h-24 rounded-[32px] bg-orange-50 flex items-center justify-center mb-8 transition-transform group-hover:scale-110 duration-300">
+                <CheckCircle className="w-10 h-10 text-brand-primary" />
               </div>
+              <h3 className="text-2xl font-bold text-[#030213] mb-4">3. Book</h3>
+              <p className="text-gray-500 font-medium leading-relaxed max-w-xs">
+                Choose the best deal and book directly with the supplier.
+              </p>
             </div>
           </div>
-        </div>
 
-        {/* Trust Features Banner */}
-        <div className="mt-16 pt-16 border-t border-gray-100">
-          <div className="grid md:grid-cols-3 gap-12">
-            <div className="flex items-center gap-5 justify-center md:justify-start">
-              <div className="w-12 h-12 rounded-full border border-brand-accent flex items-center justify-center text-brand-primary shadow-sm bg-brand-accent/30">
-                <CheckCircle className="w-6 h-6" />
+          {/* Trust Banner */}
+          <div className="mt-32 p-12 md:p-16 bg-[#F8F9FC] rounded-[48px] grid md:grid-cols-3 gap-12 border border-gray-50">
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                <CheckCircle className="w-8 h-8 text-brand-primary" />
               </div>
               <div>
-                <h4 className="font-bold text-gray-900">Trusted Suppliers</h4>
-                <p className="text-[13px] text-gray-500">All suppliers are checked and reviewed</p>
+                <h4 className="font-bold text-gray-900 mb-1">Verified Suppliers</h4>
+                <p className="text-sm text-gray-500 font-medium">All suppliers are checked and reviewed</p>
               </div>
             </div>
-            
-            <div className="flex items-center gap-5 justify-center">
-              <div className="w-12 h-12 rounded-full border border-brand-accent flex items-center justify-center text-brand-primary shadow-sm bg-brand-accent/30">
-                <BarChart3 className="w-6 h-6" />
+
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                <BarChart3 className="w-8 h-8 text-brand-primary" />
               </div>
               <div>
-                <h4 className="font-bold text-gray-900">Best Prices</h4>
-                <p className="text-[13px] text-gray-500">Compare and save on plant hire</p>
+                <h4 className="font-bold text-gray-900 mb-1">Best Prices</h4>
+                <p className="text-sm text-gray-500 font-medium">Compare and save on plant hire</p>
               </div>
             </div>
-            
-            <div className="flex items-center gap-5 justify-center md:justify-end">
-              <div className="w-12 h-12 rounded-full border border-brand-accent flex items-center justify-center text-brand-primary shadow-sm bg-brand-accent/30">
-                <ArrowRight className="w-6 h-6" />
+
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                <CalendarIcon className="w-8 h-8 text-brand-primary" />
               </div>
               <div>
-                <h4 className="font-bold text-gray-900">Save Time</h4>
-                <p className="text-[13px] text-gray-500">Quick quotes from local suppliers</p>
+                <h4 className="font-bold text-gray-900 mb-1">Save Time</h4>
+                <p className="text-sm text-gray-500 font-medium">Quick quotes from local suppliers</p>
               </div>
             </div>
           </div>
