@@ -56,6 +56,14 @@ class CreateEquipmentImageSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid organization_id.")
         return value
 
+    def validate_image_url(self, value):
+        from tooli_uk_app.services import gcs_images
+
+        msg = gcs_images.rejection_reason_for_stored_image_url(value or "")
+        if msg:
+            raise serializers.ValidationError(msg)
+        return value
+
 
 class CreateEquipmentAvailabilitySerializer(serializers.Serializer):
     availability_from = serializers.DateTimeField()

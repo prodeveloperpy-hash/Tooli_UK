@@ -21,6 +21,13 @@ class EquipmentImageViewSet(viewsets.ModelViewSet):
         raw = (obj.image_url or "").strip()
         if not raw:
             return HttpResponse(status=404)
+        if gcs_images.is_unfetchable_stored_url(raw):
+            return HttpResponse(
+                "Invalid image reference (browser blob: or data: URL was stored). "
+                "Re-upload using multipart files or a public https:// URL.",
+                status=404,
+                content_type="text/plain",
+            )
         try:
             payload = gcs_images.read_stored_image(raw)
         except RuntimeError:

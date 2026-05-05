@@ -120,6 +120,36 @@ def _storage_key_for_gcs_fetch(raw: str) -> str | None:
     return s
 
 
+def rejection_reason_for_stored_image_url(value: str) -> str | None:
+    """If this string must not be stored as ``image_url`` / logo / avatar, return reason."""
+    v = (value or "").strip()
+    if not v:
+        return None
+    low = v.lower()
+    if low.startswith("blob:"):
+        return (
+            "blob: URLs only exist in the browser and cannot be stored. "
+            "Send the file as multipart (e.g. FormData images[]) or use a public https:// URL."
+        )
+    if low.startswith("data:"):
+        return (
+            "data: (base64) URLs are not supported as stored image_url. "
+            "Use multipart file upload or an https:// URL."
+        )
+    return None
+
+
+def is_unfetchable_stored_url(raw: str) -> bool:
+    """True for values that are not GCS keys, local:, or real HTTP URLs (e.g. blob:)."""
+    s = (raw or "").strip()
+    if not s:
+        return False
+    low = s.lower()
+    if low.startswith("blob:") or low.startswith("data:"):
+        return True
+    return False
+
+
 def should_use_api_url_in_json(stored: str) -> bool:
     """True when API JSON should expose our proxy URL instead of the raw stored value."""
     s = (stored or "").strip()
@@ -148,6 +178,8 @@ def read_stored_image(stored: str) -> tuple[bytes, str] | None:
     """Streamable image bytes for API responses: local prefix, GCS object, or GCS HTTPS URL."""
     raw = (stored or "").strip()
     if not raw:
+        return None
+    if is_unfetchable_stored_url(raw):
         return None
     if raw.startswith(LOCAL_STORAGE_PREFIX):
         return download_blob(raw)
