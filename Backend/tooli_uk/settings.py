@@ -128,8 +128,28 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Private GCS bucket for equipment images; Cloud Run uses the service account (ADC).
+# Local uploads (when GCS uploads are disabled) — e.g. Windows dev without ADC.
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+
+# Private GCS bucket for images; Cloud Run should use the runtime service account (ADC).
 GCS_IMAGE_BUCKET = os.environ.get("GCS_IMAGE_BUCKET", "tooli-uk-images")
+
+# Optional path to a service account JSON key. If unset, ``google.cloud.storage.Client``
+# uses Application Default Credentials (recommended on Cloud Run with the deploy SA).
+_gcs_sa = os.environ.get("GCS_SERVICE_ACCOUNT_FILE") or os.environ.get(
+    "GOOGLE_APPLICATION_CREDENTIALS", ""
+)
+GCS_SERVICE_ACCOUNT_FILE = _gcs_sa.strip() or None
+GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "").strip() or None
+
+# When False, multipart uploads go to MEDIA_ROOT (offline dev only). Default: always GCS.
+# Set GCS_UPLOAD_ENABLED=false only if you run locally without GCP credentials.
+GCS_UPLOAD_ENABLED = os.environ.get("GCS_UPLOAD_ENABLED", "true").lower() in (
+    "1",
+    "true",
+    "yes",
+)
 
 # API supports JSON and DRF Browsable API form testing.
 REST_FRAMEWORK = {

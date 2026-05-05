@@ -5,7 +5,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from tooli_uk_app.models import Organization, Role, User, UserOrganization
-from tooli_uk_app.serializers.user import _is_public_http_url
+from tooli_uk_app.services.gcs_images import should_use_api_url_in_json
 
 
 class UserOrganizationUserDetailSerializer(serializers.Serializer):
@@ -17,8 +17,10 @@ class UserOrganizationUserDetailSerializer(serializers.Serializer):
 
     def get_avatar_url(self, obj):
         raw = (obj.avatar_url or "").strip() if obj else ""
-        if not raw or _is_public_http_url(raw):
-            return raw or None
+        if not raw:
+            return None
+        if not should_use_api_url_in_json(raw):
+            return raw
         request = self.context.get("request")
         if request is None:
             return raw
@@ -37,8 +39,10 @@ class UserOrganizationOrganizationDetailSerializer(serializers.Serializer):
 
     def get_logo(self, obj):
         raw = (obj.logo or "").strip() if obj else ""
-        if not raw or _is_public_http_url(raw):
-            return raw or None
+        if not raw:
+            return None
+        if not should_use_api_url_in_json(raw):
+            return raw
         request = self.context.get("request")
         if request is None:
             return raw
