@@ -205,13 +205,4 @@ class CreateEquipmentSerializer(serializers.Serializer):
                 )
             )
 
-        return {
-            "equipment_id": equipment.equipment_id,
-            "equipment_location_id": equipment_location.equipment_location_id,
-            "price_ids": [price.equipment_price_id for price in created_prices],
-            "image_ids": [image.equipment_image_id for image in created_images],
-            "availability_ids": [
-                availability.equipment_availability_id
-                for availability in created_availabilities
-            ],
-        }
+        return equipment
