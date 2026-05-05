@@ -29,11 +29,11 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         if request.content_type and "multipart/form-data" in request.content_type:
             raw = request.data.get("payload")
-            if raw is None:
+            if raw is None or raw == "":
                 return Response(
                     {
-                        "detail": 'Multipart requests need a JSON string field "payload". '
-                        'Optional file field "avatar" uploads the linked user profile image.'
+                        "detail": 'Multipart create needs a JSON string field "payload". '
+                        'Optional files: "avatar" (user), "organization_logo" (org).'
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
@@ -47,11 +47,13 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
             avatar_file = request.FILES.get("avatar")
+            org_logo_file = request.FILES.get("organization_logo")
             serializer = self.get_serializer(
                 data=body,
                 context={
                     **self.get_serializer_context(),
                     "avatar_file": avatar_file,
+                    "organization_logo": org_logo_file,
                 },
             )
         else:
@@ -74,29 +76,26 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
         avatar_file = None
         if request.content_type and "multipart/form-data" in request.content_type:
             raw = request.data.get("payload")
-            if raw is None:
-                return Response(
-                    {
-                        "detail": 'Multipart PATCH/PUT needs a JSON string field "payload". '
-                        'Optional file field "avatar" updates the linked user profile image.'
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if isinstance(raw, (bytes, bytearray)):
-                raw = raw.decode()
-            try:
-                data = json.loads(raw)
-            except json.JSONDecodeError as exc:
-                return Response(
-                    {"detail": f"Invalid payload JSON: {exc}"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+            if raw is None or raw == "":
+                data = {}
+            else:
+                if isinstance(raw, (bytes, bytearray)):
+                    raw = raw.decode()
+                try:
+                    data = json.loads(raw)
+                except json.JSONDecodeError as exc:
+                    return Response(
+                        {"detail": f"Invalid payload JSON: {exc}"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
             avatar_file = request.FILES.get("avatar")
+            org_logo_file = request.FILES.get("organization_logo")
         else:
             # Handle cases where JSON might be wrapped in a "payload" key
             if isinstance(data, dict) and "payload" in data and len(data) == 1:
                 data = data["payload"]
-
+            avatar_file = None
+            org_logo_file = None
         serializer = self.get_serializer(
             instance,
             data=data,
@@ -104,6 +103,7 @@ class UserOrganizationViewSet(viewsets.ModelViewSet):
             context={
                 **self.get_serializer_context(),
                 "avatar_file": avatar_file,
+                "organization_logo": org_logo_file,
             },
         )
         serializer.is_valid(raise_exception=True)

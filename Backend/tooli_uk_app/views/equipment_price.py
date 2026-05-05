@@ -6,7 +6,7 @@ from tooli_uk_app.serializers.equipment_price import EquipmentPriceSerializer
 
 
 class EquipmentPriceViewSet(viewsets.ModelViewSet):
-    queryset = EquipmentPrice.objects.all()
+    queryset = EquipmentPrice.objects.select_related("interval_id").all()
     serializer_class = EquipmentPriceSerializer
     filterset_class = EquipmentPriceFilter
     lookup_field = "equipment_price_id"

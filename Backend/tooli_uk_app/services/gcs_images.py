@@ -52,6 +52,19 @@ def upload_user_avatar(uploaded_file: UploadedFile, user_id: int) -> str:
     return object_name
 
 
+def upload_organization_logo(uploaded_file: UploadedFile, organization_id: int) -> str:
+    """Upload org logo; return GCS object name stored in ``Organization.logo``."""
+    content_type = getattr(uploaded_file, "content_type", None) or "application/octet-stream"
+    ext = _guess_extension(getattr(uploaded_file, "name", None), content_type)
+    object_name = f"organizations/{organization_id}/{uuid.uuid4().hex}{ext}"
+
+    bucket = _client().bucket(_bucket_name())
+    blob = bucket.blob(object_name)
+    data = uploaded_file.read()
+    blob.upload_from_string(data, content_type=content_type)
+    return object_name
+
+
 def upload_equipment_image(uploaded_file: UploadedFile, equipment_id: int) -> str:
     """Upload file to GCS; return object name stored in ``EquipmentImage.image_url``."""
     content_type = getattr(uploaded_file, "content_type", None) or "application/octet-stream"
