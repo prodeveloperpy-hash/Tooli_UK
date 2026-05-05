@@ -1,10 +1,17 @@
 import json
 
+from django.db import transaction
 from rest_framework import parsers, status, viewsets
 from rest_framework.response import Response
 
 from tooli_uk_app.filters.equipment import EquipmentFilter
-from tooli_uk_app.models import Equipment
+from tooli_uk_app.models import (
+    Equipment,
+    EquipmentAvailability,
+    EquipmentImage,
+    EquipmentLocation,
+    EquipmentPrice,
+)
 from tooli_uk_app.pagination import EquipmentPagination
 from tooli_uk_app.serializers.equipment import EquipmentMutateSerializer, EquipmentSerializer
 
@@ -109,3 +116,14 @@ class EquipmentViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         kwargs["partial"] = True
         return self.update(request, *args, **kwargs)
+
+    @transaction.atomic
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        eid = instance.equipment_id
+        EquipmentImage.objects.filter(equipment_id_id=eid).delete()
+        EquipmentPrice.objects.filter(equipment_id_id=eid).delete()
+        EquipmentLocation.objects.filter(equipment_id_id=eid).delete()
+        EquipmentAvailability.objects.filter(equipment_id_id=eid).delete()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
