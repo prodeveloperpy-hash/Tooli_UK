@@ -61,6 +61,7 @@ export function AdminDashboard() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [isFetchingDetail, setIsFetchingDetail] = useState(false);
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
@@ -107,9 +108,18 @@ export function AdminDashboard() {
     setIsAddEditOpen(true);
   };
 
-  const handleOpenEdit = (supplier: UserOrganization) => {
+  const handleOpenEdit = async (supplier: UserOrganization) => {
     setSelectedSupplier(supplier);
     setIsAddEditOpen(true);
+    setIsFetchingDetail(true);
+    try {
+      const detailedSupplier = await userApi.getUserOrganizationById(supplier.user_organization_id);
+      setSelectedSupplier(detailedSupplier);
+    } catch (error) {
+      console.error('Error fetching supplier details:', error);
+    } finally {
+      setIsFetchingDetail(false);
+    }
   };
 
   const handleOpenDelete = (supplier: UserOrganization) => {
@@ -122,9 +132,18 @@ export function AdminDashboard() {
     setIsEquipFormOpen(true);
   };
 
-  const handleOpenEquipEdit = (e: Equipment) => {
+  const handleOpenEquipEdit = async (e: Equipment) => {
     setSelectedEquipment(e);
     setIsEquipFormOpen(true);
+    setIsFetchingDetail(true);
+    try {
+      const detailedEquip = await equipmentApi.getEquipmentById(e.equipment_id);
+      setSelectedEquipment(detailedEquip);
+    } catch (error) {
+      console.error('Error fetching equipment details:', error);
+    } finally {
+      setIsFetchingDetail(false);
+    }
   };
 
   const handleOpenEquipDelete = (e: Equipment) => {
@@ -133,42 +152,20 @@ export function AdminDashboard() {
   };
 
   const handleEquipSubmit = async (data: any) => {
-    // Helper to convert File to Base64
-    const fileToBase64 = (file: File): Promise<string> => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = error => reject(error);
-      });
-    };
-
-    // Process images: if it's a blob URL, find the matching File and convert to Base64
-    const processedImages = await Promise.all(data.imagePreviews.map(async (url: string, index: number) => {
-      if (url.startsWith('blob:')) {
-        // Find the file that matches this preview index
-        // imagePreviews and imageFiles are added in sync in EquipmentForm
-        // But we need to be careful with the indexing if images were removed
-        // Actually, let's just find the file from the imageFiles array
-        // In EquipmentForm, when a file is added, both arrays are updated.
-        // We'll use the index from the map if it corresponds to a new file.
-        // Better: let's assume the user just wants the URLs if they exist, 
-        // and for new files, we use the File objects we have.
-        
-        // Simple approach: if it's a blob, it's a new file. 
-        // We need to find which File it is.
-        // Let's look at how EquipmentForm handles this.
-        const fileIndex = data.imagePreviews.filter((u: string, i: number) => i < index && u.startsWith('blob:')).length;
-        const file = data.imageFiles[fileIndex];
-        if (file) {
-          const base64 = await fileToBase64(file);
-          return { image_url: base64, sort_order: index };
-        }
+    // Include metadata for all images (existing and new)
+    const imagesMetadata = data.imagePreviews.map((url: string, index: number) => {
+      const isNew = url.startsWith('blob:');
+      const entry: any = {
+        sort_order: index,
+        is_active: true
+      };
+      if (!isNew) {
+        entry.image_url = url;
       }
-      return { image_url: url, sort_order: index };
-    }));
+      return entry;
+    });
 
-    const payload = {
+    const fullPayload: any = {
       name: data.name,
       description: data.description,
       is_active: data.isActive,
@@ -181,28 +178,48 @@ export function AdminDashboard() {
         is_active: true
       },
       prices: data.prices.map((p: any) => ({
+        equipment_price_id: p.equipment_price_id,
         location_id: parseInt(data.locationId),
         interval_id: p.interval_id,
         is_active: true,
         price: p.price,
         currency: p.currency
       })),
-      images: processedImages.map(img => ({
-        ...img,
-        is_active: true
-      })),
+      images: imagesMetadata,
       availabilities: data.availabilities.map((a: any) => ({
+        equipment_availability_id: a.equipment_availability_id,
         availability_from: a.from ? new Date(a.from).toISOString() : "2026-06-01T08:00:00Z",
         availability_to: a.to ? new Date(a.to).toISOString() : "2026-08-31T18:00:00Z",
         is_active: true
       }))
     };
 
+    let payload: any = {};
+    if (selectedEquipment) {
+      payload.equipment_id = selectedEquipment.equipment_id;
+      
+      // Simple diffing
+      if (data.name !== selectedEquipment.name) payload.name = data.name;
+      if (data.description !== selectedEquipment.description) payload.description = data.description;
+      if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
+      if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
+      if (parseInt(data.supplierId) !== selectedEquipment.organization_id) payload.organization_id = parseInt(data.supplierId);
+      
+      // Always include these for now to ensure they are updated correctly
+      payload.prices = fullPayload.prices;
+      payload.images = fullPayload.images;
+      payload.availabilities = fullPayload.availabilities;
+      payload.location = fullPayload.location;
+      payload.updated_by = 10;
+    } else {
+      payload = fullPayload;
+    }
+
     try {
       if (selectedEquipment) {
-        await equipmentApi.updateEquipment(selectedEquipment.equipment_id, payload);
+        await equipmentApi.updateEquipmentFiles(selectedEquipment.equipment_id, payload, data.imageFiles);
       } else {
-        await equipmentApi.createEquipment(payload);
+        await equipmentApi.createEquipmentFiles(payload, data.imageFiles);
       }
       await fetchEquipment();
       setIsEquipFormOpen(false);
@@ -245,7 +262,7 @@ export function AdminDashboard() {
       if (Object.keys(orgUpdates).length > 0) payload.organization = orgUpdates;
     } else {
       payload = {
-        role_id: 1,
+        role_id: 3,
         user: {
           first_name: data.firstName,
           last_name: data.lastName,
@@ -323,10 +340,7 @@ export function AdminDashboard() {
                 <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
                 <p className="text-muted-foreground">Manage suppliers and product listings</p>
               </div>
-              <Button className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)] shadow-md">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Button>
+             
             </div>
           </div>
         </div>
@@ -585,6 +599,7 @@ export function AdminDashboard() {
         onClose={() => setIsAddEditOpen(false)} 
         onSubmit={handleAddEditSubmit} 
         supplier={selectedSupplier} 
+        isLoading={isFetchingDetail}
       />
 
       <EquipmentForm 
@@ -596,6 +611,7 @@ export function AdminDashboard() {
         intervals={intervals}
         categories={categories}
         locations={locations}
+        isLoading={isFetchingDetail}
       />
 
       <DeleteConfirmation 

@@ -22,9 +22,10 @@ interface EquipmentFormProps {
   intervals: Interval[];
   categories: Category[];
   locations: Location[];
+  isLoading?: boolean;
 }
 
-export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers, intervals, categories, locations }: EquipmentFormProps) {
+export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers, intervals, categories, locations, isLoading }: EquipmentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -49,11 +50,13 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         isActive: equipment.is_active,
         locationId: equipment.prices?.[0]?.location_id?.toString() || '10',
         prices: equipment.prices?.map(p => ({ 
+          equipment_price_id: p.equipment_price_id,
           price: p.price, 
-          interval_id: (p as any).interval_id || 1, 
+          interval_id: p.interval_id || 1, 
           currency: p.currency || 'GBP' 
         })) || [{ price: '', interval_id: 1, currency: 'GBP' }],
         availabilities: equipment.availabilities?.map(a => ({
+          equipment_availability_id: a.equipment_availability_id,
           from: a.availability_from ? new Date(a.availability_from).toISOString().split('T')[0] : '',
           to: a.availability_to ? new Date(a.availability_to).toISOString().split('T')[0] : ''
         })) || [{ from: '', to: '' }],
@@ -107,11 +110,29 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
   };
 
   const removeImage = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      imageFiles: prev.imageFiles.filter((_, i) => i !== index),
-      imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
-    }));
+    const previewUrl = formData.imagePreviews[index];
+    setFormData(prev => {
+      const isNewFile = previewUrl.startsWith('blob:');
+      let newImageFiles = prev.imageFiles;
+      
+      if (isNewFile) {
+        // Find which file in imageFiles this blob belongs to
+        const fileIndex = prev.imagePreviews
+          .slice(0, index)
+          .filter(url => url.startsWith('blob:')).length;
+        newImageFiles = prev.imageFiles.filter((_, i) => i !== fileIndex);
+      }
+
+      return {
+        ...prev,
+        imageFiles: newImageFiles,
+        imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
+      };
+    });
+    
+    if (previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -140,7 +161,13 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
           <Button variant="ghost" onClick={onClose} className="rounded-full w-10 h-10 p-0">×</Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-10">
+        <form onSubmit={handleSubmit} className="p-8 space-y-10 relative">
+          {isLoading && (
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center gap-4">
+              <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
+              <p className="text-sm font-bold text-gray-500 animate-pulse">Syncing with API...</p>
+            </div>
+          )}
           {/* General Section */}
           <section className="space-y-6">
             <div className="flex items-center gap-2 text-brand-primary">
