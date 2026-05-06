@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Mail, Building2, MapPin, Camera, UploadCloud, Link as LinkIcon } from 'lucide-react';
+import { Mail, Building2, MapPin, Camera, UploadCloud, Link as LinkIcon, Loader2 } from 'lucide-react';
 import { UserOrganization } from '../../context/user.api';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 
@@ -12,9 +12,10 @@ interface SupplierFormProps {
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
   supplier: UserOrganization | null;
+  isLoading?: boolean;
 }
 
-export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFormProps) {
+export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }: SupplierFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -78,7 +79,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden rounded-2xl border-none shadow-2xl">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="relative">
           <DialogHeader className="p-8 bg-gray-50 border-b">
             <DialogTitle className="text-2xl font-bold">{supplier ? 'Edit Supplier' : 'Add New Supplier'}</DialogTitle>
             <DialogDescription className="text-gray-500 mt-1">
@@ -86,7 +87,13 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier }: SupplierFo
             </DialogDescription>
           </DialogHeader>
           
-          <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto">
+          <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto relative">
+            {isLoading && (
+              <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center gap-4">
+                <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
+                <p className="text-sm font-bold text-gray-500 animate-pulse">Syncing Supplier Data...</p>
+              </div>
+            )}
             {/* Profile Section */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 text-brand-primary">

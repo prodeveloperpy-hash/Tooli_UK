@@ -61,6 +61,7 @@ export function AdminDashboard() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [isFetchingDetail, setIsFetchingDetail] = useState(false);
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
@@ -108,15 +109,16 @@ export function AdminDashboard() {
   };
 
   const handleOpenEdit = async (supplier: UserOrganization) => {
+    setSelectedSupplier(supplier);
+    setIsAddEditOpen(true);
+    setIsFetchingDetail(true);
     try {
       const detailedSupplier = await userApi.getUserOrganizationById(supplier.user_organization_id);
       setSelectedSupplier(detailedSupplier);
-      setIsAddEditOpen(true);
     } catch (error) {
       console.error('Error fetching supplier details:', error);
-      // Fallback to local data if fetch fails
-      setSelectedSupplier(supplier);
-      setIsAddEditOpen(true);
+    } finally {
+      setIsFetchingDetail(false);
     }
   };
 
@@ -131,15 +133,16 @@ export function AdminDashboard() {
   };
 
   const handleOpenEquipEdit = async (e: Equipment) => {
+    setSelectedEquipment(e);
+    setIsEquipFormOpen(true);
+    setIsFetchingDetail(true);
     try {
       const detailedEquip = await equipmentApi.getEquipmentById(e.equipment_id);
       setSelectedEquipment(detailedEquip);
-      setIsEquipFormOpen(true);
     } catch (error) {
       console.error('Error fetching equipment details:', error);
-      // Fallback to local data if fetch fails
-      setSelectedEquipment(e);
-      setIsEquipFormOpen(true);
+    } finally {
+      setIsFetchingDetail(false);
     }
   };
 
@@ -596,6 +599,7 @@ export function AdminDashboard() {
         onClose={() => setIsAddEditOpen(false)} 
         onSubmit={handleAddEditSubmit} 
         supplier={selectedSupplier} 
+        isLoading={isFetchingDetail}
       />
 
       <EquipmentForm 
@@ -607,6 +611,7 @@ export function AdminDashboard() {
         intervals={intervals}
         categories={categories}
         locations={locations}
+        isLoading={isFetchingDetail}
       />
 
       <DeleteConfirmation 

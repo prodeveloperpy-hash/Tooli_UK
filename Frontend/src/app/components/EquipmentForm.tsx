@@ -22,9 +22,10 @@ interface EquipmentFormProps {
   intervals: Interval[];
   categories: Category[];
   locations: Location[];
+  isLoading?: boolean;
 }
 
-export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers, intervals, categories, locations }: EquipmentFormProps) {
+export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers, intervals, categories, locations, isLoading }: EquipmentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -160,7 +161,13 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
           <Button variant="ghost" onClick={onClose} className="rounded-full w-10 h-10 p-0">×</Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-10">
+        <form onSubmit={handleSubmit} className="p-8 space-y-10 relative">
+          {isLoading && (
+            <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center gap-4">
+              <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
+              <p className="text-sm font-bold text-gray-500 animate-pulse">Syncing with API...</p>
+            </div>
+          )}
           {/* General Section */}
           <section className="space-y-6">
             <div className="flex items-center gap-2 text-brand-primary">
