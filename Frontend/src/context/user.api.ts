@@ -58,6 +58,21 @@ export const userApi = {
     return response.json();
   },
 
+  getUserOrganizationById: async (id: number): Promise<UserOrganization> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user-organization/${id}/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user organization details');
+    }
+
+    return response.json();
+  },
+
   createUserOrganization: async (data: any): Promise<UserOrganization> => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${API_URL}/user-organization/`, {

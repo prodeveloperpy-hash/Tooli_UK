@@ -49,11 +49,13 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         isActive: equipment.is_active,
         locationId: equipment.prices?.[0]?.location_id?.toString() || '10',
         prices: equipment.prices?.map(p => ({ 
+          equipment_price_id: p.equipment_price_id,
           price: p.price, 
-          interval_id: (p as any).interval_id || 1, 
+          interval_id: p.interval_id || 1, 
           currency: p.currency || 'GBP' 
         })) || [{ price: '', interval_id: 1, currency: 'GBP' }],
         availabilities: equipment.availabilities?.map(a => ({
+          equipment_availability_id: a.equipment_availability_id,
           from: a.availability_from ? new Date(a.availability_from).toISOString().split('T')[0] : '',
           to: a.availability_to ? new Date(a.availability_to).toISOString().split('T')[0] : ''
         })) || [{ from: '', to: '' }],
@@ -107,11 +109,29 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
   };
 
   const removeImage = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      imageFiles: prev.imageFiles.filter((_, i) => i !== index),
-      imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
-    }));
+    const previewUrl = formData.imagePreviews[index];
+    setFormData(prev => {
+      const isNewFile = previewUrl.startsWith('blob:');
+      let newImageFiles = prev.imageFiles;
+      
+      if (isNewFile) {
+        // Find which file in imageFiles this blob belongs to
+        const fileIndex = prev.imagePreviews
+          .slice(0, index)
+          .filter(url => url.startsWith('blob:')).length;
+        newImageFiles = prev.imageFiles.filter((_, i) => i !== fileIndex);
+      }
+
+      return {
+        ...prev,
+        imageFiles: newImageFiles,
+        imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
+      };
+    });
+    
+    if (previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

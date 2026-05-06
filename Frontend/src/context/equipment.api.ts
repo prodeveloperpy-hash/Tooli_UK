@@ -18,6 +18,13 @@ export interface Equipment {
     price: string;
     currency: string;
     is_active: boolean;
+    interval_id?: number;
+  }[];
+  availabilities?: {
+    equipment_availability_id: number;
+    availability_from: string;
+    availability_to: string;
+    is_active: boolean;
   }[];
 }
 
@@ -45,6 +52,21 @@ export const equipmentApi = {
 
     if (!response.ok) {
       throw new Error('Failed to fetch equipment');
+    }
+
+    return response.json();
+  },
+
+  getEquipmentById: async (id: number): Promise<Equipment> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/equipment/${id}/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch equipment details');
     }
 
     return response.json();
@@ -88,7 +110,7 @@ export const equipmentApi = {
 
   deleteEquipment: async (id: number): Promise<void> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/equipment/${id}/`, {
+    const response = await fetch(`${API_URL}/create-equipment/${id}/`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -140,6 +162,52 @@ export const equipmentApi = {
 
     if (!response.ok) {
       throw new Error('Failed to fetch locations');
+    }
+
+    return response.json();
+  },
+
+  createEquipmentFiles: async (payload: any, files: File[]): Promise<Equipment> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify(payload));
+    files.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    const response = await fetch(`${API_URL}/create-equipment/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create equipment');
+    }
+
+    return response.json();
+  },
+
+  updateEquipmentFiles: async (id: number, payload: any, files: File[]): Promise<Equipment> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify(payload));
+    files.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    const response = await fetch(`${API_URL}/create-equipment/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update equipment');
     }
 
     return response.json();
