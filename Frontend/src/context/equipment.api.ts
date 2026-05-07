@@ -94,7 +94,7 @@ export const equipmentApi = {
 
   updateEquipment: async (data: any): Promise<Equipment> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/create-equipment/`, {
+    const response = await fetch(`${API_URL}/create-equipment/${data.equipment_id}/`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -214,7 +214,7 @@ export const equipmentApi = {
       formData.append('images', file);
     });
 
-    const response = await fetch(`${API_URL}/create-equipment/`, {
+    const response = await fetch(`${API_URL}/create-equipment/${payload.equipment_id}/`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,

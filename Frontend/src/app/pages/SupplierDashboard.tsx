@@ -504,7 +504,6 @@ export function SupplierDashboard() {
                                   </div>
                                   <div>
                                     <div className="font-black text-gray-900 text-lg tracking-tight">{item.name}</div>
-                                    <div className="text-xs text-gray-400 font-bold tracking-widest mt-1 uppercase">ID: #{item.equipment_id.toString().padStart(4, '0')}</div>
                                   </div>
                                 </div>
                               </TableCell>
@@ -571,7 +570,7 @@ export function SupplierDashboard() {
                         Page {equipPage} of {totalEquipPages}
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -581,6 +580,34 @@ export function SupplierDashboard() {
                       >
                         Prev
                       </Button>
+
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalEquipPages }, (_, i) => i + 1)
+                          .filter(p => {
+                            if (totalEquipPages <= 7) return true;
+                            return p === 1 || p === totalEquipPages || Math.abs(p - equipPage) <= 1;
+                          })
+                          .map((pageNum, index, array) => (
+                            <div key={pageNum} className="flex items-center gap-1">
+                              {index > 0 && array[index - 1] !== pageNum - 1 && (
+                                <span className="px-1 text-gray-400">...</span>
+                              )}
+                              <Button
+                                variant={equipPage === pageNum ? "default" : "ghost"}
+                                size="sm"
+                                onClick={() => setEquipPage(pageNum)}
+                                className={`font-black text-xs h-10 w-10 p-0 rounded-xl transition-all ${
+                                  equipPage === pageNum 
+                                    ? 'bg-[#030213] text-white shadow-lg' 
+                                    : 'hover:bg-white text-gray-500 hover:shadow-md'
+                                }`}
+                              >
+                                {pageNum}
+                              </Button>
+                            </div>
+                          ))}
+                      </div>
+
                       <Button
                         variant="ghost"
                         size="sm"

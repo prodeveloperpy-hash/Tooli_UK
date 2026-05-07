@@ -44,7 +44,7 @@ import { EquipmentForm } from '../components/EquipmentForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
 
 export function AdminDashboard() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [supplierFilter, setSupplierFilter] = useState<string>('all');
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,7 +87,7 @@ export function AdminDashboard() {
 
   useEffect(() => {
     fetchEquipment();
-  }, [equipPage]);
+  }, [equipPage, supplierFilter]);
 
   const fetchStaticData = async () => {
     try {
@@ -107,7 +107,8 @@ export function AdminDashboard() {
   const fetchEquipment = async () => {
     setIsEquipmentLoading(true);
     try {
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20);
+      const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId);
       setEquipment(response.results);
       setTotalEquipCount(response.count);
       setTotalEquipPages(Math.ceil(response.count / 20));
@@ -376,16 +377,7 @@ export function AdminDashboard() {
     }
   };
 
-  const filteredSuppliers = suppliers.filter(s => 
-    s.organization_details.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.user_details.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    s.user_details.last_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
-  const filteredEquipment = equipment.filter(e => 
-    e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    e.organization_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const stats = [
     { title: 'Total Suppliers', value: suppliers.length, change: '+12%', icon: Users, gradient: 'from-blue-500 to-indigo-600' },
@@ -461,17 +453,7 @@ export function AdminDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="p-6 border-b bg-gray-50/50">
-                    <div className="relative max-w-sm">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search by company or name..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 bg-white border-gray-200"
-                      />
-                    </div>
-                  </div>
+                  {/* Search removed as requested */}
 
                   <div className="overflow-x-auto">
                     <Table>
@@ -492,7 +474,7 @@ export function AdminDashboard() {
                               <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
                             </TableCell>
                           </TableRow>
-                        ) : filteredSuppliers.map((s) => (
+                        ) : suppliers.map((s) => (
                           <TableRow key={s.user_organization_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
                               <div className="flex items-center gap-3">
@@ -573,14 +555,23 @@ export function AdminDashboard() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="p-6 border-b bg-gray-50/50">
-                    <div className="relative max-w-sm">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search equipment..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 bg-white border-gray-200"
-                      />
+                    <div className="flex items-center gap-4">
+                      <div className="text-sm font-medium text-gray-500">Filter by Supplier:</div>
+                      <select
+                        value={supplierFilter}
+                        onChange={(e) => {
+                          setSupplierFilter(e.target.value);
+                          setEquipPage(1);
+                        }}
+                        className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[200px]"
+                      >
+                        <option value="all">All Suppliers</option>
+                        {suppliers.map(s => (
+                          <option key={s.user_organization_id} value={s.organization_id}>
+                            {s.organization_details.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 
@@ -603,7 +594,7 @@ export function AdminDashboard() {
                               <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
                             </TableCell>
                           </TableRow>
-                        ) : filteredEquipment.map((item) => (
+                        ) : equipment.map((item) => (
                           <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
                               <div className="flex items-center gap-3">
