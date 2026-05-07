@@ -301,7 +301,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
                     </SelectTrigger>
                     <SelectContent>
                       {suppliers.map(s => (
-                        <SelectItem key={s.user_organization_id} value={s.organization_id.toString()}>
+                        <SelectItem key={s.user_organization_id} value={(s.organization_id || s.user_organization_id || '0').toString()}>
                           {s.organization_details.name}
                         </SelectItem>
                       ))}
@@ -316,7 +316,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
                     </SelectTrigger>
                     <SelectContent className="max-h-[300px]">
                       {categories.map(cat => (
-                        <SelectItem key={cat.category_id} value={cat.category_id.toString()}>
+                        <SelectItem key={cat.category_id} value={(cat.category_id || '0').toString()}>
                           {cat.category_display_name}
                         </SelectItem>
                       ))}
@@ -332,7 +332,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
                   </SelectTrigger>
                   <SelectContent>
                     {locations.map(loc => (
-                      <SelectItem key={loc.location_id} value={loc.location_id.toString()}>
+                      <SelectItem key={loc.location_id} value={(loc.location_id || '0').toString()}>
                         {loc.city_name}, {loc.country}
                       </SelectItem>
                     ))}
