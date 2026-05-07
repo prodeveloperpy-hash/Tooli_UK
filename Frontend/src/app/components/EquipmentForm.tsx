@@ -159,7 +159,96 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      if (equipment) {
+        // Calculate delta for updates
+        const delta: any = { equipment_id: equipment.equipment_id };
+        const compare = (v1: any, v2: any) => (v1 ?? '').toString().trim() === (v2 ?? '').toString().trim();
+
+        if (!compare(formData.name, equipment.name)) delta.name = formData.name;
+        if (!compare(formData.description, equipment.description)) delta.description = formData.description;
+        if (!compare(formData.redirectUrl, (equipment as any).redirect_url)) delta.redirect_url = formData.redirectUrl;
+        if (formData.isActive !== equipment.is_active) delta.is_active = formData.isActive;
+        if (parseInt(formData.categoryId) !== equipment.category_id) delta.category_id = parseInt(formData.categoryId);
+        if (parseInt(formData.supplierId) !== equipment.organization_id) delta.organization_id = parseInt(formData.supplierId);
+        if (parseInt(formData.locationId) !== (equipment.prices?.[0]?.location_id || 10)) {
+          delta.location = {
+            location_id: parseInt(formData.locationId),
+            is_active: true
+          };
+        }
+
+        // Prices check
+        const originalPrices = equipment.prices?.map(p => ({
+          interval_id: p.interval_id,
+          price: p.price.toString(),
+          currency: p.currency
+        })) || [];
+        const currentPrices = formData.prices.map(p => ({
+          interval_id: p.interval_id,
+          price: p.price.toString(),
+          currency: p.currency
+        }));
+        if (JSON.stringify(originalPrices) !== JSON.stringify(currentPrices)) {
+          delta.prices = formData.prices.map(p => ({
+            equipment_price_id: p.equipment_price_id,
+            location_id: parseInt(formData.locationId),
+            interval_id: p.interval_id,
+            is_active: true,
+            price: p.price,
+            currency: p.currency
+          }));
+        }
+
+        // Availabilities check
+        const originalAvail = equipment.availabilities?.map(a => ({
+          from: a.availability_from ? new Date(a.availability_from).toISOString().split('T')[0] : '',
+          to: a.availability_to ? new Date(a.availability_to).toISOString().split('T')[0] : ''
+        })) || [];
+        const currentAvail = formData.availabilities.map(a => ({
+          from: a.from,
+          to: a.to
+        }));
+        if (JSON.stringify(originalAvail) !== JSON.stringify(currentAvail)) {
+          delta.availabilities = formData.availabilities.map(a => ({
+            equipment_availability_id: a.equipment_availability_id,
+            availability_from: a.from ? new Date(a.from).toISOString() : undefined,
+            availability_to: a.to ? new Date(a.to).toISOString() : undefined,
+            is_active: true
+          }));
+        }
+
+        // Images check
+        if (formData.imageFiles.length > 0 || formData.imagesToDelete.length > 0) {
+          delta.imageFiles = formData.imageFiles;
+          delta.imagesToDelete = formData.imagesToDelete;
+          
+          // Align JSON images with FormData files
+          // New images must come first to match the files array indices if the backend is index-based
+          const newImages = [] as any[];
+          const existingImages = [] as any[];
+          
+          formData.imagePreviews.forEach((url, index) => {
+            const isNew = url.startsWith('blob:');
+            const imgEntry = {
+              sort_order: index,
+              is_active: true,
+              ...(isNew ? {} : { image_url: url })
+            };
+            if (isNew) newImages.push(imgEntry);
+            else existingImages.push(imgEntry);
+          });
+          
+          delta.images = [...newImages, ...existingImages];
+        }
+
+        // Only call onSubmit if there are changes beyond just the equipment_id
+        if (Object.keys(delta).length > 1) {
+          await onSubmit(delta);
+        }
+      } else {
+        // For new equipment, send everything
+        await onSubmit(formData);
+      }
       onClose();
     } catch (error) {
       console.error(error);
