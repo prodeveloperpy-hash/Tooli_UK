@@ -35,12 +35,60 @@ import {
 } from 'lucide-react';
 import { products, pricing } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
+import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { toast } from 'sonner';
+import { Navbar } from '../components/Navbar';
+import { Footer } from '../components/Footer';
+import { EquipmentForm } from '../components/EquipmentForm';
+import { DeleteConfirmation } from '../components/DeleteConfirmation';
+import { Trash2 } from 'lucide-react'; // Added for delete action
 
 export function SupplierDashboard() {
   const [userData, setUserData] = useState<UserOrganization | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Equipment States
+  const [equipment, setEquipment] = useState<Equipment[]>([]);
+  const [isEquipmentLoading, setIsEquipmentLoading] = useState(true);
+  const [intervals, setIntervals] = useState<Interval[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [isEquipFormOpen, setIsEquipFormOpen] = useState(false);
+  const [isFetchingDetail, setIsFetchingDetail] = useState(false);
+
+  const fetchEquipment = async () => {
+    setIsEquipmentLoading(true);
+    try {
+      // For suppliers, we probably want to filter by their organization_id
+      // but if the API handles it via token, just call getEquipment.
+      // Actually, let's assume we want to filter if needed, but getEquipment might return all.
+      const response = await equipmentApi.getEquipment();
+      
+      // Filter by current user's organization if possible
+      const orgId = localStorage.getItem('organization_id');
+      const filtered = orgId 
+        ? response.results.filter((e: Equipment) => e.organization_id?.toString() === orgId)
+        : response.results;
+        
+      setEquipment(filtered);
+      
+      const intervalData = await equipmentApi.getIntervals();
+      setIntervals(intervalData);
+
+      const categoryData = await equipmentApi.getCategories();
+      setCategories(categoryData);
+
+      const locationData = await equipmentApi.getLocations();
+      setLocations(locationData);
+    } catch (error) {
+      console.error('Error fetching equipment:', error);
+      toast.error('Failed to load equipment');
+    } finally {
+      setIsEquipmentLoading(false);
+    }
+  };
   
   // Settings Form State
   const [settingsForm, setSettingsForm] = useState({
@@ -52,10 +100,45 @@ export function SupplierDashboard() {
   const [logoFile, setLogoFile] = useState<File | undefined>();
 
   useEffect(() => {
+    // Try to load from cache first
+    const cachedData = localStorage.getItem('user_data');
+    if (cachedData) {
+      try {
+        const parsed = JSON.parse(cachedData);
+        // Map the login response structure to the UserOrganization structure expected by the app
+        // The login response has { user, organization_id, role_key }
+        // The UserOrganization expected here seems to be the full one from getUserOrganizations
+        // But we can synthesize it or update the components to use what we have.
+        
+        // For now, let's just set the settings form from cache
+        setSettingsForm({
+          first_name: parsed.user.first_name,
+          last_name: parsed.user.last_name,
+          org_name: parsed.organization_name || 'My Organization', // Adjusted based on login response
+        });
+        
+        // If we want to use it for userData state:
+        const syntheticUserData: any = {
+          user_organization_id: parsed.organization_id, // approximation
+          user_details: parsed.user,
+          organization_details: {
+            name: parsed.organization_name || 'My Organization',
+            logo: parsed.user.avatar_url, // approximation
+          },
+          role_details: {
+            role_key: parsed.role_key,
+          }
+        };
+        setUserData(syntheticUserData);
+        setIsLoadingUser(false);
+      } catch (e) {
+        console.error('Error parsing cached user data', e);
+      }
+    }
+
     const fetchUserData = async () => {
       try {
         const orgs = await userApi.getUserOrganizations();
-        // Assuming the first organization is the one they are managing
         if (orgs.length > 0) {
           setUserData(orgs[0]);
           setSettingsForm({
@@ -63,15 +146,18 @@ export function SupplierDashboard() {
             last_name: orgs[0].user_details.last_name,
             org_name: orgs[0].organization_details.name,
           });
+          // Update cache with fresh data
+          // localStorage.setItem('user_data', JSON.stringify({ user: orgs[0].user_details, role_key: orgs[0].role_details.role_key, organization_id: orgs[0].organization_id }));
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
-        toast.error('Failed to load profile data');
+        if (!cachedData) toast.error('Failed to load profile data');
       } finally {
         setIsLoadingUser(false);
       }
     };
     fetchUserData();
+    fetchEquipment();
   }, []);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
@@ -110,39 +196,129 @@ export function SupplierDashboard() {
     }
   };
 
-  const supplierName = userData?.organization_details.name || 'Loading...';
-  const supplierProducts = products.filter((p) => p.supplierId === '1');
+  const handleOpenEquipAdd = () => {
+    setSelectedEquipment(null);
+    setIsEquipFormOpen(true);
+  };
 
-  const stats = [
-    {
-      title: 'Active Listings',
-      value: supplierProducts.length,
-      change: '+2',
-      icon: Package,
-      gradient: 'from-blue-500 to-indigo-600',
-    },
-    {
-      title: 'Total Views',
-      value: '1,247',
-      change: '+156',
-      icon: Eye,
-      gradient: 'from-purple-500 to-pink-600',
-    },
-    {
-      title: 'Click-through',
-      value: '8.4%',
-      change: '+1.2%',
-      icon: MousePointerClick,
-      gradient: 'from-cyan-500 to-teal-600',
-    },
-    {
-      title: 'Avg. Rating',
-      value: '4.8',
-      change: '+0.2',
-      icon: Star,
-      gradient: 'from-orange-500 to-red-600',
-    },
-  ];
+  const handleOpenEquipEdit = async (e: Equipment) => {
+    setSelectedEquipment(e);
+    setIsEquipFormOpen(true);
+    setIsFetchingDetail(true);
+    try {
+      const detailedEquip = await equipmentApi.getEquipmentById(e.equipment_id);
+      setSelectedEquipment(detailedEquip);
+    } catch (error) {
+      console.error('Error fetching equipment details:', error);
+    } finally {
+      setIsFetchingDetail(false);
+    }
+  };
+
+  const [isEquipDeleteOpen, setIsEquipDeleteOpen] = useState(false);
+  const handleOpenEquipDelete = (e: Equipment) => {
+    setSelectedEquipment(e);
+    setIsEquipDeleteOpen(true);
+  };
+
+  const handleEquipDeleteConfirm = async () => {
+    if (!selectedEquipment) return;
+    try {
+      await equipmentApi.deleteEquipment(selectedEquipment.equipment_id);
+      toast.success('Equipment deleted successfully');
+      fetchEquipment();
+    } catch (error) {
+      console.error('Error deleting equipment:', error);
+      toast.error('Failed to delete equipment');
+    } finally {
+      setIsEquipDeleteOpen(false);
+    }
+  };
+
+  const handleEquipSubmit = async (data: any) => {
+    // Include metadata for all images (existing and new)
+    const imagesMetadata = data.imagePreviews.map((url: string, index: number) => {
+      const isNew = url.startsWith('blob:');
+      const entry: any = {
+        sort_order: index,
+        is_active: true
+      };
+      if (!isNew) {
+        entry.image_url = url;
+      }
+      return entry;
+    });
+
+    const fullPayload: any = {
+      name: data.name,
+      description: data.description,
+      is_active: data.isActive,
+      category_id: parseInt(data.categoryId),
+      organization_id: parseInt(data.supplierId || localStorage.getItem('organization_id') || '0'),
+      created_by: parseInt(localStorage.getItem('user_id') || '0'),
+      updated_by: parseInt(localStorage.getItem('user_id') || '0'),
+      location: {
+        location_id: parseInt(data.locationId),
+        is_active: true
+      },
+      prices: data.prices.map((p: any) => ({
+        equipment_price_id: p.equipment_price_id,
+        location_id: parseInt(data.locationId),
+        interval_id: p.interval_id,
+        is_active: true,
+        price: p.price,
+        currency: p.currency
+      })),
+      images: imagesMetadata,
+      availabilities: data.availabilities.map((a: any) => ({
+        equipment_availability_id: a.equipment_availability_id,
+        availability_from: a.from ? new Date(a.from).toISOString() : "2026-06-01T08:00:00Z",
+        availability_to: a.to ? new Date(a.to).toISOString() : "2026-08-31T18:00:00Z",
+        is_active: true
+      }))
+    };
+
+    let payload: any = {};
+    if (selectedEquipment) {
+      payload.equipment_id = selectedEquipment.equipment_id;
+      
+      const compare = (val1: any, val2: any) => {
+        const v1 = (val1 || '').toString().trim();
+        const v2 = (val2 || '').toString().trim();
+        return v1 !== v2;
+      };
+
+      if (compare(data.name, selectedEquipment.name)) payload.name = data.name;
+      if (compare(data.description, selectedEquipment.description)) payload.description = data.description;
+      if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
+      if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
+      
+      payload.prices = fullPayload.prices;
+      payload.images = fullPayload.images;
+      payload.availabilities = fullPayload.availabilities;
+      payload.location = fullPayload.location;
+    } else {
+      payload = fullPayload;
+    }
+
+    try {
+      if (selectedEquipment) {
+        await equipmentApi.updateEquipmentFiles(payload, data.imageFiles);
+        toast.success('Equipment updated successfully');
+      } else {
+        await equipmentApi.createEquipmentFiles(payload, data.imageFiles);
+        toast.success('Equipment created successfully');
+      }
+      fetchEquipment();
+      setIsEquipFormOpen(false);
+    } catch (error) {
+      console.error('Error saving equipment:', error);
+      toast.error('Failed to save equipment');
+    }
+  };
+
+  const supplierName = userData?.organization_details.name || 'Loading...';
+
 
   if (isLoadingUser) {
     return (
@@ -153,338 +329,202 @@ export function SupplierDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)] text-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              {userData?.organization_details.logo && (
-                <div className="w-20 h-20 rounded-2xl bg-white p-2 shadow-xl">
-                  <img 
-                    src={userData.organization_details.logo} 
-                    alt="Logo" 
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              )}
-              <div>
-                <h1 className="text-3xl font-bold mb-2">{supplierName}</h1>
-                <p className="text-blue-100">Welcome back, {userData?.user_details.first_name}</p>
-              </div>
-            </div>
-            <Tabs defaultValue="products">
-              <TabsList className="bg-white/10 border-white/20">
-                <TabsTrigger value="products" className="data-[state=active]:bg-white data-[state=active]:text-brand-primary text-white">Dashboard</TabsTrigger>
-                <TabsTrigger value="settings" className="data-[state=active]:bg-white data-[state=active]:text-brand-primary text-white">Settings</TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="products" className="space-y-6">
-          <div className="flex items-center justify-between">
-            <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid">
-              <TabsTrigger value="products">
-                <Package className="w-4 h-4 mr-2" />
-                My Products
-              </TabsTrigger>
-              <TabsTrigger value="pricing">
-                <TrendingUp className="w-4 h-4 mr-2" />
-                Pricing
-              </TabsTrigger>
-              <TabsTrigger value="settings">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value="products" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="border-2 hover:shadow-lg transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div
-                          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center`}
-                        >
-                          <stat.icon className="w-6 h-6 text-white" />
-                        </div>
-                        <Badge variant="secondary" className="text-xs">
-                          {stat.change}
-                        </Badge>
-                      </div>
-                      <div className="text-3xl font-bold mb-1">{stat.value}</div>
-                      <p className="text-sm text-muted-foreground">{stat.title}</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>Manage Your Equipment</CardTitle>
-                  <Button size="sm" className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)]">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add New Product
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-lg border overflow-hidden">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Product</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Weekly Price</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {supplierProducts.map((product) => {
-                        const price = pricing.find(
-                          (p) => p.productId === product.id && p.supplierId === '1'
-                        );
-                        return (
-                          <TableRow key={product.id}>
-                            <TableCell>
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={product.image}
-                                  alt={product.name}
-                                  className="w-12 h-12 rounded-lg object-cover"
-                                />
-                                <div className="font-medium">{product.name}</div>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant="secondary">{product.category}</Badge>
-                            </TableCell>
-                            <TableCell className="font-semibold">
-                              £{price?.weeklyRate || 0}
-                            </TableCell>
-                            <TableCell>
-                              {price?.available ? (
-                                <Badge className="bg-green-500">Available</Badge>
-                              ) : (
-                                <Badge variant="secondary">Unavailable</Badge>
-                              )}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button size="sm" variant="ghost">
-                                  <Edit className="w-4 h-4" />
-                                </Button>
-                                <Button size="sm" variant="ghost">
-                                  <Upload className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="pricing" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Update Pricing</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-lg border overflow-hidden">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Product</TableHead>
-                        <TableHead>Daily Rate</TableHead>
-                        <TableHead>Weekly Rate</TableHead>
-                        <TableHead>Monthly Rate</TableHead>
-                        <TableHead>Delivery Fee</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {supplierProducts.map((product) => {
-                        const price = pricing.find(
-                          (p) => p.productId === product.id && p.supplierId === '1'
-                        );
-                        return (
-                          <TableRow key={product.id}>
-                            <TableCell className="font-medium">
-                              {product.name}
-                            </TableCell>
-                            <TableCell>£{price?.dailyRate || 0}</TableCell>
-                            <TableCell>£{price?.weeklyRate || 0}</TableCell>
-                            <TableCell>£{price?.monthlyRate || 0}</TableCell>
-                            <TableCell>£{price?.deliveryFee || 0}</TableCell>
-                            <TableCell className="text-right">
-                              <Button size="sm" variant="outline">
-                                <Edit className="w-4 h-4 mr-2" />
-                                Edit
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="settings" className="space-y-6">
-            <div className="grid lg:grid-cols-2 gap-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="w-5 h-5 text-brand-primary" />
-                    Personal Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="flex items-center gap-6 mb-4">
-                    <div className="relative group">
-                      <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 border-2 border-brand-primary/20">
-                        {avatarFile ? (
-                          <img src={URL.createObjectURL(avatarFile)} alt="Preview" className="w-full h-full object-cover" />
-                        ) : userData?.user_details.avatar_url ? (
-                          <img src={userData.user_details.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-400">
-                            <User className="w-10 h-10" />
-                          </div>
-                        )}
-                      </div>
-                      <label className="absolute bottom-0 right-0 p-1.5 bg-brand-primary text-white rounded-full cursor-pointer shadow-lg hover:scale-110 transition-transform">
-                        <Upload className="w-4 h-4" />
-                        <input 
-                          type="file" 
-                          className="hidden" 
-                          accept="image/*"
-                          onChange={(e) => setAvatarFile(e.target.files?.[0])}
-                        />
-                      </label>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900">Your Avatar</h4>
-                      <p className="text-sm text-gray-500">Upload a professional profile photo</p>
-                    </div>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>First Name</Label>
-                      <Input 
-                        value={settingsForm.first_name} 
-                        onChange={(e) => setSettingsForm({...settingsForm, first_name: e.target.value})}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Last Name</Label>
-                      <Input 
-                        value={settingsForm.last_name} 
-                        onChange={(e) => setSettingsForm({...settingsForm, last_name: e.target.value})}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2 text-muted-foreground">
-                    <Label>Email Address</Label>
-                    <Input value={userData?.user_details.email} disabled className="bg-gray-50" />
-                    <p className="text-[10px]">Email cannot be changed</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Building className="w-5 h-5 text-brand-primary" />
-                    Organization Profile
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="flex items-center gap-6 mb-4">
-                    <div className="relative group">
-                      <div className="w-24 h-24 rounded-2xl overflow-hidden bg-white border-2 border-gray-100 flex items-center justify-center p-2">
-                        {logoFile ? (
-                          <img src={URL.createObjectURL(logoFile)} alt="Logo Preview" className="w-full h-full object-contain" />
-                        ) : userData?.organization_details.logo ? (
-                          <img src={userData.organization_details.logo} alt="Org Logo" className="w-full h-full object-contain" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-300">
-                            <Building className="w-10 h-10" />
-                          </div>
-                        )}
-                      </div>
-                      <label className="absolute bottom-0 right-0 p-1.5 bg-brand-primary text-white rounded-full cursor-pointer shadow-lg hover:scale-110 transition-transform">
-                        <Upload className="w-4 h-4" />
-                        <input 
-                          type="file" 
-                          className="hidden" 
-                          accept="image/*"
-                          onChange={(e) => setLogoFile(e.target.files?.[0])}
-                        />
-                      </label>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900">Company Logo</h4>
-                      <p className="text-sm text-gray-500">This will be displayed on your listings</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Organization Name</Label>
-                    <Input 
-                      value={settingsForm.org_name} 
-                      onChange={(e) => setSettingsForm({...settingsForm, org_name: e.target.value})}
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Navbar />
+      
+      <main className="flex-1 pb-20">
+        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-secondary)] text-white shadow-lg overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full blur-2xl -ml-24 -mb-24" />
+          
+          <div className="container mx-auto px-4 py-16 relative z-10">
+            <div className="flex flex-col md:flex-row items-center gap-10">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="relative"
+              >
+                {userData?.organization_details.logo ? (
+                  <div className="w-28 h-28 rounded-3xl bg-white p-4 shadow-2xl transform hover:rotate-2 transition-transform duration-500">
+                    <img 
+                      src={userData.organization_details.logo} 
+                      alt="Logo" 
+                      className="w-full h-full object-contain"
                     />
                   </div>
+                ) : (
+                  <div className="w-28 h-28 rounded-3xl bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30 shadow-2xl">
+                    <Building className="w-12 h-12 text-white" />
+                  </div>
+                )}
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 border-4 border-white rounded-full" />
+              </motion.div>
 
-                  <div className="space-y-2">
-                    <Label>Domain</Label>
-                    <Input value={userData?.organization_details.domain} disabled className="bg-gray-50" />
+              <div className="text-center md:text-left">
+                <motion.h1 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-5xl font-black mb-3 tracking-tight"
+                >
+                  {supplierName}
+                </motion.h1>
+                <motion.div 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="flex items-center justify-center md:justify-start gap-3"
+                >
+                  <p className="text-blue-100 font-bold text-lg opacity-90">Welcome back, {userData?.user_details.first_name}</p>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 -mt-12 relative z-20">
+          <div className="space-y-12">
+            {/* Equipment Table Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Card className="border-none shadow-2xl rounded-[3rem] overflow-hidden bg-white">
+                <CardHeader className="p-10 border-b bg-gray-50/30">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                      <CardTitle className="text-3xl font-black text-gray-900 tracking-tight">Equipment Inventory</CardTitle>
+                      <p className="text-gray-500 font-medium mt-2">Manage your listings and update real-time availability.</p>
+                    </div>
+                    <Button 
+                      onClick={handleOpenEquipAdd}
+                      className="h-14 px-10 rounded-2xl bg-[#030213] hover:bg-black text-white font-black shadow-2xl shadow-black/20 transition-all hover:scale-105 active:scale-95"
+                    >
+                      <Plus className="w-5 h-5 mr-2" />
+                      Add Equipment
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="bg-gray-50/50">
+                        <TableRow className="hover:bg-transparent border-b">
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Product Details</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Category</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Weekly Price</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Status</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {isEquipmentLoading ? (
+                          <TableRow>
+                            <TableCell colSpan={5} className="py-20 text-center">
+                              <Loader2 className="w-10 h-10 animate-spin text-brand-primary mx-auto" />
+                              <p className="mt-4 text-gray-500 font-bold tracking-widest uppercase text-xs">Loading Equipment...</p>
+                            </TableCell>
+                          </TableRow>
+                        ) : equipment.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={5} className="py-20 text-center text-gray-500 font-medium">
+                              No equipment listings found. Start by adding your first product!
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          equipment.map((item) => (
+                            <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors border-b last:border-0 group">
+                              <TableCell className="py-8 px-12">
+                                <div className="flex items-center gap-6">
+                                  <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center overflow-hidden shadow-inner group-hover:shadow-lg transition-shadow">
+                                    {item.images && item.images[0]?.image_url ? (
+                                      <img src={item.images[0].image_url} alt={item.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                                    ) : (
+                                      <Package className="w-8 h-8 text-gray-300" />
+                                    )}
+                                  </div>
+                                  <div>
+                                    <div className="font-black text-gray-900 text-lg tracking-tight">{item.name}</div>
+                                    <div className="text-xs text-gray-400 font-bold tracking-widest mt-1 uppercase">ID: #{item.equipment_id.toString().padStart(4, '0')}</div>
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell className="py-8 px-12">
+                                <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider">
+                                  {categories.find(c => c.category_id === item.category_id)?.name || 'General'}
+                                </Badge>
+                              </TableCell>
+                              <TableCell className="py-8 px-12 font-black text-2xl text-gray-900 tracking-tight">
+                                £{item.prices?.[0]?.price || 0}
+                              </TableCell>
+                              <TableCell className="py-8 px-12">
+                                {item.is_active ? (
+                                  <div className="flex items-center gap-2 text-emerald-600 font-black text-xs uppercase tracking-widest">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                                    Active
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-2 text-red-500 font-black text-xs uppercase tracking-widest opacity-60">
+                                    <span className="w-2 h-2 rounded-full bg-red-400" />
+                                    Hidden
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell className="py-8 px-12 text-right">
+                                <div className="flex justify-end gap-3">
+                                  <Button 
+                                    size="icon" 
+                                    variant="ghost" 
+                                    onClick={() => handleOpenEquipEdit(item)}
+                                    className="h-12 w-12 rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all active:scale-90"
+                                  >
+                                    <Edit className="w-5 h-5" />
+                                  </Button>
+                                  <Button 
+                                    size="icon" 
+                                    variant="ghost" 
+                                    onClick={() => handleOpenEquipDelete(item)}
+                                    className="h-12 w-12 rounded-2xl hover:bg-red-50 hover:text-red-600 transition-all active:scale-90"
+                                  >
+                                    <Trash2 className="w-5 h-5" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
                   </div>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
+          </div>
+        </div>
+      </main>
 
-            <div className="flex justify-end pt-4">
-              <Button 
-                onClick={handleUpdateProfile} 
-                disabled={isSaving}
-                className="bg-brand-primary hover:bg-brand-primary-hover min-w-[200px]"
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Saving Changes...
-                  </>
-                ) : (
-                  'Save Settings'
-                )}
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+      <EquipmentForm 
+        isOpen={isEquipFormOpen}
+        onClose={() => setIsEquipFormOpen(false)}
+        onSubmit={handleEquipSubmit}
+        equipment={selectedEquipment}
+        suppliers={userData ? [userData] : []}
+        intervals={intervals}
+        categories={categories}
+        locations={locations}
+        isLoading={isFetchingDetail}
+      />
+
+      <DeleteConfirmation 
+        isOpen={isEquipDeleteOpen}
+        onClose={() => setIsEquipDeleteOpen(false)}
+        onConfirm={handleEquipDeleteConfirm}
+        title="Delete Equipment"
+        description={`Are you sure you want to delete ${selectedEquipment?.name}? This action will remove the listing from the marketplace.`}
+      />
+
+      <Footer />
     </div>
   );
 }

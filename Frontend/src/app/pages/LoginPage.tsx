@@ -39,6 +39,7 @@ export function LoginPage() {
       }
 
       const { user, role_key, organization_id } = response.data;
+      localStorage.setItem('user_data', JSON.stringify(response.data));
       localStorage.setItem('user_id', user.user_id.toString());
       localStorage.setItem('name', `${user.first_name} ${user.last_name}`);
       localStorage.setItem('role_key', role_key);
