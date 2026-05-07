@@ -381,7 +381,7 @@ export function AdminDashboard() {
 
   const stats = [
     { title: 'Total Suppliers', value: suppliers.length, change: '+12%', icon: Users, gradient: 'from-blue-500 to-indigo-600' },
-    { title: 'Total Equipment', value: equipment.length, change: '+18%', icon: Package, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'Total Equipment', value: totalEquipCount, change: '+18%', icon: Package, gradient: 'from-purple-500 to-pink-600' },
   ];
 
   return (
