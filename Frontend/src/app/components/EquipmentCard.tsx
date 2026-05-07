@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Star, MapPin, CheckCircle, Package, ChevronLeft, ChevronRight, Clock, ShieldCheck, Info, Loader2 } from 'lucide-react';
+import { Star, MapPin, CheckCircle, Package, ChevronLeft, ChevronRight, Clock, ShieldCheck, Info, Loader2, X } from 'lucide-react';
 import { equipmentApi, Equipment } from '../../context/equipment.api';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from './ui/dialog';
@@ -61,15 +61,15 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
             <p className="font-bold text-gray-500 animate-pulse uppercase tracking-widest text-xs">Loading Details...</p>
           </div>
         ) : (
-          <div className="flex flex-col md:flex-row h-full max-h-[90vh]">
-            {/* Image Section */}
-            <div className="md:w-1/2 relative bg-gray-100 flex items-center justify-center group overflow-hidden">
+          <div className="flex flex-col h-full max-h-[90vh]">
+            {/* Image Section - Now always at the top with fixed height */}
+            <div className="w-full h-[300px] md:h-[450px] relative bg-gray-100 flex items-center justify-center group overflow-hidden">
               {allImages.length > 0 ? (
                 <>
                   <motion.img
                     key={activeImageIndex}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     src={allImages[activeImageIndex]}
                     alt={(detailedEquipment || equipment).name}
                     className="w-full h-full object-cover"
@@ -79,24 +79,28 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-12 h-12"
                         onClick={handlePrevImage}
                       >
-                        <ChevronLeft className="w-6 h-6" />
+                        <ChevronLeft className="w-8 h-8" />
                       </Button>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-12 h-12"
                         onClick={handleNextImage}
                       >
-                        <ChevronRight className="w-6 h-6" />
+                        <ChevronRight className="w-8 h-8" />
                       </Button>
-                      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-10 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full">
                         {allImages.map((_, i) => (
-                          <div 
+                          <button 
                             key={i} 
-                            className={`h-1.5 rounded-full transition-all duration-300 ${i === activeImageIndex ? 'w-6 bg-brand-primary' : 'w-1.5 bg-white/60'}`} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveImageIndex(i);
+                            }}
+                            className={`h-2 rounded-full transition-all duration-500 ${i === activeImageIndex ? 'w-8 bg-brand-primary' : 'w-2 bg-white/60 hover:bg-white'}`} 
                           />
                         ))}
                       </div>
@@ -106,13 +110,20 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
               ) : (
                 <Package className="w-20 h-20 text-gray-300" />
               )}
-              <Badge className="absolute top-6 left-6 bg-brand-primary/90 backdrop-blur-sm text-white font-bold py-1.5 px-4 rounded-lg z-10">
+              <Badge className="absolute top-8 left-8 bg-brand-primary/90 backdrop-blur-md text-white font-black py-2 px-6 rounded-xl z-10 text-xs uppercase tracking-widest">
                 {equipment.category_id === 1 ? 'Excavators' : 'Machinery'}
               </Badge>
+              
+              <button 
+                onClick={() => setIsDetailOpen(false)}
+                className="absolute top-8 right-8 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-gray-900 hover:bg-white transition-all shadow-xl z-10"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
 
             {/* Details Section */}
-            <div className="flex-1 p-8 md:p-12 overflow-y-auto flex flex-col bg-white">
+            <div className="flex-1 p-8 md:p-14 overflow-y-auto bg-white rounded-t-[40px] -mt-10 relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
@@ -154,9 +165,9 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Supplier</div>
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded bg-gray-900 flex items-center justify-center text-white text-[10px] font-bold">
-                        {(detailedEquipment || equipment).organization_name.substring(0, 2).toUpperCase()}
+                        {(detailedEquipment || equipment).organization_name?.substring(0, 2).toUpperCase() || 'TL'}
                       </div>
-                      <span className="font-bold text-gray-900">{(detailedEquipment || equipment).organization_name}</span>
+                      <span className="font-bold text-gray-900">{(detailedEquipment || equipment).organization_name || 'Tooli Supplier'}</span>
                     </div>
                   </div>
                   <div>
@@ -217,13 +228,22 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
           <Card className="overflow-hidden hover:shadow-xl transition-shadow border-2 hover:border-[var(--brand-primary)]">
             <CardContent className="p-0">
               <div className="flex flex-col md:flex-row">
-                <div className="md:w-64 h-48 md:h-auto overflow-hidden bg-gray-100 flex items-center justify-center">
-                  {mainImage ? (
-                    <img src={mainImage} alt={equipment.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
-                  ) : (
-                    <Package className="w-12 h-12 text-gray-300" />
+            <div className="md:w-64 h-48 md:h-auto overflow-hidden bg-gray-100 flex items-center justify-center relative group">
+              {allImages.length > 0 ? (
+                <>
+                  <img src={allImages[activeImageIndex]} alt={equipment.name} className="w-full h-full object-cover" />
+                  {allImages.length > 1 && (
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {allImages.slice(0, 5).map((_, i) => (
+                        <div key={i} className={`h-1 rounded-full transition-all ${i === activeImageIndex ? 'w-3 bg-brand-primary' : 'w-1 bg-white/60'}`} />
+                      ))}
+                    </div>
                   )}
-                </div>
+                </>
+              ) : (
+                <Package className="w-12 h-12 text-gray-300" />
+              )}
+            </div>
                 <div className="flex-1 p-6">
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                     <div className="flex-1">
@@ -235,7 +255,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                         {equipment.category_id === 1 ? 'Excavators' : 'Equipment'}
                       </Badge>
                       <div className="space-y-2 text-sm text-muted-foreground">
-                        <div className="font-semibold text-foreground">{equipment.organization_name}</div>
+                        <div className="font-semibold text-foreground">{equipment.organization_name || 'Tooli Supplier'}</div>
                         <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /> United Kingdom</div>
                         <div className="flex items-center gap-2"><Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> 4.8 Rating</div>
                       </div>
@@ -276,9 +296,22 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
       >
         <Card className="overflow-hidden hover:shadow-xl transition-shadow h-full border-2 hover:border-brand-primary/20">
           <CardContent className="p-0">
-            <div className="relative aspect-video bg-gray-100 flex items-center justify-center">
-              {mainImage ? (
-                <img src={mainImage} alt={equipment.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+            <div className="relative aspect-video bg-gray-100 flex items-center justify-center group">
+              {allImages.length > 0 ? (
+                <>
+                  <img src={allImages[activeImageIndex]} alt={equipment.name} className="w-full h-full object-cover" />
+                  {allImages.length > 1 && (
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                      {allImages.slice(0, 5).map((_, i) => (
+                        <div 
+                          key={i} 
+                          onClick={(e) => { e.stopPropagation(); setActiveImageIndex(i); }}
+                          className={`h-1 rounded-full transition-all cursor-pointer ${i === activeImageIndex ? 'w-3 bg-brand-primary' : 'w-1 bg-white/60 hover:bg-white'}`} 
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               ) : (
                 <Package className="w-10 h-10 text-gray-300" />
               )}
@@ -294,7 +327,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
             <div className="p-5">
               <h3 className="font-bold text-lg mb-2 line-clamp-1">{equipment.name}</h3>
               <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                <div className="font-semibold text-foreground">{equipment.organization_name}</div>
+                <div className="font-semibold text-foreground">{equipment.organization_name || 'Tooli Supplier'}</div>
                 <div className="flex items-center gap-1"><MapPin className="w-4 h-4" /> United Kingdom</div>
                 <div className="flex items-center gap-1"><Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> 4.8</div>
               </div>
