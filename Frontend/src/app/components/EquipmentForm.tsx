@@ -38,7 +38,11 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
     availabilities: [{ from: '', to: '' }],
     imageFiles: [] as File[],
     imagePreviews: [] as string[],
+    imagesToDelete: [] as number[],
+    redirectUrl: '',
   });
+
+  const [existingImages, setExistingImages] = useState<{ id: number, url: string }[]>([]);
 
   useEffect(() => {
     if (equipment) {
@@ -62,7 +66,10 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         })) || [{ from: '', to: '' }],
         imageFiles: [],
         imagePreviews: equipment.images?.map(img => img.image_url) || [],
+        imagesToDelete: [],
+        redirectUrl: (equipment as any).redirect_url || '',
       });
+      setExistingImages(equipment.images?.map(img => ({ id: img.equipment_image_id, url: img.image_url })) || []);
     } else {
       setFormData({
         name: '',
@@ -75,7 +82,10 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         availabilities: [{ from: '', to: '' }],
         imageFiles: [],
         imagePreviews: [],
+        imagesToDelete: [],
+        redirectUrl: '',
       });
+      setExistingImages([]);
     }
   }, [equipment, isOpen]);
 
@@ -129,6 +139,16 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
       };
     });
+    
+    // Handle deletion of existing image
+    const existingImg = existingImages[index];
+    if (existingImg) {
+      setFormData(prev => ({
+        ...prev,
+        imagesToDelete: [...prev.imagesToDelete, existingImg.id]
+      }));
+    }
+    setExistingImages(prev => prev.filter((_, i) => i !== index));
     
     if (previewUrl.startsWith('blob:')) {
       URL.revokeObjectURL(previewUrl);
@@ -229,6 +249,16 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="font-bold">External Redirect URL</Label>
+                <Input 
+                  value={formData.redirectUrl} 
+                  onChange={e => setFormData({...formData, redirectUrl: e.target.value})} 
+                  placeholder="https://example.com/product" 
+                  className="h-12 rounded-xl" 
+                />
+                <p className="text-[10px] text-muted-foreground font-medium">Link users directly to your external booking or detail page.</p>
               </div>
             </div>
           </section>
