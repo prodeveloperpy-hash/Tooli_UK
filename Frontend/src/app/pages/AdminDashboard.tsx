@@ -185,6 +185,7 @@ export function AdminDashboard() {
       name: data.name,
       description: data.description,
       is_active: data.isActive,
+      redirect_url: data.redirectUrl,
       category_id: parseInt(data.categoryId),
       organization_id: parseInt(data.supplierId),
       created_by: 10,
@@ -222,6 +223,7 @@ export function AdminDashboard() {
 
       if (!compare(data.name, selectedEquipment.name)) payload.name = data.name;
       if (!compare(data.description, selectedEquipment.description)) payload.description = data.description;
+      if (!compare(data.redirectUrl, selectedEquipment.redirect_url)) payload.redirect_url = data.redirectUrl;
       if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
       if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
       payload.organization_id = fullPayload.organization_id;

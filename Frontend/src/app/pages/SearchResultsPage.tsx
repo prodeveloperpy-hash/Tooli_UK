@@ -6,6 +6,7 @@ import { Button } from '../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Loader2, Search, BarChart3, CheckCircle, ArrowRight, Filter } from 'lucide-react';
 import { equipmentApi, Equipment } from '../../context/equipment.api';
+import { EquipmentCard } from '../components/EquipmentCard';
 
 type SortOption = 'price-asc' | 'price-desc' | 'rating-desc';
 
@@ -14,6 +15,9 @@ export function SearchResultsPage() {
   const [sortBy, setSortBy] = useState<SortOption>('price-desc');
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   const categoryId = searchParams.get('category') || '';
   const locationId = searchParams.get('location') || '';
@@ -23,8 +27,10 @@ export function SearchResultsPage() {
     const fetchEquipment = async () => {
       setIsLoading(true);
       try {
-        const response = await equipmentApi.getEquipment(categoryId, locationId, date, 1);
+        const response = await equipmentApi.getEquipment(categoryId, locationId, date, page);
         setEquipment(response.results);
+        setTotalCount(response.count);
+        setTotalPages(Math.ceil(response.count / 20)); // Assuming 20 is the page size
       } catch (error) {
         console.error('Error fetching equipment:', error);
       } finally {
@@ -32,7 +38,8 @@ export function SearchResultsPage() {
       }
     };
     fetchEquipment();
-  }, [categoryId, locationId, date]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [categoryId, locationId, date, page]);
 
   const sortedResults = useMemo(() => {
     let results = [...equipment];
@@ -65,82 +72,10 @@ export function SearchResultsPage() {
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid lg:grid-cols-12 gap-8 items-start">
-          {/* How It Works Sidebar */}
-          <aside className="lg:col-span-3">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h2 className="text-xl font-bold mb-8">How It Works</h2>
-              <div className="space-y-10">
-                <div className="flex gap-4">
-                  <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full border border-orange-100 flex items-center justify-center text-brand-primary shadow-sm bg-white">
-                      <Search className="w-4 h-4" />
-                    </div>
-                    <div className="w-px h-full bg-gray-100 mt-2" />
-                  </div>
-                  <div className="pb-2">
-                    <h3 className="font-bold text-base mb-1">1. Search</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">Enter your equipment, location and dates to see what's available.</p>
-                  </div>
-                </div>
-                
-                <div className="flex gap-4">
-                  <div className="flex flex-col items-center">
-                    <div className="w-8 h-8 rounded-full border border-orange-100 flex items-center justify-center text-brand-primary shadow-sm bg-white">
-                      <BarChart3 className="w-4 h-4" />
-                    </div>
-                    <div className="w-px h-full bg-gray-100 mt-2" />
-                  </div>
-                  <div className="pb-2">
-                    <h3 className="font-bold text-base mb-1">2. Compare</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">Compare prices and delivery options from trusted local suppliers.</p>
-                  </div>
-                </div>
-                
-                <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full border border-orange-100 flex items-center justify-center text-brand-primary shadow-sm bg-white flex-shrink-0">
-                    <CheckCircle className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-base mb-1">3. Book</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">Choose the best deal and book directly with the supplier.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-8 space-y-6">
-              <div className="flex items-center gap-4 px-2">
-                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-5 h-5 text-brand-primary" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm">Verified Local Suppliers</h4>
-                  <p className="text-[12px] text-gray-500">All suppliers are checked</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 px-2">
-                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
-                  <BarChart3 className="w-5 h-5 text-brand-primary" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm">Best Prices</h4>
-                  <p className="text-[12px] text-gray-500">Compare and save</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 px-2">
-                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
-                  <ArrowRight className="w-5 h-5 text-brand-primary" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm">Save Time</h4>
-                  <p className="text-[12px] text-gray-500">Quick local quotes</p>
-                </div>
-              </div>
-            </div>
-          </aside>
+
 
           {/* Results Main Section */}
-          <main className="lg:col-span-9">
+          <main className="lg:col-span-12">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-50">
                 <div>
@@ -177,91 +112,144 @@ export function SearchResultsPage() {
                     <p className="text-gray-500 font-medium">Fetching the best deals for you...</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider bg-gray-50/50">
-                          <th className="px-8 py-4">Supplier</th>
-                          <th className="px-8 py-4">Equipment</th>
-                          <th className="px-8 py-4">Price / Day <span className="text-[9px] font-normal lowercase">(ex. VAT)</span></th>
-                          <th className="px-8 py-4">Delivery</th>
-                          <th className="px-8 py-4">Action</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-50">
-                        {sortedResults.length === 0 ? (
-                          <tr>
-                            <td colSpan={5} className="text-center py-20">
-                              <h3 className="text-lg font-semibold mb-2">No results found</h3>
-                              <p className="text-gray-500">Try adjusting your search criteria</p>
-                            </td>
-                          </tr>
-                        ) : (
-                          sortedResults.map((result) => {
-                            const weeklyPrice = parseFloat(result.prices[0]?.price || '0');
-                            const dailyPrice = (weeklyPrice / 7).toFixed(0);
-                            return (
-                              <tr key={result.equipment_id} className="group hover:bg-gray-50/30 transition-colors">
-                                <td className="px-8 py-6">
-                                  <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-md bg-gray-900 flex items-center justify-center text-white font-bold text-xs">
-                                      {(result.organization_name || 'Supplier').substring(0, 2).toUpperCase()}
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                      <span className="font-bold text-gray-900">{result.organization_name || 'Unknown Supplier'}</span>
-                                      <CheckCircle className="w-3.5 h-3.5 text-brand-success fill-brand-success text-white" />
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-8 py-6">
-                                  <div className="flex flex-col">
-                                    <span className="font-bold text-gray-900 text-sm">{result.name}</span>
-                                    <span className="text-xs text-gray-400 mt-0.5">Kubota U17-3 or similar</span>
-                                  </div>
-                                </td>
-                                <td className="px-8 py-6">
-                                  <div className="text-2xl font-extrabold text-brand-primary">
-                                    £{dailyPrice}
-                                  </div>
-                                </td>
-                                <td className="px-8 py-6">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
-                                      <CheckCircle className="w-3 h-3 text-white" />
-                                    </div>
-                                    <div className="flex flex-col">
-                                      <span className="text-sm font-bold text-gray-900">Available today</span>
-                                      <span className="text-[10px] text-gray-400">Delivered within 1 hour</span>
-                                    </div>
-                                  </div>
-                                </td>
-                                <td className="px-8 py-6">
-                                  <Button className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold h-11 px-6 rounded-xl text-sm transition-all shadow-sm">
-                                    View & Book
-                                  </Button>
-                                </td>
-                              </tr>
-                            );
-                          })
-                        )}
-                      </tbody>
-                    </table>
+                  <div className="w-full">
+                    {sortedResults.length === 0 ? (
+                      <div className="text-center py-24">
+                        <h3 className="text-xl font-bold mb-2">No results found</h3>
+                        <p className="text-gray-500">Try adjusting your search criteria</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-6 md:p-8 bg-gray-50/20">
+                        {sortedResults.map((result) => (
+                          <EquipmentCard key={result.equipment_id} equipment={result} />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
               
-              <div className="p-6 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div className="flex items-center gap-2 text-[13px] font-medium text-gray-400">
-                  <CheckCircle className="w-4 h-4" />
-                  All suppliers are vetted and trusted
+              <div className="p-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6 bg-gray-50/30">
+                <div className="flex flex-col">
+                  <div className="text-[11px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-1">
+                    Results Overview
+                  </div>
+                  <div className="text-sm font-medium text-gray-500">
+                    Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalCount}</span> available deals
+                  </div>
                 </div>
-                <div className="flex items-center gap-8">
-                  <span className="text-[13px] font-medium text-gray-400">
-                    Showing {sortedResults.length} results
-                  </span>
-                  <Link to="/search" className="text-brand-primary font-bold text-sm hover:underline flex items-center gap-1 group">
-                    View all results <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage(prev => Math.max(1, prev - 1))}
+                    disabled={page === 1}
+                    className="font-bold h-10 px-4 rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all"
+                  >
+                    Previous
+                  </Button>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter(p => {
+                        if (totalPages <= 7) return true;
+                        return p === 1 || p === totalPages || Math.abs(p - page) <= 1;
+                      })
+                      .map((pageNum, index, array) => (
+                        <div key={pageNum} className="flex items-center gap-1">
+                          {index > 0 && array[index - 1] !== pageNum - 1 && (
+                            <span className="px-1 text-gray-400">...</span>
+                          )}
+                          <Button
+                            variant={page === pageNum ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setPage(pageNum)}
+                            className={`font-bold h-10 w-10 p-0 rounded-xl transition-all ${
+                              page === pageNum 
+                                ? 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-lg' 
+                                : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:shadow-md'
+                            }`}
+                          >
+                            {pageNum}
+                          </Button>
+                        </div>
+                      ))}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={page === totalPages || totalPages === 0}
+                    className="font-bold h-10 px-4 rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all"
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* How It Works Horizontal Section */}
+            <div className="mt-12 space-y-12">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
+                <h2 className="text-2xl font-bold mb-10 text-center">How It Works</h2>
+                <div className="grid md:grid-cols-3 gap-12">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-brand-primary mb-6 shadow-sm">
+                      <Search className="w-7 h-7" />
+                    </div>
+                    <h3 className="font-bold text-lg mb-3 text-gray-900">1. Search</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed px-4">Enter your equipment, location and dates to see what's available.</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-brand-primary mb-6 shadow-sm">
+                      <BarChart3 className="w-7 h-7" />
+                    </div>
+                    <h3 className="font-bold text-lg mb-3 text-gray-900">2. Compare</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed px-4">Compare prices and delivery options from trusted local suppliers.</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-brand-primary mb-6 shadow-sm">
+                      <CheckCircle className="w-7 h-7" />
+                    </div>
+                    <h3 className="font-bold text-lg mb-3 text-gray-900">3. Book</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed px-4">Choose the best deal and book directly with the supplier.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">Verified Local Suppliers</h4>
+                    <p className="text-xs text-gray-500 mt-1">All suppliers are checked</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <BarChart3 className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">Best Prices</h4>
+                    <p className="text-xs text-gray-500 mt-1">Compare and save</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
+                    <ArrowRight className="w-6 h-6 text-brand-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">Save Time</h4>
+                    <p className="text-xs text-gray-500 mt-1">Quick local quotes</p>
+                  </div>
                 </div>
               </div>
             </div>

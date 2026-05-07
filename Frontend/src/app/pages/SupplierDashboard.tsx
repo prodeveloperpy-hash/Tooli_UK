@@ -125,7 +125,7 @@ export function SupplierDashboard() {
         setSettingsForm({
           first_name: parsed.user.first_name,
           last_name: parsed.user.last_name,
-          org_name: parsed.organization_name || 'My Organization', // Adjusted based on login response
+          org_name: parsed.organization_name || '', 
         });
         
         // If we want to use it for userData state:
@@ -133,12 +133,16 @@ export function SupplierDashboard() {
           user_organization_id: parsed.organization_id, // approximation
           user_details: parsed.user,
           organization_details: {
-            name: parsed.organization_name || 'My Organization',
-            logo: parsed.user.avatar_url, // approximation
+            name: parsed.organization_name || '',
+            logo: parsed.user.avatar_url, 
           },
           role_details: {
             role_key: parsed.role_key,
-          }
+            role_display_name: parsed.role_key === 'SUPPLIER' ? 'Supplier' : parsed.role_key,
+          },
+          organization_id: parsed.organization_id,
+          user_id: parsed.user.user_id,
+          is_active: parsed.user.is_active,
         };
         setUserData(syntheticUserData);
         setIsLoadingUser(false);
@@ -150,15 +154,20 @@ export function SupplierDashboard() {
     const fetchUserData = async () => {
       try {
         const orgs = await userApi.getUserOrganizations();
+        // If the API returns data, we can update, but the login data is our primary source
+        // for name and organization as per user request.
         if (orgs.length > 0) {
-          setUserData(orgs[0]);
-          setSettingsForm({
-            first_name: orgs[0].user_details.first_name,
-            last_name: orgs[0].user_details.last_name,
-            org_name: orgs[0].organization_details.name,
-          });
-          // Update cache with fresh data
-          // localStorage.setItem('user_data', JSON.stringify({ user: orgs[0].user_details, role_key: orgs[0].role_details.role_key, organization_id: orgs[0].organization_id }));
+          const apiOrg = orgs[0];
+          // Only update if the API data seems "real" (optional check)
+          // For now, let's keep the login data as priority if it exists
+          if (!cachedData) {
+            setUserData(apiOrg);
+            setSettingsForm({
+              first_name: apiOrg.user_details.first_name,
+              last_name: apiOrg.user_details.last_name,
+              org_name: apiOrg.organization_details.name,
+            });
+          }
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -264,6 +273,7 @@ export function SupplierDashboard() {
       name: data.name,
       description: data.description,
       is_active: data.isActive,
+      redirect_url: data.redirectUrl,
       category_id: parseInt(data.categoryId),
       organization_id: parseInt(data.supplierId || localStorage.getItem('organization_id') || '0'),
       created_by: parseInt(localStorage.getItem('user_id') || '0'),
@@ -301,6 +311,7 @@ export function SupplierDashboard() {
 
       if (!compare(data.name, selectedEquipment.name)) payload.name = data.name;
       if (!compare(data.description, selectedEquipment.description)) payload.description = data.description;
+      if (!compare(data.redirectUrl, selectedEquipment.redirect_url)) payload.redirect_url = data.redirectUrl;
       if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
       if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
       payload.organization_id = fullPayload.organization_id;
@@ -432,7 +443,9 @@ export function SupplierDashboard() {
                   transition={{ delay: 0.1 }}
                   className="flex items-center justify-center md:justify-start gap-3"
                 >
-                  <p className="text-blue-100 font-bold text-lg opacity-90">Welcome back, {userData?.user_details.first_name}</p>
+                  <p className="text-blue-100 font-bold text-lg opacity-90">
+                    Welcome back, {userData?.user_details.first_name} {userData?.user_details.last_name}
+                  </p>
                 </motion.div>
               </div>
             </div>

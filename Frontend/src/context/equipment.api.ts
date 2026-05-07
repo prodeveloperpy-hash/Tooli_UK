@@ -26,6 +26,7 @@ export interface Equipment {
     availability_to: string;
     is_active: boolean;
   }[];
+  redirect_url?: string;
 }
 
 export interface EquipmentResponse {
