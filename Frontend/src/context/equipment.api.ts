@@ -229,6 +229,80 @@ export const equipmentApi = {
 
     return response.json();
   },
+
+  createCategory: async (data: any): Promise<Category> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/category/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('Failed to create category');
+    return response.json();
+  },
+
+  updateCategory: async (id: number, data: any): Promise<Category> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/category/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('Failed to update category');
+    return response.json();
+  },
+
+  deleteCategory: async (id: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/category/${id}/`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!response.ok) throw new Error('Failed to delete category');
+  },
+
+  createLocation: async (data: any): Promise<Location> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/location/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('Failed to create location');
+    return response.json();
+  },
+
+  updateLocation: async (id: number, data: any): Promise<Location> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/location/${id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error('Failed to update location');
+    return response.json();
+  },
+
+  deleteLocation: async (id: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/location/${id}/`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!response.ok) throw new Error('Failed to delete location');
+  },
 };
 
 export interface Interval {

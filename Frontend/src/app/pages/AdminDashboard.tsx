@@ -21,6 +21,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '../components/ui/tabs';
+import { toast } from 'sonner';
 import {
   LayoutDashboard,
   Users,
@@ -35,12 +36,16 @@ import {
   Building2,
   Mail,
   MapPin,
+  Tag,
+  Globe,
 } from 'lucide-react';
 import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
 import { EquipmentForm } from '../components/EquipmentForm';
+import { CategoryForm } from '../components/CategoryForm';
+import { LocationForm } from '../components/LocationForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
 
 export function AdminDashboard() {
@@ -65,6 +70,15 @@ export function AdminDashboard() {
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
+
+  // Category/Location Modal States
+  const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [isCategoryDeleteOpen, setIsCategoryDeleteOpen] = useState(false);
+
+  const [isLocationFormOpen, setIsLocationFormOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [isLocationDeleteOpen, setIsLocationDeleteOpen] = useState(false);
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
@@ -168,130 +182,76 @@ export function AdminDashboard() {
   };
 
   const handleEquipSubmit = async (data: any) => {
-    // Include metadata for all images (existing and new)
-    const imagesMetadata = data.imagePreviews.map((url: string, index: number) => {
-      const isNew = url.startsWith('blob:');
-      const entry: any = {
+    const isUpdate = !!data.equipment_id;
+    let payload = { ...data };
+
+    if (!isUpdate) {
+      // Format full payload for new equipment
+      const imagesMetadata = data.imagePreviews.map((url: string, index: number) => ({
         sort_order: index,
         is_active: true
+      }));
+
+      payload = {
+        name: data.name,
+        description: data.description,
+        is_active: data.isActive,
+        redirect_url: data.redirectUrl,
+        category_id: parseInt(data.categoryId),
+        organization_id: parseInt(data.supplierId),
+        created_by: parseInt(localStorage.getItem('user_id') || '10'),
+        updated_by: parseInt(localStorage.getItem('user_id') || '10'),
+        location: {
+          location_id: parseInt(data.locationId),
+          is_active: true
+        },
+        prices: data.prices.map((p: any) => ({
+          ...p,
+          location_id: parseInt(data.locationId),
+          is_active: true,
+        })),
+        images: imagesMetadata,
+        availabilities: data.availabilities.map((a: any) => ({
+          ...a,
+          availability_from: a.from ? new Date(a.from).toISOString() : undefined,
+          availability_to: a.to ? new Date(a.to).toISOString() : undefined,
+          is_active: true
+        }))
       };
-      if (!isNew) {
-        entry.image_url = url;
-      }
-      return entry;
-    });
-
-    const fullPayload: any = {
-      name: data.name,
-      description: data.description,
-      is_active: data.isActive,
-      redirect_url: data.redirectUrl,
-      category_id: parseInt(data.categoryId),
-      organization_id: parseInt(data.supplierId),
-      created_by: 10,
-      updated_by: 10,
-      location: {
-        location_id: parseInt(data.locationId),
-        is_active: true
-      },
-      prices: data.prices.map((p: any) => ({
-        equipment_price_id: p.equipment_price_id,
-        location_id: parseInt(data.locationId),
-        interval_id: p.interval_id,
-        is_active: true,
-        price: p.price,
-        currency: p.currency
-      })),
-      images: imagesMetadata,
-      availabilities: data.availabilities.map((a: any) => ({
-        equipment_availability_id: a.equipment_availability_id,
-        availability_from: a.from ? new Date(a.from).toISOString() : "2026-06-01T08:00:00Z",
-        availability_to: a.to ? new Date(a.to).toISOString() : "2026-08-31T18:00:00Z",
-        is_active: true
-      }))
-    };
-
-    let payload: any = {};
-    if (selectedEquipment) {
-      payload.equipment_id = selectedEquipment.equipment_id;
-      
-      const compare = (v1: any, v2: any) => {
-        const str1 = (v1 ?? '').toString().trim();
-        const str2 = (v2 ?? '').toString().trim();
-        return str1 === str2;
-      };
-
-      if (!compare(data.name, selectedEquipment.name)) payload.name = data.name;
-      if (!compare(data.description, selectedEquipment.description)) payload.description = data.description;
-      if (!compare(data.redirectUrl, selectedEquipment.redirect_url)) payload.redirect_url = data.redirectUrl;
-      if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
-      if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
-      payload.organization_id = fullPayload.organization_id;
-      payload.updated_by = parseInt(localStorage.getItem('user_id') || '0');
-
-      // Prices check
-      const originalPrices = selectedEquipment.prices?.map(p => ({
-        equipment_price_id: p.equipment_price_id,
-        interval_id: p.interval_id,
-        price: p.price.toString(),
-        currency: p.currency
-      })) || [];
-      const currentPrices = fullPayload.prices.map((p: any) => ({
-        equipment_price_id: p.equipment_price_id,
-        interval_id: p.interval_id,
-        price: p.price.toString(),
-        currency: p.currency
-      }));
-      if (JSON.stringify(originalPrices) !== JSON.stringify(currentPrices)) {
-        payload.prices = fullPayload.prices;
-      }
-
-      // Images check
-      const originalImages = selectedEquipment.images?.map(img => ({
-        image_url: img.image_url,
-        is_active: img.is_active
-      })) || [];
-      const currentImages = fullPayload.images.map((img: any) => ({
-        image_url: img.image_url,
-        is_active: img.is_active
-      }));
-      if (JSON.stringify(originalImages) !== JSON.stringify(currentImages) || data.imageFiles.length > 0) {
-        payload.images = fullPayload.images;
-      }
-
-      // Availabilities check
-      const originalAvail = selectedEquipment.availabilities?.map(a => ({
-        equipment_availability_id: a.equipment_availability_id,
-        availability_from: a.availability_from,
-        availability_to: a.availability_to
-      })) || [];
-      const currentAvail = fullPayload.availabilities.map((a: any) => ({
-        equipment_availability_id: a.equipment_availability_id,
-        availability_from: a.availability_from,
-        availability_to: a.availability_to
-      }));
-      if (JSON.stringify(originalAvail) !== JSON.stringify(currentAvail)) {
-        payload.availabilities = fullPayload.availabilities;
-      }
     } else {
-      payload = fullPayload;
+      payload.updated_by = parseInt(localStorage.getItem('user_id') || '10');
     }
 
     try {
-      if (selectedEquipment) {
-        // Handle queued image deletions
-        if (data.imagesToDelete && data.imagesToDelete.length > 0) {
-          await Promise.all(data.imagesToDelete.map((id: number) => equipmentApi.deleteEquipmentImage(id)));
+      if (isUpdate) {
+        // 1. Handle queued image deletions FIRST
+        if (data.imagesToDelete?.length > 0) {
+          for (const imgId of data.imagesToDelete) {
+            await equipmentApi.deleteEquipmentImage(imgId);
+          }
         }
-        await equipmentApi.updateEquipmentFiles(payload, data.imageFiles);
+
+        // 2. Check if we actually need to send a PATCH
+        // We need to PATCH if there's any field in payload other than equipment_id, updated_by, imageFiles, or imagesToDelete
+        const patchFields = Object.keys(payload).filter(k => 
+          !['equipment_id', 'updated_by', 'imageFiles', 'imagesToDelete'].includes(k)
+        );
+
+        if (patchFields.length > 0 || (data.imageFiles && data.imageFiles.length > 0)) {
+          await equipmentApi.updateEquipmentFiles(payload, data.imageFiles || []);
+          toast.success('Equipment updated successfully');
+        } else if (data.imagesToDelete?.length > 0) {
+          toast.success('Images removed successfully');
+        }
       } else {
-        await equipmentApi.createEquipmentFiles(payload, data.imageFiles);
+        await equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
+        toast.success('Equipment added successfully');
       }
-      await fetchEquipment();
+      fetchEquipment();
       setIsEquipFormOpen(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving equipment:', error);
-      throw error;
+      toast.error(error.message || 'Failed to save equipment');
     }
   };
 
@@ -303,7 +263,87 @@ export function AdminDashboard() {
       setIsEquipDeleteOpen(false);
     } catch (error) {
       console.error('Error deleting equipment:', error);
-      throw error;
+      toast.error('Failed to delete equipment');
+    }
+  };
+
+  // Category Handlers
+  const handleOpenCategoryAdd = () => {
+    setSelectedCategory(null);
+    setIsCategoryFormOpen(true);
+  };
+  const handleOpenCategoryEdit = (cat: Category) => {
+    setSelectedCategory(cat);
+    setIsCategoryFormOpen(true);
+  };
+  const handleOpenCategoryDelete = (cat: Category) => {
+    setSelectedCategory(cat);
+    setIsCategoryDeleteOpen(true);
+  };
+  const handleCategorySubmit = async (data: any) => {
+    try {
+      if (selectedCategory) {
+        await equipmentApi.updateCategory(selectedCategory.category_id, data);
+        toast.success('Category updated successfully');
+      } else {
+        await equipmentApi.createCategory(data);
+        toast.success('Category created successfully');
+      }
+      fetchStaticData();
+      setIsCategoryFormOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to save category');
+    }
+  };
+  const handleCategoryDeleteConfirm = async () => {
+    if (!selectedCategory) return;
+    try {
+      await equipmentApi.deleteCategory(selectedCategory.category_id);
+      toast.success('Category deleted successfully');
+      fetchStaticData();
+      setIsCategoryDeleteOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete category');
+    }
+  };
+
+  // Location Handlers
+  const handleOpenLocationAdd = () => {
+    setSelectedLocation(null);
+    setIsLocationFormOpen(true);
+  };
+  const handleOpenLocationEdit = (loc: Location) => {
+    setSelectedLocation(loc);
+    setIsLocationFormOpen(true);
+  };
+  const handleOpenLocationDelete = (loc: Location) => {
+    setSelectedLocation(loc);
+    setIsLocationDeleteOpen(true);
+  };
+  const handleLocationSubmit = async (data: any) => {
+    try {
+      if (selectedLocation) {
+        await equipmentApi.updateLocation(selectedLocation.location_id, data);
+        toast.success('Location updated successfully');
+      } else {
+        await equipmentApi.createLocation(data);
+        toast.success('Location created successfully');
+      }
+      fetchStaticData();
+      setIsLocationFormOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to save location');
+    }
+  };
+  const handleLocationDeleteConfirm = async () => {
+    if (!selectedLocation) return;
+    try {
+      await equipmentApi.deleteLocation(selectedLocation.location_id);
+      toast.success('Location deleted successfully');
+      fetchStaticData();
+      setIsLocationDeleteOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete location');
     }
   };
 
@@ -437,6 +477,14 @@ export function AdminDashboard() {
               <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Package className="w-4 h-4 mr-2" />
                 Products
+              </TabsTrigger>
+              <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+                <Tag className="w-4 h-4 mr-2" />
+                Categories
+              </TabsTrigger>
+              <TabsTrigger value="locations" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+                <MapPin className="w-4 h-4 mr-2" />
+                Locations
               </TabsTrigger>
             </TabsList>
 
@@ -706,19 +754,136 @@ export function AdminDashboard() {
                 </CardContent>
               </Card>
             </TabsContent>
+
+            <TabsContent value="categories" className="space-y-6">
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-white border-b py-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">Equipment Categories</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Manage the types of equipment available</p>
+                    </div>
+                    <Button onClick={handleOpenCategoryAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Category
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="bg-gray-50">
+                        <TableRow>
+                          <TableHead className="font-bold py-4">Display Name</TableHead>
+                          <TableHead className="font-bold">Technical Key</TableHead>
+                          <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {categories.map((cat) => (
+                          <TableRow key={cat.category_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4 font-bold text-gray-900">{cat.category_display_name}</TableCell>
+                            <TableCell className="font-mono text-xs text-muted-foreground uppercase">{cat.category_key}</TableCell>
+                            <TableCell>
+                              <Badge variant={cat.is_active ? "default" : "secondary"} className={cat.is_active ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-700"}>
+                                {cat.is_active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-right pr-6 space-x-2">
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenCategoryEdit(cat)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenCategoryDelete(cat)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="locations" className="space-y-6">
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-white border-b py-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">Service Locations</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Manage cities where suppliers operate</p>
+                    </div>
+                    <Button onClick={handleOpenLocationAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Location
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="bg-gray-50">
+                        <TableRow>
+                          <TableHead className="font-bold py-4">City</TableHead>
+                          <TableHead className="font-bold">Country</TableHead>
+                          <TableHead className="font-bold">State/County</TableHead>
+                          <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {locations.map((loc) => (
+                          <TableRow key={loc.location_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4 font-bold text-gray-900">{loc.city_name}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{loc.country}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{loc.state || '-'}</TableCell>
+                            <TableCell>
+                              <Badge variant={loc.is_active ? "default" : "secondary"} className={loc.is_active ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-700"}>
+                                {loc.is_active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-right pr-6 space-x-2">
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenLocationEdit(loc)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenLocationDelete(loc)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
           </Tabs>
         </div>
       </div>
 
-      <SupplierForm 
-        isOpen={isAddEditOpen} 
-        onClose={() => setIsAddEditOpen(false)} 
-        onSubmit={handleAddEditSubmit} 
-        supplier={selectedSupplier} 
+      <Footer />
+
+      {/* Modals */}
+      <SupplierForm
+        isOpen={isAddEditOpen}
+        onClose={() => setIsAddEditOpen(false)}
+        onSubmit={handleAddEditSubmit}
+        supplier={selectedSupplier}
         isLoading={isFetchingDetail}
       />
 
-      <EquipmentForm 
+      <DeleteConfirmation
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Supplier"
+        description={`Are you sure you want to delete ${selectedSupplier?.user_details.first_name} ${selectedSupplier?.user_details.last_name}? This action cannot be undone.`}
+      />
+
+      <EquipmentForm
         isOpen={isEquipFormOpen}
         onClose={() => setIsEquipFormOpen(false)}
         onSubmit={handleEquipSubmit}
@@ -730,15 +895,7 @@ export function AdminDashboard() {
         isLoading={isFetchingDetail}
       />
 
-      <DeleteConfirmation 
-        isOpen={isDeleteOpen} 
-        onClose={() => setIsDeleteOpen(false)} 
-        onConfirm={handleDeleteConfirm} 
-        title="Delete Supplier"
-        description={`Are you sure you want to delete ${selectedSupplier?.user_details.first_name} ${selectedSupplier?.user_details.last_name}? This action cannot be undone.`}
-      />
-
-      <DeleteConfirmation 
+      <DeleteConfirmation
         isOpen={isEquipDeleteOpen}
         onClose={() => setIsEquipDeleteOpen(false)}
         onConfirm={handleEquipDeleteConfirm}
@@ -746,7 +903,37 @@ export function AdminDashboard() {
         description={`Are you sure you want to delete ${selectedEquipment?.name}? This action will remove the listing from the marketplace.`}
       />
 
-      <Footer />
+      {/* Category Modals */}
+      <CategoryForm
+        isOpen={isCategoryFormOpen}
+        onClose={() => setIsCategoryFormOpen(false)}
+        onSubmit={handleCategorySubmit}
+        category={selectedCategory}
+      />
+
+      <DeleteConfirmation
+        isOpen={isCategoryDeleteOpen}
+        onClose={() => setIsCategoryDeleteOpen(false)}
+        onConfirm={handleCategoryDeleteConfirm}
+        title="Delete Category"
+        message={`Are you sure you want to delete the category "${selectedCategory?.category_display_name}"?`}
+      />
+
+      {/* Location Modals */}
+      <LocationForm
+        isOpen={isLocationFormOpen}
+        onClose={() => setIsLocationFormOpen(false)}
+        onSubmit={handleLocationSubmit}
+        location={selectedLocation}
+      />
+
+      <DeleteConfirmation
+        isOpen={isLocationDeleteOpen}
+        onClose={() => setIsLocationDeleteOpen(false)}
+        onConfirm={handleLocationDeleteConfirm}
+        title="Delete Location"
+        message={`Are you sure you want to delete the location "${selectedLocation?.city_name}"?`}
+      />
     </div>
   );
 }

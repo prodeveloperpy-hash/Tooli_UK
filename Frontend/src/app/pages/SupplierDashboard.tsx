@@ -256,134 +256,79 @@ export function SupplierDashboard() {
   };
 
   const handleEquipSubmit = async (data: any) => {
-    // Include metadata for all images (existing and new)
-    const imagesMetadata = data.imagePreviews.map((url: string, index: number) => {
-      const isNew = url.startsWith('blob:');
-      const entry: any = {
+    const isUpdate = !!data.equipment_id;
+    let payload = { ...data };
+
+    if (!isUpdate) {
+      // Format full payload for new equipment
+      const imagesMetadata = data.imagePreviews.map((url: string, index: number) => ({
         sort_order: index,
         is_active: true
+      }));
+
+      payload = {
+        name: data.name,
+        description: data.description,
+        is_active: data.isActive,
+        redirect_url: data.redirectUrl,
+        category_id: parseInt(data.categoryId),
+        organization_id: parseInt(data.supplierId || localStorage.getItem('organization_id') || '0'),
+        created_by: parseInt(localStorage.getItem('user_id') || '0'),
+        updated_by: parseInt(localStorage.getItem('user_id') || '0'),
+        location: {
+          location_id: parseInt(data.locationId),
+          is_active: true
+        },
+        prices: data.prices.map((p: any) => ({
+          ...p,
+          location_id: parseInt(data.locationId),
+          is_active: true,
+        })),
+        images: imagesMetadata,
+        availabilities: data.availabilities.map((a: any) => ({
+          ...a,
+          availability_from: a.from ? new Date(a.from).toISOString() : undefined,
+          availability_to: a.to ? new Date(a.to).toISOString() : undefined,
+          is_active: true
+        }))
       };
-      if (!isNew) {
-        entry.image_url = url;
-      }
-      return entry;
-    });
-
-    const fullPayload: any = {
-      name: data.name,
-      description: data.description,
-      is_active: data.isActive,
-      redirect_url: data.redirectUrl,
-      category_id: parseInt(data.categoryId),
-      organization_id: parseInt(data.supplierId || localStorage.getItem('organization_id') || '0'),
-      created_by: parseInt(localStorage.getItem('user_id') || '0'),
-      updated_by: parseInt(localStorage.getItem('user_id') || '0'),
-      location: {
-        location_id: parseInt(data.locationId),
-        is_active: true
-      },
-      prices: data.prices.map((p: any) => ({
-        equipment_price_id: p.equipment_price_id,
-        location_id: parseInt(data.locationId),
-        interval_id: p.interval_id,
-        is_active: true,
-        price: p.price,
-        currency: p.currency
-      })),
-      images: imagesMetadata,
-      availabilities: data.availabilities.map((a: any) => ({
-        equipment_availability_id: a.equipment_availability_id,
-        availability_from: a.from ? new Date(a.from).toISOString() : "2026-06-01T08:00:00Z",
-        availability_to: a.to ? new Date(a.to).toISOString() : "2026-08-31T18:00:00Z",
-        is_active: true
-      }))
-    };
-
-    let payload: any = {};
-    if (selectedEquipment) {
-      payload.equipment_id = selectedEquipment.equipment_id;
-      
-      const compare = (v1: any, v2: any) => {
-        const str1 = (v1 ?? '').toString().trim();
-        const str2 = (v2 ?? '').toString().trim();
-        return str1 === str2;
-      };
-
-      if (!compare(data.name, selectedEquipment.name)) payload.name = data.name;
-      if (!compare(data.description, selectedEquipment.description)) payload.description = data.description;
-      if (!compare(data.redirectUrl, selectedEquipment.redirect_url)) payload.redirect_url = data.redirectUrl;
-      if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
-      if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
-      payload.organization_id = fullPayload.organization_id;
-      payload.updated_by = parseInt(localStorage.getItem('user_id') || '0');
-
-      // Prices check
-      const originalPrices = selectedEquipment.prices?.map(p => ({
-        equipment_price_id: p.equipment_price_id,
-        interval_id: p.interval_id,
-        price: p.price.toString(),
-        currency: p.currency
-      })) || [];
-      const currentPrices = fullPayload.prices.map((p: any) => ({
-        equipment_price_id: p.equipment_price_id,
-        interval_id: p.interval_id,
-        price: p.price.toString(),
-        currency: p.currency
-      }));
-      if (JSON.stringify(originalPrices) !== JSON.stringify(currentPrices)) {
-        payload.prices = fullPayload.prices;
-      }
-
-      // Images check
-      const originalImages = selectedEquipment.images?.map(img => ({
-        image_url: img.image_url,
-        is_active: img.is_active
-      })) || [];
-      const currentImages = fullPayload.images.map((img: any) => ({
-        image_url: img.image_url,
-        is_active: img.is_active
-      }));
-      if (JSON.stringify(originalImages) !== JSON.stringify(currentImages) || data.imageFiles.length > 0) {
-        payload.images = fullPayload.images;
-      }
-
-      // Availabilities check
-      const originalAvail = selectedEquipment.availabilities?.map(a => ({
-        equipment_availability_id: a.equipment_availability_id,
-        availability_from: a.availability_from,
-        availability_to: a.availability_to
-      })) || [];
-      const currentAvail = fullPayload.availabilities.map((a: any) => ({
-        equipment_availability_id: a.equipment_availability_id,
-        availability_from: a.availability_from,
-        availability_to: a.availability_to
-      }));
-      if (JSON.stringify(originalAvail) !== JSON.stringify(currentAvail)) {
-        payload.availabilities = fullPayload.availabilities;
-      }
     } else {
-      payload = fullPayload;
+      payload.updated_by = parseInt(localStorage.getItem('user_id') || '0');
     }
 
     try {
-      if (selectedEquipment) {
-        // Handle queued image deletions
-        if (data.imagesToDelete && data.imagesToDelete.length > 0) {
-          await Promise.all(data.imagesToDelete.map((id: number) => equipmentApi.deleteEquipmentImage(id)));
+      if (isUpdate) {
+        // 1. Handle queued image deletions FIRST
+        if (data.imagesToDelete?.length > 0) {
+          for (const imgId of data.imagesToDelete) {
+            await equipmentApi.deleteEquipmentImage(imgId);
+          }
         }
-        await equipmentApi.updateEquipmentFiles(payload, data.imageFiles);
-        toast.success('Equipment updated successfully');
+
+        // 2. Check if we actually need to send a PATCH
+        // We need to PATCH if there's any field in payload other than equipment_id, updated_by, imageFiles, or imagesToDelete
+        const patchFields = Object.keys(payload).filter(k => 
+          !['equipment_id', 'updated_by', 'imageFiles', 'imagesToDelete'].includes(k)
+        );
+
+        if (patchFields.length > 0 || (data.imageFiles && data.imageFiles.length > 0)) {
+          await equipmentApi.updateEquipmentFiles(payload, data.imageFiles || []);
+          toast.success('Equipment updated successfully');
+        } else if (data.imagesToDelete?.length > 0) {
+          toast.success('Images removed successfully');
+        }
       } else {
-        await equipmentApi.createEquipmentFiles(payload, data.imageFiles);
-        toast.success('Equipment created successfully');
+        await equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
+        toast.success('Equipment added successfully');
       }
       fetchEquipment();
-      setIsEquipFormOpen(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving equipment:', error);
-      toast.error('Failed to save equipment');
+      toast.error(error.message || 'Failed to save equipment');
     }
   };
+
+
 
   const supplierName = userData?.organization_details.name || 'Loading...';
 
