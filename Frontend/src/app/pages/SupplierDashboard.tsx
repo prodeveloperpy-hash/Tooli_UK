@@ -298,14 +298,25 @@ export function SupplierDashboard() {
 
     try {
       if (isUpdate) {
-        // Handle queued image deletions
+        // 1. Handle queued image deletions FIRST
         if (data.imagesToDelete?.length > 0) {
           for (const imgId of data.imagesToDelete) {
-            await equipmentApi.deleteEquipmentImage(data.equipment_id, imgId);
+            await equipmentApi.deleteEquipmentImage(imgId);
           }
         }
-        await equipmentApi.updateEquipmentFiles(payload, data.imageFiles || []);
-        toast.success('Equipment updated successfully');
+
+        // 2. Check if we actually need to send a PATCH
+        // We need to PATCH if there's any field in payload other than equipment_id, updated_by, imageFiles, or imagesToDelete
+        const patchFields = Object.keys(payload).filter(k => 
+          !['equipment_id', 'updated_by', 'imageFiles', 'imagesToDelete'].includes(k)
+        );
+
+        if (patchFields.length > 0 || (data.imageFiles && data.imageFiles.length > 0)) {
+          await equipmentApi.updateEquipmentFiles(payload, data.imageFiles || []);
+          toast.success('Equipment updated successfully');
+        } else if (data.imagesToDelete?.length > 0) {
+          toast.success('Images removed successfully');
+        }
       } else {
         await equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
         toast.success('Equipment added successfully');
