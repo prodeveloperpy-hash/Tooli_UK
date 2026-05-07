@@ -57,31 +57,42 @@ export function SupplierDashboard() {
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const [isEquipFormOpen, setIsEquipFormOpen] = useState(false);
   const [isFetchingDetail, setIsFetchingDetail] = useState(false);
+  const [equipPage, setEquipPage] = useState(1);
+  const [totalEquipPages, setTotalEquipPages] = useState(1);
+  const [totalEquipCount, setTotalEquipCount] = useState(0);
+
+  useEffect(() => {
+    fetchStaticData();
+  }, []);
+
+  useEffect(() => {
+    fetchEquipment();
+  }, [equipPage]);
+
+  const fetchStaticData = async () => {
+    try {
+      const [intervalData, categoryData, locationData] = await Promise.all([
+        equipmentApi.getIntervals(),
+        equipmentApi.getCategories(),
+        equipmentApi.getLocations()
+      ]);
+      setIntervals(intervalData);
+      setCategories(categoryData);
+      setLocations(locationData);
+    } catch (error) {
+      console.error('Error fetching static data:', error);
+    }
+  };
 
   const fetchEquipment = async () => {
     setIsEquipmentLoading(true);
     try {
-      // For suppliers, we probably want to filter by their organization_id
-      // but if the API handles it via token, just call getEquipment.
-      // Actually, let's assume we want to filter if needed, but getEquipment might return all.
-      const response = await equipmentApi.getEquipment();
-      
-      // Filter by current user's organization if possible
       const orgId = localStorage.getItem('organization_id');
-      const filtered = orgId 
-        ? response.results.filter((e: Equipment) => e.organization_id?.toString() === orgId)
-        : response.results;
-        
-      setEquipment(filtered);
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId || undefined);
       
-      const intervalData = await equipmentApi.getIntervals();
-      setIntervals(intervalData);
-
-      const categoryData = await equipmentApi.getCategories();
-      setCategories(categoryData);
-
-      const locationData = await equipmentApi.getLocations();
-      setLocations(locationData);
+      setEquipment(response.results);
+      setTotalEquipCount(response.count);
+      setTotalEquipPages(Math.ceil(response.count / 20));
     } catch (error) {
       console.error('Error fetching equipment:', error);
       toast.error('Failed to load equipment');
@@ -282,27 +293,73 @@ export function SupplierDashboard() {
     if (selectedEquipment) {
       payload.equipment_id = selectedEquipment.equipment_id;
       
-      const compare = (val1: any, val2: any) => {
-        const v1 = (val1 || '').toString().trim();
-        const v2 = (val2 || '').toString().trim();
-        return v1 !== v2;
+      const compare = (v1: any, v2: any) => {
+        const str1 = (v1 ?? '').toString().trim();
+        const str2 = (v2 ?? '').toString().trim();
+        return str1 === str2;
       };
 
-      if (compare(data.name, selectedEquipment.name)) payload.name = data.name;
-      if (compare(data.description, selectedEquipment.description)) payload.description = data.description;
+      if (!compare(data.name, selectedEquipment.name)) payload.name = data.name;
+      if (!compare(data.description, selectedEquipment.description)) payload.description = data.description;
       if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
       if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
-      
-      payload.prices = fullPayload.prices;
-      payload.images = fullPayload.images;
-      payload.availabilities = fullPayload.availabilities;
-      payload.location = fullPayload.location;
+      payload.organization_id = fullPayload.organization_id;
+      payload.updated_by = parseInt(localStorage.getItem('user_id') || '0');
+
+      // Prices check
+      const originalPrices = selectedEquipment.prices?.map(p => ({
+        equipment_price_id: p.equipment_price_id,
+        interval_id: p.interval_id,
+        price: p.price.toString(),
+        currency: p.currency
+      })) || [];
+      const currentPrices = fullPayload.prices.map((p: any) => ({
+        equipment_price_id: p.equipment_price_id,
+        interval_id: p.interval_id,
+        price: p.price.toString(),
+        currency: p.currency
+      }));
+      if (JSON.stringify(originalPrices) !== JSON.stringify(currentPrices)) {
+        payload.prices = fullPayload.prices;
+      }
+
+      // Images check
+      const originalImages = selectedEquipment.images?.map(img => ({
+        image_url: img.image_url,
+        is_active: img.is_active
+      })) || [];
+      const currentImages = fullPayload.images.map((img: any) => ({
+        image_url: img.image_url,
+        is_active: img.is_active
+      }));
+      if (JSON.stringify(originalImages) !== JSON.stringify(currentImages) || data.imageFiles.length > 0) {
+        payload.images = fullPayload.images;
+      }
+
+      // Availabilities check
+      const originalAvail = selectedEquipment.availabilities?.map(a => ({
+        equipment_availability_id: a.equipment_availability_id,
+        availability_from: a.availability_from,
+        availability_to: a.availability_to
+      })) || [];
+      const currentAvail = fullPayload.availabilities.map((a: any) => ({
+        equipment_availability_id: a.equipment_availability_id,
+        availability_from: a.availability_from,
+        availability_to: a.availability_to
+      }));
+      if (JSON.stringify(originalAvail) !== JSON.stringify(currentAvail)) {
+        payload.availabilities = fullPayload.availabilities;
+      }
     } else {
       payload = fullPayload;
     }
 
     try {
       if (selectedEquipment) {
+        // Handle queued image deletions
+        if (data.imagesToDelete && data.imagesToDelete.length > 0) {
+          await Promise.all(data.imagesToDelete.map((id: number) => equipmentApi.deleteEquipmentImage(id)));
+        }
         await equipmentApi.updateEquipmentFiles(payload, data.imageFiles);
         toast.success('Equipment updated successfully');
       } else {
@@ -412,6 +469,7 @@ export function SupplierDashboard() {
                       <TableHeader className="bg-gray-50/50">
                         <TableRow className="hover:bg-transparent border-b">
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Product Details</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Description</TableHead>
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Category</TableHead>
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Weekly Price</TableHead>
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Status</TableHead>
@@ -421,14 +479,14 @@ export function SupplierDashboard() {
                       <TableBody>
                         {isEquipmentLoading ? (
                           <TableRow>
-                            <TableCell colSpan={5} className="py-20 text-center">
+                            <TableCell colSpan={6} className="py-20 text-center">
                               <Loader2 className="w-10 h-10 animate-spin text-brand-primary mx-auto" />
                               <p className="mt-4 text-gray-500 font-bold tracking-widest uppercase text-xs">Loading Equipment...</p>
                             </TableCell>
                           </TableRow>
                         ) : equipment.length === 0 ? (
                           <TableRow>
-                            <TableCell colSpan={5} className="py-20 text-center text-gray-500 font-medium">
+                            <TableCell colSpan={6} className="py-20 text-center text-gray-500 font-medium">
                               No equipment listings found. Start by adding your first product!
                             </TableCell>
                           </TableRow>
@@ -448,6 +506,11 @@ export function SupplierDashboard() {
                                     <div className="font-black text-gray-900 text-lg tracking-tight">{item.name}</div>
                                     <div className="text-xs text-gray-400 font-bold tracking-widest mt-1 uppercase">ID: #{item.equipment_id.toString().padStart(4, '0')}</div>
                                   </div>
+                                </div>
+                              </TableCell>
+                              <TableCell className="py-8 px-12">
+                                <div className="text-sm text-gray-500 font-medium max-w-[250px] truncate" title={item.description}>
+                                  {item.description}
                                 </div>
                               </TableCell>
                               <TableCell className="py-8 px-12">
@@ -496,6 +559,38 @@ export function SupplierDashboard() {
                         )}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-8 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="flex flex-col">
+                      <div className="text-xs text-gray-400 font-black uppercase tracking-widest">
+                        Showing <span className="text-gray-900">{equipment.length}</span> of <span className="text-gray-900">{totalEquipCount}</span> items
+                      </div>
+                      <div className="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-[0.2em]">
+                        Page {equipPage} of {totalEquipPages}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setEquipPage(prev => Math.max(1, prev - 1))}
+                        disabled={equipPage === 1}
+                        className="font-black text-xs uppercase tracking-widest h-12 px-6 rounded-xl hover:bg-white hover:shadow-lg transition-all disabled:opacity-30"
+                      >
+                        Prev
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setEquipPage(prev => Math.min(totalEquipPages, prev + 1))}
+                        disabled={equipPage === totalEquipPages || totalEquipPages === 0}
+                        className="font-black text-xs uppercase tracking-widest h-12 px-6 rounded-xl hover:bg-white hover:shadow-lg transition-all disabled:opacity-30"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

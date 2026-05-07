@@ -62,6 +62,9 @@ export function AdminDashboard() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
   const [isFetchingDetail, setIsFetchingDetail] = useState(false);
+  const [equipPage, setEquipPage] = useState(1);
+  const [totalEquipPages, setTotalEquipPages] = useState(1);
+  const [totalEquipCount, setTotalEquipCount] = useState(0);
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
@@ -77,31 +80,43 @@ export function AdminDashboard() {
     }
   };
 
+  useEffect(() => {
+    fetchSuppliers();
+    fetchStaticData();
+  }, []);
+
+  useEffect(() => {
+    fetchEquipment();
+  }, [equipPage]);
+
+  const fetchStaticData = async () => {
+    try {
+      const [intervalData, categoryData, locationData] = await Promise.all([
+        equipmentApi.getIntervals(),
+        equipmentApi.getCategories(),
+        equipmentApi.getLocations()
+      ]);
+      setIntervals(intervalData);
+      setCategories(categoryData);
+      setLocations(locationData);
+    } catch (error) {
+      console.error('Error fetching static data:', error);
+    }
+  };
+
   const fetchEquipment = async () => {
     setIsEquipmentLoading(true);
     try {
-      const response = await equipmentApi.getEquipment();
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20);
       setEquipment(response.results);
-      
-      const intervalData = await equipmentApi.getIntervals();
-      setIntervals(intervalData);
-
-      const categoryData = await equipmentApi.getCategories();
-      setCategories(categoryData);
-
-      const locationData = await equipmentApi.getLocations();
-      setLocations(locationData);
+      setTotalEquipCount(response.count);
+      setTotalEquipPages(Math.ceil(response.count / 20));
     } catch (error) {
       console.error('Error fetching equipment:', error);
     } finally {
       setIsEquipmentLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchSuppliers();
-    fetchEquipment();
-  }, []);
 
   const handleOpenAdd = () => {
     setSelectedSupplier(null);
@@ -198,26 +213,74 @@ export function AdminDashboard() {
     if (selectedEquipment) {
       payload.equipment_id = selectedEquipment.equipment_id;
       
-      // Simple diffing
-      if (data.name !== selectedEquipment.name) payload.name = data.name;
-      if (data.description !== selectedEquipment.description) payload.description = data.description;
+      const compare = (v1: any, v2: any) => {
+        const str1 = (v1 ?? '').toString().trim();
+        const str2 = (v2 ?? '').toString().trim();
+        return str1 === str2;
+      };
+
+      if (!compare(data.name, selectedEquipment.name)) payload.name = data.name;
+      if (!compare(data.description, selectedEquipment.description)) payload.description = data.description;
       if (data.isActive !== selectedEquipment.is_active) payload.is_active = data.isActive;
       if (parseInt(data.categoryId) !== selectedEquipment.category_id) payload.category_id = parseInt(data.categoryId);
-      if (parseInt(data.supplierId) !== selectedEquipment.organization_id) payload.organization_id = parseInt(data.supplierId);
-      
-      // Always include these for now to ensure they are updated correctly
-      payload.prices = fullPayload.prices;
-      payload.images = fullPayload.images;
-      payload.availabilities = fullPayload.availabilities;
-      payload.location = fullPayload.location;
-      payload.updated_by = 10;
+      payload.organization_id = fullPayload.organization_id;
+      payload.updated_by = parseInt(localStorage.getItem('user_id') || '0');
+
+      // Prices check
+      const originalPrices = selectedEquipment.prices?.map(p => ({
+        equipment_price_id: p.equipment_price_id,
+        interval_id: p.interval_id,
+        price: p.price.toString(),
+        currency: p.currency
+      })) || [];
+      const currentPrices = fullPayload.prices.map((p: any) => ({
+        equipment_price_id: p.equipment_price_id,
+        interval_id: p.interval_id,
+        price: p.price.toString(),
+        currency: p.currency
+      }));
+      if (JSON.stringify(originalPrices) !== JSON.stringify(currentPrices)) {
+        payload.prices = fullPayload.prices;
+      }
+
+      // Images check
+      const originalImages = selectedEquipment.images?.map(img => ({
+        image_url: img.image_url,
+        is_active: img.is_active
+      })) || [];
+      const currentImages = fullPayload.images.map((img: any) => ({
+        image_url: img.image_url,
+        is_active: img.is_active
+      }));
+      if (JSON.stringify(originalImages) !== JSON.stringify(currentImages) || data.imageFiles.length > 0) {
+        payload.images = fullPayload.images;
+      }
+
+      // Availabilities check
+      const originalAvail = selectedEquipment.availabilities?.map(a => ({
+        equipment_availability_id: a.equipment_availability_id,
+        availability_from: a.availability_from,
+        availability_to: a.availability_to
+      })) || [];
+      const currentAvail = fullPayload.availabilities.map((a: any) => ({
+        equipment_availability_id: a.equipment_availability_id,
+        availability_from: a.availability_from,
+        availability_to: a.availability_to
+      }));
+      if (JSON.stringify(originalAvail) !== JSON.stringify(currentAvail)) {
+        payload.availabilities = fullPayload.availabilities;
+      }
     } else {
       payload = fullPayload;
     }
 
     try {
       if (selectedEquipment) {
-        await equipmentApi.updateEquipmentFiles(selectedEquipment.equipment_id, payload, data.imageFiles);
+        // Handle queued image deletions
+        if (data.imagesToDelete && data.imagesToDelete.length > 0) {
+          await Promise.all(data.imagesToDelete.map((id: number) => equipmentApi.deleteEquipmentImage(id)));
+        }
+        await equipmentApi.updateEquipmentFiles(payload, data.imageFiles);
       } else {
         await equipmentApi.createEquipmentFiles(payload, data.imageFiles);
       }
@@ -526,6 +589,7 @@ export function AdminDashboard() {
                       <TableHeader className="bg-gray-50">
                         <TableRow>
                           <TableHead className="font-bold py-4">Equipment</TableHead>
+                          <TableHead className="font-bold w-[300px]">Description</TableHead>
                           <TableHead className="font-bold">Supplier</TableHead>
                           <TableHead className="font-bold">Price</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
@@ -552,8 +616,12 @@ export function AdminDashboard() {
                                 </div>
                                 <div>
                                   <div className="font-bold text-gray-900 leading-none mb-1">{item.name}</div>
-                                  <div className="text-xs text-muted-foreground line-clamp-1">{item.description}</div>
                                 </div>
+                              </div>
+                            </TableCell>
+                            <TableCell className="py-4">
+                              <div className="text-sm text-muted-foreground max-w-[300px] truncate" title={item.description}>
+                                {item.description}
                               </div>
                             </TableCell>
                             <TableCell className="font-medium text-gray-700">
@@ -586,6 +654,61 @@ export function AdminDashboard() {
                         ))}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalEquipCount}</span> equipment
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setEquipPage(prev => Math.max(1, prev - 1))}
+                        disabled={equipPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalEquipPages }, (_, i) => i + 1)
+                          .filter(p => {
+                            if (totalEquipPages <= 7) return true;
+                            return p === 1 || p === totalEquipPages || Math.abs(p - equipPage) <= 1;
+                          })
+                          .map((pageNum, index, array) => (
+                            <div key={pageNum} className="flex items-center gap-1">
+                              {index > 0 && array[index - 1] !== pageNum - 1 && (
+                                <span className="px-1 text-muted-foreground">...</span>
+                              )}
+                              <Button
+                                variant={equipPage === pageNum ? "default" : "outline"}
+                                size="sm"
+                                onClick={() => setEquipPage(pageNum)}
+                                className={`font-bold h-9 w-9 p-0 rounded-xl transition-all ${
+                                  equipPage === pageNum 
+                                    ? 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-sm' 
+                                    : 'hover:bg-gray-100 text-gray-600'
+                                }`}
+                              >
+                                {pageNum}
+                              </Button>
+                            </div>
+                          ))}
+                      </div>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setEquipPage(prev => Math.min(totalEquipPages, prev + 1))}
+                        disabled={equipPage === totalEquipPages || totalEquipPages === 0}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

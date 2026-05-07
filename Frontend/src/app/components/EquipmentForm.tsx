@@ -38,7 +38,10 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
     availabilities: [{ from: '', to: '' }],
     imageFiles: [] as File[],
     imagePreviews: [] as string[],
+    imagesToDelete: [] as number[],
   });
+
+  const [existingImages, setExistingImages] = useState<{ id: number, url: string }[]>([]);
 
   useEffect(() => {
     if (equipment) {
@@ -62,7 +65,9 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         })) || [{ from: '', to: '' }],
         imageFiles: [],
         imagePreviews: equipment.images?.map(img => img.image_url) || [],
+        imagesToDelete: [],
       });
+      setExistingImages(equipment.images?.map(img => ({ id: img.equipment_image_id, url: img.image_url })) || []);
     } else {
       setFormData({
         name: '',
@@ -75,7 +80,9 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         availabilities: [{ from: '', to: '' }],
         imageFiles: [],
         imagePreviews: [],
+        imagesToDelete: [],
       });
+      setExistingImages([]);
     }
   }, [equipment, isOpen]);
 
@@ -129,6 +136,16 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
       };
     });
+    
+    // Handle deletion of existing image
+    const existingImg = existingImages[index];
+    if (existingImg) {
+      setFormData(prev => ({
+        ...prev,
+        imagesToDelete: [...prev.imagesToDelete, existingImg.id]
+      }));
+    }
+    setExistingImages(prev => prev.filter((_, i) => i !== index));
     
     if (previewUrl.startsWith('blob:')) {
       URL.revokeObjectURL(previewUrl);
