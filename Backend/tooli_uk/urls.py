@@ -49,5 +49,10 @@ urlpatterns = [
         CreateEquipmentDetailAPIView.as_view(),
         name="create_equipment_detail",
     ),
+    path(
+        "create-equipment/<int:equipment_id>/",
+        CreateEquipmentDetailAPIView.as_view(),
+        name="create_equipment_detail_hyphen",
+    ),
     path("", include(router.urls)),
 ]

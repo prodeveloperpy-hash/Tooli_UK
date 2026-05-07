@@ -89,7 +89,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
     created_by = serializers.IntegerField(required=False, allow_null=True)
     updated_by = serializers.IntegerField(required=False, allow_null=True)
 
-    location = CreateEquipmentLocationSerializer(required=True)
+    location = CreateEquipmentLocationSerializer(required=False)
     locations = CreateEquipmentLocationSerializer(many=True, required=False, write_only=True)
     prices = CreateEquipmentPriceSerializer(many=True, required=False)
     images = CreateEquipmentImageSerializer(many=True, required=False)
