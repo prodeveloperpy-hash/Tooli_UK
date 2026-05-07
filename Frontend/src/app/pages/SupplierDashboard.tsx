@@ -261,11 +261,6 @@ export function SupplierDashboard() {
 
     if (!isUpdate) {
       // Format full payload for new equipment
-      const imagesMetadata = data.imagePreviews.map((url: string, index: number) => ({
-        sort_order: index,
-        is_active: true
-      }));
-
       payload = {
         name: data.name,
         description: data.description,
@@ -284,7 +279,10 @@ export function SupplierDashboard() {
           location_id: parseInt(data.locationId),
           is_active: true,
         })),
-        images: imagesMetadata,
+        images: data.imagePreviews.map((url: string, index: number) => ({
+          sort_order: index,
+          is_active: true
+        })),
         availabilities: data.availabilities.map((a: any) => ({
           ...a,
           availability_from: a.from ? new Date(a.from).toISOString() : undefined,
@@ -321,7 +319,8 @@ export function SupplierDashboard() {
         await equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
         toast.success('Equipment added successfully');
       }
-      fetchEquipment();
+      await fetchEquipment();
+      setIsEquipFormOpen(false);
     } catch (error: any) {
       console.error('Error saving equipment:', error);
       toast.error(error.message || 'Failed to save equipment');
@@ -472,7 +471,7 @@ export function SupplierDashboard() {
                               </TableCell>
                               <TableCell className="py-8 px-12">
                                 <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider">
-                                  {categories.find(c => c.category_id === item.category_id)?.name || 'General'}
+                                  {categories.find(c => c.category_id === item.category_id)?.category_display_name || 'General'}
                                 </Badge>
                               </TableCell>
                               <TableCell className="py-8 px-12 font-black text-2xl text-gray-900 tracking-tight">
