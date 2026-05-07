@@ -64,11 +64,17 @@ class LoginAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
 
-        organization_id = (
+        organization_link = (
             UserOrganization.objects.filter(user_id=user, is_active=True)
+            .select_related("organization_id")
             .order_by("user_organization_id")
-            .values_list("organization_id", flat=True)
             .first()
+        )
+        organization_id = organization_link.organization_id_id if organization_link else None
+        organization_name = (
+            organization_link.organization_id.name
+            if organization_link and organization_link.organization_id_id
+            else None
         )
         role_key = user.role_id.role_key if user.role_id_id else None
 
@@ -79,6 +85,10 @@ class LoginAPIView(APIView):
                     "user": UserSerializer(user, context={"request": request}).data,
                     "role_key": role_key,
                     "organization_id": organization_id,
+                    "organization": {
+                        "id": organization_id,
+                        "name": organization_name,
+                    },
                 },
             },
             status=status.HTTP_200_OK,
