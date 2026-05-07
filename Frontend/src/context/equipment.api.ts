@@ -26,6 +26,7 @@ export interface Equipment {
     availability_to: string;
     is_active: boolean;
   }[];
+  redirect_url?: string;
 }
 
 export interface EquipmentResponse {
@@ -36,13 +37,15 @@ export interface EquipmentResponse {
 }
 
 export const equipmentApi = {
-  getEquipment: async (categoryId?: string, locationId?: string, availabilityFrom?: string, page: number = 1): Promise<EquipmentResponse> => {
+  getEquipment: async (categoryId?: string, locationId?: string, availabilityFrom?: string, page: number = 1, pageSize: number = 20, organizationId?: string): Promise<EquipmentResponse> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (categoryId) params.append('category_id', categoryId);
     if (locationId) params.append('location_id', locationId);
     if (availabilityFrom) params.append('availability_from', availabilityFrom);
+    if (organizationId) params.append('organization_id', organizationId);
     params.append('page', page.toString());
+    params.append('page_size', pageSize.toString());
 
     const response = await fetch(`${API_URL}/equipment/?${params.toString()}`, {
       headers: {
@@ -90,9 +93,9 @@ export const equipmentApi = {
     return response.json();
   },
 
-  updateEquipment: async (id: number, data: any): Promise<Equipment> => {
+  updateEquipment: async (data: any): Promise<Equipment> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/create-equipment/${id}/`, {
+    const response = await fetch(`${API_URL}/create-equipment/${data.equipment_id}/`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -119,6 +122,20 @@ export const equipmentApi = {
 
     if (!response.ok) {
       throw new Error('Failed to delete equipment');
+    }
+  },
+
+  deleteEquipmentImage: async (id: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/equipment-image/${id}/`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete equipment image');
     }
   },
 
@@ -190,7 +207,7 @@ export const equipmentApi = {
     return response.json();
   },
 
-  updateEquipmentFiles: async (id: number, payload: any, files: File[]): Promise<Equipment> => {
+  updateEquipmentFiles: async (payload: any, files: File[]): Promise<Equipment> => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
     formData.append('payload', JSON.stringify(payload));
@@ -198,7 +215,7 @@ export const equipmentApi = {
       formData.append('images', file);
     });
 
-    const response = await fetch(`${API_URL}/create-equipment/${id}/`, {
+    const response = await fetch(`${API_URL}/create-equipment/${payload.equipment_id}/`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`,
