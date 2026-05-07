@@ -190,69 +190,7 @@ export function SearchResultsPage() {
               </div>
             </div>
 
-            {/* How It Works Horizontal Section */}
-            <div className="mt-12 space-y-12">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
-                <h2 className="text-2xl font-bold mb-10 text-center">How It Works</h2>
-                <div className="grid md:grid-cols-3 gap-12">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-brand-primary mb-6 shadow-sm">
-                      <Search className="w-7 h-7" />
-                    </div>
-                    <h3 className="font-bold text-lg mb-3 text-gray-900">1. Search</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed px-4">Enter your equipment, location and dates to see what's available.</p>
-                  </div>
-                  
-                  <div className="flex flex-col items-center text-center">
-                    <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-brand-primary mb-6 shadow-sm">
-                      <BarChart3 className="w-7 h-7" />
-                    </div>
-                    <h3 className="font-bold text-lg mb-3 text-gray-900">2. Compare</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed px-4">Compare prices and delivery options from trusted local suppliers.</p>
-                  </div>
-                  
-                  <div className="flex flex-col items-center text-center">
-                    <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-brand-primary mb-6 shadow-sm">
-                      <CheckCircle className="w-7 h-7" />
-                    </div>
-                    <h3 className="font-bold text-lg mb-3 text-gray-900">3. Book</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed px-4">Choose the best deal and book directly with the supplier.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-white rounded-2xl p-6 border border-gray-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900">Verified Local Suppliers</h4>
-                    <p className="text-xs text-gray-500 mt-1">All suppliers are checked</p>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-2xl p-6 border border-gray-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    <BarChart3 className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900">Best Prices</h4>
-                    <p className="text-xs text-gray-500 mt-1">Compare and save</p>
-                  </div>
-                </div>
-                
-                <div className="bg-white rounded-2xl p-6 border border-gray-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center flex-shrink-0">
-                    <ArrowRight className="w-6 h-6 text-brand-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900">Save Time</h4>
-                    <p className="text-xs text-gray-500 mt-1">Quick local quotes</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+           
           </main>
         </div>
       </div>

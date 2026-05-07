@@ -55,15 +55,23 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
   const renderDetailModal = () => (
     <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
       <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-3xl border-none shadow-2xl bg-white">
+        {/* Fixed Close Button - Does not scroll */}
+        <button 
+          onClick={() => setIsDetailOpen(false)}
+          className="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-gray-900 hover:bg-white transition-all shadow-xl z-[100] border border-white/20"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
         {isFetching ? (
           <div className="h-[600px] flex flex-col items-center justify-center gap-4 bg-white w-full">
             <Loader2 className="w-12 h-12 text-brand-primary animate-spin" />
             <p className="font-bold text-gray-500 animate-pulse uppercase tracking-widest text-xs">Loading Details...</p>
           </div>
         ) : (
-          <div className="flex flex-col h-full max-h-[90vh]">
-            {/* Image Section - Now always at the top with fixed height */}
-            <div className="w-full h-[300px] md:h-[450px] relative bg-gray-100 flex items-center justify-center group overflow-hidden">
+          <div className="flex flex-col max-h-[85vh] overflow-y-auto overflow-x-hidden">
+            {/* Image Section - Now part of the scrollable flow and even smaller */}
+            <div className="w-full h-[200px] md:h-[300px] relative bg-gray-100 flex items-center justify-center group overflow-hidden flex-shrink-0">
               {allImages.length > 0 ? (
                 <>
                   <motion.img
@@ -79,20 +87,20 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-12 h-12"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-10 h-10"
                         onClick={handlePrevImage}
                       >
-                        <ChevronLeft className="w-8 h-8" />
+                        <ChevronLeft className="w-6 h-6" />
                       </Button>
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-12 h-12"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-10 h-10"
                         onClick={handleNextImage}
                       >
-                        <ChevronRight className="w-8 h-8" />
+                        <ChevronRight className="w-6 h-6" />
                       </Button>
-                      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-10 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full">
+                      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full">
                         {allImages.map((_, i) => (
                           <button 
                             key={i} 
@@ -100,7 +108,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                               e.stopPropagation();
                               setActiveImageIndex(i);
                             }}
-                            className={`h-2 rounded-full transition-all duration-500 ${i === activeImageIndex ? 'w-8 bg-brand-primary' : 'w-2 bg-white/60 hover:bg-white'}`} 
+                            className={`h-1.5 rounded-full transition-all duration-500 ${i === activeImageIndex ? 'w-6 bg-brand-primary' : 'w-1.5 bg-white/60 hover:bg-white'}`} 
                           />
                         ))}
                       </div>
@@ -110,20 +118,13 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
               ) : (
                 <Package className="w-20 h-20 text-gray-300" />
               )}
-              <Badge className="absolute top-8 left-8 bg-brand-primary/90 backdrop-blur-md text-white font-black py-2 px-6 rounded-xl z-10 text-xs uppercase tracking-widest">
+              <Badge className="absolute top-6 left-6 bg-brand-primary/90 backdrop-blur-md text-white font-black py-1.5 px-4 rounded-lg z-10 text-[10px] uppercase tracking-widest">
                 {equipment.category_id === 1 ? 'Excavators' : 'Machinery'}
               </Badge>
-              
-              <button 
-                onClick={() => setIsDetailOpen(false)}
-                className="absolute top-8 right-8 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-gray-900 hover:bg-white transition-all shadow-xl z-10"
-              >
-                <X className="w-6 h-6" />
-              </button>
             </div>
 
-            {/* Details Section */}
-            <div className="flex-1 p-8 md:p-14 overflow-y-auto bg-white rounded-t-[40px] -mt-10 relative z-20 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+            {/* Details Section - Integrated into the scroll flow */}
+            <div className="flex-1 p-6 md:p-10 bg-white rounded-t-[32px] -mt-8 relative z-20 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] min-h-full">
               <div className="flex justify-between items-start mb-6">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
@@ -132,7 +133,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                       <Clock className="w-3 h-3 mr-1" /> Available Now
                     </Badge>
                   </div>
-                  <h2 className="text-3xl font-extrabold text-gray-900 mb-2 leading-tight">{(detailedEquipment || equipment).name}</h2>
+                  <h2 className="text-2xl font-extrabold text-gray-900 mb-2 leading-tight">{(detailedEquipment || equipment).name}</h2>
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center gap-1.5">
                       <MapPin className="w-4 h-4 text-brand-primary" />
@@ -185,13 +186,13 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                   <div>
                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Starting from</div>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-4xl font-extrabold text-brand-primary">£{dailyPrice}</span>
-                      <span className="text-sm font-medium text-gray-500">/ day</span>
+                      <span className="text-3xl font-extrabold text-brand-primary">£{dailyPrice}</span>
+                      <span className="text-xs font-medium text-gray-500">/ day</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-xl font-bold text-gray-900">£{displayPrice}</div>
-                    <div className="text-xs font-medium text-gray-500">per week (ex. VAT)</div>
+                    <div className="text-xs font-medium text-gray-500">per week</div>
                   </div>
                 </div>
                 
