@@ -54,6 +54,7 @@ def _apply_put_list_defaults(body: dict) -> None:
     body.setdefault("prices", [])
     body.setdefault("images", [])
     body.setdefault("availabilities", [])
+    body.setdefault("locations", [])
 
 
 class CreateEquipmentAPIView(APIView):

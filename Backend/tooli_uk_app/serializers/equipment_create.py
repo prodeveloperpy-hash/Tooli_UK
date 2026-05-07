@@ -90,6 +90,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
     updated_by = serializers.IntegerField(required=False, allow_null=True)
 
     location = CreateEquipmentLocationSerializer(required=True)
+    locations = CreateEquipmentLocationSerializer(many=True, required=False, write_only=True)
     prices = CreateEquipmentPriceSerializer(many=True, required=False)
     images = CreateEquipmentImageSerializer(many=True, required=False)
     availabilities = CreateEquipmentAvailabilitySerializer(many=True, required=False)
@@ -121,6 +122,17 @@ class CreateEquipmentSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
+        has_location = "location" in attrs
+        has_locations = "locations" in attrs
+        if has_location and has_locations:
+            raise serializers.ValidationError(
+                {"location": 'Use either "location" or "locations", not both.'}
+            )
+        if self.instance is None and not has_location and not has_locations:
+            raise serializers.ValidationError(
+                {"location": 'This field is required ("location" or "locations").'}
+            )
+
         if self.instance is None:
             images = attrs.get("images") or []
         elif "images" not in attrs:
@@ -141,11 +153,20 @@ class CreateEquipmentSerializer(serializers.Serializer):
                 )
         return attrs
 
+    def _extract_locations_payload(self, validated_data: dict) -> list[dict] | None:
+        locations_data = validated_data.pop("locations", None)
+        location_data = validated_data.pop("location", None)
+        if locations_data is not None:
+            return locations_data
+        if location_data is not None:
+            return [location_data]
+        return None
+
     @transaction.atomic
     def create(self, validated_data):
         now = timezone.now()
 
-        location_data = validated_data.pop("location")
+        locations_data = self._extract_locations_payload(validated_data) or []
         prices_data = validated_data.pop("prices", [])
         images_data = validated_data.pop("images", [])
         availabilities_data = validated_data.pop("availabilities", [])
@@ -162,12 +183,13 @@ class CreateEquipmentSerializer(serializers.Serializer):
             updated_datetime=now,
         )
 
-        EquipmentLocation.objects.create(
-            equipment_id_id=equipment.equipment_id,
-            location_id_id=location_data["location_id"],
-            is_active=location_data.get("is_active", True),
-            created_datetime=now,
-        )
+        for location_data in locations_data:
+            EquipmentLocation.objects.create(
+                equipment_id_id=equipment.equipment_id,
+                location_id_id=location_data["location_id"],
+                is_active=location_data.get("is_active", True),
+                created_datetime=now,
+            )
 
         self._apply_prices(equipment.equipment_id, prices_data, now)
         self._apply_images(equipment, images_data, now)
@@ -229,7 +251,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
         now = timezone.now()
         partial = self.partial
 
-        location_data = validated_data.pop("location", None)
+        locations_data = self._extract_locations_payload(validated_data)
         prices_data = validated_data.pop("prices", None)
         images_data = validated_data.pop("images", None)
         availabilities_data = validated_data.pop("availabilities", None)
@@ -249,17 +271,18 @@ class CreateEquipmentSerializer(serializers.Serializer):
         if "updated_by" in validated_data:
             instance.updated_by_id = validated_data.get("updated_by")
 
-        if location_data is not None:
+        if locations_data is not None:
             EquipmentLocation.objects.filter(equipment_id_id=instance.equipment_id).delete()
-            EquipmentLocation.objects.create(
-                equipment_id_id=instance.equipment_id,
-                location_id_id=location_data["location_id"],
-                is_active=location_data.get("is_active", True),
-                created_datetime=now,
-            )
+            for location_data in locations_data:
+                EquipmentLocation.objects.create(
+                    equipment_id_id=instance.equipment_id,
+                    location_id_id=location_data["location_id"],
+                    is_active=location_data.get("is_active", True),
+                    created_datetime=now,
+                )
         elif not partial:
             raise serializers.ValidationError(
-                {"location": "This field is required for full (PUT) updates."}
+                {"location": 'This field is required for full (PUT) updates ("location" or "locations").'}
             )
 
         if prices_data is not None:
