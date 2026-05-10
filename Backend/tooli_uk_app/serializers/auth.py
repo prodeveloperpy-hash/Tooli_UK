@@ -7,6 +7,10 @@ from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.role import Role
 from tooli_uk_app.models.user import User
 from tooli_uk_app.models.user_organization import UserOrganization
+from tooli_uk_app.services.notifications import notify_new_supplier_for_approval
+from tooli_uk_app.services.superadmin import (
+    is_hardcoded_superadmin_login,
+)
 
 
 class SignupSerializer(serializers.Serializer):
@@ -103,16 +107,31 @@ class SignupSerializer(serializers.Serializer):
             user.save(update_fields=["avatar_url", "updated_datetime"])
 
         user_org_role = validated_data.get("user_organization_role_id")
+        membership_role_id = (
+            user_org_role if user_org_role is not None else resolved_role_id
+        )
         UserOrganization.objects.create(
             user_id_id=user.user_id,
             organization_id_id=organization.organization_id,
-            role_id_id=user_org_role if user_org_role is not None else resolved_role_id,
+            role_id_id=membership_role_id,
             is_active=True,
+            is_approved=False,
             created_datetime=now,
             updated_datetime=now,
             created_by_id=user.user_id,
             updated_by_id=user.user_id,
         )
+
+        role = Role.objects.filter(role_id=membership_role_id).first()
+        if role and role.role_key and role.role_key.upper() == "SUPPLIER":
+            full_name = f"{user.first_name} {user.last_name}".strip()
+            transaction.on_commit(
+                lambda: notify_new_supplier_for_approval(
+                    supplier_name=full_name or user.email,
+                    supplier_email=user.email,
+                    organization_name=organization.name,
+                )
+            )
 
         return {
             "user_id": user.user_id,
@@ -129,6 +148,10 @@ class LoginSerializer(serializers.Serializer):
         email = attrs["email"]
         password = attrs["password"]
 
+        if is_hardcoded_superadmin_login(email=email, password=password):
+            attrs["is_hardcoded_superadmin"] = True
+            return attrs
+
         user = (
             User.objects.select_related("role_id")
             .filter(email__iexact=email, is_active=True)
@@ -137,5 +160,6 @@ class LoginSerializer(serializers.Serializer):
         if not user or not check_password(password, user.password):
             raise serializers.ValidationError("Invalid email or password.")
 
+        attrs["is_hardcoded_superadmin"] = False
         attrs["user"] = user
         return attrs

@@ -205,6 +205,57 @@ CORS_ALLOW_CREDENTIALS = os.environ.get("CORS_ALLOW_CREDENTIALS", "false").lower
     "yes",
 )
 
+# Email (supplier approval notifications).
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend",
+)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "info@tooli.uk").strip()
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "ejHp9RtXThFY").strip()
+
+# Auto-pick SMTP host/port from sender email when host/port are not provided.
+_email_domain = EMAIL_HOST_USER.split("@")[-1].lower() if "@" in EMAIL_HOST_USER else ""
+_smtp_defaults = {
+    # Gmail / Google Workspace
+    "gmail.com": ("smtp.gmail.com", 587, True, False),
+    "googlemail.com": ("smtp.gmail.com", 587, True, False),
+    "tooli.uk": ("smtp.zoho.eu", 587, True, False),
+    # Microsoft
+    "outlook.com": ("smtp.office365.com", 587, True, False),
+    "hotmail.com": ("smtp.office365.com", 587, True, False),
+    "live.com": ("smtp.office365.com", 587, True, False),
+    # Yahoo
+    "yahoo.com": ("smtp.mail.yahoo.com", 587, True, False),
+    # Zoho
+    "zoho.com": ("smtp.zoho.com", 587, True, False),
+    "zoho.eu": ("smtp.zoho.eu", 587, True, False),
+}
+_default_host, _default_port, _default_tls, _default_ssl = _smtp_defaults.get(
+    _email_domain,
+    ("smtp.zoho.eu", 587, True, False),
+)
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST", _default_host)
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", str(_default_port)))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", str(_default_tls)).lower() in (
+    "1",
+    "true",
+    "yes",
+)
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", str(_default_ssl)).lower() in (
+    "1",
+    "true",
+    "yes",
+)
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL",
+    EMAIL_HOST_USER or "noreply@tooli.uk",
+)
+SUPPLIER_APPROVAL_URL = os.environ.get(
+    "SUPPLIER_APPROVAL_URL",
+    "https://frontend-service-961815749151.us-central1.run.app/suppliers",
+)
+
 # Cloud Run / reverse proxy: correct scheme and host for absolute URLs (e.g. avatar links) and CSRF.
 if os.environ.get("K_SERVICE") or os.environ.get("USE_CLOUD_RUN_PROXY_HEADERS", "").lower() in (
     "1",

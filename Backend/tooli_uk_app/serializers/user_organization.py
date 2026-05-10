@@ -6,6 +6,7 @@ from rest_framework import serializers
 
 from tooli_uk_app.models import Organization, Role, User, UserOrganization
 from tooli_uk_app.services.gcs_images import should_use_api_url_in_json
+from tooli_uk_app.services.notifications import notify_new_supplier_for_approval
 
 
 class UserOrganizationUserDetailSerializer(serializers.Serializer):
@@ -292,16 +293,34 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
                 "This user is already linked to this organization."
             )
 
-        link = UserOrganization.objects.create(
-            user_id_id=user_id,
-            organization_id_id=organization_id,
-            role_id_id=role_id,
-            is_active=is_active,
-            created_datetime=now,
-            updated_datetime=now,
-            created_by_id=created_by or user_id,
-            updated_by_id=updated_by or user_id,
-        )
+        role = Role.objects.filter(role_id=role_id).first()
+        is_supplier = bool(role and role.role_key and role.role_key.upper() == "SUPPLIER")
+        create_kwargs = {
+            "user_id_id": user_id,
+            "organization_id_id": organization_id,
+            "role_id_id": role_id,
+            "is_active": is_active,
+            "created_datetime": now,
+            "updated_datetime": now,
+            "created_by_id": created_by or user_id,
+            "updated_by_id": updated_by or user_id,
+        }
+        if is_supplier:
+            create_kwargs["is_approved"] = False
+
+        link = UserOrganization.objects.create(**create_kwargs)
+        if is_supplier:
+            supplier = User.objects.filter(pk=user_id).first()
+            org = Organization.objects.filter(pk=organization_id).first()
+            if supplier and org:
+                supplier_name = f"{supplier.first_name} {supplier.last_name}".strip()
+                transaction.on_commit(
+                    lambda: notify_new_supplier_for_approval(
+                        supplier_name=supplier_name or supplier.email,
+                        supplier_email=supplier.email,
+                        organization_name=org.name,
+                    )
+                )
         return link
 
     @transaction.atomic

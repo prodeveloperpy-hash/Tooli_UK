@@ -9,6 +9,12 @@ from tooli_uk_app.models import User
 from tooli_uk_app.models.user_organization import UserOrganization
 from tooli_uk_app.serializers.auth import LoginSerializer, SignupSerializer
 from tooli_uk_app.serializers.user import UserSerializer
+from tooli_uk_app.services.superadmin import (
+    HARDCODED_SUPERADMIN_EMAIL,
+    HARDCODED_SUPERADMIN_FIRST_NAME,
+    HARDCODED_SUPERADMIN_LAST_NAME,
+    SUPERADMIN_ROLE_KEY,
+)
 
 
 class SignupAPIView(APIView):
@@ -62,6 +68,35 @@ class LoginAPIView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if serializer.validated_data.get("is_hardcoded_superadmin"):
+            return Response(
+                {
+                    "message": "Login successful.",
+                    "data": {
+                        "user": {
+                            "user_id": None,
+                            "first_name": HARDCODED_SUPERADMIN_FIRST_NAME,
+                            "last_name": HARDCODED_SUPERADMIN_LAST_NAME,
+                            "email": HARDCODED_SUPERADMIN_EMAIL,
+                            "avatar_url": None,
+                            "role_id": None,
+                            "created_datetime": None,
+                            "updated_datetime": None,
+                            "created_by": None,
+                            "updated_by": None,
+                            "is_active": True,
+                        },
+                        "role_key": SUPERADMIN_ROLE_KEY,
+                        "organization_id": None,
+                        "organization": {
+                            "id": None,
+                            "name": None,
+                        },
+                    },
+                },
+                status=status.HTTP_200_OK,
+            )
+
         user = serializer.validated_data["user"]
 
         organization_link = (
