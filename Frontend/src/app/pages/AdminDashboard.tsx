@@ -68,6 +68,7 @@ export function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [approvingId, setApprovingId] = useState<number | null>(null);
+  const [rejectingId, setRejectingId] = useState<number | null>(null);
   
   // Modal states
   const [isAddEditOpen, setIsAddEditOpen] = useState(false);
@@ -468,6 +469,26 @@ export function AdminDashboard() {
       console.error('Error approving supplier:', error);
     } finally {
       setApprovingId(null);
+    }
+  };
+
+  const handleRejectSupplier = async (id: number) => {
+    setRejectingId(id);
+    const rejectionPromise = userApi.deleteUserOrganization(id);
+
+    toast.promise(rejectionPromise, {
+      loading: 'Rejecting and deleting supplier...',
+      success: 'Supplier rejected and deleted',
+      error: 'Failed to reject supplier'
+    });
+
+    try {
+      await rejectionPromise;
+      await fetchSuppliers();
+    } catch (error) {
+      console.error('Error rejecting supplier:', error);
+    } finally {
+      setRejectingId(null);
     }
   };
 
@@ -1029,17 +1050,31 @@ export function AdminDashboard() {
                       </div>
                     </div>
 
-                    <Button 
-                      onClick={() => handleApproveSupplier(s.user_organization_id)}
-                      disabled={approvingId === s.user_organization_id}
-                      className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 rounded-xl shadow-lg shadow-green-200 min-w-[120px]"
-                    >
-                      {approvingId === s.user_organization_id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        'Approve'
-                      )}
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button 
+                        onClick={() => handleRejectSupplier(s.user_organization_id)}
+                        disabled={rejectingId === s.user_organization_id || approvingId === s.user_organization_id}
+                        variant="outline"
+                        className="border-red-200 text-red-600 hover:bg-red-50 font-bold px-6 rounded-xl min-w-[120px]"
+                      >
+                        {rejectingId === s.user_organization_id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          'Reject'
+                        )}
+                      </Button>
+                      <Button 
+                        onClick={() => handleApproveSupplier(s.user_organization_id)}
+                        disabled={approvingId === s.user_organization_id || rejectingId === s.user_organization_id}
+                        className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 rounded-xl shadow-lg shadow-green-200 min-w-[120px]"
+                      >
+                        {approvingId === s.user_organization_id ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          'Approve'
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
