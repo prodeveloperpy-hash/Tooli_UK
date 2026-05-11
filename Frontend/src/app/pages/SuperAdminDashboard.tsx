@@ -830,14 +830,13 @@ export function AdminDashboard() {
                           <TableHead className="font-bold">Email</TableHead>
                           <TableHead className="font-bold">Location</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="font-bold">Approval</TableHead>
                           <TableHead className="text-right font-bold pr-6">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {isLoading ? (
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center py-20">
+                            <TableCell colSpan={5} className="text-center py-20">
                               <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
                             </TableCell>
                           </TableRow>
@@ -886,13 +885,6 @@ export function AdminDashboard() {
                                 <Badge className="bg-green-500 hover:bg-green-600 font-bold px-3 text-white border-none">Active</Badge>
                               ) : (
                                 <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
-                              )}
-                            </TableCell>
-                            <TableCell>
-                              {s.is_approved ? (
-                                <Badge className="bg-blue-500 hover:bg-blue-600 font-bold px-3 text-white border-none">Approved</Badge>
-                              ) : (
-                                <Badge variant="outline" className="font-bold px-3 text-orange-600 border-orange-200 bg-orange-50">Pending</Badge>
                               )}
                             </TableCell>
                             <TableCell className="text-right pr-6">
