@@ -953,7 +953,7 @@ export function SuperAdminDashboard() {
                         <TableRow>
                           <TableHead className="font-bold py-4 w-[250px]">Equipment</TableHead>
                           <TableHead className="font-bold">Supplier</TableHead>
-                          <TableHead className="font-bold">Price</TableHead>
+                          <TableHead className="font-bold">Weekly Price</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
                           <TableHead className="text-right font-bold pr-6">Actions</TableHead>
                         </TableRow>
@@ -987,7 +987,6 @@ export function SuperAdminDashboard() {
                             <TableCell>
                               <div className="font-bold text-brand-primary">
                                 {item.prices[0] ? `${item.prices[0].currency} ${item.prices[0].price}` : 'N/A'}
-                                {item.prices.length > 1 && <span className="text-[10px] text-muted-foreground ml-1">+{item.prices.length - 1} more</span>}
                               </div>
                             </TableCell>
                             <TableCell>
