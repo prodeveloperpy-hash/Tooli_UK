@@ -46,10 +46,8 @@ export function LoginPage() {
       localStorage.setItem('organization_id', organization_id || '');
       localStorage.setItem('avatar_url', user.avatar_url || '');
 
-      if (role_key === 'SUPERADMIN') {
-        navigate('/admin');
-      } else if (role_key === 'SUPPLIER') {
-        navigate('/supplier');
+      if (['SUPERADMIN', 'ADMIN', 'SUPPLIER'].includes(role_key)) {
+        navigate('/dashboard');
       } else {
         navigate('/');
       }

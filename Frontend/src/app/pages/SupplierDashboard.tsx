@@ -125,7 +125,7 @@ export function SupplierDashboard() {
         setSettingsForm({
           first_name: parsed.user.first_name,
           last_name: parsed.user.last_name,
-          org_name: parsed.organization_name || '', 
+          org_name: parsed.organization?.name || parsed.organization_name || '', 
         });
         
         // If we want to use it for userData state:
@@ -133,8 +133,8 @@ export function SupplierDashboard() {
           user_organization_id: parsed.organization_id, // approximation
           user_details: parsed.user,
           organization_details: {
-            name: parsed.organization_name || '',
-            logo: parsed.user.avatar_url, 
+            name: parsed.organization?.name || parsed.organization_name || '',
+            logo: parsed.organization?.logo || parsed.user.avatar_url, 
           },
           role_details: {
             role_key: parsed.role_key,
@@ -426,7 +426,6 @@ export function SupplierDashboard() {
                       <TableHeader className="bg-gray-50/50">
                         <TableRow className="hover:bg-transparent border-b">
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Product Details</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Description</TableHead>
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Category</TableHead>
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Weekly Price</TableHead>
                           <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Status</TableHead>
@@ -443,7 +442,7 @@ export function SupplierDashboard() {
                           </TableRow>
                         ) : equipment.length === 0 ? (
                           <TableRow>
-                            <TableCell colSpan={6} className="py-20 text-center text-gray-500 font-medium">
+                            <TableCell colSpan={5} className="py-20 text-center text-gray-500 font-medium">
                               No equipment listings found. Start by adding your first product!
                             </TableCell>
                           </TableRow>
@@ -451,7 +450,7 @@ export function SupplierDashboard() {
                           equipment.map((item) => (
                             <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors border-b last:border-0 group">
                               <TableCell className="py-8 px-12">
-                                <div className="flex items-center gap-6">
+                                <div className="flex items-center gap-6 w-[250px]">
                                   <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center overflow-hidden shadow-inner group-hover:shadow-lg transition-shadow">
                                     {item.images && item.images[0]?.image_url ? (
                                       <img src={item.images[0].image_url} alt={item.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
@@ -459,14 +458,9 @@ export function SupplierDashboard() {
                                       <Package className="w-8 h-8 text-gray-300" />
                                     )}
                                   </div>
-                                  <div>
-                                    <div className="font-black text-gray-900 text-lg tracking-tight">{item.name}</div>
+                                  <div className="min-w-0">
+                                    <div className="font-black text-gray-900 text-lg tracking-tight truncate" title={item.name}>{item.name}</div>
                                   </div>
-                                </div>
-                              </TableCell>
-                              <TableCell className="py-8 px-12">
-                                <div className="text-sm text-gray-500 font-medium max-w-[250px] truncate" title={item.description}>
-                                  {item.description}
                                 </div>
                               </TableCell>
                               <TableCell className="py-8 px-12">

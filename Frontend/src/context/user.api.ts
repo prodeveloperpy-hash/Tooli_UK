@@ -25,6 +25,9 @@ export interface UserOrganization {
   user_id: number;
   organization_id: number;
   is_active: boolean;
+  is_approved: boolean;
+  approved_datetime: string | null;
+  approved_by: number | null;
 }
 
 export const userApi = {
@@ -43,9 +46,14 @@ export const userApi = {
     return response.json();
   },
 
-  getUserOrganizations: async (): Promise<UserOrganization[]> => {
+  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean): Promise<UserOrganization[]> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/user-organization/`, {
+    const params = new URLSearchParams();
+    if (isActive !== undefined) params.append('is_active', isActive.toString());
+    if (isApproved !== undefined) params.append('is_approved', isApproved.toString());
+
+    const url = `${API_URL}/user-organization/${params.toString() ? `?${params.toString()}` : ''}`;
+    const response = await fetch(url, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -129,10 +137,21 @@ export const userApi = {
   createUserOrganizationFiles: async (payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    
-    // Add the payload as a JSON string
-    formData.append('payload', JSON.stringify(payload));
-    
+
+    // Pull out specific fields from payload and append them directly to formData
+    const topLevelFields = ['is_approved', 'is_active', 'approved_by', 'approved_datetime'];
+    const cleanedPayload = { ...payload };
+
+    topLevelFields.forEach(field => {
+      if (cleanedPayload[field] !== undefined) {
+        formData.append(field, String(cleanedPayload[field]));
+        delete cleanedPayload[field];
+      }
+    });
+
+    // Add the remaining payload as a JSON string
+    formData.append('payload', JSON.stringify(cleanedPayload));
+
     // Add files if they exist
     if (avatar) formData.append('avatar', avatar);
     if (logo) formData.append('organization_logo', logo);
@@ -156,10 +175,21 @@ export const userApi = {
   updateUserOrganizationFiles: async (id: number, payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    
-    // Add the payload as a JSON string
-    formData.append('payload', JSON.stringify(payload));
-    
+
+    // Pull out specific fields from payload and append them directly to formData
+    const topLevelFields = ['is_approved', 'is_active', 'approved_by', 'approved_datetime'];
+    const cleanedPayload = { ...payload };
+
+    topLevelFields.forEach(field => {
+      if (cleanedPayload[field] !== undefined) {
+        formData.append(field, String(cleanedPayload[field]));
+        delete cleanedPayload[field];
+      }
+    });
+
+    // Add the remaining payload as a JSON string
+    formData.append('payload', JSON.stringify(cleanedPayload));
+
     // Add files if they exist
     if (avatar) formData.append('avatar', avatar);
     if (logo) formData.append('organization_logo', logo);
@@ -179,5 +209,88 @@ export const userApi = {
     }
 
     return response.json();
+  },
+
+  getUsersByRole: async (roleId: number): Promise<UserOrganization[]> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user/?role_id=${roleId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch users by role');
+    }
+
+    return response.json();
+  },
+
+  createUser: async (payload: any, avatar?: File): Promise<any> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    
+    // Flatten fields for FormData
+    formData.append('first_name', payload.first_name);
+    formData.append('last_name', payload.last_name);
+    formData.append('email', payload.email);
+    formData.append('password', payload.password);
+    formData.append('role_id', '7');
+    if (payload.is_active !== undefined) formData.append('is_active', String(payload.is_active));
+    
+    if (avatar) formData.append('avatar', avatar);
+
+    const response = await fetch(`${API_URL}/user/`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      // Handle the nested error structure
+      const errorMsg = typeof errorData === 'object' ? Object.values(errorData).flat().join(', ') : 'Failed to create user';
+      throw new Error(errorMsg || 'Failed to create user');
+    }
+    return response.json();
+  },
+
+  updateUser: async (id: number, payload: any, avatar?: File): Promise<any> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    
+    // Append only provided fields
+    if (payload.first_name) formData.append('first_name', payload.first_name);
+    if (payload.last_name) formData.append('last_name', payload.last_name);
+    if (payload.email) formData.append('email', payload.email);
+    if (payload.password) formData.append('password', payload.password);
+    if (payload.is_active !== undefined) formData.append('is_active', String(payload.is_active));
+    
+    if (avatar) formData.append('avatar', avatar);
+
+    const response = await fetch(`${API_URL}/user/${id}/`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMsg = typeof errorData === 'object' ? Object.values(errorData).flat().join(', ') : 'Failed to update user';
+      throw new Error(errorMsg || 'Failed to update user');
+    }
+    return response.json();
+  },
+
+  deleteUser: async (id: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user/${id}/`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete user');
+    }
   },
 };

@@ -29,6 +29,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     logoUrl: '',
     logoFile: null as File | null,
     password: '',
+    is_approved: true,
+    is_active: true,
+    approved_by: 7,
+    approved_datetime: new Date().toISOString(),
   });
 
   useEffect(() => {
@@ -59,6 +63,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         logoUrl: '',
         logoFile: null,
         password: '',
+        is_approved: true,
+        is_active: true,
+        approved_by: 7,
+        approved_datetime: new Date().toISOString(),
       });
     }
   }, [supplier, isOpen]);

@@ -75,7 +75,7 @@ export function Navbar() {
           <div className="hidden lg:flex items-center gap-4">
             {user ? (
               <div className="flex items-center gap-3">
-                <Link to={user.role === 'SUPERADMIN' ? '/admin' : '/supplier'}>
+                <Link to="/dashboard">
                   <Button variant="ghost" size="sm" className="flex items-center gap-2 font-bold">
                     <LayoutDashboard className="w-4 h-4" />
                     Dashboard
@@ -101,7 +101,7 @@ export function Navbar() {
                   <DropdownMenuContent align="end" className="w-56 mt-2">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer" onClick={() => navigate(user.role === 'SUPERADMIN' ? '/admin' : '/supplier')}>
+                    <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/dashboard')}>
                       <LayoutDashboard className="w-4 h-4 mr-2" />
                       Dashboard
                     </DropdownMenuItem>
@@ -161,7 +161,7 @@ export function Navbar() {
               </Link>
               {user ? (
                 <>
-                  <Link to={user.role === 'SUPERADMIN' ? '/admin' : '/supplier'} className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
+                  <Link to="/dashboard" className="text-sm font-bold" onClick={() => setMobileMenuOpen(false)}>
                     Dashboard
                   </Link>
                   <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="text-sm font-bold text-destructive text-left flex items-center gap-2">

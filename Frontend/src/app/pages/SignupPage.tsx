@@ -57,7 +57,7 @@ export function SignupPage() {
         email: formData.email,
         password: formData.password,
         avatar_url: null,
-        is_active: true,
+        is_active: false,
         organization_name: formData.organization_name,
         organization_domain: formData.organization_name.toLowerCase().replace(/\s+/g, '') + '.com',
         organization_logo: null,
@@ -67,8 +67,9 @@ export function SignupPage() {
         organization_state: '',
         organization_postal_code: formData.postcode,
         organization_country: 'UK',
-        organization_is_active: true,
+        organization_is_active: false,
         user_organization_role_id: 1,
+        is_approved: false,
       };
       await authApi.signup(signupData);
       navigate('/login', { state: { message: 'Account created successfully! Please log in.' } });

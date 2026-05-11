@@ -47,21 +47,27 @@ import {
   Tag,
   Globe,
   Loader2,
+  ShieldCheck,
 } from 'lucide-react';
+import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
+import { AdminForm } from '../components/AdminForm';
 import { EquipmentForm } from '../components/EquipmentForm';
+import { CategoryForm } from '../components/CategoryForm';
+import { LocationForm } from '../components/LocationForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
 
-export function AdminDashboard() {
+export function SuperAdminDashboard() {
   const [supplierFilter, setSupplierFilter] = useState<string>('all');
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
   const [pendingSuppliers, setPendingSuppliers] = useState<UserOrganization[]>([]);
+  const [admins, setAdmins] = useState<UserOrganization[]>([]);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEquipmentLoading, setIsEquipmentLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('suppliers');
+  const [activeTab, setActiveTab] = useState('admins');
   const [approvalFilter, setApprovalFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
@@ -86,9 +92,38 @@ export function AdminDashboard() {
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
 
+  // Category/Location Modal States
+  const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [isCategoryDeleteOpen, setIsCategoryDeleteOpen] = useState(false);
 
+  const [isLocationFormOpen, setIsLocationFormOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [isLocationDeleteOpen, setIsLocationDeleteOpen] = useState(false);
 
+  // Admin States
+  const [isAdminFormOpen, setIsAdminFormOpen] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<UserOrganization | null>(null);
+  const [isAdminDeleteOpen, setIsAdminDeleteOpen] = useState(false);
 
+  const fetchAdmins = async () => {
+    setIsLoading(true);
+    try {
+      const data = await userApi.getUsersByRole(7);
+      const userList = Array.isArray(data) ? data : (data as any).results || [];
+      setAdmins(userList);
+    } catch (error) {
+      console.error('Error fetching admins:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'admins') {
+      fetchAdmins();
+    }
+  }, [activeTab]);
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
@@ -129,23 +164,60 @@ export function AdminDashboard() {
     }
   }, [activeTab, equipPage, supplierFilter]);
 
+  useEffect(() => {
+    if (activeTab === 'categories') {
+      fetchCategories();
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'locations') {
+      fetchLocations();
+    }
+  }, [activeTab]);
+
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
+    fetchCategories();
+    fetchLocations();
   }, []);
 
   const fetchFormStaticData = async () => {
     try {
-      const [intervalData, categoryData, locationData] = await Promise.all([
+      const [intervalData] = await Promise.all([
         equipmentApi.getIntervals(),
-        equipmentApi.getCategories(),
-        equipmentApi.getLocations(),
       ]);
       setIntervals(intervalData);
-      setCategories(categoryData);
-      setLocations(locationData);
     } catch (error) {
       console.error('Error fetching form static data:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const categoryData = await equipmentApi.getCategories();
+      setCategories(categoryData);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchLocations = async () => {
+    try {
+      const locationData = await equipmentApi.getLocations();
+      setLocations(locationData);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    }
+  };
+
+  const fetchStaticData = async () => {
+    // Legacy combined fetcher - keeping for compatibility if needed elsewhere
+    try {
+      await Promise.all([fetchCategories(), fetchLocations(), fetchFormStaticData()]);
+    } catch (error) {
+      console.error('Error in fetchStaticData:', error);
     }
   };
 
@@ -217,6 +289,7 @@ export function AdminDashboard() {
     let payload = { ...data };
 
     if (!isUpdate) {
+      // Format full payload for new equipment
       const imagesMetadata = data.imagePreviews.map((url: string, index: number) => ({
         sort_order: index,
         is_active: true
@@ -241,12 +314,6 @@ export function AdminDashboard() {
           is_active: true,
         })),
         images: imagesMetadata,
-        availabilities: data.availabilities.map((a: any) => ({
-          ...a,
-          availability_from: a.from ? new Date(a.from).toISOString() : undefined,
-          availability_to: a.to ? new Date(a.to).toISOString() : undefined,
-          is_active: true
-        }))
       };
     } else {
       payload.updated_by = parseInt(localStorage.getItem('user_id') || '10');
@@ -288,7 +355,180 @@ export function AdminDashboard() {
     }
   };
 
+  // Category Handlers
+  const handleOpenCategoryAdd = () => {
+    setSelectedCategory(null);
+    setIsCategoryFormOpen(true);
+  };
+  const handleOpenCategoryEdit = (cat: Category) => {
+    setSelectedCategory(cat);
+    setIsCategoryFormOpen(true);
+  };
+  const handleOpenCategoryDelete = (cat: Category) => {
+    setSelectedCategory(cat);
+    setIsCategoryDeleteOpen(true);
+  };
+  const handleCategorySubmit = async (data: any) => {
+    try {
+      const categoryPromise = selectedCategory
+        ? equipmentApi.updateCategory(selectedCategory.category_id, data)
+        : equipmentApi.createCategory(data);
 
+      await toast.promise(categoryPromise, {
+        loading: selectedCategory ? 'Updating category...' : 'Creating category...',
+        success: selectedCategory ? 'Category updated successfully' : 'Category created successfully',
+        error: (err) => err.message || 'Failed to save category'
+      });
+
+      await fetchCategories();
+      setIsCategoryFormOpen(false);
+    } catch (error: any) {
+      console.error('Error saving category:', error);
+    }
+  };
+  const handleCategoryDeleteConfirm = async () => {
+    if (!selectedCategory) return;
+    try {
+      await equipmentApi.deleteCategory(selectedCategory.category_id);
+      toast.success('Category deleted successfully');
+      fetchStaticData();
+      setIsCategoryDeleteOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete category');
+    }
+  };
+
+  // Location Handlers
+  const handleOpenLocationAdd = () => {
+    setSelectedLocation(null);
+    setIsLocationFormOpen(true);
+  };
+  const handleOpenLocationEdit = (loc: Location) => {
+    setSelectedLocation(loc);
+    setIsLocationFormOpen(true);
+  };
+  const handleOpenLocationDelete = (loc: Location) => {
+    setSelectedLocation(loc);
+    setIsLocationDeleteOpen(true);
+  };
+  const handleLocationSubmit = async (data: any) => {
+    try {
+      const locationPromise = selectedLocation
+        ? equipmentApi.updateLocation(selectedLocation.location_id, data)
+        : equipmentApi.createLocation(data);
+
+      await toast.promise(locationPromise, {
+        loading: selectedLocation ? 'Updating location...' : 'Creating location...',
+        success: selectedLocation ? 'Location updated successfully' : 'Location created successfully',
+        error: (err) => err.message || 'Failed to save location'
+      });
+
+      await fetchLocations();
+      setIsLocationFormOpen(false);
+    } catch (error: any) {
+      console.error('Error saving location:', error);
+    }
+  };
+  const handleLocationDeleteConfirm = async () => {
+    if (!selectedLocation) return;
+    try {
+      await equipmentApi.deleteLocation(selectedLocation.location_id);
+      toast.success('Location deleted successfully');
+      fetchLocations();
+      setIsLocationDeleteOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete location');
+    }
+  };
+
+  // Admin Handlers
+  const handleOpenAdminAdd = () => {
+    setSelectedAdmin(null);
+    setIsAdminFormOpen(true);
+  };
+
+  const handleOpenAdminEdit = (admin: UserOrganization) => {
+    setSelectedAdmin(admin);
+    setIsAdminFormOpen(true);
+  };
+
+  const handleOpenAdminDelete = (admin: UserOrganization) => {
+    setSelectedAdmin(admin);
+    setIsAdminDeleteOpen(true);
+  };
+
+  const handleAdminSubmit = async (data: any) => {
+    let payload: any = {};
+    
+    if (selectedAdmin) {
+      // Delta update for Edit
+      const userDetails = selectedAdmin.user_details || (selectedAdmin as any);
+      if (data.firstName !== userDetails.first_name) payload.first_name = data.firstName;
+      if (data.lastName !== userDetails.last_name) payload.last_name = data.lastName;
+      if (data.email !== userDetails.email) payload.email = data.email;
+      const currentStatus = selectedAdmin.is_active !== undefined ? selectedAdmin.is_active : (userDetails.is_active ?? false);
+      if (data.isActive !== currentStatus) payload.is_active = data.isActive;
+      if (data.isChangingPassword && data.password) payload.password = data.password;
+    } else {
+      // Full payload for Create
+      payload = {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        password: data.password,
+        is_active: data.isActive,
+      };
+    }
+
+    // Only proceed if there are changes (including avatar)
+    if (Object.keys(payload).length === 0 && !data.avatarFile) {
+      setIsAdminFormOpen(false);
+      return;
+    }
+
+    const adminId = selectedAdmin ? (selectedAdmin.user_id || (selectedAdmin as any).user_id) : null;
+    const adminPromise = selectedAdmin && adminId
+      ? userApi.updateUser(adminId, payload, data.avatarFile || undefined)
+      : userApi.createUser(payload, data.avatarFile || undefined);
+
+    await toast.promise(adminPromise, {
+      loading: selectedAdmin ? 'Updating administrator...' : 'Creating administrator...',
+      success: selectedAdmin ? 'Administrator updated' : 'Administrator created successfully',
+      error: (err) => err.message || 'Failed to save administrator'
+    });
+
+    try {
+      const result = await adminPromise;
+      
+      // If we just created a new admin and there's an avatar, ensure it's updated
+      // as some backends may ignore files on POST /user/
+      if (!selectedAdmin && data.avatarFile && result) {
+        const newAdminId = result.user_id || result.id;
+        if (newAdminId) {
+          await userApi.updateUser(newAdminId, {}, data.avatarFile);
+        }
+      }
+
+      await fetchAdmins();
+      setIsAdminFormOpen(false);
+    } catch (error) {
+      console.error('Error saving admin:', error);
+    }
+  };
+
+  const handleAdminDeleteConfirm = async () => {
+    if (!selectedAdmin) return;
+    const adminId = selectedAdmin.user_id || (selectedAdmin as any).user_id;
+    
+    try {
+      await userApi.deleteUser(adminId);
+      toast.success('Administrator deleted successfully');
+      fetchAdmins();
+      setIsAdminDeleteOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to delete administrator');
+    }
+  };
 
   const handleAddEditSubmit = async (data: any) => {
     let payload: any = {};
@@ -351,6 +591,7 @@ export function AdminDashboard() {
     try {
       await supplierPromise;
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error saving supplier:', error);
       throw error;
@@ -386,7 +627,6 @@ export function AdminDashboard() {
     try {
       await approvalPromise;
       await fetchSuppliers();
-      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error approving supplier:', error);
     } finally {
@@ -441,9 +681,10 @@ export function AdminDashboard() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+                <h1 className="text-3xl font-bold mb-2">Master Admin Dashboard</h1>
                 <p className="text-muted-foreground">Manage suppliers and product listings</p>
               </div>
+             
             </div>
           </div>
         </div>
@@ -466,14 +707,17 @@ export function AdminDashboard() {
                     </div>
                     <div className="text-3xl font-bold mb-1 tracking-tight">{stat.value}</div>
                     <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">{stat.title}</p>
-                  </CardContent>
-                </Card>
+                  </CardContent>                </Card>
               </motion.div>
             ))}
           </div>
 
-          <Tabs defaultValue="suppliers" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <Tabs defaultValue="admins" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-white p-1 rounded-xl shadow-sm border">
+              <TabsTrigger value="admins" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+                <ShieldCheck className="w-4 h-4 mr-2" />
+                Admins
+              </TabsTrigger>
               <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Users className="w-4 h-4 mr-2" />
                 Suppliers
@@ -482,7 +726,100 @@ export function AdminDashboard() {
                 <Package className="w-4 h-4 mr-2" />
                 Products
               </TabsTrigger>
+              <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+                <Tag className="w-4 h-4 mr-2" />
+                Categories
+              </TabsTrigger>
+              <TabsTrigger value="locations" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+                <MapPin className="w-4 h-4 mr-2" />
+                Locations
+              </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="admins" className="space-y-6">
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-white border-b py-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">System Administrators</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Manage administrative access and permissions</p>
+                    </div>
+                    <Button onClick={handleOpenAdminAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20 rounded-xl px-6">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Admin
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="bg-gray-50">
+                        <TableRow>
+                          <TableHead className="font-bold py-4">Admin</TableHead>
+                          <TableHead className="font-bold">Email</TableHead>
+                          <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {isLoading ? (
+                          <TableRow>
+                            <TableCell colSpan={4} className="text-center py-20">
+                              <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
+                            </TableCell>
+                          </TableRow>
+                        ) : admins.map((a) => {
+                          const userDetails = a.user_details || (a as any);
+                          const firstName = userDetails.first_name || '';
+                          const lastName = userDetails.last_name || '';
+                          const email = userDetails.email || '';
+                          const avatarUrl = userDetails.avatar_url || '';
+
+                          return (
+                            <TableRow key={a.user_organization_id || (a as any).user_id} className="hover:bg-gray-50/50 transition-colors">
+                              <TableCell className="py-4">
+                                <div className="flex items-center gap-3">
+                                  <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
+                                    <AvatarImage src={avatarUrl} />
+                                    <AvatarFallback className="text-xs bg-brand-primary/10 text-brand-primary font-bold">
+                                      {firstName[0]}{lastName[0]}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <span className="font-bold text-gray-900">{firstName} {lastName}</span>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1.5 text-sm text-muted-foreground font-medium">
+                                  <Mail className="w-3.5 h-3.5" />
+                                  {email}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                {a.is_active ? (
+                                  <Badge className="bg-green-500 hover:bg-green-600 font-bold px-3 text-white border-none">Active</Badge>
+                                ) : (
+                                  <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
+                                )}
+                              </TableCell>
+                              <TableCell className="text-right pr-6">
+                                <div className="flex justify-end gap-1">
+                                  <Button size="icon" variant="ghost" onClick={() => handleOpenAdminEdit(a)} className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                                    <Edit className="w-4 h-4" />
+                                  </Button>
+                                  <Button size="icon" variant="ghost" onClick={() => handleOpenAdminDelete(a)} className="text-destructive hover:text-destructive hover:bg-destructive/10">
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             <TabsContent value="suppliers" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
@@ -534,6 +871,7 @@ export function AdminDashboard() {
                           <option value="inactive">Inactive</option>
                         </select>
                       </div>
+
                     </div>
                   </div>
 
@@ -627,8 +965,7 @@ export function AdminDashboard() {
                 <CardHeader className="bg-white border-b py-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-xl">Manage Equipment</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
+                      <CardTitle className="text-xl">Manage Equipment</CardTitle>                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
                     </div>
                     <Button onClick={handleOpenEquipAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
                       <Plus className="w-4 h-4 mr-2" />
@@ -662,7 +999,7 @@ export function AdminDashboard() {
                     <Table>
                       <TableHeader className="bg-gray-50">
                         <TableRow>
-                          <TableHead className="font-bold py-4">Equipment</TableHead>
+                          <TableHead className="font-bold py-4 w-[250px]">Equipment</TableHead>
                           <TableHead className="font-bold">Supplier</TableHead>
                           <TableHead className="font-bold">Weekly Price</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
@@ -723,6 +1060,7 @@ export function AdminDashboard() {
                     </Table>
                   </div>
 
+                  {/* Pagination Controls */}
                   <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
                     <div className="text-sm text-muted-foreground font-medium">
                       Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalEquipCount}</span> equipment
@@ -779,6 +1117,112 @@ export function AdminDashboard() {
                 </CardContent>
               </Card>
             </TabsContent>
+
+            <TabsContent value="categories" className="space-y-6">
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-white border-b py-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">Equipment Categories</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Manage the types of equipment available</p>
+                    </div>
+                    <Button onClick={handleOpenCategoryAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Category
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="bg-gray-50">
+                        <TableRow>
+                          <TableHead className="font-bold py-4">Display Name</TableHead>
+                          <TableHead className="font-bold">Technical Key</TableHead>
+                          <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {categories.map((cat) => (
+                          <TableRow key={cat.category_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4 font-bold text-gray-900">{cat.category_display_name}</TableCell>
+                            <TableCell className="font-mono text-xs text-muted-foreground uppercase">{cat.category_key}</TableCell>
+                            <TableCell>
+                              <Badge variant={cat.is_active ? "default" : "secondary"} className={cat.is_active ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-700"}>
+                                {cat.is_active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-right pr-6 space-x-2">
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenCategoryEdit(cat)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenCategoryDelete(cat)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="locations" className="space-y-6">
+              <Card className="border-none shadow-sm overflow-hidden">
+                <CardHeader className="bg-white border-b py-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-xl">Service Locations</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Manage cities where suppliers operate</p>
+                    </div>
+                    <Button onClick={handleOpenLocationAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Location
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="bg-gray-50">
+                        <TableRow>
+                          <TableHead className="font-bold py-4">City</TableHead>
+                          <TableHead className="font-bold">Country</TableHead>
+                          <TableHead className="font-bold">State/County</TableHead>
+                          <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {locations.map((loc) => (
+                          <TableRow key={loc.location_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4 font-bold text-gray-900">{loc.city_name}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{loc.country}</TableCell>
+                            <TableCell className="text-sm text-muted-foreground">{loc.state || '-'}</TableCell>
+                            <TableCell>
+                              <Badge variant={loc.is_active ? "default" : "secondary"} className={loc.is_active ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-700"}>
+                                {loc.is_active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-right pr-6 space-x-2">
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenLocationEdit(loc)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="icon" onClick={() => handleOpenLocationDelete(loc)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
           </Tabs>
         </div>
       </div>
@@ -811,6 +1255,7 @@ export function AdminDashboard() {
       />
 
       <EquipmentForm
+        key={selectedEquipment?.equipment_id || 'new'}
         isOpen={isEquipFormOpen}
         onClose={() => setIsEquipFormOpen(false)}
         onSubmit={handleEquipSubmit}
@@ -830,7 +1275,52 @@ export function AdminDashboard() {
         description={`Are you sure you want to delete ${selectedEquipment?.name}? This action will remove the listing from the marketplace.`}
       />
 
+      {/* Category Modals */}
+      <CategoryForm
+        isOpen={isCategoryFormOpen}
+        onClose={() => setIsCategoryFormOpen(false)}
+        onSubmit={handleCategorySubmit}
+        category={selectedCategory}
+      />
 
+      <AdminForm
+        isOpen={isAdminFormOpen}
+        onClose={() => setIsAdminFormOpen(false)}
+        onSubmit={handleAdminSubmit}
+        admin={selectedAdmin}
+      />
+
+      <DeleteConfirmation
+        isOpen={isAdminDeleteOpen}
+        onClose={() => setIsAdminDeleteOpen(false)}
+        onConfirm={handleAdminDeleteConfirm}
+        title="Delete Administrator"
+        message={`Are you sure you want to delete the administrator "${selectedAdmin?.user_details?.first_name || (selectedAdmin as any)?.first_name}"?`}
+      />
+
+      <DeleteConfirmation
+        isOpen={isCategoryDeleteOpen}
+        onClose={() => setIsCategoryDeleteOpen(false)}
+        onConfirm={handleCategoryDeleteConfirm}
+        title="Delete Category"
+        message={`Are you sure you want to delete the category "${selectedCategory?.category_display_name}"?`}
+      />
+
+      {/* Location Modals */}
+      <LocationForm
+        isOpen={isLocationFormOpen}
+        onClose={() => setIsLocationFormOpen(false)}
+        onSubmit={handleLocationSubmit}
+        location={selectedLocation}
+      />
+
+      <DeleteConfirmation
+        isOpen={isLocationDeleteOpen}
+        onClose={() => setIsLocationDeleteOpen(false)}
+        onConfirm={handleLocationDeleteConfirm}
+        title="Delete Location"
+        message={`Are you sure you want to delete the location "${selectedLocation?.city_name}"?`}
+      />
 
       {/* Pending Approvals Modal */}
       <Dialog 
