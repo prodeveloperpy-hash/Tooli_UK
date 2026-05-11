@@ -98,6 +98,7 @@ export interface SignupRequest {
   organization_country: string;
   organization_is_active: boolean;
   user_organization_role_id: number;
+  is_approved: boolean;
 }
 
 export interface AuthResponse {

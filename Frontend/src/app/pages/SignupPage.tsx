@@ -69,6 +69,7 @@ export function SignupPage() {
         organization_country: 'UK',
         organization_is_active: true,
         user_organization_role_id: 1,
+        is_approved: false,
       };
       await authApi.signup(signupData);
       navigate('/login', { state: { message: 'Account created successfully! Please log in.' } });
