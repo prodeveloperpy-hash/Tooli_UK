@@ -125,7 +125,7 @@ export function SupplierDashboard() {
         setSettingsForm({
           first_name: parsed.user.first_name,
           last_name: parsed.user.last_name,
-          org_name: parsed.organization_name || '', 
+          org_name: parsed.organization?.name || parsed.organization_name || '', 
         });
         
         // If we want to use it for userData state:
@@ -133,8 +133,8 @@ export function SupplierDashboard() {
           user_organization_id: parsed.organization_id, // approximation
           user_details: parsed.user,
           organization_details: {
-            name: parsed.organization_name || '',
-            logo: parsed.user.avatar_url, 
+            name: parsed.organization?.name || parsed.organization_name || '',
+            logo: parsed.organization?.logo || parsed.user.avatar_url, 
           },
           role_details: {
             role_key: parsed.role_key,
