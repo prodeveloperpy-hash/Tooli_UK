@@ -541,6 +541,9 @@ export function SuperAdminDashboard() {
     } else {
       payload = {
         role_id: 3,
+        is_approved: true,
+        is_active: true,
+        approved_datetime: new Date().toISOString(),
         user: {
           first_name: data.firstName,
           last_name: data.lastName,
