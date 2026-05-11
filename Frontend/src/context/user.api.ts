@@ -25,6 +25,8 @@ export interface UserOrganization {
   user_id: number;
   organization_id: number;
   is_active: boolean;
+  is_approved: boolean;
+  approved_datetime: string | null;
 }
 
 export const userApi = {
@@ -43,9 +45,14 @@ export const userApi = {
     return response.json();
   },
 
-  getUserOrganizations: async (): Promise<UserOrganization[]> => {
+  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean): Promise<UserOrganization[]> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/user-organization/`, {
+    const params = new URLSearchParams();
+    if (isActive !== undefined) params.append('is_active', isActive.toString());
+    if (isApproved !== undefined) params.append('is_approved', isApproved.toString());
+    
+    const url = `${API_URL}/user-organization/${params.toString() ? `?${params.toString()}` : ''}`;
+    const response = await fetch(url, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

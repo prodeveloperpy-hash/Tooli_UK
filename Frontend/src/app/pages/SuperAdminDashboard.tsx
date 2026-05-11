@@ -16,6 +16,14 @@ import {
   TableRow,
 } from '../components/ui/table';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '../components/ui/dialog';
+import { Checkbox } from '../components/ui/checkbox';
+import { Label } from '../components/ui/label';
+import {
   Tabs,
   TabsContent,
   TabsList,
@@ -38,6 +46,7 @@ import {
   MapPin,
   Tag,
   Globe,
+  Loader2,
 } from 'lucide-react';
 import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
@@ -54,6 +63,11 @@ export function AdminDashboard() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEquipmentLoading, setIsEquipmentLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('suppliers');
+  const [approvalFilter, setApprovalFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
+  const [approvingId, setApprovingId] = useState<number | null>(null);
   
   // Modal states
   const [isAddEditOpen, setIsAddEditOpen] = useState(false);
@@ -83,7 +97,10 @@ export function AdminDashboard() {
   const fetchSuppliers = async () => {
     setIsLoading(true);
     try {
-      const data = await userApi.getUserOrganizations();
+      const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
+      const isApproved = approvalFilter === 'all' ? undefined : approvalFilter === 'approved';
+      
+      const data = await userApi.getUserOrganizations(isActive, isApproved);
       const supplierList = Array.isArray(data) ? data : (data as any).results || [];
       const filtered = supplierList.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
       setSuppliers(filtered);
@@ -95,26 +112,69 @@ export function AdminDashboard() {
   };
 
   useEffect(() => {
-    fetchSuppliers();
-    fetchStaticData();
-  }, []);
+    if (activeTab === 'suppliers') {
+      fetchSuppliers();
+    }
+  }, [activeTab, approvalFilter, statusFilter]);
 
   useEffect(() => {
-    fetchEquipment();
-  }, [equipPage, supplierFilter]);
+    if (activeTab === 'products') {
+      fetchEquipment();
+    }
+  }, [activeTab, equipPage, supplierFilter]);
 
-  const fetchStaticData = async () => {
+  useEffect(() => {
+    if (activeTab === 'categories') {
+      fetchCategories();
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'locations') {
+      fetchLocations();
+    }
+  }, [activeTab]);
+
+  // Initial data needed for forms
+  useEffect(() => {
+    fetchFormStaticData();
+  }, []);
+
+  const fetchFormStaticData = async () => {
     try {
-      const [intervalData, categoryData, locationData] = await Promise.all([
+      const [intervalData] = await Promise.all([
         equipmentApi.getIntervals(),
-        equipmentApi.getCategories(),
-        equipmentApi.getLocations()
       ]);
       setIntervals(intervalData);
+    } catch (error) {
+      console.error('Error fetching form static data:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const categoryData = await equipmentApi.getCategories();
       setCategories(categoryData);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  const fetchLocations = async () => {
+    try {
+      const locationData = await equipmentApi.getLocations();
       setLocations(locationData);
     } catch (error) {
-      console.error('Error fetching static data:', error);
+      console.error('Error fetching locations:', error);
+    }
+  };
+
+  const fetchStaticData = async () => {
+    // Legacy combined fetcher - keeping for compatibility if needed elsewhere
+    try {
+      await Promise.all([fetchCategories(), fetchLocations(), fetchFormStaticData()]);
+    } catch (error) {
+      console.error('Error in fetchStaticData:', error);
     }
   };
 
@@ -419,7 +479,30 @@ export function AdminDashboard() {
     }
   };
 
+  const handleApproveSupplier = async (id: number) => {
+    setApprovingId(id);
+    const approvalPromise = userApi.updateUserOrganization(id, { 
+      is_approved: true,
+      approved_datetime: new Date().toISOString()
+    });
 
+    toast.promise(approvalPromise, {
+      loading: 'Approving supplier...',
+      success: 'Supplier approved successfully',
+      error: 'Failed to approve supplier'
+    });
+
+    try {
+      await approvalPromise;
+      await fetchSuppliers();
+    } catch (error) {
+      console.error('Error approving supplier:', error);
+    } finally {
+      setApprovingId(null);
+    }
+  };
+
+  const pendingSuppliers = suppliers.filter(s => !s.is_approved);
 
   const stats = [
     { title: 'Total Suppliers', value: suppliers.length, change: '+12%', icon: Users, gradient: 'from-blue-500 to-indigo-600' },
@@ -434,7 +517,7 @@ export function AdminDashboard() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
+                <h1 className="text-3xl font-bold mb-2">Master Admin Dashboard</h1>
                 <p className="text-muted-foreground">Manage suppliers and product listings</p>
               </div>
              
@@ -468,7 +551,7 @@ export function AdminDashboard() {
             ))}
           </div>
 
-          <Tabs defaultValue="suppliers" className="space-y-6">
+          <Tabs defaultValue="suppliers" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-white p-1 rounded-xl shadow-sm border">
               <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Users className="w-4 h-4 mr-2" />
@@ -503,7 +586,44 @@ export function AdminDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                  {/* Search removed as requested */}
+                  <div className="p-6 border-b bg-gray-50/50">
+                    <div className="flex flex-wrap items-center gap-6">
+                      <div className="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm transition-all hover:border-brand-primary/30">
+                        <Checkbox 
+                          id="approval-required" 
+                          checked={approvalFilter === 'not_approved'}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setApprovalFilter('not_approved');
+                              setIsApprovalModalOpen(true);
+                            } else {
+                              setApprovalFilter('all');
+                            }
+                          }}
+                        />
+                        <Label 
+                          htmlFor="approval-required" 
+                          className="text-sm font-bold text-gray-700 cursor-pointer"
+                        >
+                          Approval Required
+                        </Label>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Status:</div>
+                        <select
+                          value={statusFilter}
+                          onChange={(e) => setStatusFilter(e.target.value)}
+                          className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[160px] shadow-sm transition-all hover:border-brand-primary/30"
+                        >
+                          <option value="all">All Types</option>
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                        </select>
+                      </div>
+
+                    </div>
+                  </div>
 
                   <div className="overflow-x-auto">
                     <Table>
@@ -514,6 +634,7 @@ export function AdminDashboard() {
                           <TableHead className="font-bold">Email</TableHead>
                           <TableHead className="font-bold">Location</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
+                          <TableHead className="font-bold">Approval</TableHead>
                           <TableHead className="text-right font-bold pr-6">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -566,9 +687,16 @@ export function AdminDashboard() {
                             </TableCell>
                             <TableCell>
                               {s.is_active ? (
-                                <Badge className="bg-green-500 hover:bg-green-600 font-bold px-3">Active</Badge>
+                                <Badge className="bg-green-500 hover:bg-green-600 font-bold px-3 text-white border-none">Active</Badge>
                               ) : (
                                 <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {s.is_approved ? (
+                                <Badge className="bg-blue-500 hover:bg-blue-600 font-bold px-3 text-white border-none">Approved</Badge>
+                              ) : (
+                                <Badge variant="outline" className="font-bold px-3 text-orange-600 border-orange-200 bg-orange-50">Pending</Badge>
                               )}
                             </TableCell>
                             <TableCell className="text-right pr-6">
@@ -934,6 +1062,80 @@ export function AdminDashboard() {
         title="Delete Location"
         message={`Are you sure you want to delete the location "${selectedLocation?.city_name}"?`}
       />
+
+      {/* Pending Approvals Modal */}
+      <Dialog 
+        open={isApprovalModalOpen} 
+        onOpenChange={(open) => {
+          setIsApprovalModalOpen(open);
+          if (!open) setApprovalFilter('all');
+        }}
+      >
+        <DialogContent className="sm:max-w-[1200px] w-[95vw] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">Pending Approvals</DialogTitle>
+            <p className="text-muted-foreground text-sm">Review and approve new supplier registrations</p>
+          </DialogHeader>
+          
+          <div className="mt-6">
+            {pendingSuppliers.length === 0 ? (
+              <div className="py-12 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                  <Users className="w-8 h-8 text-gray-300" />
+                </div>
+                <p className="text-gray-500 font-medium">No pending approvals at the moment</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {pendingSuppliers.map((s) => (
+                  <div key={s.user_organization_id} className="p-4 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 flex-1">
+                      <Avatar className="h-12 w-12 border-2 border-brand-primary/10">
+                        <AvatarImage src={s.user_details.avatar_url || ''} />
+                        <AvatarFallback className="bg-brand-primary/5 text-brand-primary font-bold">
+                          {s.user_details.first_name?.[0]}{s.user_details.last_name?.[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0">
+                        <div className="font-bold text-gray-900 truncate">
+                          {s.user_details.first_name} {s.user_details.last_name}
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Building2 className="w-3.5 h-3.5" />
+                          <span className="truncate">{s.organization_details.name}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="hidden md:block flex-1">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
+                        <Mail className="w-3.5 h-3.5" />
+                        <span className="truncate">{s.user_details.email}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="w-3.5 h-3.5" />
+                        <span className="truncate">{s.organization_details.city}</span>
+                      </div>
+                    </div>
+
+                    <Button 
+                      onClick={() => handleApproveSupplier(s.user_organization_id)}
+                      disabled={approvingId === s.user_organization_id}
+                      className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 rounded-xl shadow-lg shadow-green-200 min-w-[120px]"
+                    >
+                      {approvingId === s.user_organization_id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        'Approve'
+                      )}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

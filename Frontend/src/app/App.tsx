@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { MainLayout } from './layouts/MainLayout';
 import { HomePage } from './pages/HomePage';
 import { SearchResultsPage } from './pages/SearchResultsPage';
-import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminDashboard } from './pages/SuperAdminDashboard';
 import { SupplierDashboard } from './pages/SupplierDashboard';
 import { AboutPage } from './pages/AboutPage';
 import { HowItWorksPage } from './pages/HowItWorksPage';
