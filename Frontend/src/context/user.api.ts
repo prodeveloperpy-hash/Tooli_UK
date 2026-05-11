@@ -27,6 +27,7 @@ export interface UserOrganization {
   is_active: boolean;
   is_approved: boolean;
   approved_datetime: string | null;
+  approved_by: number | null;
 }
 
 export const userApi = {

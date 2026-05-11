@@ -282,36 +282,27 @@ export function AdminDashboard() {
       payload.updated_by = parseInt(localStorage.getItem('user_id') || '10');
     }
 
+    const equipPromise = isUpdate
+      ? equipmentApi.updateEquipmentFiles(payload, data.imageFiles || [])
+      : equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
+
+    await toast.promise(equipPromise, {
+      loading: isUpdate ? 'Updating equipment...' : 'Listing equipment...',
+      success: isUpdate ? 'Equipment updated successfully' : 'Equipment listed successfully',
+      error: (err) => err.message || 'Failed to save equipment'
+    });
+
     try {
-      if (isUpdate) {
-        // 1. Handle queued image deletions FIRST
-        if (data.imagesToDelete?.length > 0) {
-          for (const imgId of data.imagesToDelete) {
-            await equipmentApi.deleteEquipmentImage(imgId);
-          }
+      if (isUpdate && data.imagesToDelete?.length > 0) {
+        for (const imgId of data.imagesToDelete) {
+          await equipmentApi.deleteEquipmentImage(imgId);
         }
-
-        // 2. Check if we actually need to send a PATCH
-        // We need to PATCH if there's any field in payload other than equipment_id, updated_by, imageFiles, or imagesToDelete
-        const patchFields = Object.keys(payload).filter(k => 
-          !['equipment_id', 'updated_by', 'imageFiles', 'imagesToDelete'].includes(k)
-        );
-
-        if (patchFields.length > 0 || (data.imageFiles && data.imageFiles.length > 0)) {
-          await equipmentApi.updateEquipmentFiles(payload, data.imageFiles || []);
-          toast.success('Equipment updated successfully');
-        } else if (data.imagesToDelete?.length > 0) {
-          toast.success('Images removed successfully');
-        }
-      } else {
-        await equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
-        toast.success('Equipment added successfully');
       }
-      fetchEquipment();
+      await equipPromise;
+      await fetchEquipment();
       setIsEquipFormOpen(false);
     } catch (error: any) {
       console.error('Error saving equipment:', error);
-      toast.error(error.message || 'Failed to save equipment');
     }
   };
 
@@ -342,17 +333,20 @@ export function AdminDashboard() {
   };
   const handleCategorySubmit = async (data: any) => {
     try {
-      if (selectedCategory) {
-        await equipmentApi.updateCategory(selectedCategory.category_id, data);
-        toast.success('Category updated successfully');
-      } else {
-        await equipmentApi.createCategory(data);
-        toast.success('Category created successfully');
-      }
-      fetchStaticData();
+      const categoryPromise = selectedCategory
+        ? equipmentApi.updateCategory(selectedCategory.category_id, data)
+        : equipmentApi.createCategory(data);
+
+      await toast.promise(categoryPromise, {
+        loading: selectedCategory ? 'Updating category...' : 'Creating category...',
+        success: selectedCategory ? 'Category updated successfully' : 'Category created successfully',
+        error: (err) => err.message || 'Failed to save category'
+      });
+
+      await fetchCategories();
       setIsCategoryFormOpen(false);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save category');
+      console.error('Error saving category:', error);
     }
   };
   const handleCategoryDeleteConfirm = async () => {
@@ -382,17 +376,20 @@ export function AdminDashboard() {
   };
   const handleLocationSubmit = async (data: any) => {
     try {
-      if (selectedLocation) {
-        await equipmentApi.updateLocation(selectedLocation.location_id, data);
-        toast.success('Location updated successfully');
-      } else {
-        await equipmentApi.createLocation(data);
-        toast.success('Location created successfully');
-      }
-      fetchStaticData();
+      const locationPromise = selectedLocation
+        ? equipmentApi.updateLocation(selectedLocation.location_id, data)
+        : equipmentApi.createLocation(data);
+
+      await toast.promise(locationPromise, {
+        loading: selectedLocation ? 'Updating location...' : 'Creating location...',
+        success: selectedLocation ? 'Location updated successfully' : 'Location created successfully',
+        error: (err) => err.message || 'Failed to save location'
+      });
+
+      await fetchLocations();
       setIsLocationFormOpen(false);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save location');
+      console.error('Error saving location:', error);
     }
   };
   const handleLocationDeleteConfirm = async () => {
@@ -443,24 +440,27 @@ export function AdminDashboard() {
       };
     }
 
-    try {
-      if (selectedSupplier) {
-        // If we have updates OR files to upload
-        if (Object.keys(payload).length > 0 || data.avatarFile || data.logoFile) {
-          await userApi.updateUserOrganizationFiles(
-            selectedSupplier.user_organization_id, 
-            payload, 
-            data.avatarFile || undefined, 
-            data.logoFile || undefined
-          );
-        }
-      } else {
-        await userApi.createUserOrganizationFiles(
+    const supplierPromise = selectedSupplier
+      ? userApi.updateUserOrganizationFiles(
+          selectedSupplier.user_organization_id, 
+          payload, 
+          data.avatarFile || undefined, 
+          data.logoFile || undefined
+        )
+      : userApi.createUserOrganizationFiles(
           payload, 
           data.avatarFile || undefined, 
           data.logoFile || undefined
         );
-      }
+
+    await toast.promise(supplierPromise, {
+      loading: selectedSupplier ? 'Updating supplier...' : 'Creating supplier account...',
+      success: selectedSupplier ? 'Supplier updated successfully' : 'Supplier account created',
+      error: 'Failed to save supplier details'
+    });
+
+    try {
+      await supplierPromise;
       await fetchSuppliers();
     } catch (error) {
       console.error('Error saving supplier:', error);
@@ -483,7 +483,8 @@ export function AdminDashboard() {
     setApprovingId(id);
     const approvalPromise = userApi.updateUserOrganization(id, { 
       is_approved: true,
-      approved_datetime: new Date().toISOString()
+      approved_datetime: new Date().toISOString(),
+      approved_by: parseInt(localStorage.getItem('user_id') || '10')
     });
 
     toast.promise(approvalPromise, {
