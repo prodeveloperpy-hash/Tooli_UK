@@ -207,7 +207,14 @@ export const userApi = {
   createUser: async (payload: any, avatar?: File): Promise<any> => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    formData.append('payload', JSON.stringify({ ...payload, role_id: 7 }));
+    
+    // Flatten payload into formData
+    formData.append('first_name', payload.first_name);
+    formData.append('last_name', payload.last_name);
+    formData.append('email', payload.email);
+    formData.append('password', payload.password);
+    formData.append('role_id', '7');
+    
     if (avatar) formData.append('avatar', avatar);
 
     const response = await fetch(`${API_URL}/user/`, {
@@ -218,7 +225,9 @@ export const userApi = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Failed to create user');
+      // Handle the nested error structure if possible
+      const errorMsg = typeof errorData === 'object' ? Object.values(errorData).flat().join(', ') : 'Failed to create user';
+      throw new Error(errorMsg || 'Failed to create user');
     }
     return response.json();
   },
@@ -226,7 +235,13 @@ export const userApi = {
   updateUser: async (id: number, payload: any, avatar?: File): Promise<any> => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    formData.append('payload', JSON.stringify(payload));
+    
+    // Append available fields to formData
+    if (payload.first_name) formData.append('first_name', payload.first_name);
+    if (payload.last_name) formData.append('last_name', payload.last_name);
+    if (payload.email) formData.append('email', payload.email);
+    if (payload.password) formData.append('password', payload.password);
+    
     if (avatar) formData.append('avatar', avatar);
 
     const response = await fetch(`${API_URL}/user/${id}/`, {
@@ -237,7 +252,8 @@ export const userApi = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Failed to update user');
+      const errorMsg = typeof errorData === 'object' ? Object.values(errorData).flat().join(', ') : 'Failed to update user';
+      throw new Error(errorMsg || 'Failed to update user');
     }
     return response.json();
   },
