@@ -6,7 +6,10 @@ from rest_framework import serializers
 
 from tooli_uk_app.models import Organization, Role, User, UserOrganization
 from tooli_uk_app.services.gcs_images import should_use_api_url_in_json
-from tooli_uk_app.services.notifications import notify_new_supplier_for_approval
+from tooli_uk_app.services.notifications import (
+    notify_new_supplier_for_approval,
+    notify_supplier_approved,
+)
 
 
 class UserOrganizationUserDetailSerializer(serializers.Serializer):
@@ -332,6 +335,7 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
     @transaction.atomic
     def update(self, instance, validated_data):
         now = timezone.now()
+        was_approved = bool(instance.is_approved)
         user_payload = validated_data.pop("user", None)
         org_payload = validated_data.pop("organization", None)
         validated_data.pop("created_by", None)
@@ -395,6 +399,25 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         if updated_by is not None:
             instance.updated_by_id = updated_by
         instance.save()
+
+        role = Role.objects.filter(role_id=instance.role_id_id).first()
+        is_supplier_membership = bool(
+            role and role.role_key and role.role_key.upper() == "SUPPLIER"
+        )
+        if is_supplier_membership and (not was_approved) and bool(instance.is_approved):
+            supplier = User.objects.filter(pk=instance.user_id_id).first()
+            organization = Organization.objects.filter(
+                pk=instance.organization_id_id
+            ).first()
+            if supplier and supplier.email and organization:
+                supplier_name = f"{supplier.first_name} {supplier.last_name}".strip()
+                transaction.on_commit(
+                    lambda: notify_supplier_approved(
+                        supplier_name=supplier_name or supplier.email,
+                        supplier_email=supplier.email,
+                        organization_name=organization.name,
+                    )
+                )
 
         avatar_file = self.context.get("avatar_file")
         if avatar_file:

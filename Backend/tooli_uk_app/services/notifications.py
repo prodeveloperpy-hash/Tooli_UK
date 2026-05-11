@@ -56,3 +56,27 @@ def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, or
         )
     except Exception:
         logger.exception("Failed sending supplier approval notification email.")
+
+
+def notify_supplier_approved(
+    supplier_name: str,
+    supplier_email: str,
+    organization_name: str,
+) -> None:
+    subject = "Your supplier account is approved"
+    message = (
+        f"Hi {supplier_name},\n\n"
+        "Your supplier account has been approved by admin.\n"
+        f"Organization: {organization_name}\n\n"
+        "You can now log in to your account."
+    )
+    try:
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=None,
+            recipient_list=[supplier_email],
+            fail_silently=False,
+        )
+    except Exception:
+        logger.exception("Failed sending supplier approved email.")
