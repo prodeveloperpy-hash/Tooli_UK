@@ -138,8 +138,19 @@ export const userApi = {
     const token = localStorage.getItem('token');
     const formData = new FormData();
 
-    // Add the payload as a JSON string
-    formData.append('payload', JSON.stringify(payload));
+    // Pull out specific fields from payload and append them directly to formData
+    const topLevelFields = ['is_approved', 'is_active', 'approved_by', 'approved_datetime'];
+    const cleanedPayload = { ...payload };
+
+    topLevelFields.forEach(field => {
+      if (cleanedPayload[field] !== undefined) {
+        formData.append(field, String(cleanedPayload[field]));
+        delete cleanedPayload[field];
+      }
+    });
+
+    // Add the remaining payload as a JSON string
+    formData.append('payload', JSON.stringify(cleanedPayload));
 
     // Add files if they exist
     if (avatar) formData.append('avatar', avatar);
@@ -165,8 +176,19 @@ export const userApi = {
     const token = localStorage.getItem('token');
     const formData = new FormData();
 
-    // Add the payload as a JSON string
-    formData.append('payload', JSON.stringify(payload));
+    // Pull out specific fields from payload and append them directly to formData
+    const topLevelFields = ['is_approved', 'is_active', 'approved_by', 'approved_datetime'];
+    const cleanedPayload = { ...payload };
+
+    topLevelFields.forEach(field => {
+      if (cleanedPayload[field] !== undefined) {
+        formData.append(field, String(cleanedPayload[field]));
+        delete cleanedPayload[field];
+      }
+    });
+
+    // Add the remaining payload as a JSON string
+    formData.append('payload', JSON.stringify(cleanedPayload));
 
     // Add files if they exist
     if (avatar) formData.append('avatar', avatar);
