@@ -12,6 +12,21 @@ import { SignupPage } from './pages/SignupPage';
 import { SuppliersPage } from './pages/SuppliersPage';
 import { HelpPage } from './pages/HelpPage';
 
+function DashboardSelector() {
+  const role = localStorage.getItem('role_key');
+  
+  switch (role) {
+    case 'SUPERADMIN':
+      return <SuperAdminDashboard />;
+    case 'ADMIN':
+      return <AdminDashboard />;
+    case 'SUPPLIER':
+      return <SupplierDashboard />;
+    default:
+      return <LoginPage />;
+  }
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -26,9 +41,7 @@ export default function App() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/super-admin" element={<SuperAdminDashboard />} />
-        <Route path="/supplier" element={<SupplierDashboard />} />
+        <Route path="/dashboard" element={<DashboardSelector />} />
       </Routes>
     </BrowserRouter>
   );
