@@ -3,12 +3,27 @@ import { SignupRequest, AuthResponse, LoginRequest } from '../types';
 
 export const authApi = {
   signup: async (data: SignupRequest): Promise<AuthResponse> => {
+    const formData = new FormData();
+    const topLevelFields = ['is_approved', 'is_active', 'organization_is_active'];
+    const cleanedPayload = { ...data };
+
+    topLevelFields.forEach(field => {
+      if ((cleanedPayload as any)[field] !== undefined) {
+        formData.append(field, String((cleanedPayload as any)[field]));
+        delete (cleanedPayload as any)[field];
+      }
+    });
+
+    // Add the remaining payload as a JSON string
+    formData.append('payload', JSON.stringify(cleanedPayload));
+
+    // Add files if they exist (though SignupRequest currently uses URLs/null, 
+    // we should check if SignupPage passes actual File objects in the future)
+    // For now, SignupPage doesn't seem to pass File objects for avatar/logo in signupData
+
     const response = await fetch(`${API_URL}/signup/`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+      body: formData,
     });
 
     if (!response.ok) {
