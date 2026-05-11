@@ -47,23 +47,21 @@ import {
   Tag,
   Globe,
   Loader2,
-  ShieldCheck,
 } from 'lucide-react';
 import { userApi, UserOrganization } from '../../context/user.api';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
-import { AdminForm } from '../components/AdminForm';
 import { EquipmentForm } from '../components/EquipmentForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
 
 export function AdminDashboard() {
   const [supplierFilter, setSupplierFilter] = useState<string>('all');
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
-  const [admins, setAdmins] = useState<UserOrganization[]>([]);
+  const [pendingSuppliers, setPendingSuppliers] = useState<UserOrganization[]>([]);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isEquipmentLoading, setIsEquipmentLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('admins');
+  const [activeTab, setActiveTab] = useState('suppliers');
   const [approvalFilter, setApprovalFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
@@ -88,37 +86,15 @@ export function AdminDashboard() {
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
 
-  // Admin States
-  const [isAdminFormOpen, setIsAdminFormOpen] = useState(false);
-  const [selectedAdmin, setSelectedAdmin] = useState<UserOrganization | null>(null);
-  const [isAdminDeleteOpen, setIsAdminDeleteOpen] = useState(false);
 
-  const fetchAdmins = async () => {
-    setIsLoading(true);
-    try {
-      const data = await userApi.getUsersByRole(7);
-      const userList = Array.isArray(data) ? data : (data as any).results || [];
-      setAdmins(userList);
-    } catch (error) {
-      console.error('Error fetching admins:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    if (activeTab === 'admins') {
-      fetchAdmins();
-    }
-  }, [activeTab]);
+
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
     try {
       const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
-      const isApproved = approvalFilter === 'all' ? undefined : approvalFilter === 'approved';
-      
-      const data = await userApi.getUserOrganizations(isActive, isApproved);
+      const data = await userApi.getUserOrganizations(isActive, true);
       const supplierList = Array.isArray(data) ? data : (data as any).results || [];
       const filtered = supplierList.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
       setSuppliers(filtered);
@@ -129,9 +105,21 @@ export function AdminDashboard() {
     }
   };
 
+  const fetchPendingSuppliers = async () => {
+    try {
+      const data = await userApi.getUserOrganizations(undefined, false);
+      const list = Array.isArray(data) ? data : (data as any).results || [];
+      const filtered = list.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
+      setPendingSuppliers(filtered);
+    } catch (error) {
+      console.error('Error fetching pending suppliers:', error);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'suppliers') {
       fetchSuppliers();
+      fetchPendingSuppliers();
     }
   }, [activeTab, approvalFilter, statusFilter]);
 
@@ -300,80 +288,7 @@ export function AdminDashboard() {
     }
   };
 
-  const handleOpenAdminAdd = () => {
-    setSelectedAdmin(null);
-    setIsAdminFormOpen(true);
-  };
 
-  const handleOpenAdminEdit = (admin: UserOrganization) => {
-    setSelectedAdmin(admin);
-    setIsAdminFormOpen(true);
-  };
-
-  const handleOpenAdminDelete = (admin: UserOrganization) => {
-    setSelectedAdmin(admin);
-    setIsAdminDeleteOpen(true);
-  };
-
-  const handleAdminSubmit = async (data: any) => {
-    let payload: any = {};
-    
-    if (selectedAdmin) {
-      const userDetails = selectedAdmin.user_details || (selectedAdmin as any);
-      if (data.firstName !== userDetails.first_name) payload.first_name = data.firstName;
-      if (data.lastName !== userDetails.last_name) payload.last_name = data.lastName;
-      if (data.email !== userDetails.email) payload.email = data.email;
-      const currentStatus = selectedAdmin.is_active !== undefined ? selectedAdmin.is_active : (userDetails.is_active ?? false);
-      if (data.isActive !== currentStatus) payload.is_active = data.isActive;
-      if (data.isChangingPassword && data.password) payload.password = data.password;
-    } else {
-      payload = {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        email: data.email,
-        password: data.password,
-        is_active: data.isActive,
-      };
-    }
-
-    if (Object.keys(payload).length === 0 && !data.avatarFile) {
-      setIsAdminFormOpen(false);
-      return;
-    }
-
-    const adminId = selectedAdmin ? (selectedAdmin.user_id || (selectedAdmin as any).user_id) : null;
-    const adminPromise = selectedAdmin && adminId
-      ? userApi.updateUser(adminId, payload, data.avatarFile || undefined)
-      : userApi.createUser(payload, data.avatarFile || undefined);
-
-    await toast.promise(adminPromise, {
-      loading: selectedAdmin ? 'Updating administrator...' : 'Creating administrator...',
-      success: selectedAdmin ? 'Administrator updated' : 'Administrator created successfully',
-      error: (err) => err.message || 'Failed to save administrator'
-    });
-
-    try {
-      await adminPromise;
-      await fetchAdmins();
-      setIsAdminFormOpen(false);
-    } catch (error) {
-      console.error('Error saving admin:', error);
-    }
-  };
-
-  const handleAdminDeleteConfirm = async () => {
-    if (!selectedAdmin) return;
-    const adminId = selectedAdmin.user_id || (selectedAdmin as any).user_id;
-    
-    try {
-      await userApi.deleteUser(adminId);
-      toast.success('Administrator deleted successfully');
-      fetchAdmins();
-      setIsAdminDeleteOpen(false);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete administrator');
-    }
-  };
 
   const handleAddEditSubmit = async (data: any) => {
     let payload: any = {};
@@ -471,6 +386,7 @@ export function AdminDashboard() {
     try {
       await approvalPromise;
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error approving supplier:', error);
     } finally {
@@ -501,6 +417,7 @@ export function AdminDashboard() {
     try {
       await rejectionPromise;
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error rejecting supplier:', error);
     } finally {
@@ -509,7 +426,7 @@ export function AdminDashboard() {
     }
   };
 
-  const pendingSuppliers = suppliers.filter(s => !s.is_approved);
+
 
   const stats = [
     { title: 'Total Suppliers', value: suppliers.length, change: '+12%', icon: Users, gradient: 'from-blue-500 to-indigo-600' },
@@ -558,12 +475,8 @@ export function AdminDashboard() {
             ))}
           </div>
 
-          <Tabs defaultValue="admins" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <Tabs defaultValue="suppliers" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-white p-1 rounded-xl shadow-sm border">
-              <TabsTrigger value="admins" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
-                <ShieldCheck className="w-4 h-4 mr-2" />
-                Admins
-              </TabsTrigger>
               <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Users className="w-4 h-4 mr-2" />
                 Suppliers
@@ -573,91 +486,6 @@ export function AdminDashboard() {
                 Products
               </TabsTrigger>
             </TabsList>
-
-            <TabsContent value="admins" className="space-y-6">
-              <Card className="border-none shadow-sm overflow-hidden">
-                <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-xl">System Administrators</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Manage administrative access and permissions</p>
-                    </div>
-                    <Button onClick={handleOpenAdminAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20 rounded-xl px-6">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Admin
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4">Admin</TableHead>
-                          <TableHead className="font-bold">Email</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {isLoading ? (
-                          <TableRow>
-                            <TableCell colSpan={4} className="text-center py-20">
-                              <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
-                            </TableCell>
-                          </TableRow>
-                        ) : admins.map((a) => {
-                          const userDetails = a.user_details || (a as any);
-                          const firstName = userDetails.first_name || '';
-                          const lastName = userDetails.last_name || '';
-                          const email = userDetails.email || '';
-                          const avatarUrl = userDetails.avatar_url || '';
-
-                          return (
-                            <TableRow key={a.user_organization_id || (a as any).user_id} className="hover:bg-gray-50/50 transition-colors">
-                              <TableCell className="py-4">
-                                <div className="flex items-center gap-3">
-                                  <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
-                                    <AvatarImage src={avatarUrl} />
-                                    <AvatarFallback className="text-xs bg-brand-primary/10 text-brand-primary font-bold">
-                                      {firstName[0]}{lastName[0]}
-                                    </AvatarFallback>
-                                  </Avatar>
-                                  <span className="font-bold text-gray-900">{firstName} {lastName}</span>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <div className="flex items-center gap-1.5 text-sm text-muted-foreground font-medium">
-                                  <Mail className="w-3.5 h-3.5" />
-                                  {email}
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                {a.is_active ? (
-                                  <Badge className="bg-green-500 hover:bg-green-600 font-bold px-3 text-white border-none">Active</Badge>
-                                ) : (
-                                  <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-right pr-6">
-                                <div className="flex justify-end gap-1">
-                                  <Button size="icon" variant="ghost" onClick={() => handleOpenAdminEdit(a)} className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
-                                    <Edit className="w-4 h-4" />
-                                  </Button>
-                                  <Button size="icon" variant="ghost" onClick={() => handleOpenAdminDelete(a)} className="text-destructive hover:text-destructive hover:bg-destructive/10">
-                                    <Trash2 className="w-4 h-4" />
-                                  </Button>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
 
             <TabsContent value="suppliers" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
@@ -1005,20 +833,7 @@ export function AdminDashboard() {
         description={`Are you sure you want to delete ${selectedEquipment?.name}? This action will remove the listing from the marketplace.`}
       />
 
-      <AdminForm
-        isOpen={isAdminFormOpen}
-        onClose={() => setIsAdminFormOpen(false)}
-        onSubmit={handleAdminSubmit}
-        admin={selectedAdmin}
-      />
 
-      <DeleteConfirmation
-        isOpen={isAdminDeleteOpen}
-        onClose={() => setIsAdminDeleteOpen(false)}
-        onConfirm={handleAdminDeleteConfirm}
-        title="Delete Administrator"
-        message={`Are you sure you want to delete the administrator "${selectedAdmin?.user_details?.first_name || (selectedAdmin as any)?.first_name}"?`}
-      />
 
       {/* Pending Approvals Modal */}
       <Dialog 

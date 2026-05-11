@@ -62,6 +62,7 @@ import { DeleteConfirmation } from '../components/DeleteConfirmation';
 export function SuperAdminDashboard() {
   const [supplierFilter, setSupplierFilter] = useState<string>('all');
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
+  const [pendingSuppliers, setPendingSuppliers] = useState<UserOrganization[]>([]);
   const [admins, setAdmins] = useState<UserOrganization[]>([]);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -128,9 +129,7 @@ export function SuperAdminDashboard() {
     setIsLoading(true);
     try {
       const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
-      const isApproved = approvalFilter === 'all' ? undefined : approvalFilter === 'approved';
-      
-      const data = await userApi.getUserOrganizations(isActive, isApproved);
+      const data = await userApi.getUserOrganizations(isActive, true);
       const supplierList = Array.isArray(data) ? data : (data as any).results || [];
       const filtered = supplierList.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
       setSuppliers(filtered);
@@ -141,9 +140,21 @@ export function SuperAdminDashboard() {
     }
   };
 
+  const fetchPendingSuppliers = async () => {
+    try {
+      const data = await userApi.getUserOrganizations(undefined, false);
+      const list = Array.isArray(data) ? data : (data as any).results || [];
+      const filtered = list.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
+      setPendingSuppliers(filtered);
+    } catch (error) {
+      console.error('Error fetching pending suppliers:', error);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'suppliers') {
       fetchSuppliers();
+      fetchPendingSuppliers();
     }
   }, [activeTab, approvalFilter, statusFilter]);
 
@@ -580,6 +591,7 @@ export function SuperAdminDashboard() {
     try {
       await supplierPromise;
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error saving supplier:', error);
       throw error;
@@ -645,6 +657,7 @@ export function SuperAdminDashboard() {
     try {
       await rejectionPromise;
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error rejecting supplier:', error);
     } finally {
@@ -653,7 +666,7 @@ export function SuperAdminDashboard() {
     }
   };
 
-  const pendingSuppliers = suppliers.filter(s => !s.is_approved);
+
 
   const stats = [
     { title: 'Total Suppliers', value: suppliers.length, change: '+12%', icon: Users, gradient: 'from-blue-500 to-indigo-600' },
