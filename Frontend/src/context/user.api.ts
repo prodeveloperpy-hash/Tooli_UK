@@ -216,7 +216,7 @@ export const userApi = {
     formData.append('role_id', '7');
     if (payload.is_active !== undefined) formData.append('is_active', String(payload.is_active));
     
-    if (avatar) formData.append('avatar_url', avatar);
+    if (avatar) formData.append('avatar', avatar);
 
     const response = await fetch(`${API_URL}/user/`, {
       method: 'POST',
@@ -244,7 +244,7 @@ export const userApi = {
     if (payload.password) formData.append('password', payload.password);
     if (payload.is_active !== undefined) formData.append('is_active', String(payload.is_active));
     
-    if (avatar) formData.append('avatar_url', avatar);
+    if (avatar) formData.append('avatar', avatar);
 
     const response = await fetch(`${API_URL}/user/${id}/`, {
       method: 'PATCH',

@@ -47,6 +47,8 @@ export function LoginPage() {
       localStorage.setItem('avatar_url', user.avatar_url || '');
 
       if (role_key === 'SUPERADMIN') {
+        navigate('/super-admin');
+      } else if (role_key === 'ADMIN') {
         navigate('/admin');
       } else if (role_key === 'SUPPLIER') {
         navigate('/supplier');

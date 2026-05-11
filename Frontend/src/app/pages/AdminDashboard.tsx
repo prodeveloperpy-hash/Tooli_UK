@@ -49,17 +49,14 @@ import {
   Loader2,
   ShieldCheck,
 } from 'lucide-react';
-import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
 import { AdminForm } from '../components/AdminForm';
 import { EquipmentForm } from '../components/EquipmentForm';
-import { CategoryForm } from '../components/CategoryForm';
-import { LocationForm } from '../components/LocationForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
 
-export function SuperAdminDashboard() {
+export function AdminDashboard() {
   const [supplierFilter, setSupplierFilter] = useState<string>('all');
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
   const [admins, setAdmins] = useState<UserOrganization[]>([]);
@@ -87,15 +84,6 @@ export function SuperAdminDashboard() {
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
-
-  // Category/Location Modal States
-  const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [isCategoryDeleteOpen, setIsCategoryDeleteOpen] = useState(false);
-
-  const [isLocationFormOpen, setIsLocationFormOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
-  const [isLocationDeleteOpen, setIsLocationDeleteOpen] = useState(false);
 
   // Admin States
   const [isAdminFormOpen, setIsAdminFormOpen] = useState(false);
@@ -150,18 +138,6 @@ export function SuperAdminDashboard() {
     }
   }, [activeTab, equipPage, supplierFilter]);
 
-  useEffect(() => {
-    if (activeTab === 'categories') {
-      fetchCategories();
-    }
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (activeTab === 'locations') {
-      fetchLocations();
-    }
-  }, [activeTab]);
-
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
@@ -169,39 +145,16 @@ export function SuperAdminDashboard() {
 
   const fetchFormStaticData = async () => {
     try {
-      const [intervalData] = await Promise.all([
+      const [intervalData, categoryData, locationData] = await Promise.all([
         equipmentApi.getIntervals(),
+        equipmentApi.getCategories(),
+        equipmentApi.getLocations(),
       ]);
       setIntervals(intervalData);
-    } catch (error) {
-      console.error('Error fetching form static data:', error);
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const categoryData = await equipmentApi.getCategories();
       setCategories(categoryData);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
-
-  const fetchLocations = async () => {
-    try {
-      const locationData = await equipmentApi.getLocations();
       setLocations(locationData);
     } catch (error) {
-      console.error('Error fetching locations:', error);
-    }
-  };
-
-  const fetchStaticData = async () => {
-    // Legacy combined fetcher - keeping for compatibility if needed elsewhere
-    try {
-      await Promise.all([fetchCategories(), fetchLocations(), fetchFormStaticData()]);
-    } catch (error) {
-      console.error('Error in fetchStaticData:', error);
+      console.error('Error fetching form static data:', error);
     }
   };
 
@@ -273,7 +226,6 @@ export function SuperAdminDashboard() {
     let payload = { ...data };
 
     if (!isUpdate) {
-      // Format full payload for new equipment
       const imagesMetadata = data.imagePreviews.map((url: string, index: number) => ({
         sort_order: index,
         is_active: true
@@ -345,93 +297,6 @@ export function SuperAdminDashboard() {
     }
   };
 
-  // Category Handlers
-  const handleOpenCategoryAdd = () => {
-    setSelectedCategory(null);
-    setIsCategoryFormOpen(true);
-  };
-  const handleOpenCategoryEdit = (cat: Category) => {
-    setSelectedCategory(cat);
-    setIsCategoryFormOpen(true);
-  };
-  const handleOpenCategoryDelete = (cat: Category) => {
-    setSelectedCategory(cat);
-    setIsCategoryDeleteOpen(true);
-  };
-  const handleCategorySubmit = async (data: any) => {
-    try {
-      const categoryPromise = selectedCategory
-        ? equipmentApi.updateCategory(selectedCategory.category_id, data)
-        : equipmentApi.createCategory(data);
-
-      await toast.promise(categoryPromise, {
-        loading: selectedCategory ? 'Updating category...' : 'Creating category...',
-        success: selectedCategory ? 'Category updated successfully' : 'Category created successfully',
-        error: (err) => err.message || 'Failed to save category'
-      });
-
-      await fetchCategories();
-      setIsCategoryFormOpen(false);
-    } catch (error: any) {
-      console.error('Error saving category:', error);
-    }
-  };
-  const handleCategoryDeleteConfirm = async () => {
-    if (!selectedCategory) return;
-    try {
-      await equipmentApi.deleteCategory(selectedCategory.category_id);
-      toast.success('Category deleted successfully');
-      fetchStaticData();
-      setIsCategoryDeleteOpen(false);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete category');
-    }
-  };
-
-  // Location Handlers
-  const handleOpenLocationAdd = () => {
-    setSelectedLocation(null);
-    setIsLocationFormOpen(true);
-  };
-  const handleOpenLocationEdit = (loc: Location) => {
-    setSelectedLocation(loc);
-    setIsLocationFormOpen(true);
-  };
-  const handleOpenLocationDelete = (loc: Location) => {
-    setSelectedLocation(loc);
-    setIsLocationDeleteOpen(true);
-  };
-  const handleLocationSubmit = async (data: any) => {
-    try {
-      const locationPromise = selectedLocation
-        ? equipmentApi.updateLocation(selectedLocation.location_id, data)
-        : equipmentApi.createLocation(data);
-
-      await toast.promise(locationPromise, {
-        loading: selectedLocation ? 'Updating location...' : 'Creating location...',
-        success: selectedLocation ? 'Location updated successfully' : 'Location created successfully',
-        error: (err) => err.message || 'Failed to save location'
-      });
-
-      await fetchLocations();
-      setIsLocationFormOpen(false);
-    } catch (error: any) {
-      console.error('Error saving location:', error);
-    }
-  };
-  const handleLocationDeleteConfirm = async () => {
-    if (!selectedLocation) return;
-    try {
-      await equipmentApi.deleteLocation(selectedLocation.location_id);
-      toast.success('Location deleted successfully');
-      fetchLocations();
-      setIsLocationDeleteOpen(false);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete location');
-    }
-  };
-
-  // Admin Handlers
   const handleOpenAdminAdd = () => {
     setSelectedAdmin(null);
     setIsAdminFormOpen(true);
@@ -451,7 +316,6 @@ export function SuperAdminDashboard() {
     let payload: any = {};
     
     if (selectedAdmin) {
-      // Delta update for Edit
       const userDetails = selectedAdmin.user_details || (selectedAdmin as any);
       if (data.firstName !== userDetails.first_name) payload.first_name = data.firstName;
       if (data.lastName !== userDetails.last_name) payload.last_name = data.lastName;
@@ -460,7 +324,6 @@ export function SuperAdminDashboard() {
       if (data.isActive !== currentStatus) payload.is_active = data.isActive;
       if (data.isChangingPassword && data.password) payload.password = data.password;
     } else {
-      // Full payload for Create
       payload = {
         first_name: data.firstName,
         last_name: data.lastName,
@@ -470,7 +333,6 @@ export function SuperAdminDashboard() {
       };
     }
 
-    // Only proceed if there are changes (including avatar)
     if (Object.keys(payload).length === 0 && !data.avatarFile) {
       setIsAdminFormOpen(false);
       return;
@@ -624,10 +486,9 @@ export function SuperAdminDashboard() {
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold mb-2">Master Admin Dashboard</h1>
+                <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
                 <p className="text-muted-foreground">Manage suppliers and product listings</p>
               </div>
-             
             </div>
           </div>
         </div>
@@ -653,7 +514,8 @@ export function SuperAdminDashboard() {
                     </div>
                     <div className="text-3xl font-bold mb-1 tracking-tight">{stat.value}</div>
                     <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">{stat.title}</p>
-                  </CardContent>                </Card>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -671,14 +533,6 @@ export function SuperAdminDashboard() {
               <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Package className="w-4 h-4 mr-2" />
                 Products
-              </TabsTrigger>
-              <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
-                <Tag className="w-4 h-4 mr-2" />
-                Categories
-              </TabsTrigger>
-              <TabsTrigger value="locations" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
-                <MapPin className="w-4 h-4 mr-2" />
-                Locations
               </TabsTrigger>
             </TabsList>
 
@@ -817,7 +671,6 @@ export function SuperAdminDashboard() {
                           <option value="inactive">Inactive</option>
                         </select>
                       </div>
-
                     </div>
                   </div>
 
@@ -911,7 +764,8 @@ export function SuperAdminDashboard() {
                 <CardHeader className="bg-white border-b py-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle className="text-xl">Manage Equipment</CardTitle>                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
+                      <CardTitle className="text-xl">Manage Equipment</CardTitle>
+                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
                     </div>
                     <Button onClick={handleOpenEquipAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
                       <Plus className="w-4 h-4 mr-2" />
@@ -1013,7 +867,6 @@ export function SuperAdminDashboard() {
                     </Table>
                   </div>
 
-                  {/* Pagination Controls */}
                   <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
                     <div className="text-sm text-muted-foreground font-medium">
                       Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalEquipCount}</span> equipment
@@ -1070,112 +923,6 @@ export function SuperAdminDashboard() {
                 </CardContent>
               </Card>
             </TabsContent>
-
-            <TabsContent value="categories" className="space-y-6">
-              <Card className="border-none shadow-sm overflow-hidden">
-                <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-xl">Equipment Categories</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Manage the types of equipment available</p>
-                    </div>
-                    <Button onClick={handleOpenCategoryAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Category
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4">Display Name</TableHead>
-                          <TableHead className="font-bold">Technical Key</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {categories.map((cat) => (
-                          <TableRow key={cat.category_id} className="hover:bg-gray-50/50 transition-colors">
-                            <TableCell className="py-4 font-bold text-gray-900">{cat.category_display_name}</TableCell>
-                            <TableCell className="font-mono text-xs text-muted-foreground uppercase">{cat.category_key}</TableCell>
-                            <TableCell>
-                              <Badge variant={cat.is_active ? "default" : "secondary"} className={cat.is_active ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-700"}>
-                                {cat.is_active ? 'Active' : 'Inactive'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-right pr-6 space-x-2">
-                              <Button variant="ghost" size="icon" onClick={() => handleOpenCategoryEdit(cat)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="icon" onClick={() => handleOpenCategoryDelete(cat)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="locations" className="space-y-6">
-              <Card className="border-none shadow-sm overflow-hidden">
-                <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-xl">Service Locations</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Manage cities where suppliers operate</p>
-                    </div>
-                    <Button onClick={handleOpenLocationAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Location
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4">City</TableHead>
-                          <TableHead className="font-bold">Country</TableHead>
-                          <TableHead className="font-bold">State/County</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {locations.map((loc) => (
-                          <TableRow key={loc.location_id} className="hover:bg-gray-50/50 transition-colors">
-                            <TableCell className="py-4 font-bold text-gray-900">{loc.city_name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{loc.country}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{loc.state || '-'}</TableCell>
-                            <TableCell>
-                              <Badge variant={loc.is_active ? "default" : "secondary"} className={loc.is_active ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-700"}>
-                                {loc.is_active ? 'Active' : 'Inactive'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell className="text-right pr-6 space-x-2">
-                              <Button variant="ghost" size="icon" onClick={() => handleOpenLocationEdit(loc)} className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg">
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="icon" onClick={() => handleOpenLocationDelete(loc)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg">
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
           </Tabs>
         </div>
       </div>
@@ -1219,14 +966,6 @@ export function SuperAdminDashboard() {
         description={`Are you sure you want to delete ${selectedEquipment?.name}? This action will remove the listing from the marketplace.`}
       />
 
-      {/* Category Modals */}
-      <CategoryForm
-        isOpen={isCategoryFormOpen}
-        onClose={() => setIsCategoryFormOpen(false)}
-        onSubmit={handleCategorySubmit}
-        category={selectedCategory}
-      />
-
       <AdminForm
         isOpen={isAdminFormOpen}
         onClose={() => setIsAdminFormOpen(false)}
@@ -1240,30 +979,6 @@ export function SuperAdminDashboard() {
         onConfirm={handleAdminDeleteConfirm}
         title="Delete Administrator"
         message={`Are you sure you want to delete the administrator "${selectedAdmin?.user_details?.first_name || (selectedAdmin as any)?.first_name}"?`}
-      />
-
-      <DeleteConfirmation
-        isOpen={isCategoryDeleteOpen}
-        onClose={() => setIsCategoryDeleteOpen(false)}
-        onConfirm={handleCategoryDeleteConfirm}
-        title="Delete Category"
-        message={`Are you sure you want to delete the category "${selectedCategory?.category_display_name}"?`}
-      />
-
-      {/* Location Modals */}
-      <LocationForm
-        isOpen={isLocationFormOpen}
-        onClose={() => setIsLocationFormOpen(false)}
-        onSubmit={handleLocationSubmit}
-        location={selectedLocation}
-      />
-
-      <DeleteConfirmation
-        isOpen={isLocationDeleteOpen}
-        onClose={() => setIsLocationDeleteOpen(false)}
-        onConfirm={handleLocationDeleteConfirm}
-        title="Delete Location"
-        message={`Are you sure you want to delete the location "${selectedLocation?.city_name}"?`}
       />
 
       {/* Pending Approvals Modal */}
