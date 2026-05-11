@@ -456,7 +456,8 @@ export function AdminDashboard() {
       if (data.firstName !== userDetails.first_name) payload.first_name = data.firstName;
       if (data.lastName !== userDetails.last_name) payload.last_name = data.lastName;
       if (data.email !== userDetails.email) payload.email = data.email;
-      if (data.isActive !== (selectedAdmin.is_active ?? true)) payload.is_active = data.isActive;
+      const currentStatus = selectedAdmin.is_active !== undefined ? selectedAdmin.is_active : (userDetails.is_active ?? false);
+      if (data.isActive !== currentStatus) payload.is_active = data.isActive;
       if (data.isChangingPassword && data.password) payload.password = data.password;
     } else {
       // Full payload for Create

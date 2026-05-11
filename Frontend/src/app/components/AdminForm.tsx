@@ -44,7 +44,7 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
         avatarFile: null,
         password: '',
         confirmPassword: '',
-        isActive: admin.is_active ?? true,
+        isActive: admin.is_active !== undefined ? admin.is_active : (userDetails.is_active ?? false),
       });
       setIsChangingPassword(false);
     } else {

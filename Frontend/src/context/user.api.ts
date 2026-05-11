@@ -51,7 +51,7 @@ export const userApi = {
     const params = new URLSearchParams();
     if (isActive !== undefined) params.append('is_active', isActive.toString());
     if (isApproved !== undefined) params.append('is_approved', isApproved.toString());
-    
+
     const url = `${API_URL}/user-organization/${params.toString() ? `?${params.toString()}` : ''}`;
     const response = await fetch(url, {
       headers: {
@@ -137,10 +137,10 @@ export const userApi = {
   createUserOrganizationFiles: async (payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    
+
     // Add the payload as a JSON string
     formData.append('payload', JSON.stringify(payload));
-    
+
     // Add files if they exist
     if (avatar) formData.append('avatar', avatar);
     if (logo) formData.append('organization_logo', logo);
@@ -164,10 +164,10 @@ export const userApi = {
   updateUserOrganizationFiles: async (id: number, payload: any, avatar?: File, logo?: File): Promise<UserOrganization> => {
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    
+
     // Add the payload as a JSON string
     formData.append('payload', JSON.stringify(payload));
-    
+
     // Add files if they exist
     if (avatar) formData.append('avatar', avatar);
     if (logo) formData.append('organization_logo', logo);
@@ -208,14 +208,15 @@ export const userApi = {
     const token = localStorage.getItem('token');
     const formData = new FormData();
     
-    // Flatten payload into formData
+    // Flatten fields for FormData
     formData.append('first_name', payload.first_name);
     formData.append('last_name', payload.last_name);
     formData.append('email', payload.email);
     formData.append('password', payload.password);
     formData.append('role_id', '7');
+    if (payload.is_active !== undefined) formData.append('is_active', String(payload.is_active));
     
-    if (avatar) formData.append('avatar', avatar);
+    if (avatar) formData.append('avatar_url', avatar);
 
     const response = await fetch(`${API_URL}/user/`, {
       method: 'POST',
@@ -225,7 +226,7 @@ export const userApi = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      // Handle the nested error structure if possible
+      // Handle the nested error structure
       const errorMsg = typeof errorData === 'object' ? Object.values(errorData).flat().join(', ') : 'Failed to create user';
       throw new Error(errorMsg || 'Failed to create user');
     }
@@ -236,13 +237,14 @@ export const userApi = {
     const token = localStorage.getItem('token');
     const formData = new FormData();
     
-    // Append available fields to formData
+    // Append only provided fields
     if (payload.first_name) formData.append('first_name', payload.first_name);
     if (payload.last_name) formData.append('last_name', payload.last_name);
     if (payload.email) formData.append('email', payload.email);
     if (payload.password) formData.append('password', payload.password);
+    if (payload.is_active !== undefined) formData.append('is_active', String(payload.is_active));
     
-    if (avatar) formData.append('avatar', avatar);
+    if (avatar) formData.append('avatar_url', avatar);
 
     const response = await fetch(`${API_URL}/user/${id}/`, {
       method: 'PATCH',
