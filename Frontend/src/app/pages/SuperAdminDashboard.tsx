@@ -488,7 +488,17 @@ export function SuperAdminDashboard() {
     });
 
     try {
-      await adminPromise;
+      const result = await adminPromise;
+      
+      // If we just created a new admin and there's an avatar, ensure it's updated
+      // as some backends may ignore files on POST /user/
+      if (!selectedAdmin && data.avatarFile && result) {
+        const newAdminId = result.user_id || result.id;
+        if (newAdminId) {
+          await userApi.updateUser(newAdminId, {}, data.avatarFile);
+        }
+      }
+
       await fetchAdmins();
       setIsAdminFormOpen(false);
     } catch (error) {
