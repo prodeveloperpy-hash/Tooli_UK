@@ -124,6 +124,7 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
     organization = UserOrganizationOrganizationNestedSerializer(required=False)
     role_id = serializers.IntegerField(required=False, allow_null=True)
     is_active = serializers.BooleanField(required=False)
+    is_approved = serializers.BooleanField(required=False)
     created_by = serializers.IntegerField(required=False, allow_null=True)
     updated_by = serializers.IntegerField(required=False, allow_null=True)
 
@@ -215,6 +216,7 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         organization_id = validated_data.pop("organization_id", None)
         role_id = validated_data.pop("role_id")
         is_active = validated_data.pop("is_active", True)
+        is_approved = validated_data.pop("is_approved", None)
         created_by = validated_data.pop("created_by", None)
         updated_by = validated_data.pop("updated_by", None)
 
@@ -305,7 +307,11 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             "created_by_id": created_by or user_id,
             "updated_by_id": updated_by or user_id,
         }
-        if is_supplier:
+        if is_approved is not None:
+            create_kwargs["is_approved"] = is_approved
+            if is_approved:
+                create_kwargs["is_active"] = True
+        if is_supplier and "is_approved" not in create_kwargs:
             create_kwargs["is_approved"] = False
 
         link = UserOrganization.objects.create(**create_kwargs)
@@ -339,6 +345,10 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             instance.role_id_id = validated_data.pop("role_id")
         if "is_active" in validated_data:
             instance.is_active = validated_data.pop("is_active")
+        if "is_approved" in validated_data:
+            instance.is_approved = validated_data.pop("is_approved")
+            if instance.is_approved:
+                instance.is_active = True
 
         if user_payload:
             u = User.objects.get(pk=instance.user_id_id)

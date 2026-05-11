@@ -160,6 +160,18 @@ class LoginSerializer(serializers.Serializer):
         if not user or not check_password(password, user.password):
             raise serializers.ValidationError("Invalid email or password.")
 
+        role_key = (user.role_id.role_key or "").upper() if user.role_id else ""
+        if role_key == "SUPPLIER":
+            approved_supplier_link_exists = UserOrganization.objects.filter(
+                user_id=user.user_id,
+                is_active=True,
+                is_approved=True,
+            ).exists()
+            if not approved_supplier_link_exists:
+                raise serializers.ValidationError(
+                    "Your account is not approved by admin."
+                )
+
         attrs["is_hardcoded_superadmin"] = False
         attrs["user"] = user
         return attrs
