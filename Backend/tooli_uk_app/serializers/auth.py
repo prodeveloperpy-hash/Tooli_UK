@@ -110,11 +110,16 @@ class SignupSerializer(serializers.Serializer):
         membership_role_id = (
             user_org_role if user_org_role is not None else resolved_role_id
         )
+        role = Role.objects.filter(role_id=membership_role_id).first()
+        is_supplier_membership = bool(
+            role and role.role_key and role.role_key.upper() == "SUPPLIER"
+        )
         UserOrganization.objects.create(
             user_id_id=user.user_id,
             organization_id_id=organization.organization_id,
             role_id_id=membership_role_id,
             is_active=True,
+            # Supplier signups are always pending admin approval.
             is_approved=False,
             created_datetime=now,
             updated_datetime=now,
@@ -122,8 +127,7 @@ class SignupSerializer(serializers.Serializer):
             updated_by_id=user.user_id,
         )
 
-        role = Role.objects.filter(role_id=membership_role_id).first()
-        if role and role.role_key and role.role_key.upper() == "SUPPLIER":
+        if is_supplier_membership:
             full_name = f"{user.first_name} {user.last_name}".strip()
             transaction.on_commit(
                 lambda: notify_new_supplier_for_approval(

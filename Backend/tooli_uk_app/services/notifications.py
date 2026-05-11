@@ -37,13 +37,13 @@ def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, or
         "SUPPLIER_APPROVAL_URL",
         "https://frontend-service-961815749151.us-central1.run.app/suppliers",
     )
-    subject = f"New supplier approval required: {supplier_name}"
+    subject = f"New supplier request for approval: {supplier_name}"
     message = (
-        "A new supplier has signed up and is waiting for approval.\n\n"
+        "A new supplier signup request is waiting for approval.\n\n"
         f"Supplier name: {supplier_name}\n"
         f"Supplier email: {supplier_email}\n"
         f"Organization: {organization_name}\n\n"
-        "Please review and approve this supplier.\n"
+        "Please review and approve this supplier request.\n"
         f"Approval page: {supplier_approval_url}"
     )
     try:
@@ -52,7 +52,7 @@ def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, or
             message=message,
             from_email=None,
             recipient_list=recipients,
-            fail_silently=True,
+            fail_silently=False,
         )
     except Exception:
         logger.exception("Failed sending supplier approval notification email.")
