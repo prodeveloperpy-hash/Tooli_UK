@@ -800,7 +800,6 @@ export function AdminDashboard() {
                       <TableHeader className="bg-gray-50">
                         <TableRow>
                           <TableHead className="font-bold py-4">Equipment</TableHead>
-                          <TableHead className="font-bold w-[300px]">Description</TableHead>
                           <TableHead className="font-bold">Supplier</TableHead>
                           <TableHead className="font-bold">Price</TableHead>
                           <TableHead className="font-bold">Status</TableHead>
@@ -817,7 +816,7 @@ export function AdminDashboard() {
                         ) : equipment.map((item) => (
                           <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-3 w-[250px]">
                                 <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-100 shadow-sm shrink-0">
                                   {item.images[0] ? (
                                     <img src={item.images[0].image_url} alt="" className="w-full h-full object-cover" />
@@ -825,14 +824,9 @@ export function AdminDashboard() {
                                     <Package className="w-6 h-6 m-3 text-gray-300" />
                                   )}
                                 </div>
-                                <div>
-                                  <div className="font-bold text-gray-900 leading-none mb-1">{item.name}</div>
+                                <div className="min-w-0">
+                                  <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
                                 </div>
-                              </div>
-                            </TableCell>
-                            <TableCell className="py-4">
-                              <div className="text-sm text-muted-foreground max-w-[300px] truncate" title={item.description}>
-                                {item.description}
                               </div>
                             </TableCell>
                             <TableCell className="font-medium text-gray-700">
