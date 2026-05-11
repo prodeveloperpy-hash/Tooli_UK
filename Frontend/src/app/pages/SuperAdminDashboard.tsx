@@ -448,13 +448,32 @@ export function AdminDashboard() {
   };
 
   const handleAdminSubmit = async (data: any) => {
-    const payload = {
-      first_name: data.firstName,
-      last_name: data.lastName,
-      email: data.email,
-      ...(data.password ? { password: data.password } : {}),
-      is_active: true,
-    };
+    let payload: any = {};
+    
+    if (selectedAdmin) {
+      // Delta update for Edit
+      const userDetails = selectedAdmin.user_details || (selectedAdmin as any);
+      if (data.firstName !== userDetails.first_name) payload.first_name = data.firstName;
+      if (data.lastName !== userDetails.last_name) payload.last_name = data.lastName;
+      if (data.email !== userDetails.email) payload.email = data.email;
+      if (data.isActive !== (selectedAdmin.is_active ?? true)) payload.is_active = data.isActive;
+      if (data.isChangingPassword && data.password) payload.password = data.password;
+    } else {
+      // Full payload for Create
+      payload = {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        email: data.email,
+        password: data.password,
+        is_active: data.isActive,
+      };
+    }
+
+    // Only proceed if there are changes (including avatar)
+    if (Object.keys(payload).length === 0 && !data.avatarFile) {
+      setIsAdminFormOpen(false);
+      return;
+    }
 
     const adminId = selectedAdmin ? (selectedAdmin.user_id || (selectedAdmin as any).user_id) : null;
     const adminPromise = selectedAdmin && adminId
