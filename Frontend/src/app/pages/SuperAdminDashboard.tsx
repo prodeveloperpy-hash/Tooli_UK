@@ -669,8 +669,8 @@ export function SuperAdminDashboard() {
 
 
   const stats = [
-    { title: 'Total Suppliers', value: suppliers.length, change: '+12%', icon: Users, gradient: 'from-blue-500 to-indigo-600' },
-    { title: 'Total Equipment', value: totalEquipCount, change: '+18%', icon: Package, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'Total Suppliers', value: suppliers.length, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
+    { title: 'Total Equipment', value: totalEquipCount, icon: Package, gradient: 'from-purple-500 to-pink-600' },
   ];
 
   return (
@@ -704,9 +704,6 @@ export function SuperAdminDashboard() {
                       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center shadow-inner`}>
                         <stat.icon className="w-6 h-6 text-white" />
                       </div>
-                      <Badge variant="secondary" className="text-xs font-bold text-green-600 bg-green-50 border-green-100">
-                        {stat.change}
-                      </Badge>
                     </div>
                     <div className="text-3xl font-bold mb-1 tracking-tight">{stat.value}</div>
                     <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">{stat.title}</p>
