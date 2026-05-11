@@ -188,4 +188,69 @@ export const userApi = {
 
     return response.json();
   },
+
+  getUsersByRole: async (roleId: number): Promise<UserOrganization[]> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user/?role_id=${roleId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch users by role');
+    }
+
+    return response.json();
+  },
+
+  createUser: async (payload: any, avatar?: File): Promise<any> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify({ ...payload, role_id: 7 }));
+    if (avatar) formData.append('avatar', avatar);
+
+    const response = await fetch(`${API_URL}/user/`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to create user');
+    }
+    return response.json();
+  },
+
+  updateUser: async (id: number, payload: any, avatar?: File): Promise<any> => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('payload', JSON.stringify(payload));
+    if (avatar) formData.append('avatar', avatar);
+
+    const response = await fetch(`${API_URL}/user/${id}/`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || 'Failed to update user');
+    }
+    return response.json();
+  },
+
+  deleteUser: async (id: number): Promise<void> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/user/${id}/`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete user');
+    }
+  },
 };
