@@ -73,7 +73,9 @@ export function AdminDashboard() {
   // Modal states
   const [isAddEditOpen, setIsAddEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isRejectConfirmOpen, setIsRejectConfirmOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<UserOrganization | null>(null);
+  const [supplierToReject, setSupplierToReject] = useState<UserOrganization | null>(null);
 
   const [isEquipFormOpen, setIsEquipFormOpen] = useState(false);
   const [isEquipDeleteOpen, setIsEquipDeleteOpen] = useState(false);
@@ -452,6 +454,7 @@ export function AdminDashboard() {
     setApprovingId(id);
     const approvalPromise = userApi.updateUserOrganization(id, { 
       is_approved: true,
+      is_active: true,
       approved_datetime: new Date().toISOString(),
       approved_by: parseInt(localStorage.getItem('user_id') || '10')
     });
@@ -472,8 +475,18 @@ export function AdminDashboard() {
     }
   };
 
-  const handleRejectSupplier = async (id: number) => {
+  const handleOpenRejectConfirm = (s: UserOrganization) => {
+    setSupplierToReject(s);
+    setIsRejectConfirmOpen(true);
+  };
+
+  const handleRejectConfirm = async () => {
+    if (!supplierToReject) return;
+    const id = supplierToReject.user_organization_id;
+    
     setRejectingId(id);
+    setIsRejectConfirmOpen(false);
+    
     const rejectionPromise = userApi.deleteUserOrganization(id);
 
     toast.promise(rejectionPromise, {
@@ -489,6 +502,7 @@ export function AdminDashboard() {
       console.error('Error rejecting supplier:', error);
     } finally {
       setRejectingId(null);
+      setSupplierToReject(null);
     }
   };
 
@@ -960,6 +974,14 @@ export function AdminDashboard() {
         description={`Are you sure you want to delete ${selectedSupplier?.user_details.first_name} ${selectedSupplier?.user_details.last_name}? This action cannot be undone.`}
       />
 
+      <DeleteConfirmation
+        isOpen={isRejectConfirmOpen}
+        onClose={() => setIsRejectConfirmOpen(false)}
+        onConfirm={handleRejectConfirm}
+        title="Reject Supplier"
+        description={`Are you sure you want to reject and delete the registration for ${supplierToReject?.user_details?.first_name} ${supplierToReject?.user_details?.last_name}?`}
+      />
+
       <EquipmentForm
         isOpen={isEquipFormOpen}
         onClose={() => setIsEquipFormOpen(false)}
@@ -1052,7 +1074,7 @@ export function AdminDashboard() {
 
                     <div className="flex gap-2">
                       <Button 
-                        onClick={() => handleRejectSupplier(s.user_organization_id)}
+                        onClick={() => handleOpenRejectConfirm(s)}
                         disabled={rejectingId === s.user_organization_id || approvingId === s.user_organization_id}
                         variant="outline"
                         className="border-red-200 text-red-600 hover:bg-red-50 font-bold px-6 rounded-xl min-w-[120px]"
