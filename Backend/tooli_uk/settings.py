@@ -157,11 +157,12 @@ GCS_UPLOAD_ENABLED = os.environ.get("GCS_UPLOAD_ENABLED", "true").lower() in (
     "yes",
 )
 
-# Per-request timeout (seconds) for GCS JSON API (upload/download). Increase on slow links.
+# Per-request timeout (seconds) for GCS JSON API (upload/download).
+# Keep this lower than Gunicorn worker timeout to avoid WORKER TIMEOUT crashes.
 try:
-    GCS_HTTP_TIMEOUT_SECONDS = float(os.environ.get("GCS_HTTP_TIMEOUT_SECONDS", "300"))
+    GCS_HTTP_TIMEOUT_SECONDS = float(os.environ.get("GCS_HTTP_TIMEOUT_SECONDS", "250"))
 except ValueError:
-    GCS_HTTP_TIMEOUT_SECONDS = 300.0
+    GCS_HTTP_TIMEOUT_SECONDS = 250.0
 
 # API supports JSON and DRF Browsable API form testing.
 REST_FRAMEWORK = {
@@ -247,6 +248,8 @@ EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", str(_default_ssl)).lower() in (
     "true",
     "yes",
 )
+# SMTP timeout to prevent long blocking requests in API handlers.
+EMAIL_TIMEOUT = int(os.environ.get("EMAIL_TIMEOUT", "20"))
 DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     EMAIL_HOST_USER or "noreply@tooli.uk",

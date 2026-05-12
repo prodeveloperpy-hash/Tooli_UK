@@ -1,4 +1,6 @@
 import logging
+import os
+import threading
 
 from django.core.mail import send_mail
 from django.conf import settings
@@ -7,6 +9,13 @@ from tooli_uk_app.models import User
 from tooli_uk_app.services.superadmin import HARDCODED_SUPERADMIN_EMAIL
 
 logger = logging.getLogger(__name__)
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    value = os.getenv(name, "").strip().lower()
+    if not value:
+        return default
+    return value in {"1", "true", "yes", "on"}
 
 
 def _send_email_with_status(
@@ -48,6 +57,25 @@ def _send_email_with_status(
         return False
 
 
+def _send_email_with_status_async(
+    *,
+    subject: str,
+    message: str,
+    recipients: list[str],
+    log_context: str,
+) -> None:
+    threading.Thread(
+        target=_send_email_with_status,
+        kwargs={
+            "subject": subject,
+            "message": message,
+            "recipients": recipients,
+            "log_context": log_context,
+        },
+        daemon=True,
+    ).start()
+
+
 def _superadmin_recipients() -> list[str]:
     db_emails = list(
         User.objects.filter(
@@ -85,12 +113,20 @@ def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, or
         "Please review and approve this supplier request.\n"
         f"Approval page: {supplier_approval_url}"
     )
-    _send_email_with_status(
-        subject=subject,
-        message=message,
-        recipients=recipients,
-        log_context="new_supplier_for_superadmin_approval",
-    )
+    if _env_bool("EMAIL_SEND_ASYNC", True):
+        _send_email_with_status_async(
+            subject=subject,
+            message=message,
+            recipients=recipients,
+            log_context="new_supplier_for_superadmin_approval",
+        )
+    else:
+        _send_email_with_status(
+            subject=subject,
+            message=message,
+            recipients=recipients,
+            log_context="new_supplier_for_superadmin_approval",
+        )
 
 
 def notify_supplier_approved(
@@ -105,9 +141,17 @@ def notify_supplier_approved(
         f"Organization: {organization_name}\n\n"
         "You can now log in to your account."
     )
-    _send_email_with_status(
-        subject=subject,
-        message=message,
-        recipients=[supplier_email],
-        log_context="supplier_approved_notification",
-    )
+    if _env_bool("EMAIL_SEND_ASYNC", True):
+        _send_email_with_status_async(
+            subject=subject,
+            message=message,
+            recipients=[supplier_email],
+            log_context="supplier_approved_notification",
+        )
+    else:
+        _send_email_with_status(
+            subject=subject,
+            message=message,
+            recipients=[supplier_email],
+            log_context="supplier_approved_notification",
+        )
