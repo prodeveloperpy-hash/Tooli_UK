@@ -9,6 +9,45 @@ from tooli_uk_app.services.superadmin import HARDCODED_SUPERADMIN_EMAIL
 logger = logging.getLogger(__name__)
 
 
+def _send_email_with_status(
+    *,
+    subject: str,
+    message: str,
+    recipients: list[str],
+    log_context: str,
+) -> bool:
+    if not recipients:
+        logger.warning("Email not sent (%s): recipient list is empty.", log_context)
+        return False
+
+    try:
+        sent_count = send_mail(
+            subject=subject,
+            message=message,
+            from_email=None,
+            recipient_list=recipients,
+            fail_silently=False,
+        )
+        if sent_count:
+            logger.info(
+                "Email sent (%s): recipients=%s subject=%s",
+                log_context,
+                ", ".join(recipients),
+                subject,
+            )
+            return True
+        logger.warning(
+            "Email not sent (%s): recipients=%s subject=%s",
+            log_context,
+            ", ".join(recipients),
+            subject,
+        )
+        return False
+    except Exception:
+        logger.exception("Email failed (%s).", log_context)
+        return False
+
+
 def _superadmin_recipients() -> list[str]:
     db_emails = list(
         User.objects.filter(
@@ -46,16 +85,12 @@ def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, or
         "Please review and approve this supplier request.\n"
         f"Approval page: {supplier_approval_url}"
     )
-    try:
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=None,
-            recipient_list=recipients,
-            fail_silently=False,
-        )
-    except Exception:
-        logger.exception("Failed sending supplier approval notification email.")
+    _send_email_with_status(
+        subject=subject,
+        message=message,
+        recipients=recipients,
+        log_context="new_supplier_for_superadmin_approval",
+    )
 
 
 def notify_supplier_approved(
@@ -70,13 +105,9 @@ def notify_supplier_approved(
         f"Organization: {organization_name}\n\n"
         "You can now log in to your account."
     )
-    try:
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=None,
-            recipient_list=[supplier_email],
-            fail_silently=False,
-        )
-    except Exception:
-        logger.exception("Failed sending supplier approved email.")
+    _send_email_with_status(
+        subject=subject,
+        message=message,
+        recipients=[supplier_email],
+        log_context="supplier_approved_notification",
+    )
