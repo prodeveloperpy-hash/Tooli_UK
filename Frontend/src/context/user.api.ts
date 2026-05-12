@@ -46,11 +46,12 @@ export const userApi = {
     return response.json();
   },
 
-  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean): Promise<UserOrganization[]> => {
+  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean, roleKey?: string): Promise<UserOrganization[]> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (isActive !== undefined) params.append('is_active', isActive.toString());
     if (isApproved !== undefined) params.append('is_approved', isApproved.toString());
+    if (roleKey !== undefined) params.append('role_key', roleKey);
 
     const url = `${API_URL}/user-organization/${params.toString() ? `?${params.toString()}` : ''}`;
     const response = await fetch(url, {

@@ -28,7 +28,10 @@ export const authApi = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Signup failed');
+      const errorMsg = typeof errorData === 'object' 
+        ? Object.values(errorData).flat().join(', ') 
+        : 'Signup failed';
+      throw new Error(errorMsg || 'Signup failed');
     }
 
     return response.json();
@@ -45,7 +48,10 @@ export const authApi = {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || 'Login failed');
+      const errorMsg = typeof errorData === 'object' 
+        ? Object.values(errorData).flat().join(', ') 
+        : 'Login failed';
+      throw new Error(errorMsg || 'Login failed');
     }
 
     return response.json();

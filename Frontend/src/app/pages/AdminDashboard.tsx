@@ -94,10 +94,9 @@ export function AdminDashboard() {
     setIsLoading(true);
     try {
       const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
-      const data = await userApi.getUserOrganizations(isActive, true);
+      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER');
       const supplierList = Array.isArray(data) ? data : (data as any).results || [];
-      const filtered = supplierList.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
-      setSuppliers(filtered);
+      setSuppliers(supplierList);
     } catch (error) {
       console.error('Error fetching suppliers:', error);
     } finally {
@@ -107,10 +106,9 @@ export function AdminDashboard() {
 
   const fetchPendingSuppliers = async () => {
     try {
-      const data = await userApi.getUserOrganizations(undefined, false);
+      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER');
       const list = Array.isArray(data) ? data : (data as any).results || [];
-      const filtered = list.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
-      setPendingSuppliers(filtered);
+      setPendingSuppliers(list);
     } catch (error) {
       console.error('Error fetching pending suppliers:', error);
     }
@@ -351,6 +349,7 @@ export function AdminDashboard() {
     try {
       await supplierPromise;
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error saving supplier:', error);
       throw error;
@@ -362,6 +361,7 @@ export function AdminDashboard() {
     try {
       await userApi.deleteUserOrganization(selectedSupplier.user_organization_id);
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error deleting supplier:', error);
       throw error;
@@ -518,7 +518,7 @@ export function AdminDashboard() {
                           htmlFor="approval-required" 
                           className="text-sm font-bold text-gray-700 cursor-pointer"
                         >
-                          Approval Required
+                          Approval Requests
                         </Label>
                       </div>
 
