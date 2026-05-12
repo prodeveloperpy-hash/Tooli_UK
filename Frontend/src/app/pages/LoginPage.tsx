@@ -39,9 +39,14 @@ export function LoginPage() {
       }
 
       const { user, role_key, organization_id } = response.data;
+      const normalizedUserId = user?.user_id ?? 10;
+      const normalizedFirstName = user?.first_name || 'Super';
+      const normalizedLastName = user?.last_name || 'Admin';
+      const normalizedEmail = user?.email || formData.email;
       localStorage.setItem('user_data', JSON.stringify(response.data));
-      localStorage.setItem('user_id', user.user_id.toString());
-      localStorage.setItem('name', `${user.first_name} ${user.last_name}`);
+      localStorage.setItem('user_id', String(normalizedUserId));
+      localStorage.setItem('name', `${normalizedFirstName} ${normalizedLastName}`.trim());
+      localStorage.setItem('email', normalizedEmail);
       localStorage.setItem('role_key', role_key);
       localStorage.setItem('organization_id', organization_id || '');
       localStorage.setItem('avatar_url', user.avatar_url || '');
