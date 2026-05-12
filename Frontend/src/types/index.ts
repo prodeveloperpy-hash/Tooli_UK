@@ -86,7 +86,7 @@ export interface SignupRequest {
   email: string;
   password: string;
   avatar_url: string | null;
-  is_active: boolean;
+  is_active?: boolean;
   organization_name: string;
   organization_domain: string;
   organization_logo: string | null;
@@ -96,7 +96,7 @@ export interface SignupRequest {
   organization_state: string;
   organization_postal_code: string;
   organization_country: string;
-  organization_is_active: boolean;
+  organization_is_active?: boolean;
   user_organization_role_id: number;
   is_approved: boolean;
 }

@@ -85,6 +85,7 @@ export function AdminDashboard() {
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
+  const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState<string>('all');
 
 
 
@@ -94,10 +95,9 @@ export function AdminDashboard() {
     setIsLoading(true);
     try {
       const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
-      const data = await userApi.getUserOrganizations(isActive, true);
+      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER');
       const supplierList = Array.isArray(data) ? data : (data as any).results || [];
-      const filtered = supplierList.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
-      setSuppliers(filtered);
+      setSuppliers(supplierList);
     } catch (error) {
       console.error('Error fetching suppliers:', error);
     } finally {
@@ -107,10 +107,9 @@ export function AdminDashboard() {
 
   const fetchPendingSuppliers = async () => {
     try {
-      const data = await userApi.getUserOrganizations(undefined, false);
+      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER');
       const list = Array.isArray(data) ? data : (data as any).results || [];
-      const filtered = list.filter((item: UserOrganization) => item.role_details.role_key === 'SUPPLIER');
-      setPendingSuppliers(filtered);
+      setPendingSuppliers(list);
     } catch (error) {
       console.error('Error fetching pending suppliers:', error);
     }
@@ -127,7 +126,7 @@ export function AdminDashboard() {
     if (activeTab === 'products') {
       fetchEquipment();
     }
-  }, [activeTab, equipPage, supplierFilter]);
+  }, [activeTab, equipPage, supplierFilter, equipAvailabilityFilter]);
 
   // Initial data needed for forms
   useEffect(() => {
@@ -153,7 +152,8 @@ export function AdminDashboard() {
     setIsEquipmentLoading(true);
     try {
       const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId);
+      const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId, isActive);
       setEquipment(response.results);
       setTotalEquipCount(response.count);
       setTotalEquipPages(Math.ceil(response.count / 20));
@@ -351,6 +351,7 @@ export function AdminDashboard() {
     try {
       await supplierPromise;
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error saving supplier:', error);
       throw error;
@@ -362,6 +363,7 @@ export function AdminDashboard() {
     try {
       await userApi.deleteUserOrganization(selectedSupplier.user_organization_id);
       await fetchSuppliers();
+      await fetchPendingSuppliers();
     } catch (error) {
       console.error('Error deleting supplier:', error);
       throw error;
@@ -480,7 +482,7 @@ export function AdminDashboard() {
               </TabsTrigger>
               <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Package className="w-4 h-4 mr-2" />
-                Products
+                Equipments
               </TabsTrigger>
             </TabsList>
 
@@ -518,7 +520,7 @@ export function AdminDashboard() {
                           htmlFor="approval-required" 
                           className="text-sm font-bold text-gray-700 cursor-pointer"
                         >
-                          Approval Required
+                          Approval Requests
                         </Label>
                       </div>
 
@@ -655,6 +657,18 @@ export function AdminDashboard() {
                           </option>
                         ))}
                       </select>
+                      <select 
+                        value={equipAvailabilityFilter}
+                        onChange={(e) => {
+                          setEquipAvailabilityFilter(e.target.value);
+                          setEquipPage(1);
+                        }}
+                        className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[150px]"
+                      >
+                        <option value="all">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="unavailable">Not Available</option>
+                      </select>
                     </div>
                   </div>
 
@@ -702,9 +716,9 @@ export function AdminDashboard() {
                             </TableCell>
                             <TableCell>
                               {item.is_active ? (
-                                <Badge className="bg-green-500 font-bold px-3">Active</Badge>
+                                <Badge className="bg-green-500 font-bold px-3">Available</Badge>
                               ) : (
-                                <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
+                                <Badge variant="secondary" className="font-bold px-3">Not Available</Badge>
                               )}
                             </TableCell>
                             <TableCell className="text-right pr-6">

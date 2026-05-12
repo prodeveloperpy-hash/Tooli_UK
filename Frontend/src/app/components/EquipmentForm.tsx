@@ -297,20 +297,34 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
                   </Select>
                 </div>
               </div>
-              <div className="space-y-2">
-                <Label className="font-bold">Location</Label>
-                <Select value={formData.locationId} onValueChange={v => { if(v !== formData.locationId) setFormData({...formData, locationId: v}) }}>
-                  <SelectTrigger className="h-12 rounded-xl">
-                    <SelectValue placeholder="Select Location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {locations.map(loc => (
-                      <SelectItem key={loc.location_id} value={(loc.location_id || '0').toString()}>
-                        {loc.city_name}, {loc.country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="font-bold">Location</Label>
+                  <Select value={formData.locationId} onValueChange={v => { if(v !== formData.locationId) setFormData({...formData, locationId: v}) }}>
+                    <SelectTrigger className="h-12 rounded-xl">
+                      <SelectValue placeholder="Select Location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {locations.map(loc => (
+                        <SelectItem key={loc.location_id} value={(loc.location_id || '0').toString()}>
+                          {loc.city_name}, {loc.country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="font-bold">Availability Status</Label>
+                  <Select value={formData.isActive.toString()} onValueChange={v => { setFormData({...formData, isActive: v === 'true'}) }}>
+                    <SelectTrigger className="h-12 rounded-xl">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="true">Available</SelectItem>
+                      <SelectItem value="false">Not Available</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="space-y-2">
                 <Label className="font-bold">External Redirect URL</Label>
