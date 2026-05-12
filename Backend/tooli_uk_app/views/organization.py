@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from tooli_uk_app.filters.organization import OrganizationFilter
 from tooli_uk_app.models import Organization
+from tooli_uk_app.paginations import OrganizationPagination
 from tooli_uk_app.serializers.organization import OrganizationSerializer
 from tooli_uk_app.services import gcs_images
 
@@ -16,6 +17,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all().order_by("-organization_id")
     serializer_class = OrganizationSerializer
     filterset_class = OrganizationFilter
+    pagination_class = OrganizationPagination
     parser_classes = [
         parsers.JSONParser,
         parsers.MultiPartParser,

@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from tooli_uk_app.filters.user import UserFilter
 from tooli_uk_app.models import User
+from tooli_uk_app.paginations import UserPagination
 from tooli_uk_app.serializers.user import UserSerializer
 from tooli_uk_app.services import gcs_images
 
@@ -14,6 +15,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by("-user_id")
     serializer_class = UserSerializer
     filterset_class = UserFilter
+    pagination_class = UserPagination
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()

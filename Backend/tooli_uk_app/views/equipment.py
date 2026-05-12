@@ -12,7 +12,7 @@ from tooli_uk_app.models import (
     EquipmentLocation,
     EquipmentPrice,
 )
-from tooli_uk_app.pagination import EquipmentPagination
+from tooli_uk_app.paginations import EquipmentPagination
 from tooli_uk_app.serializers.equipment import EquipmentMutateSerializer, EquipmentSerializer
 
 
