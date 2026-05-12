@@ -18,6 +18,7 @@ class SignupSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=100)
     email = serializers.EmailField(max_length=150)
     password = serializers.CharField(write_only=True, min_length=8, max_length=128)
+    # Signup is supplier-only. Role is forced to SUPPLIER in backend.
     role_id = serializers.IntegerField(required=False, allow_null=True)
     avatar_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     is_active = serializers.BooleanField(required=False, default=True)
@@ -33,11 +34,8 @@ class SignupSerializer(serializers.Serializer):
     organization_country = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=100)
     organization_is_active = serializers.BooleanField(required=False, default=True)
 
+    # Signup is supplier-only. Membership role is forced to SUPPLIER in backend.
     user_organization_role_id = serializers.IntegerField(required=False, allow_null=True)
-    def validate_user_organization_role_id(self, value):
-        if value is not None and not Role.objects.filter(role_id=value).exists():
-            raise serializers.ValidationError("Invalid user_organization_role_id.")
-        return value
 
 
     def validate_email(self, value: str) -> str:
@@ -45,12 +43,7 @@ class SignupSerializer(serializers.Serializer):
             raise serializers.ValidationError("Email is already registered.")
         return value
 
-    def _resolve_role_id(self, role_id: int | None) -> int:
-        if role_id is not None:
-            if not Role.objects.filter(role_id=role_id).exists():
-                raise serializers.ValidationError({"role_id": "Invalid role_id."})
-            return role_id
-
+    def _resolve_supplier_role_id(self) -> int:
         supplier_role = Role.objects.filter(role_key__iexact="SUPPLIER").first()
         if not supplier_role:
             raise serializers.ValidationError(
@@ -61,7 +54,8 @@ class SignupSerializer(serializers.Serializer):
     @transaction.atomic
     def create(self, validated_data):
         now = timezone.now()
-        resolved_role_id = self._resolve_role_id(validated_data.get("role_id"))
+        # Force supplier-only signup regardless of any role fields sent by client.
+        resolved_role_id = self._resolve_supplier_role_id()
 
         organization = Organization.objects.create(
             name=validated_data["organization_name"],
@@ -106,14 +100,7 @@ class SignupSerializer(serializers.Serializer):
             user.avatar_url = gcs_images.upload_user_avatar(avatar_file, user.user_id)
             user.save(update_fields=["avatar_url", "updated_datetime"])
 
-        user_org_role = validated_data.get("user_organization_role_id")
-        membership_role_id = (
-            user_org_role if user_org_role is not None else resolved_role_id
-        )
-        role = Role.objects.filter(role_id=membership_role_id).first()
-        is_supplier_membership = bool(
-            role and role.role_key and role.role_key.upper() == "SUPPLIER"
-        )
+        membership_role_id = resolved_role_id
         UserOrganization.objects.create(
             user_id_id=user.user_id,
             organization_id_id=organization.organization_id,
@@ -127,15 +114,14 @@ class SignupSerializer(serializers.Serializer):
             updated_by_id=user.user_id,
         )
 
-        if is_supplier_membership:
-            full_name = f"{user.first_name} {user.last_name}".strip()
-            transaction.on_commit(
-                lambda: notify_new_supplier_for_approval(
-                    supplier_name=full_name or user.email,
-                    supplier_email=user.email,
-                    organization_name=organization.name,
-                )
+        full_name = f"{user.first_name} {user.last_name}".strip()
+        transaction.on_commit(
+            lambda: notify_new_supplier_for_approval(
+                supplier_name=full_name or user.email,
+                supplier_email=user.email,
+                organization_name=organization.name,
             )
+        )
 
         return {
             "user_id": user.user_id,
