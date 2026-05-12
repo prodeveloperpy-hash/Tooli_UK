@@ -304,7 +304,31 @@ export const equipmentApi = {
     });
     if (!response.ok) throw new Error('Failed to delete location');
   },
+
+  getStats: async (): Promise<Stats> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/stats/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch stats');
+    }
+
+    return response.json();
+  },
 };
+
+export interface Stats {
+  total_equipment: number;
+  today_equipment: number;
+  total_categories: number;
+  total_locations: number;
+  total_admins: number;
+  total_suppliers: number;
+}
 
 export interface Interval {
   interval_id: number;

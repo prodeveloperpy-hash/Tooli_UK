@@ -49,7 +49,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { userApi, UserOrganization } from '../../context/user.api';
-import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
+import { equipmentApi, Equipment, Interval, Category, Location, Stats } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
 import { EquipmentForm } from '../components/EquipmentForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
@@ -86,6 +86,7 @@ export function AdminDashboard() {
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState<string>('all');
+  const [statsData, setStatsData] = useState<Stats | null>(null);
 
 
 
@@ -131,7 +132,17 @@ export function AdminDashboard() {
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
+    fetchStats();
   }, []);
+
+  const fetchStats = async () => {
+    try {
+      const data = await equipmentApi.getStats();
+      setStatsData(data);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
   const fetchFormStaticData = async () => {
     try {
@@ -140,9 +151,9 @@ export function AdminDashboard() {
         equipmentApi.getCategories(),
         equipmentApi.getLocations(),
       ]);
-      setIntervals(intervalData);
-      setCategories(categoryData);
-      setLocations(locationData);
+      setIntervals(Array.isArray(intervalData) ? intervalData : (intervalData as any).results || []);
+      setCategories(Array.isArray(categoryData) ? categoryData : (categoryData as any).results || []);
+      setLocations(Array.isArray(locationData) ? locationData : (locationData as any).results || []);
     } catch (error) {
       console.error('Error fetching form static data:', error);
     }
@@ -431,8 +442,8 @@ export function AdminDashboard() {
 
 
   const stats = [
-    { title: 'Total Suppliers', value: suppliers.length, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
-    { title: 'Total Equipment', value: totalEquipCount, icon: Package, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'Total Suppliers', value: statsData?.total_suppliers || 0, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
+    { title: 'Total Equipment', value: statsData?.total_equipment || 0, icon: Package, gradient: 'from-purple-500 to-pink-600' },
   ];
 
   return (

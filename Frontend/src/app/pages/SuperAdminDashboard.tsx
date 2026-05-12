@@ -51,7 +51,7 @@ import {
 } from 'lucide-react';
 import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
-import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
+import { equipmentApi, Equipment, Interval, Category, Location, Stats } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
 import { AdminForm } from '../components/AdminForm';
 import { EquipmentForm } from '../components/EquipmentForm';
@@ -91,6 +91,7 @@ export function SuperAdminDashboard() {
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
+  const [statsData, setStatsData] = useState<Stats | null>(null);
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState('all');
 
   // Category/Location Modal States
@@ -180,14 +181,25 @@ export function SuperAdminDashboard() {
     fetchFormStaticData();
     fetchCategories();
     fetchLocations();
+    fetchStats();
   }, []);
+
+  const fetchStats = async () => {
+    try {
+      const data = await equipmentApi.getStats();
+      setStatsData(data);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
   const fetchFormStaticData = async () => {
     try {
       const [intervalData] = await Promise.all([
         equipmentApi.getIntervals(),
       ]);
-      setIntervals(intervalData);
+      const list = Array.isArray(intervalData) ? intervalData : (intervalData as any).results || [];
+      setIntervals(list);
     } catch (error) {
       console.error('Error fetching form static data:', error);
     }
@@ -196,7 +208,8 @@ export function SuperAdminDashboard() {
   const fetchCategories = async () => {
     try {
       const categoryData = await equipmentApi.getCategories();
-      setCategories(categoryData);
+      const list = Array.isArray(categoryData) ? categoryData : (categoryData as any).results || [];
+      setCategories(list);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -205,7 +218,8 @@ export function SuperAdminDashboard() {
   const fetchLocations = async () => {
     try {
       const locationData = await equipmentApi.getLocations();
-      setLocations(locationData);
+      const list = Array.isArray(locationData) ? locationData : (locationData as any).results || [];
+      setLocations(list);
     } catch (error) {
       console.error('Error fetching locations:', error);
     }
@@ -670,8 +684,11 @@ export function SuperAdminDashboard() {
 
 
   const stats = [
-    { title: 'Total Suppliers', value: suppliers.length, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
-    { title: 'Total Equipment', value: totalEquipCount, icon: Package, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'Total Admins', value: statsData?.total_admins || 0, icon: ShieldCheck, gradient: 'from-slate-700 to-slate-900' },
+    { title: 'Total Suppliers', value: statsData?.total_suppliers || 0, icon: Users, gradient: 'from-cyan-500 to-blue-600' },
+    { title: 'Total Equipment', value: statsData?.total_equipment || 0, icon: Package, gradient: 'from-blue-500 to-indigo-600' },
+    { title: 'Total Categories', value: statsData?.total_categories || 0, icon: Tag, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'Total Locations', value: statsData?.total_locations || 0, icon: MapPin, gradient: 'from-orange-500 to-red-600' },
   ];
 
   return (
@@ -691,7 +708,7 @@ export function SuperAdminDashboard() {
         </div>
 
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.title}
