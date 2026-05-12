@@ -60,6 +60,7 @@ export function SupplierDashboard() {
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
+  const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState<string>('all');
 
   useEffect(() => {
     fetchStaticData();
@@ -67,7 +68,7 @@ export function SupplierDashboard() {
 
   useEffect(() => {
     fetchEquipment();
-  }, [equipPage]);
+  }, [equipPage, equipAvailabilityFilter]);
 
   const fetchStaticData = async () => {
     try {
@@ -88,7 +89,8 @@ export function SupplierDashboard() {
     setIsEquipmentLoading(true);
     try {
       const orgId = localStorage.getItem('organization_id');
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId || undefined);
+      const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId || undefined, isActive);
       
       setEquipment(response.results);
       setTotalEquipCount(response.count);
@@ -411,13 +413,27 @@ export function SupplierDashboard() {
                       <CardTitle className="text-3xl font-black text-gray-900 tracking-tight">Equipment Inventory</CardTitle>
                       <p className="text-gray-500 font-medium mt-2">Manage your listings and update real-time availability.</p>
                     </div>
-                    <Button 
-                      onClick={handleOpenEquipAdd}
-                      className="h-14 px-10 rounded-2xl bg-[#030213] hover:bg-black text-white font-black shadow-2xl shadow-black/20 transition-all hover:scale-105 active:scale-95"
-                    >
-                      <Plus className="w-5 h-5 mr-2" />
-                      Add Equipment
-                    </Button>
+                    <div className="flex items-center gap-4">
+                      <select 
+                        value={equipAvailabilityFilter}
+                        onChange={(e) => {
+                          setEquipAvailabilityFilter(e.target.value);
+                          setEquipPage(1);
+                        }}
+                        className="h-14 px-6 rounded-2xl border-none bg-white shadow-xl text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-brand-primary/20 appearance-none min-w-[200px]"
+                      >
+                        <option value="all">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="unavailable">Not Available</option>
+                      </select>
+                      <Button 
+                        onClick={handleOpenEquipAdd}
+                        className="h-14 px-10 rounded-2xl bg-[#030213] hover:bg-black text-white font-black shadow-2xl shadow-black/20 transition-all hover:scale-105 active:scale-95"
+                      >
+                        <Plus className="w-5 h-5 mr-2" />
+                        Add Equipment
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
@@ -475,12 +491,12 @@ export function SupplierDashboard() {
                                 {item.is_active ? (
                                   <div className="flex items-center gap-2 text-emerald-600 font-black text-xs uppercase tracking-widest">
                                     <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                                    Active
+                                    Available
                                   </div>
                                 ) : (
                                   <div className="flex items-center gap-2 text-red-500 font-black text-xs uppercase tracking-widest opacity-60">
                                     <span className="w-2 h-2 rounded-full bg-red-400" />
-                                    Hidden
+                                    Not Available
                                   </div>
                                 )}
                               </TableCell>

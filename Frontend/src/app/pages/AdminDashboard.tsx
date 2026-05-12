@@ -85,6 +85,7 @@ export function AdminDashboard() {
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
+  const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState<string>('all');
 
 
 
@@ -125,7 +126,7 @@ export function AdminDashboard() {
     if (activeTab === 'products') {
       fetchEquipment();
     }
-  }, [activeTab, equipPage, supplierFilter]);
+  }, [activeTab, equipPage, supplierFilter, equipAvailabilityFilter]);
 
   // Initial data needed for forms
   useEffect(() => {
@@ -151,7 +152,8 @@ export function AdminDashboard() {
     setIsEquipmentLoading(true);
     try {
       const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId);
+      const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId, isActive);
       setEquipment(response.results);
       setTotalEquipCount(response.count);
       setTotalEquipPages(Math.ceil(response.count / 20));
@@ -655,6 +657,18 @@ export function AdminDashboard() {
                           </option>
                         ))}
                       </select>
+                      <select 
+                        value={equipAvailabilityFilter}
+                        onChange={(e) => {
+                          setEquipAvailabilityFilter(e.target.value);
+                          setEquipPage(1);
+                        }}
+                        className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[150px]"
+                      >
+                        <option value="all">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="unavailable">Not Available</option>
+                      </select>
                     </div>
                   </div>
 
@@ -702,9 +716,9 @@ export function AdminDashboard() {
                             </TableCell>
                             <TableCell>
                               {item.is_active ? (
-                                <Badge className="bg-green-500 font-bold px-3">Active</Badge>
+                                <Badge className="bg-green-500 font-bold px-3">Available</Badge>
                               ) : (
-                                <Badge variant="secondary" className="font-bold px-3">Inactive</Badge>
+                                <Badge variant="secondary" className="font-bold px-3">Not Available</Badge>
                               )}
                             </TableCell>
                             <TableCell className="text-right pr-6">

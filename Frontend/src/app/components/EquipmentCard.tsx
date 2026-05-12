@@ -130,7 +130,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary bg-brand-primary/10 px-2 py-1 rounded">Verified Product</span>
                     <Badge variant="secondary" className="bg-green-50 text-green-700 border-green-100">
-                      <Clock className="w-3 h-3 mr-1" /> Available Now
+                      <Clock className="w-3 h-3 mr-1" /> Available
                     </Badge>
                   </div>
                   <h2 className="text-2xl font-extrabold text-gray-900 mb-2 leading-tight">{(detailedEquipment || equipment).name}</h2>
