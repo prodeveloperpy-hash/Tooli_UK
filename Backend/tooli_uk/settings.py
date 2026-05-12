@@ -253,7 +253,7 @@ DEFAULT_FROM_EMAIL = os.environ.get(
 )
 SUPPLIER_APPROVAL_URL = os.environ.get(
     "SUPPLIER_APPROVAL_URL",
-    "https://frontend-service-961815749151.us-central1.run.app/suppliers",
+    "https://frontend-service-961815749151.us-central1.run.app/dashboard",
 )
 
 # Cloud Run / reverse proxy: correct scheme and host for absolute URLs (e.g. avatar links) and CSRF.

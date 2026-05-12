@@ -74,7 +74,7 @@ def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, or
     supplier_approval_url = getattr(
         settings,
         "SUPPLIER_APPROVAL_URL",
-        "https://frontend-service-961815749151.us-central1.run.app/suppliers",
+        "https://frontend-service-961815749151.us-central1.run.app/dashboard",
     )
     subject = f"New supplier request for approval: {supplier_name}"
     message = (
