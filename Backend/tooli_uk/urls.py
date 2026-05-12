@@ -20,6 +20,7 @@ from tooli_uk_app.views.location import LocationViewSet
 from tooli_uk_app.views.organization import OrganizationViewSet
 from tooli_uk_app.views.role import RoleViewSet
 from tooli_uk_app.views.auth import LoginAPIView, LogoutAPIView, SignupAPIView
+from tooli_uk_app.views.stats import StatsAPIView
 from tooli_uk_app.views.user import UserViewSet
 from tooli_uk_app.views.user_organization import UserOrganizationViewSet
 
@@ -43,6 +44,7 @@ urlpatterns = [
     path("signup/", SignupAPIView.as_view(), name="signup"),
     path("login/", LoginAPIView.as_view(), name="login"),
     path("logout/", LogoutAPIView.as_view(), name="logout"),
+    path("stats/", StatsAPIView.as_view(), name="stats"),
     path("create-equipment/", CreateEquipmentAPIView.as_view(), name="create_equipment"),
     path(
         "create_equipment/<int:equipment_id>/",
