@@ -51,7 +51,7 @@ import {
 } from 'lucide-react';
 import { products as mockProducts } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
-import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
+import { equipmentApi, Equipment, Interval, Category, Location, Stats } from '../../context/equipment.api';
 import { SupplierForm } from '../components/SupplierForm';
 import { AdminForm } from '../components/AdminForm';
 import { EquipmentForm } from '../components/EquipmentForm';
@@ -91,7 +91,20 @@ export function SuperAdminDashboard() {
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
+  const [statsData, setStatsData] = useState<Stats | null>(null);
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState('all');
+
+  const [adminPage, setAdminPage] = useState(1);
+  const [totalAdminCount, setTotalAdminCount] = useState(0);
+  
+  const [supplierPage, setSupplierPage] = useState(1);
+  const [totalSupplierCount, setTotalSupplierCount] = useState(0);
+  
+  const [categoryPage, setCategoryPage] = useState(1);
+  const [totalCategoryCount, setTotalCategoryCount] = useState(0);
+  
+  const [locationPage, setLocationPage] = useState(1);
+  const [totalLocationCount, setTotalLocationCount] = useState(0);
 
   // Category/Location Modal States
   const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
@@ -110,9 +123,10 @@ export function SuperAdminDashboard() {
   const fetchAdmins = async () => {
     setIsLoading(true);
     try {
-      const data = await userApi.getUsersByRole(7);
-      const userList = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUsersByRole(7, adminPage, 50);
+      const userList = Array.isArray(data) ? data : data.results || [];
       setAdmins(userList);
+      setTotalAdminCount(data.count || userList.length);
     } catch (error) {
       console.error('Error fetching admins:', error);
     } finally {
@@ -124,15 +138,16 @@ export function SuperAdminDashboard() {
     if (activeTab === 'admins') {
       fetchAdmins();
     }
-  }, [activeTab]);
+  }, [activeTab, adminPage]);
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
     try {
       const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
-      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER');
-      const supplierList = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER', supplierPage, 50);
+      const supplierList = Array.isArray(data) ? data : data.results || [];
       setSuppliers(supplierList);
+      setTotalSupplierCount(data.count || supplierList.length);
     } catch (error) {
       console.error('Error fetching suppliers:', error);
     } finally {
@@ -142,8 +157,8 @@ export function SuperAdminDashboard() {
 
   const fetchPendingSuppliers = async () => {
     try {
-      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER');
-      const list = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER', 1, 100);
+      const list = Array.isArray(data) ? data : data.results || [];
       setPendingSuppliers(list);
     } catch (error) {
       console.error('Error fetching pending suppliers:', error);
@@ -155,7 +170,7 @@ export function SuperAdminDashboard() {
       fetchSuppliers();
       fetchPendingSuppliers();
     }
-  }, [activeTab, approvalFilter, statusFilter]);
+  }, [activeTab, approvalFilter, statusFilter, supplierPage]);
 
   useEffect(() => {
     if (activeTab === 'products') {
@@ -178,16 +193,37 @@ export function SuperAdminDashboard() {
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
-    fetchCategories();
-    fetchLocations();
+    fetchStats();
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'categories') {
+      fetchCategories();
+    }
+  }, [activeTab, categoryPage]);
+
+  useEffect(() => {
+    if (activeTab === 'locations') {
+      fetchLocations();
+    }
+  }, [activeTab, locationPage]);
+
+  const fetchStats = async () => {
+    try {
+      const data = await equipmentApi.getStats();
+      setStatsData(data);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
   const fetchFormStaticData = async () => {
     try {
       const [intervalData] = await Promise.all([
         equipmentApi.getIntervals(),
       ]);
-      setIntervals(intervalData);
+      const list = Array.isArray(intervalData) ? intervalData : (intervalData as any).results || [];
+      setIntervals(list);
     } catch (error) {
       console.error('Error fetching form static data:', error);
     }
@@ -195,8 +231,10 @@ export function SuperAdminDashboard() {
 
   const fetchCategories = async () => {
     try {
-      const categoryData = await equipmentApi.getCategories();
-      setCategories(categoryData);
+      const data = await equipmentApi.getCategories(categoryPage, 50);
+      const list = Array.isArray(data) ? data : data.results || [];
+      setCategories(list);
+      setTotalCategoryCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -204,8 +242,10 @@ export function SuperAdminDashboard() {
 
   const fetchLocations = async () => {
     try {
-      const locationData = await equipmentApi.getLocations();
-      setLocations(locationData);
+      const data = await equipmentApi.getLocations(locationPage, 50);
+      const list = Array.isArray(data) ? data : data.results || [];
+      setLocations(list);
+      setTotalLocationCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching locations:', error);
     }
@@ -670,8 +710,11 @@ export function SuperAdminDashboard() {
 
 
   const stats = [
-    { title: 'Total Suppliers', value: suppliers.length, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
-    { title: 'Total Equipment', value: totalEquipCount, icon: Package, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'Total Admins', value: statsData?.total_admins || 0, icon: ShieldCheck, gradient: 'from-slate-700 to-slate-900' },
+    { title: 'Total Suppliers', value: statsData?.total_suppliers || 0, icon: Users, gradient: 'from-cyan-500 to-blue-600' },
+    { title: 'Total Equipment', value: statsData?.total_equipment || 0, icon: Package, gradient: 'from-blue-500 to-indigo-600' },
+    { title: 'Total Categories', value: statsData?.total_categories || 0, icon: Tag, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'Total Locations', value: statsData?.total_locations || 0, icon: MapPin, gradient: 'from-orange-500 to-red-600' },
   ];
 
   return (
@@ -691,7 +734,7 @@ export function SuperAdminDashboard() {
         </div>
 
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.title}
@@ -753,6 +796,7 @@ export function SuperAdminDashboard() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="overflow-x-auto">
+                    {/* ... table content ... */}
                     <Table>
                       <TableHeader className="bg-gray-50">
                         <TableRow>
@@ -817,6 +861,34 @@ export function SuperAdminDashboard() {
                         })}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{admins.length}</span> of <span className="text-gray-900 font-bold">{totalAdminCount}</span> admins
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAdminPage(prev => Math.max(1, prev - 1))}
+                        disabled={adminPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {adminPage} of {Math.ceil(totalAdminCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAdminPage(prev => prev + 1)}
+                        disabled={adminPage >= Math.ceil(totalAdminCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -931,8 +1003,8 @@ export function SuperAdminDashboard() {
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-1.5 text-sm font-medium">
-                                <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                                {s.organization_details.city}
+                                <MapPin className="w-3.5 h-3.5 text-brand-primary" />
+                                {s.organization_details.city}, {s.organization_details.country}
                               </div>
                             </TableCell>
                             <TableCell>
@@ -956,6 +1028,34 @@ export function SuperAdminDashboard() {
                         ))}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{suppliers.length}</span> of <span className="text-gray-900 font-bold">{totalSupplierCount}</span> suppliers
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSupplierPage(prev => Math.max(1, prev - 1))}
+                        disabled={supplierPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {supplierPage} of {Math.ceil(totalSupplierCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSupplierPage(prev => prev + 1)}
+                        disabled={supplierPage >= Math.ceil(totalSupplierCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -1179,6 +1279,34 @@ export function SuperAdminDashboard() {
                       </TableBody>
                     </Table>
                   </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{categories.length}</span> of <span className="text-gray-900 font-bold">{totalCategoryCount}</span> categories
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCategoryPage(prev => Math.max(1, prev - 1))}
+                        disabled={categoryPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {categoryPage} of {Math.ceil(totalCategoryCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCategoryPage(prev => prev + 1)}
+                        disabled={categoryPage >= Math.ceil(totalCategoryCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -1232,6 +1360,34 @@ export function SuperAdminDashboard() {
                         ))}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{locations.length}</span> of <span className="text-gray-900 font-bold">{totalLocationCount}</span> locations
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setLocationPage(prev => Math.max(1, prev - 1))}
+                        disabled={locationPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {locationPage} of {Math.ceil(totalLocationCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setLocationPage(prev => prev + 1)}
+                        disabled={locationPage >= Math.ceil(totalLocationCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

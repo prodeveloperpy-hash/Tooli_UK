@@ -46,14 +46,16 @@ export const userApi = {
     return response.json();
   },
 
-  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean, roleKey?: string): Promise<UserOrganization[]> => {
+  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean, roleKey?: string, page: number = 1, pageSize: number = 50): Promise<any> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (isActive !== undefined) params.append('is_active', isActive.toString());
     if (isApproved !== undefined) params.append('is_approved', isApproved.toString());
     if (roleKey !== undefined) params.append('role_key', roleKey);
+    params.append('page', page.toString());
+    params.append('page_size', pageSize.toString());
 
-    const url = `${API_URL}/user-organization/${params.toString() ? `?${params.toString()}` : ''}`;
+    const url = `${API_URL}/user-organization/?${params.toString()}`;
     const response = await fetch(url, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -212,9 +214,14 @@ export const userApi = {
     return response.json();
   },
 
-  getUsersByRole: async (roleId: number): Promise<UserOrganization[]> => {
+  getUsersByRole: async (roleId: number, page: number = 1, pageSize: number = 50): Promise<any> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/user/?role_id=${roleId}`, {
+    const params = new URLSearchParams();
+    params.append('role_id', roleId.toString());
+    params.append('page', page.toString());
+    params.append('page_size', pageSize.toString());
+
+    const response = await fetch(`${API_URL}/user/?${params.toString()}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },

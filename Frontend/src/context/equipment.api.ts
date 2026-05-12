@@ -155,9 +155,13 @@ export const equipmentApi = {
     return response.json();
   },
 
-  getCategories: async (): Promise<Category[]> => {
+  getCategories: async (page: number = 1, pageSize: number = 50): Promise<any> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/category/`, {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('page_size', pageSize.toString());
+
+    const response = await fetch(`${API_URL}/category/?${params.toString()}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -170,9 +174,13 @@ export const equipmentApi = {
     return response.json();
   },
 
-  getLocations: async (): Promise<Location[]> => {
+  getLocations: async (page: number = 1, pageSize: number = 50): Promise<any> => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/location/`, {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+    params.append('page_size', pageSize.toString());
+
+    const response = await fetch(`${API_URL}/location/?${params.toString()}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -304,7 +312,31 @@ export const equipmentApi = {
     });
     if (!response.ok) throw new Error('Failed to delete location');
   },
+
+  getStats: async (): Promise<Stats> => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_URL}/stats/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch stats');
+    }
+
+    return response.json();
+  },
 };
+
+export interface Stats {
+  total_equipment: number;
+  today_equipment: number;
+  total_categories: number;
+  total_locations: number;
+  total_admins: number;
+  total_suppliers: number;
+}
 
 export interface Interval {
   interval_id: number;

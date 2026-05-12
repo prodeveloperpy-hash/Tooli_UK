@@ -77,9 +77,9 @@ export function SupplierDashboard() {
         equipmentApi.getCategories(),
         equipmentApi.getLocations()
       ]);
-      setIntervals(intervalData);
-      setCategories(categoryData);
-      setLocations(locationData);
+      setIntervals(Array.isArray(intervalData) ? intervalData : (intervalData as any).results || []);
+      setCategories(Array.isArray(categoryData) ? categoryData : (categoryData as any).results || []);
+      setLocations(Array.isArray(locationData) ? locationData : (locationData as any).results || []);
     } catch (error) {
       console.error('Error fetching static data:', error);
     }
