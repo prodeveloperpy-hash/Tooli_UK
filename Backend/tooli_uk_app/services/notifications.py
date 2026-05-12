@@ -137,7 +137,7 @@ def notify_supplier_approved(
     subject = "Your supplier account is approved"
     message = (
         f"Hi {supplier_name},\n\n"
-        "Your supplier account has been approved by admin.\n"
+        "Your supplier account has been created/approved by admin.\n"
         f"Organization: {organization_name}\n\n"
         "You can now log in to your account."
     )

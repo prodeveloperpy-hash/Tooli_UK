@@ -324,15 +324,24 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         if is_supplier:
             supplier = User.objects.filter(pk=user_id).first()
             org = Organization.objects.filter(pk=organization_id).first()
-            if supplier and org:
+            if supplier and supplier.email and org:
                 supplier_name = f"{supplier.first_name} {supplier.last_name}".strip()
-                transaction.on_commit(
-                    lambda: notify_new_supplier_for_approval(
-                        supplier_name=supplier_name or supplier.email,
-                        supplier_email=supplier.email,
-                        organization_name=org.name,
+                if bool(link.is_approved):
+                    transaction.on_commit(
+                        lambda: notify_supplier_approved(
+                            supplier_name=supplier_name or supplier.email,
+                            supplier_email=supplier.email,
+                            organization_name=org.name,
+                        )
                     )
-                )
+                else:
+                    transaction.on_commit(
+                        lambda: notify_new_supplier_for_approval(
+                            supplier_name=supplier_name or supplier.email,
+                            supplier_email=supplier.email,
+                            organization_name=org.name,
+                        )
+                    )
         return link
 
     @transaction.atomic
