@@ -27,7 +27,7 @@ export function SearchResultsPage() {
     const fetchEquipment = async () => {
       setIsLoading(true);
       try {
-        const response = await equipmentApi.getEquipment(categoryId, locationId, date, page);
+        const response = await equipmentApi.getEquipment(categoryId, locationId, undefined, page);
         setEquipment(response.results);
         setTotalCount(response.count);
         setTotalPages(Math.ceil(response.count / 20)); // Assuming 20 is the page size

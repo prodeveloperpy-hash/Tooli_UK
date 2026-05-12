@@ -40,7 +40,6 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
   }, [isDetailOpen, equipment.equipment_id, detailedEquipment]);
   
   const displayPrice = primaryPrice?.price || '0.00';
-  const dailyPrice = (parseFloat(displayPrice) / 7).toFixed(2);
 
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -182,19 +181,12 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
               </div>
 
               <div className="mt-10 pt-8 border-t border-gray-100">
-                <div className="flex items-center justify-between mb-8">
                   <div>
-                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Starting from</div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-extrabold text-brand-primary">£{dailyPrice}</span>
-                      <span className="text-xs font-medium text-gray-500">/ day</span>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold text-brand-primary">£{displayPrice}</div>
+                      <div className="text-xs font-medium text-gray-500">per week</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xl font-bold text-gray-900">£{displayPrice}</div>
-                    <div className="text-xs font-medium text-gray-500">per week</div>
-                  </div>
-                </div>
                 
                 <Button 
                   onClick={(e) => {
@@ -265,7 +257,6 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                       <div className="text-right">
                         <div className="text-3xl font-bold text-brand-primary">£{displayPrice}</div>
                         <div className="text-sm text-muted-foreground">per week</div>
-                        <div className="text-xs text-muted-foreground mt-1">£{dailyPrice}/day</div>
                       </div>
                       <Button 
                         onClick={(e) => { e.stopPropagation(); equipment.redirect_url && window.open(equipment.redirect_url, '_blank'); }}
@@ -338,7 +329,6 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                     <div className="text-2xl font-bold text-brand-primary">£{displayPrice}</div>
                     <div className="text-xs text-muted-foreground">per week</div>
                   </div>
-                  <div className="text-right text-xs text-muted-foreground">£{dailyPrice}/day</div>
                 </div>
                 <Button 
                   onClick={(e) => { e.stopPropagation(); equipment.redirect_url && window.open(equipment.redirect_url, '_blank'); }}
