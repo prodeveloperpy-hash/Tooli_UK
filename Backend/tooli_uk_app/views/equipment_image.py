@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -29,7 +29,7 @@ class EquipmentImageViewSet(viewsets.ModelViewSet):
                 content_type="text/plain",
             )
         try:
-            payload = gcs_images.read_stored_image(raw)
+            payload = gcs_images.open_stored_image(raw)
         except RuntimeError:
             return HttpResponse(
                 "Image storage is not configured.",
@@ -43,8 +43,10 @@ class EquipmentImageViewSet(viewsets.ModelViewSet):
                 content_type="text/plain",
             )
         if payload is not None:
-            data, content_type = payload
-            response = HttpResponse(data, content_type=content_type)
+            file_obj, content_type, content_length = payload
+            response = FileResponse(file_obj, content_type=content_type)
+            if content_length is not None:
+                response["Content-Length"] = str(content_length)
             response["Cache-Control"] = "private, max-age=3600"
             return response
         if gcs_images.is_external_public_image_url(raw):

@@ -5,7 +5,7 @@ from __future__ import annotations
 import mimetypes
 import uuid
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, BinaryIO
 from urllib.parse import unquote, urlparse
 
 from django.conf import settings
@@ -37,13 +37,22 @@ def _gcs_http_timeout_seconds() -> float:
     return float(getattr(settings, "GCS_HTTP_TIMEOUT_SECONDS", 300) or 300)
 
 
-def _upload_blob_from_bytes(blob, data: bytes, content_type: str) -> None:
-    """Upload with configurable timeout; map network timeouts to ``RuntimeError`` for API layers."""
+def _upload_blob_from_file(blob, file_obj: BinaryIO, content_type: str) -> None:
+    """Upload using file streaming; map network timeouts to ``RuntimeError`` for API layers."""
     timeout = _gcs_http_timeout_seconds()
     try:
-        blob.upload_from_string(data, content_type=content_type, timeout=timeout)
+        blob.upload_from_file(
+            file_obj,
+            content_type=content_type,
+            rewind=True,
+            timeout=timeout,
+        )
     except TypeError:
-        blob.upload_from_string(data, content_type=content_type)
+        blob.upload_from_file(
+            file_obj,
+            content_type=content_type,
+            rewind=True,
+        )
     except Exception as exc:
         if requests is not None and isinstance(
             exc,
@@ -230,6 +239,24 @@ def _save_local_file(relative_posix: str, data: bytes) -> str:
     return f"{LOCAL_STORAGE_PREFIX}{relative_posix}"
 
 
+def _save_local_uploaded_file(relative_posix: str, uploaded_file: UploadedFile) -> str:
+    path = _safe_local_path(relative_posix)
+    if path is None:
+        raise ValueError("Invalid storage path.")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("wb") as dst:
+        for chunk in uploaded_file.chunks():
+            dst.write(chunk)
+    return f"{LOCAL_STORAGE_PREFIX}{relative_posix}"
+
+
+def _rewind_file_if_possible(file_obj) -> None:
+    try:
+        file_obj.seek(0)
+    except Exception:
+        pass
+
+
 def upload_user_avatar(uploaded_file: UploadedFile, user_id: int) -> str:
     """Store profile image; return value for ``User.avatar_url``."""
     content_type = getattr(uploaded_file, "content_type", None) or "application/octet-stream"
@@ -237,14 +264,13 @@ def upload_user_avatar(uploaded_file: UploadedFile, user_id: int) -> str:
     relative = f"uploads/users/{user_id}/{uuid.uuid4().hex}{ext}".replace("\\", "/")
 
     if not _gcs_uploads_enabled():
-        data = uploaded_file.read()
-        return _save_local_file(relative, data)
+        return _save_local_uploaded_file(relative, uploaded_file)
 
     object_name = f"users/{user_id}/{uuid.uuid4().hex}{ext}"
     bucket = _client().bucket(_bucket_name())
     blob = bucket.blob(object_name)
-    data = uploaded_file.read()
-    _upload_blob_from_bytes(blob, data, content_type)
+    _rewind_file_if_possible(uploaded_file)
+    _upload_blob_from_file(blob, uploaded_file, content_type)
     return object_name
 
 
@@ -257,14 +283,13 @@ def upload_organization_logo(uploaded_file: UploadedFile, organization_id: int) 
     )
 
     if not _gcs_uploads_enabled():
-        data = uploaded_file.read()
-        return _save_local_file(relative, data)
+        return _save_local_uploaded_file(relative, uploaded_file)
 
     object_name = f"organizations/{organization_id}/{uuid.uuid4().hex}{ext}"
     bucket = _client().bucket(_bucket_name())
     blob = bucket.blob(object_name)
-    data = uploaded_file.read()
-    _upload_blob_from_bytes(blob, data, content_type)
+    _rewind_file_if_possible(uploaded_file)
+    _upload_blob_from_file(blob, uploaded_file, content_type)
     return object_name
 
 
@@ -275,15 +300,45 @@ def upload_equipment_image(uploaded_file: UploadedFile, equipment_id: int) -> st
     relative = f"uploads/equipment/{equipment_id}/{uuid.uuid4().hex}{ext}".replace("\\", "/")
 
     if not _gcs_uploads_enabled():
-        data = uploaded_file.read()
-        return _save_local_file(relative, data)
+        return _save_local_uploaded_file(relative, uploaded_file)
 
     object_name = f"equipment/{equipment_id}/{uuid.uuid4().hex}{ext}"
     bucket = _client().bucket(_bucket_name())
     blob = bucket.blob(object_name)
-    data = uploaded_file.read()
-    _upload_blob_from_bytes(blob, data, content_type)
+    _rewind_file_if_possible(uploaded_file)
+    _upload_blob_from_file(blob, uploaded_file, content_type)
     return object_name
+
+
+def open_stored_image(stored: str) -> tuple[BinaryIO, str, int | None] | None:
+    """
+    Open an image as a stream and return ``(file_obj, content_type, content_length)``.
+    Caller is responsible for closing ``file_obj``.
+    """
+    raw = (stored or "").strip()
+    if not raw or is_unfetchable_stored_url(raw):
+        return None
+
+    if raw.startswith(LOCAL_STORAGE_PREFIX):
+        rel = raw[len(LOCAL_STORAGE_PREFIX) :]
+        path = _safe_local_path(rel)
+        if path is None or not path.is_file():
+            return None
+        ctype = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        return path.open("rb"), ctype, path.stat().st_size
+
+    key = _storage_key_for_gcs_fetch(raw)
+    if key is None:
+        return None
+    bucket = _client().bucket(_bucket_name())
+    blob = bucket.blob(key)
+    if not blob.exists():
+        return None
+    blob.reload()
+    content_type = blob.content_type or "application/octet-stream"
+    content_length = int(blob.size) if blob.size is not None else None
+    file_obj = blob.open("rb")
+    return file_obj, content_type, content_length
 
 
 def blob_exists(object_name: str) -> bool:
