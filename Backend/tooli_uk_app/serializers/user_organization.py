@@ -315,7 +315,10 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             if is_approved:
                 create_kwargs["is_active"] = True
         if is_supplier and "is_approved" not in create_kwargs:
-            create_kwargs["is_approved"] = False
+            # Admin-side UserOrganization create for supplier defaults to approved.
+            # Public signup path uses a different serializer and still sets False.
+            create_kwargs["is_approved"] = True
+            create_kwargs["is_active"] = True
 
         link = UserOrganization.objects.create(**create_kwargs)
         if is_supplier:
