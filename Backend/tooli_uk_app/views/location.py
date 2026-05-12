@@ -6,7 +6,7 @@ from tooli_uk_app.serializers.location import LocationSerializer
 
 
 class LocationViewSet(viewsets.ModelViewSet):
-    queryset = Location.objects.all()
+    queryset = Location.objects.all().order_by("-location_id")
     serializer_class = LocationSerializer
     filterset_class = LocationFilter
     lookup_field = "location_id"

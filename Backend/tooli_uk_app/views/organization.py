@@ -13,7 +13,7 @@ from tooli_uk_app.services import gcs_images
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.all().order_by("-organization_id")
     serializer_class = OrganizationSerializer
     filterset_class = OrganizationFilter
     parser_classes = [

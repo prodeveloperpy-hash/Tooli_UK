@@ -26,6 +26,7 @@ class EquipmentViewSet(viewsets.ModelViewSet):
         )
         .all()
         .distinct()
+        .order_by("-equipment_id")
     )
     filterset_class = EquipmentFilter
     pagination_class = EquipmentPagination

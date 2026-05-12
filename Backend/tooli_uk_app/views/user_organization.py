@@ -14,7 +14,7 @@ from tooli_uk_app.serializers.user_organization import (
 class UserOrganizationViewSet(viewsets.ModelViewSet):
     queryset = UserOrganization.objects.select_related(
         "user_id", "organization_id", "role_id"
-    ).all()
+    ).order_by("-user_organization_id")
     filterset_class = UserOrganizationFilter
 
     def get_serializer_class(self):

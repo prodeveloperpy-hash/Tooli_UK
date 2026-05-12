@@ -11,7 +11,7 @@ from tooli_uk_app.services import gcs_images
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by("-user_id")
     serializer_class = UserSerializer
     filterset_class = UserFilter
 
