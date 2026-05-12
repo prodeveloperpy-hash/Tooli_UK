@@ -723,7 +723,7 @@ export function SuperAdminDashboard() {
               </TabsTrigger>
               <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Package className="w-4 h-4 mr-2" />
-                Products
+                Equipments
               </TabsTrigger>
               <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
                 <Tag className="w-4 h-4 mr-2" />
