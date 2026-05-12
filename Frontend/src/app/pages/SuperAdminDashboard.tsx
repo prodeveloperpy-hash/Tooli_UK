@@ -94,6 +94,18 @@ export function SuperAdminDashboard() {
   const [statsData, setStatsData] = useState<Stats | null>(null);
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState('all');
 
+  const [adminPage, setAdminPage] = useState(1);
+  const [totalAdminCount, setTotalAdminCount] = useState(0);
+  
+  const [supplierPage, setSupplierPage] = useState(1);
+  const [totalSupplierCount, setTotalSupplierCount] = useState(0);
+  
+  const [categoryPage, setCategoryPage] = useState(1);
+  const [totalCategoryCount, setTotalCategoryCount] = useState(0);
+  
+  const [locationPage, setLocationPage] = useState(1);
+  const [totalLocationCount, setTotalLocationCount] = useState(0);
+
   // Category/Location Modal States
   const [isCategoryFormOpen, setIsCategoryFormOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -111,9 +123,10 @@ export function SuperAdminDashboard() {
   const fetchAdmins = async () => {
     setIsLoading(true);
     try {
-      const data = await userApi.getUsersByRole(7);
-      const userList = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUsersByRole(7, adminPage, 50);
+      const userList = Array.isArray(data) ? data : data.results || [];
       setAdmins(userList);
+      setTotalAdminCount(data.count || userList.length);
     } catch (error) {
       console.error('Error fetching admins:', error);
     } finally {
@@ -125,15 +138,16 @@ export function SuperAdminDashboard() {
     if (activeTab === 'admins') {
       fetchAdmins();
     }
-  }, [activeTab]);
+  }, [activeTab, adminPage]);
 
   const fetchSuppliers = async () => {
     setIsLoading(true);
     try {
       const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
-      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER');
-      const supplierList = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER', supplierPage, 50);
+      const supplierList = Array.isArray(data) ? data : data.results || [];
       setSuppliers(supplierList);
+      setTotalSupplierCount(data.count || supplierList.length);
     } catch (error) {
       console.error('Error fetching suppliers:', error);
     } finally {
@@ -143,8 +157,8 @@ export function SuperAdminDashboard() {
 
   const fetchPendingSuppliers = async () => {
     try {
-      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER');
-      const list = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER', 1, 100);
+      const list = Array.isArray(data) ? data : data.results || [];
       setPendingSuppliers(list);
     } catch (error) {
       console.error('Error fetching pending suppliers:', error);
@@ -156,7 +170,7 @@ export function SuperAdminDashboard() {
       fetchSuppliers();
       fetchPendingSuppliers();
     }
-  }, [activeTab, approvalFilter, statusFilter]);
+  }, [activeTab, approvalFilter, statusFilter, supplierPage]);
 
   useEffect(() => {
     if (activeTab === 'products') {
@@ -179,10 +193,20 @@ export function SuperAdminDashboard() {
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
-    fetchCategories();
-    fetchLocations();
     fetchStats();
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'categories') {
+      fetchCategories();
+    }
+  }, [activeTab, categoryPage]);
+
+  useEffect(() => {
+    if (activeTab === 'locations') {
+      fetchLocations();
+    }
+  }, [activeTab, locationPage]);
 
   const fetchStats = async () => {
     try {
@@ -207,9 +231,10 @@ export function SuperAdminDashboard() {
 
   const fetchCategories = async () => {
     try {
-      const categoryData = await equipmentApi.getCategories();
-      const list = Array.isArray(categoryData) ? categoryData : (categoryData as any).results || [];
+      const data = await equipmentApi.getCategories(categoryPage, 50);
+      const list = Array.isArray(data) ? data : data.results || [];
       setCategories(list);
+      setTotalCategoryCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -217,9 +242,10 @@ export function SuperAdminDashboard() {
 
   const fetchLocations = async () => {
     try {
-      const locationData = await equipmentApi.getLocations();
-      const list = Array.isArray(locationData) ? locationData : (locationData as any).results || [];
+      const data = await equipmentApi.getLocations(locationPage, 50);
+      const list = Array.isArray(data) ? data : data.results || [];
       setLocations(list);
+      setTotalLocationCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching locations:', error);
     }
@@ -770,6 +796,7 @@ export function SuperAdminDashboard() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="overflow-x-auto">
+                    {/* ... table content ... */}
                     <Table>
                       <TableHeader className="bg-gray-50">
                         <TableRow>
@@ -834,6 +861,34 @@ export function SuperAdminDashboard() {
                         })}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{admins.length}</span> of <span className="text-gray-900 font-bold">{totalAdminCount}</span> admins
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAdminPage(prev => Math.max(1, prev - 1))}
+                        disabled={adminPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {adminPage} of {Math.ceil(totalAdminCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAdminPage(prev => prev + 1)}
+                        disabled={adminPage >= Math.ceil(totalAdminCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -948,8 +1003,8 @@ export function SuperAdminDashboard() {
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-1.5 text-sm font-medium">
-                                <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                                {s.organization_details.city}
+                                <MapPin className="w-3.5 h-3.5 text-brand-primary" />
+                                {s.organization_details.city}, {s.organization_details.country}
                               </div>
                             </TableCell>
                             <TableCell>
@@ -973,6 +1028,34 @@ export function SuperAdminDashboard() {
                         ))}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{suppliers.length}</span> of <span className="text-gray-900 font-bold">{totalSupplierCount}</span> suppliers
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSupplierPage(prev => Math.max(1, prev - 1))}
+                        disabled={supplierPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {supplierPage} of {Math.ceil(totalSupplierCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSupplierPage(prev => prev + 1)}
+                        disabled={supplierPage >= Math.ceil(totalSupplierCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -1196,6 +1279,34 @@ export function SuperAdminDashboard() {
                       </TableBody>
                     </Table>
                   </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{categories.length}</span> of <span className="text-gray-900 font-bold">{totalCategoryCount}</span> categories
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCategoryPage(prev => Math.max(1, prev - 1))}
+                        disabled={categoryPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {categoryPage} of {Math.ceil(totalCategoryCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCategoryPage(prev => prev + 1)}
+                        disabled={categoryPage >= Math.ceil(totalCategoryCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -1249,6 +1360,34 @@ export function SuperAdminDashboard() {
                         ))}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{locations.length}</span> of <span className="text-gray-900 font-bold">{totalLocationCount}</span> locations
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setLocationPage(prev => Math.max(1, prev - 1))}
+                        disabled={locationPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {locationPage} of {Math.ceil(totalLocationCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setLocationPage(prev => prev + 1)}
+                        disabled={locationPage >= Math.ceil(totalLocationCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

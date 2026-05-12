@@ -88,6 +88,9 @@ export function AdminDashboard() {
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState<string>('all');
   const [statsData, setStatsData] = useState<Stats | null>(null);
 
+  const [supplierPage, setSupplierPage] = useState(1);
+  const [totalSupplierCount, setTotalSupplierCount] = useState(0);
+
 
 
 
@@ -96,9 +99,10 @@ export function AdminDashboard() {
     setIsLoading(true);
     try {
       const isActive = statusFilter === 'all' ? undefined : statusFilter === 'active';
-      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER');
-      const supplierList = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUserOrganizations(isActive, true, 'SUPPLIER', supplierPage, 50);
+      const supplierList = Array.isArray(data) ? data : data.results || [];
       setSuppliers(supplierList);
+      setTotalSupplierCount(data.count || supplierList.length);
     } catch (error) {
       console.error('Error fetching suppliers:', error);
     } finally {
@@ -108,8 +112,8 @@ export function AdminDashboard() {
 
   const fetchPendingSuppliers = async () => {
     try {
-      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER');
-      const list = Array.isArray(data) ? data : (data as any).results || [];
+      const data = await userApi.getUserOrganizations(undefined, false, 'SUPPLIER', 1, 100);
+      const list = Array.isArray(data) ? data : data.results || [];
       setPendingSuppliers(list);
     } catch (error) {
       console.error('Error fetching pending suppliers:', error);
@@ -121,7 +125,7 @@ export function AdminDashboard() {
       fetchSuppliers();
       fetchPendingSuppliers();
     }
-  }, [activeTab, approvalFilter, statusFilter]);
+  }, [activeTab, approvalFilter, statusFilter, supplierPage]);
 
   useEffect(() => {
     if (activeTab === 'products') {
@@ -630,6 +634,34 @@ export function AdminDashboard() {
                         ))}
                       </TableBody>
                     </Table>
+                  </div>
+
+                  {/* Pagination Controls */}
+                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
+                    <div className="text-sm text-muted-foreground font-medium">
+                      Showing <span className="text-gray-900 font-bold">{suppliers.length}</span> of <span className="text-gray-900 font-bold">{totalSupplierCount}</span> suppliers
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSupplierPage(prev => Math.max(1, prev - 1))}
+                        disabled={supplierPage === 1}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Previous
+                      </Button>
+                      <span className="text-sm font-bold px-2">Page {supplierPage} of {Math.ceil(totalSupplierCount / 50) || 1}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSupplierPage(prev => prev + 1)}
+                        disabled={supplierPage >= Math.ceil(totalSupplierCount / 50)}
+                        className="font-bold h-9 px-4 rounded-xl"
+                      >
+                        Next
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

@@ -33,8 +33,8 @@ export function SearchBar({ className = '' }: SearchBarProps) {
           equipmentApi.getCategories(),
           equipmentApi.getLocations()
         ]);
-        setCategories(catData);
-        setLocations(locData);
+        setCategories(Array.isArray(catData) ? catData : (catData as any).results || []);
+        setLocations(Array.isArray(locData) ? locData : (locData as any).results || []);
       } catch (error) {
         console.error('Error fetching search options:', error);
       }
