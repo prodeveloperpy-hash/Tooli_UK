@@ -36,16 +36,6 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
     }
   }, [isDetailOpen, equipment.equipment_id, detailedEquipment]);
   
-  useEffect(() => {
-    if (isDetailOpen) {
-      // Small timeout to ensure DOM is rendered
-      setTimeout(() => {
-        const container = document.getElementById(`detail-scroll-${equipment.equipment_id}`);
-        if (container) container.scrollTop = 0;
-      }, 0);
-    }
-  }, [isDetailOpen, equipment.equipment_id]);
-  
   const displayPrice = primaryPrice?.price || '0.00';
 
 
@@ -55,6 +45,8 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
       <DialogContent className="max-w-4xl p-0">
         {isFetching ? (
           <div className="h-full lg:h-[600px] flex flex-col items-center justify-center gap-4 bg-white w-full overflow-hidden">
+            <DialogTitle className="sr-only">Loading Equipment Details</DialogTitle>
+            <DialogDescription className="sr-only">Please wait while we fetch the latest machinery information.</DialogDescription>
             <Loader2 className="w-10 h-10 lg:w-12 lg:h-12 text-brand-primary animate-spin" />
             <p className="font-bold text-gray-400 animate-pulse uppercase tracking-widest text-[10px] lg:text-xs">Loading Details...</p>
           </div>

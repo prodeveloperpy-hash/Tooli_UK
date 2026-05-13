@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -54,12 +55,12 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md p-0">
-        <div className="p-6 border-b flex justify-between items-center bg-gray-50 shrink-0">
+        <DialogHeader className="p-6 border-b flex justify-between items-center bg-gray-50 shrink-0">
           <div>
             <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{category ? 'Edit Category' : 'Add Category'}</DialogTitle>
             <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Define a new equipment category</DialogDescription>
           </div>
-        </div>
+        </DialogHeader>
         <div className="flex-1 overflow-y-auto p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">

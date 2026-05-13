@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -77,7 +77,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
         supplierId: (equipment.organization_id || '').toString(),
         categoryId: (equipment.category_id || '').toString(),
         isActive: equipment.is_active ?? true,
-        locationIds: Array.from(new Set(equipment.prices?.map(p => (p.location_id || '10').toString()) || [])),
+        locationIds: Array.from(new Set(equipment.prices?.map(p => ((p as any).location_id || '10').toString()) || [])),
         prices: equipment.prices?.length ? equipment.prices.slice(0, 1).map(p => ({ 
           equipment_price_id: p.equipment_price_id,
           price: p.price || '', 
@@ -122,7 +122,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
         if (parseInt(formData.categoryId) !== equipment.category_id) delta.category_id = parseInt(formData.categoryId);
         if (parseInt(formData.supplierId) !== equipment.organization_id) delta.organization_id = parseInt(formData.supplierId);
         
-        const originalLocationIds = Array.from(new Set(equipment.prices?.map(p => p.location_id.toString()) || []));
+        const originalLocationIds = Array.from(new Set(equipment.prices?.map(p => ((p as any).location_id || '10').toString()) || []));
         if (JSON.stringify(formData.locationIds.sort()) !== JSON.stringify(originalLocationIds.sort())) {
           delta.locations = formData.locationIds.map(id => ({
             location_id: parseInt(id),
@@ -142,7 +142,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
         }));
         if (JSON.stringify(originalPrices) !== JSON.stringify(currentPrices)) {
           delta.prices = formData.prices.map(p => ({
-            equipment_price_id: p.equipment_price_id,
+            equipment_price_id: (p as any).equipment_price_id,
             interval_id: p.interval_id,
             is_active: true,
             price: p.price,
@@ -176,12 +176,12 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl p-0">
-        <div className="p-4 sm:p-6 lg:p-8 border-b sticky top-0 bg-white z-10 flex justify-between items-center shrink-0">
+        <DialogHeader className="p-4 sm:p-6 lg:p-8 border-b sticky top-0 bg-white z-10 flex justify-between items-center shrink-0">
           <div>
-            <h2 className="text-xl lg:text-2xl font-black text-gray-900">{equipment ? 'Edit Equipment' : 'Add New Equipment'}</h2>
-            <p className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">List machinery & set pricing</p>
+            <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{equipment ? 'Edit Equipment' : 'Add New Equipment'}</DialogTitle>
+            <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">List machinery & set pricing</DialogDescription>
           </div>
-        </div>
+        </DialogHeader>
 
         <div className="p-4 sm:p-6 lg:p-10 relative">
           {(isLoading || isDataLoading) && (

@@ -350,7 +350,7 @@ export function SuperAdminDashboard() {
     }
 
     const equipPromise = isUpdate
-      ? equipmentApi.updateEquipment(payload.equipment_id, payload)
+      ? equipmentApi.updateEquipment(payload)
       : equipmentApi.createEquipment(payload);
 
     await toast.promise(equipPromise, {
@@ -361,7 +361,7 @@ export function SuperAdminDashboard() {
 
     try {
       await equipPromise;
-      await fetchEquipment(equipPage);
+      await fetchEquipment();
       setIsEquipFormOpen(false);
     } catch (error: any) {
       console.error('Error saving equipment:', error);
