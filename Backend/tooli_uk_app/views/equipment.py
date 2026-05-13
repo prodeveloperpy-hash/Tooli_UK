@@ -18,7 +18,11 @@ from tooli_uk_app.serializers.equipment import EquipmentMutateSerializer, Equipm
 
 class EquipmentViewSet(viewsets.ModelViewSet):
     queryset = (
-        Equipment.objects.prefetch_related(
+        Equipment.objects.select_related(
+            "organization_id",
+            "category_id",
+        )
+        .prefetch_related(
             "prices__interval_id",
             "locations__location_id",
             "images",

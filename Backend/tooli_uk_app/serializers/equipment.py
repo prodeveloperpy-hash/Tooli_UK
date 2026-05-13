@@ -17,6 +17,14 @@ class EquipmentSerializer(serializers.ModelSerializer):
         source="organization_id.name",
         read_only=True,
     )
+    organization_logo = serializers.CharField(
+        source="organization_id.logo",
+        read_only=True,
+    )
+    category_display_name = serializers.CharField(
+        source="category_id.category_display_name",
+        read_only=True,
+    )
     locations = EquipmentLocationSerializer(many=True, read_only=True)
     prices = EquipmentPriceSerializer(many=True, read_only=True)
     images = EquipmentImageSerializer(many=True, read_only=True)
@@ -45,6 +53,7 @@ class EquipmentMutateSerializer(serializers.ModelSerializer):
             "updated_by",
             "created_datetime",
             "updated_datetime",
+            "redirect_url",
             "images",
         )
         read_only_fields = ("equipment_id", "created_datetime", "updated_datetime")
