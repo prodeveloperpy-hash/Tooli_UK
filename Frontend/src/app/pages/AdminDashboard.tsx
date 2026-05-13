@@ -232,11 +232,6 @@ export function AdminDashboard() {
     let payload = { ...data };
 
     if (!isUpdate) {
-      const imagesMetadata = data.imagePreviews.map((url: string, index: number) => ({
-        sort_order: index,
-        is_active: true
-      }));
-
       payload = {
         name: data.name,
         description: data.description,
@@ -246,30 +241,19 @@ export function AdminDashboard() {
         organization_id: parseInt(data.supplierId),
         created_by: parseInt(localStorage.getItem('user_id') || '10'),
         updated_by: parseInt(localStorage.getItem('user_id') || '10'),
-        location: {
-          location_id: parseInt(data.locationId),
-          is_active: true
-        },
+        locations: data.locations,
         prices: data.prices.map((p: any) => ({
           ...p,
-          location_id: parseInt(data.locationId),
           is_active: true,
         })),
-        images: imagesMetadata,
-        availabilities: data.availabilities.map((a: any) => ({
-          ...a,
-          availability_from: a.from ? new Date(a.from).toISOString() : undefined,
-          availability_to: a.to ? new Date(a.to).toISOString() : undefined,
-          is_active: true
-        }))
       };
     } else {
       payload.updated_by = parseInt(localStorage.getItem('user_id') || '10');
     }
 
     const equipPromise = isUpdate
-      ? equipmentApi.updateEquipmentFiles(payload, data.imageFiles || [])
-      : equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
+      ? equipmentApi.updateEquipment(payload.equipment_id, payload)
+      : equipmentApi.createEquipment(payload);
 
     await toast.promise(equipPromise, {
       loading: isUpdate ? 'Updating equipment...' : 'Listing equipment...',
@@ -278,13 +262,8 @@ export function AdminDashboard() {
     });
 
     try {
-      if (isUpdate && data.imagesToDelete?.length > 0) {
-        for (const imgId of data.imagesToDelete) {
-          await equipmentApi.deleteEquipmentImage(imgId);
-        }
-      }
       await equipPromise;
-      await fetchEquipment();
+      await fetchEquipment(equipPage);
       setIsEquipFormOpen(false);
     } catch (error: any) {
       console.error('Error saving equipment:', error);
@@ -736,17 +715,8 @@ export function AdminDashboard() {
                         ) : equipment.map((item) => (
                           <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
-                              <div className="flex items-center gap-3 w-[250px]">
-                                <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-100 shadow-sm shrink-0">
-                                  {item.images[0] ? (
-                                    <img src={item.images[0].image_url} alt="" className="w-full h-full object-cover" />
-                                  ) : (
-                                    <Package className="w-6 h-6 m-3 text-gray-300" />
-                                  )}
-                                </div>
-                                <div className="min-w-0">
-                                  <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
-                                </div>
+                              <div className="min-w-0">
+                                <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
                               </div>
                             </TableCell>
                             <TableCell className="font-medium text-gray-700">
@@ -872,10 +842,6 @@ export function AdminDashboard() {
         onClose={() => setIsEquipFormOpen(false)}
         onSubmit={handleEquipSubmit}
         equipment={selectedEquipment}
-        suppliers={suppliers}
-        intervals={intervals}
-        categories={categories}
-        locations={locations}
         isLoading={isFetchingDetail}
       />
 

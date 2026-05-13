@@ -46,14 +46,18 @@ export const userApi = {
     return response.json();
   },
 
-  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean, roleKey?: string, page: number = 1, pageSize: number = 50): Promise<any> => {
+  getUserOrganizations: async (isActive?: boolean, isApproved?: boolean, roleKey?: string, page: number = 1, pageSize: number = 50, skipPagination?: boolean): Promise<any> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (isActive !== undefined) params.append('is_active', isActive.toString());
     if (isApproved !== undefined) params.append('is_approved', isApproved.toString());
     if (roleKey !== undefined) params.append('role_key', roleKey);
-    params.append('page', page.toString());
-    params.append('page_size', pageSize.toString());
+    if (skipPagination) {
+      params.append('skip_pagination', 'true');
+    } else {
+      params.append('page', page.toString());
+      params.append('page_size', pageSize.toString());
+    }
 
     const url = `${API_URL}/user-organization/?${params.toString()}`;
     const response = await fetch(url, {

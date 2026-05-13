@@ -119,10 +119,22 @@ export function SearchResultsPage() {
                         <p className="text-gray-500">Try adjusting your search criteria</p>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-6 md:p-8 bg-gray-50/20">
-                        {sortedResults.map((result) => (
-                          <EquipmentCard key={result.equipment_id} equipment={result} />
-                        ))}
+                      <div className="w-full overflow-x-auto">
+                        {/* List Header */}
+                        <div className="flex items-center px-6 md:px-8 py-4 bg-gray-50 border-b border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 min-w-[800px]">
+                          <div className="flex-1 min-w-[200px]">Equipment Details</div>
+                          <div className="min-w-[180px] ml-6">Supplier</div>
+                          <div className="min-w-[150px] ml-6">Location</div>
+                          <div className="min-w-[120px] ml-6">Weekly Rate</div>
+                          <div className="min-w-[100px] ml-6">Availability</div>
+                          <div className="ml-auto w-[140px] text-right pr-4">Actions</div>
+                        </div>
+
+                        <div className="flex flex-col gap-px bg-gray-100 min-w-[800px]">
+                          {sortedResults.map((result) => (
+                            <EquipmentCard key={result.equipment_id} equipment={result} view="list" showImages={false} />
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
