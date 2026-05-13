@@ -78,49 +78,77 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
     setIsSubmitting(true);
 
     try {
+      const roleKey = localStorage.getItem('role_key');
+      const isSuperAdmin = roleKey === 'SUPERADMIN';
       const userOrgId = localStorage.getItem('user_organization_id');
-      if (!userOrgId) throw new Error('User organization ID not found');
+      const userId = localStorage.getItem('user_id');
 
-      const formDataToSend = new FormData();
-      const payload = {
-        user: {
+      if (!isSuperAdmin && !userOrgId) throw new Error('User organization ID not found');
+      if (isSuperAdmin && !userId) throw new Error('User ID not found');
+
+      if (isSuperAdmin) {
+        const payload = {
           first_name: formData.firstName,
           last_name: formData.lastName,
           email: formData.email,
+        };
+        
+        const updatedData = await userApi.updateUser(parseInt(userId!), payload, formData.avatarFile || undefined);
+        
+        // Update local storage
+        const newName = `${updatedData.first_name} ${updatedData.last_name}`;
+        localStorage.setItem('name', newName);
+        if (updatedData.avatar_url) {
+          localStorage.setItem('avatar_url', updatedData.avatar_url);
         }
-      };
-      
-      formDataToSend.append('payload', JSON.stringify(payload));
-      if (formData.avatarFile) {
-        formDataToSend.append('avatar', formData.avatarFile);
+
+        onUpdate({
+          name: newName,
+          avatar: updatedData.avatar_url || '',
+          role: roleKey || 'SUPERADMIN',
+        });
+      } else {
+        const formDataToSend = new FormData();
+        const payload = {
+          user: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+          }
+        };
+        
+        formDataToSend.append('payload', JSON.stringify(payload));
+        if (formData.avatarFile) {
+          formDataToSend.append('avatar', formData.avatarFile);
+        }
+
+        // Update via userApi (I might need to adjust the update method to handle FormData)
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://backend-service-961815749151.us-central1.run.app/'}user-organization/${userOrgId}/`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: formDataToSend,
+        });
+
+        if (!response.ok) throw new Error('Failed to update profile');
+
+        const updatedData = await response.json();
+        
+        // Update local storage
+        const newName = `${updatedData.user_details.first_name} ${updatedData.user_details.last_name}`;
+        localStorage.setItem('name', newName);
+        if (updatedData.user_details.avatar_url) {
+          localStorage.setItem('avatar_url', updatedData.user_details.avatar_url);
+        }
+
+        onUpdate({
+          name: newName,
+          avatar: updatedData.user_details.avatar_url || '',
+          role: updatedData.role_details.role_key,
+        });
       }
-
-      // Update via userApi (I might need to adjust the update method to handle FormData)
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://backend-service-961815749151.us-central1.run.app/'}user-organization/${userOrgId}/`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formDataToSend,
-      });
-
-      if (!response.ok) throw new Error('Failed to update profile');
-
-      const updatedData = await response.json();
-      
-      // Update local storage
-      const newName = `${updatedData.user_details.first_name} ${updatedData.user_details.last_name}`;
-      localStorage.setItem('name', newName);
-      if (updatedData.user_details.avatar_url) {
-        localStorage.setItem('avatar_url', updatedData.user_details.avatar_url);
-      }
-
-      onUpdate({
-        name: newName,
-        avatar: updatedData.user_details.avatar_url || '',
-        role: updatedData.role_details.role_key,
-      });
 
       toast.success('Profile updated successfully');
       onClose();
