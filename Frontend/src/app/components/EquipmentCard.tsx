@@ -10,18 +10,14 @@ import { Dialog, DialogContent } from './ui/dialog';
 interface EquipmentCardProps {
   equipment: Equipment;
   view?: 'grid' | 'list';
-  showImages?: boolean;
 }
 
-export function EquipmentCard({ equipment, view = 'grid', showImages = true }: EquipmentCardProps) {
+export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [detailedEquipment, setDetailedEquipment] = useState<Equipment | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   
   const primaryPrice = equipment.prices[0];
-  const mainImage = equipment.images[0]?.image_url;
-  const allImages = (detailedEquipment || equipment).images.map(img => img.image_url);
 
   useEffect(() => {
     if (isDetailOpen && !detailedEquipment) {
@@ -42,15 +38,7 @@ export function EquipmentCard({ equipment, view = 'grid', showImages = true }: E
   
   const displayPrice = primaryPrice?.price || '0.00';
 
-  const handleNextImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setActiveImageIndex((prev) => (prev + 1) % allImages.length);
-  };
 
-  const handlePrevImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setActiveImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
-  };
 
   const renderDetailModal = () => (
     <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
@@ -70,55 +58,8 @@ export function EquipmentCard({ equipment, view = 'grid', showImages = true }: E
           </div>
         ) : (
           <div className="flex flex-col max-h-[85vh] overflow-y-auto overflow-x-hidden">
-            {/* Image Section - Now part of the scrollable flow and even smaller */}
-            <div className="w-full h-[200px] md:h-[300px] relative bg-gray-100 flex items-center justify-center group overflow-hidden flex-shrink-0">
-              {allImages.length > 0 ? (
-                <>
-                  <motion.img
-                    key={activeImageIndex}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    src={allImages[activeImageIndex]}
-                    alt={(detailedEquipment || equipment).name}
-                    className="w-full h-full object-cover"
-                  />
-                  {allImages.length > 1 && (
-                    <>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-10 h-10"
-                        onClick={handlePrevImage}
-                      >
-                        <ChevronLeft className="w-6 h-6" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 rounded-full shadow-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 w-10 h-10"
-                        onClick={handleNextImage}
-                      >
-                        <ChevronRight className="w-6 h-6" />
-                      </Button>
-                      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full">
-                        {allImages.map((_, i) => (
-                          <button 
-                            key={i} 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveImageIndex(i);
-                            }}
-                            className={`h-1.5 rounded-full transition-all duration-500 ${i === activeImageIndex ? 'w-6 bg-brand-primary' : 'w-1.5 bg-white/60 hover:bg-white'}`} 
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </>
-              ) : (
-                <Package className="w-20 h-20 text-gray-300" />
-              )}
-              <Badge className="absolute top-6 left-6 bg-brand-primary/90 backdrop-blur-md text-white font-black py-1.5 px-4 rounded-lg z-10 text-[10px] uppercase tracking-widest">
+            <div className="w-full h-12 relative flex items-center px-10 pt-4 overflow-hidden flex-shrink-0">
+              <Badge className="bg-brand-primary/90 backdrop-blur-md text-white font-black py-1.5 px-4 rounded-lg z-10 text-[10px] uppercase tracking-widest">
                 {equipment.category_id === 1 ? 'Excavators' : 'Machinery'}
               </Badge>
             </div>
@@ -316,37 +257,17 @@ export function EquipmentCard({ equipment, view = 'grid', showImages = true }: E
       >
         <Card className="overflow-hidden hover:shadow-xl transition-shadow h-full border-2 hover:border-brand-primary/20">
           <CardContent className="p-0">
-            {showImages && (
-              <div className="relative aspect-video bg-gray-100 flex items-center justify-center group">
-                {allImages.length > 0 ? (
-                  <>
-                    <img src={allImages[activeImageIndex]} alt={equipment.name} className="w-full h-full object-cover" />
-                    {allImages.length > 1 && (
-                      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        {allImages.slice(0, 5).map((_, i) => (
-                          <div 
-                            key={i} 
-                            onClick={(e) => { e.stopPropagation(); setActiveImageIndex(i); }}
-                            className={`h-1 rounded-full transition-all cursor-pointer ${i === activeImageIndex ? 'w-3 bg-brand-primary' : 'w-1 bg-white/60 hover:bg-white'}`} 
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <Package className="w-10 h-10 text-gray-300" />
-                )}
+            <div className="p-5">
+              <div className="flex items-center justify-between mb-2">
+                <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-widest">
+                  {equipment.category_id === 1 ? 'Excavators' : 'Equipment'}
+                </Badge>
                 {equipment.is_active && (
-                  <Badge className="absolute top-3 right-3 bg-green-500">
+                  <Badge className="bg-green-500 text-white border-none text-[10px]">
                     <CheckCircle className="w-3 h-3 mr-1" /> Verified
                   </Badge>
                 )}
-                <Badge variant="secondary" className="absolute bottom-3 left-3">
-                  {equipment.category_id === 1 ? 'Excavators' : 'Equipment'}
-                </Badge>
               </div>
-            )}
-            <div className="p-5">
               <h3 className="font-bold text-lg mb-2 line-clamp-1">{equipment.name}</h3>
               <div className="space-y-3 text-sm text-muted-foreground mb-4">
                 <div className="flex items-center gap-2">

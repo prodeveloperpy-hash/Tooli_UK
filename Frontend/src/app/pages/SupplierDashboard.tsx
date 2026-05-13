@@ -466,17 +466,8 @@ export function SupplierDashboard() {
                           equipment.map((item) => (
                             <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors border-b last:border-0 group">
                               <TableCell className="py-8 px-12">
-                                <div className="flex items-center gap-6 w-[250px]">
-                                  <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center overflow-hidden shadow-inner group-hover:shadow-lg transition-shadow">
-                                    {item.images && item.images[0]?.image_url ? (
-                                      <img src={item.images[0].image_url} alt={item.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                                    ) : (
-                                      <Package className="w-8 h-8 text-gray-300" />
-                                    )}
-                                  </div>
-                                  <div className="min-w-0">
-                                    <div className="font-black text-gray-900 text-lg tracking-tight truncate" title={item.name}>{item.name}</div>
-                                  </div>
+                                <div className="min-w-0">
+                                  <div className="font-black text-gray-900 text-lg tracking-tight truncate" title={item.name}>{item.name}</div>
                                 </div>
                               </TableCell>
                               <TableCell className="py-8 px-12">

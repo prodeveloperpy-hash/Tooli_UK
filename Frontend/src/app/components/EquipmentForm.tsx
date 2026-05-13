@@ -5,7 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Package, User, Tag, Image as ImageIcon, MapPin, PoundSterling, Trash2, Plus, Loader2 } from 'lucide-react';
+import { Package, User, Tag, MapPin, PoundSterling, Trash2, Plus, Loader2 } from 'lucide-react';
 import { Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { UserOrganization } from '../../context/user.api';
 
@@ -31,13 +31,10 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
     isActive: true,
     locationId: '10',
     prices: [{ price: '', interval_id: 1, currency: 'GBP' }],
-    imageFiles: [] as File[],
-    imagePreviews: [] as string[],
-    imagesToDelete: [] as number[],
     redirectUrl: '',
   });
 
-  const [existingImages, setExistingImages] = useState<{ id: number, url: string }[]>([]);
+
 
   // Find Weekly interval ID
   const weeklyIntervalId = intervals.find(i => 
@@ -61,12 +58,8 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
           interval_id: p.interval_id || weeklyIntervalId, 
           currency: p.currency || 'GBP' 
         })) : [{ price: '', interval_id: weeklyIntervalId, currency: 'GBP' }],
-        imageFiles: [],
-        imagePreviews: equipment.images?.map(img => img.image_url) || [],
-        imagesToDelete: [],
         redirectUrl: (equipment as any).redirect_url || '',
       });
-      setExistingImages(equipment.images?.map(img => ({ id: img.equipment_image_id, url: img.image_url })) || []);
     } else {
       setFormData({
         name: '',
@@ -76,12 +69,8 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         isActive: true,
         locationId: '10',
         prices: [{ price: '', interval_id: weeklyIntervalId, currency: 'GBP' }],
-        imageFiles: [],
-        imagePreviews: [],
-        imagesToDelete: [],
         redirectUrl: '',
       });
-      setExistingImages([]);
     }
   }, [equipment, isOpen, weeklyIntervalId]);
 
@@ -97,53 +86,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
 
   const removePrice = (index: number) => setFormData({ ...formData, prices: formData.prices.filter((_, i) => i !== index) });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length > 0) {
-      const newPreviews = files.map(file => URL.createObjectURL(file));
-      setFormData(prev => ({
-        ...prev,
-        imageFiles: [...prev.imageFiles, ...files],
-        imagePreviews: [...prev.imagePreviews, ...newPreviews]
-      }));
-    }
-  };
 
-  const removeImage = (index: number) => {
-    const previewUrl = formData.imagePreviews[index];
-    setFormData(prev => {
-      const isNewFile = previewUrl.startsWith('blob:');
-      let newImageFiles = prev.imageFiles;
-      
-      if (isNewFile) {
-        // Find which file in imageFiles this blob belongs to
-        const fileIndex = prev.imagePreviews
-          .slice(0, index)
-          .filter(url => url.startsWith('blob:')).length;
-        newImageFiles = prev.imageFiles.filter((_, i) => i !== fileIndex);
-      }
-
-      return {
-        ...prev,
-        imageFiles: newImageFiles,
-        imagePreviews: prev.imagePreviews.filter((_, i) => i !== index)
-      };
-    });
-    
-    // Handle deletion of existing image
-    const existingImg = existingImages[index];
-    if (existingImg) {
-      setFormData(prev => ({
-        ...prev,
-        imagesToDelete: [...prev.imagesToDelete, existingImg.id]
-      }));
-    }
-    setExistingImages(prev => prev.filter((_, i) => i !== index));
-    
-    if (previewUrl.startsWith('blob:')) {
-      URL.revokeObjectURL(previewUrl);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -190,29 +133,6 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
         }
 
 
-        // Images check
-        if (formData.imageFiles.length > 0 || formData.imagesToDelete.length > 0) {
-          delta.imageFiles = formData.imageFiles;
-          delta.imagesToDelete = formData.imagesToDelete;
-          
-          // Align JSON images with FormData files
-          // New images must come first to match the files array indices if the backend is index-based
-          const newImages = [] as any[];
-          const existingImages = [] as any[];
-          
-          formData.imagePreviews.forEach((url, index) => {
-            const isNew = url.startsWith('blob:');
-            const imgEntry = {
-              sort_order: index,
-              is_active: true,
-              ...(isNew ? {} : { image_url: url })
-            };
-            if (isNew) newImages.push(imgEntry);
-            else existingImages.push(imgEntry);
-          });
-          
-          delta.images = [...newImages, ...existingImages];
-        }
 
         // Only call onSubmit if there are changes beyond just the equipment_id
         if (Object.keys(delta).length > 1) {
@@ -379,28 +299,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, suppliers,
             </div>
           </section>
 
-          {/* Images Section */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-2 text-brand-primary">
-              <ImageIcon className="w-5 h-5" />
-              <h3 className="font-bold uppercase tracking-widest text-xs">Media Assets</h3>
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-              {formData.imagePreviews.map((preview, index) => (
-                <div key={index} className="relative group aspect-square rounded-2xl overflow-hidden border-2 border-gray-100">
-                  <img src={preview} alt="" className="w-full h-full object-cover" />
-                  <button type="button" onClick={() => removeImage(index)} className="absolute top-2 right-2 bg-white shadow-md p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all text-destructive hover:scale-110">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-              <label className="aspect-square rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group">
-                <Plus className="w-8 h-8 text-gray-300 group-hover:text-brand-primary transition-colors" />
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Add Image</span>
-                <input type="file" className="hidden" accept="image/*" multiple onChange={handleImageChange} />
-              </label>
-            </div>
-          </section>
+
 
           <div className="pt-8 border-t flex justify-end gap-4">
             <Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting} className="font-bold">Cancel</Button>

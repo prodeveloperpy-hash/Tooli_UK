@@ -1129,17 +1129,8 @@ export function SuperAdminDashboard() {
                         ) : equipment.map((item) => (
                           <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
-                              <div className="flex items-center gap-3 w-[250px]">
-                                <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden border border-gray-100 shadow-sm shrink-0">
-                                  {item.images[0] ? (
-                                    <img src={item.images[0].image_url} alt="" className="w-full h-full object-cover" />
-                                  ) : (
-                                    <Package className="w-6 h-6 m-3 text-gray-300" />
-                                  )}
-                                </div>
-                                <div className="min-w-0">
-                                  <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
-                                </div>
+                              <div className="min-w-0">
+                                <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
                               </div>
                             </TableCell>
                             <TableCell className="font-medium text-gray-700">
