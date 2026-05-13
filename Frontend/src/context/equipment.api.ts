@@ -8,6 +8,7 @@ export interface Equipment {
   is_active: boolean;
   category_id: number;
   organization_id: number;
+  organization_logo?: string;
   images: {
     equipment_image_id: number;
     image_url: string;
