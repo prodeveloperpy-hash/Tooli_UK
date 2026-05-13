@@ -3,7 +3,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Switch } from './ui/switch';
-import { MapPin, Loader2, Globe } from 'lucide-react';
+import { MapPin, Loader2, Globe, X } from 'lucide-react';
 import { Location } from '../../context/equipment.api';
 
 interface LocationFormProps {
@@ -55,17 +55,16 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-      <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-        <div className="p-6 border-b flex justify-between items-center">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-md p-0">
+        <div className="p-6 border-b flex justify-between items-center bg-gray-50 shrink-0">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">{location ? 'Edit Location' : 'Add Location'}</h2>
-            <p className="text-sm text-gray-500">Add a new operational city.</p>
+            <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{location ? 'Edit Location' : 'Add Location'}</DialogTitle>
+            <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Configure service area details</DialogDescription>
           </div>
-          <Button variant="ghost" onClick={onClose} className="rounded-full w-10 h-10 p-0 text-xl">×</Button>
         </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
               <Label className="font-bold flex items-center gap-2">
@@ -128,7 +127,8 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
             </Button>
           </div>
         </form>
-      </div>
-    </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }

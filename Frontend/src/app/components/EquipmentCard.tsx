@@ -36,30 +36,32 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
     }
   }, [isDetailOpen, equipment.equipment_id, detailedEquipment]);
   
+  useEffect(() => {
+    if (isDetailOpen) {
+      // Small timeout to ensure DOM is rendered
+      setTimeout(() => {
+        const container = document.getElementById(`detail-scroll-${equipment.equipment_id}`);
+        if (container) container.scrollTop = 0;
+      }, 0);
+    }
+  }, [isDetailOpen, equipment.equipment_id]);
+  
   const displayPrice = primaryPrice?.price || '0.00';
 
 
 
   const renderDetailModal = () => (
     <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
-      <DialogContent className="fixed inset-0 z-50 w-screen h-screen lg:h-auto lg:w-[95vw] lg:max-w-4xl p-0 overflow-hidden rounded-none lg:rounded-3xl border-none shadow-2xl bg-white max-h-screen lg:max-h-[90vh] max-w-none">
-        {/* Fixed Close Button */}
-        <button 
-          onClick={() => setIsDetailOpen(false)}
-          className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-gray-900 hover:bg-white transition-all shadow-xl z-[100] border border-white/20"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
+      <DialogContent className="max-w-4xl p-0">
         {isFetching ? (
-          <div className="h-full lg:h-[600px] flex flex-col items-center justify-center gap-4 bg-white w-full">
+          <div className="h-full lg:h-[600px] flex flex-col items-center justify-center gap-4 bg-white w-full overflow-hidden">
             <Loader2 className="w-10 h-10 lg:w-12 lg:h-12 text-brand-primary animate-spin" />
             <p className="font-bold text-gray-400 animate-pulse uppercase tracking-widest text-[10px] lg:text-xs">Loading Details...</p>
           </div>
         ) : (
-          <div className="flex flex-col h-full lg:max-h-[90vh] overflow-y-auto overflow-x-hidden">
+          <div id={`detail-scroll-${equipment.equipment_id}`} className="flex flex-col h-full lg:max-h-[90vh] overflow-y-auto overflow-x-hidden w-full">
             {/* Details Section */}
-            <div className="flex-1 p-6 lg:p-10 bg-white relative z-20">
+            <div className="flex-1 p-4 sm:p-6 lg:p-10 bg-white relative z-20">
               <div className="flex flex-col gap-6 mb-8">
                 <DialogHeader className="text-left">
                   <div className="flex flex-wrap items-center gap-2 mb-4">
@@ -70,7 +72,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                       {equipment.category_id === 1 ? 'Excavators' : 'Machinery'}
                     </Badge>
                   </div>
-                  <DialogTitle className="text-xl lg:text-3xl font-black text-gray-900 mb-3 leading-tight">
+                  <DialogTitle className="text-lg sm:text-xl lg:text-3xl font-black text-gray-900 mb-2 lg:mb-3 leading-tight">
                     {(detailedEquipment || equipment).name}
                   </DialogTitle>
                   <DialogDescription className="flex items-center gap-2 text-sm text-gray-500">
@@ -93,7 +95,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                 </div>
 
                 {/* Supplier Info Box */}
-                <div className="bg-gray-50/50 p-5 lg:p-6 rounded-2xl border border-gray-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="bg-gray-50/50 p-4 lg:p-6 rounded-2xl border border-gray-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                   <div>
                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Listed By</div>
                     <div className="flex items-center gap-3">
@@ -117,7 +119,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                     <div>
                       <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Weekly Rate</div>
                       <div className="flex items-center gap-2 text-brand-primary">
-                        <span className="text-4xl font-black">£{displayPrice}</span>
+                        <span className="text-3xl lg:text-4xl font-black">£{displayPrice}</span>
                         <span className="text-sm font-bold text-gray-500 mb-1">/ week</span>
                       </div>
                     </div>
