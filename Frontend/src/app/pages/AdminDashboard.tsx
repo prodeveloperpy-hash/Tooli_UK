@@ -29,6 +29,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '../components/ui/tabs';
+import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import { toast } from 'sonner';
 import {
   LayoutDashboard,
@@ -698,30 +699,65 @@ export function AdminDashboard() {
                     <Table>
                       <TableHeader className="bg-gray-50">
                         <TableRow>
-                          <TableHead className="font-bold py-4">Equipment</TableHead>
-                          <TableHead className="font-bold">Supplier</TableHead>
-                          <TableHead className="font-bold">Weekly Price</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                           <TableHead className="font-bold py-4 w-[25%]">Equipment</TableHead>
+                           <TableHead className="font-bold w-[15%]">Category</TableHead>
+                           <TableHead className="font-bold w-[20%]">Supplier</TableHead>
+                           <TableHead className="font-bold w-[15%]">Weekly Price</TableHead>
+                           <TableHead className="font-bold w-[15%]">Status</TableHead>
+                           <TableHead className="text-right font-bold pr-6 w-[10%]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {isEquipmentLoading ? (
                           <TableRow>
-                            <TableCell colSpan={5} className="text-center py-20">
+                            <TableCell colSpan={6} className="text-center py-20">
                               <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
                             </TableCell>
                           </TableRow>
                         ) : equipment.map((item) => (
                           <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
-                              <div className="min-w-0">
-                                <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
-                              </div>
-                            </TableCell>
-                            <TableCell className="font-medium text-gray-700">
-                              {item.organization_name}
-                            </TableCell>
+                               <div className="min-w-0">
+                                 <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
+                                 <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+                                   <MapPin className="w-3 h-3 text-gray-400" />
+                                   <span>{item.locations?.[0]?.city_name || 'Global'}</span>
+                                   {item.locations && item.locations.length > 1 && (
+                                     <Popover>
+                                       <PopoverTrigger asChild>
+                                         <span className="text-[9px] font-bold text-brand-primary cursor-pointer hover:underline">
+                                           +{item.locations.length - 1} more
+                                         </span>
+                                       </PopoverTrigger>
+                                       <PopoverContent className="w-auto p-2" onClick={(e) => e.stopPropagation()}>
+                                         <div className="space-y-1">
+                                           <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Locations</p>
+                                           {item.locations.map((loc, i) => (
+                                             <div key={i} className="text-[10px] font-bold text-gray-700 whitespace-nowrap flex items-center gap-1.5">
+                                               <div className="w-1 h-1 rounded-full bg-brand-primary" />
+                                               {loc.city_name}, {loc.country}
+                                             </div>
+                                           ))}
+                                         </div>
+                                       </PopoverContent>
+                                     </Popover>
+                                   )}
+                                 </div>
+                               </div>
+                             </TableCell>
+                             <TableCell>
+                               <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-none font-bold text-[10px] uppercase tracking-wider">
+                                 {item.category_display_name}
+                               </Badge>
+                             </TableCell>
+                             <TableCell className="font-medium text-gray-700">
+                               <div className="flex items-center gap-2">
+                                 {item.organization_logo && (
+                                   <img src={item.organization_logo} alt="" className="w-4 h-4 object-contain" />
+                                 )}
+                                 {item.organization_name}
+                               </div>
+                             </TableCell>
                             <TableCell>
                               <div className="font-bold text-brand-primary">
                                 {item.prices[0] ? `${item.prices[0].currency} ${item.prices[0].price}` : 'N/A'}

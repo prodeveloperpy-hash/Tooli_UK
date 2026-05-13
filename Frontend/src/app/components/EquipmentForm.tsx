@@ -77,7 +77,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
         supplierId: (equipment.organization_id || '').toString(),
         categoryId: (equipment.category_id || '').toString(),
         isActive: equipment.is_active ?? true,
-        locationIds: Array.from(new Set(equipment.prices?.map(p => ((p as any).location_id || '10').toString()) || [])),
+        locationIds: equipment.locations?.map(l => l.location_id.toString()) || [],
         prices: equipment.prices?.length ? equipment.prices.slice(0, 1).map(p => ({ 
           equipment_price_id: p.equipment_price_id,
           price: p.price || '', 
@@ -122,7 +122,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
         if (parseInt(formData.categoryId) !== equipment.category_id) delta.category_id = parseInt(formData.categoryId);
         if (parseInt(formData.supplierId) !== equipment.organization_id) delta.organization_id = parseInt(formData.supplierId);
         
-        const originalLocationIds = Array.from(new Set(equipment.prices?.map(p => ((p as any).location_id || '10').toString()) || []));
+        const originalLocationIds = equipment.locations?.map(l => l.location_id.toString()) || [];
         if (JSON.stringify(formData.locationIds.sort()) !== JSON.stringify(originalLocationIds.sort())) {
           delta.locations = formData.locationIds.map(id => ({
             location_id: parseInt(id),

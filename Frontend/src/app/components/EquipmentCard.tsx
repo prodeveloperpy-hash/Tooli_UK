@@ -6,13 +6,15 @@ import { Star, MapPin, CheckCircle, Package, ChevronLeft, ChevronRight, Clock, S
 import { equipmentApi, Equipment } from '../../context/equipment.api';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 interface EquipmentCardProps {
   equipment: Equipment;
   view?: 'grid' | 'list';
+  searchedLocationId?: string | null;
 }
 
-export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) {
+export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: EquipmentCardProps) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [detailedEquipment, setDetailedEquipment] = useState<Equipment | null>(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -38,6 +40,68 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
   
   const displayPrice = primaryPrice?.price || '0.00';
 
+  const renderLocationInfo = () => {
+    const locs = equipment.locations || [];
+    
+    // If we have a searched location, try to find it first
+    if (searchedLocationId) {
+      const searchedLoc = locs.find(l => l.location_id.toString() === searchedLocationId);
+      if (searchedLoc) {
+        return (
+          <div className="flex items-center gap-1.5 font-medium text-gray-700">
+            <MapPin className="w-3.5 h-3.5 text-brand-primary" />
+            <span>{searchedLoc.city_name}, {searchedLoc.country}</span>
+          </div>
+        );
+      }
+    }
+
+    if (locs.length === 0) {
+      return (
+        <div className="flex items-center gap-1.5 font-medium text-gray-700">
+          <MapPin className="w-3.5 h-3.5 text-brand-primary" />
+          <span>United Kingdom</span>
+        </div>
+      );
+    }
+
+    const firstLoc = locs[0];
+    const hasMore = locs.length > 1;
+
+    return (
+      <div className="flex items-center gap-1.5 font-medium text-gray-700">
+        <MapPin className="w-3.5 h-3.5 text-brand-primary" />
+        <span className="">{firstLoc.city_name}, {firstLoc.country}</span>
+        {hasMore && (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Badge 
+                variant="outline" 
+                className="ml-1 cursor-pointer hover:bg-indigo-50 hover:text-indigo-600 transition-colors text-[9px] px-1.5 py-0 h-4 border-gray-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                +{locs.length - 1} more
+              </Badge>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-3" onClick={(e) => e.stopPropagation()}>
+              <div className="space-y-2">
+                <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Available Locations</p>
+                <div className="flex flex-col gap-1.5">
+                  {locs.map((loc, idx) => (
+                    <div key={idx} className="flex items-center gap-2 text-xs font-bold text-gray-700">
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+                      {loc.city_name}, {loc.country}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+    );
+  };
+
 
 
   const renderDetailModal = () => (
@@ -61,15 +125,14 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                       <Clock className="w-3.5 h-3.5 mr-1.5" /> Available
                     </Badge>
                     <Badge className="bg-brand-primary/10 text-brand-primary border-none font-bold py-1 px-3 rounded-lg text-[10px] uppercase tracking-widest">
-                      {equipment.category_id === 1 ? 'Excavators' : 'Machinery'}
+                      {equipment.category_display_name || 'Machinery'}
                     </Badge>
                   </div>
                   <DialogTitle className="text-lg sm:text-xl lg:text-3xl font-black text-gray-900 mb-2 lg:mb-3 leading-tight">
                     {(detailedEquipment || equipment).name}
                   </DialogTitle>
                   <DialogDescription className="flex items-center gap-2 text-sm text-gray-500">
-                    <MapPin className="w-4 h-4 text-brand-primary shrink-0" />
-                    <span className="font-medium text-gray-700">United Kingdom</span>
+                    {renderLocationInfo()}
                   </DialogDescription>
                 </DialogHeader>
               </div>
@@ -91,8 +154,12 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                   <div>
                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Listed By</div>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-white p-1.5 border border-gray-100 flex items-center justify-center shadow-sm">
-                        <Building2 className="w-5 h-5 text-brand-primary" />
+                      <div className="w-10 h-10 rounded-xl bg-white p-1.5 border border-gray-100 flex items-center justify-center shadow-sm overflow-hidden">
+                        {(detailedEquipment || equipment).organization_logo ? (
+                          <img src={(detailedEquipment || equipment).organization_logo} alt="" className="w-full h-full object-contain" />
+                        ) : (
+                          <Building2 className="w-5 h-5 text-brand-primary" />
+                        )}
                       </div>
                       <span className="font-bold text-gray-900 lg:text-lg leading-tight">
                         {(detailedEquipment || equipment).organization_name || 'Tooli Supplier'}
@@ -158,9 +225,9 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
         >
           <Card className="rounded-none border-none shadow-none hover:bg-gray-50 transition-colors border-b border-gray-100">
             <CardContent className="p-0">
-              <div className="flex flex-row items-center px-6 md:px-8 py-4 gap-6">
+              <div className="flex flex-row items-center px-6 md:px-8 py-4 gap-6 w-full min-w-[1060px]">
                 {/* 1. Equipment Info */}
-                <div className="flex-1 min-w-[200px]">
+                <div className="w-[280px]">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-sm font-bold text-gray-900 group-hover:text-brand-primary transition-colors line-clamp-1">
                       {equipment.name}
@@ -168,13 +235,13 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                   </div>
                   <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-medium">
                     <span className="uppercase tracking-wider">
-                      {equipment.category_id === 1 ? 'Excavators' : 'Machinery'}
+                      {equipment.category_display_name || 'Machinery'}
                     </span>
                   </div>
                 </div>
 
                 {/* 2. Supplier Info */}
-                <div className="flex items-center gap-3 min-w-[180px]">
+                <div className="flex items-center gap-3 w-[180px]">
                   <div className="w-8 h-8 rounded-lg bg-gray-50 p-1 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
                     {equipment.organization_logo ? (
                       <img src={equipment.organization_logo} alt="" className="w-full h-full object-contain" />
@@ -188,29 +255,26 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                 </div>
 
                 {/* 3. Location */}
-                <div className="min-w-[150px]">
-                  <div className="flex items-center gap-1.5 text-xs font-medium text-gray-700">
-                    <MapPin className="w-3.5 h-3.5 text-brand-primary" />
-                    United Kingdom
-                  </div>
+                <div className="flex-1 min-w-[320px] text-xs">
+                  {renderLocationInfo()}
                 </div>
 
                 {/* 4. Price */}
-                <div className="min-w-[120px]">
+                <div className="w-[120px]">
                   <div className="flex items-baseline gap-1">
                     <span className="text-base font-black text-brand-primary">£{displayPrice}</span>
                   </div>
                 </div>
 
                 {/* 5. Status */}
-                <div className="min-w-[100px]">
+                <div className="w-[100px]">
                   <Badge className="bg-green-50 text-green-700 border-green-100 font-bold text-[9px] px-2 py-0.5">
                     <Clock className="w-3 h-3 mr-1" /> Available
                   </Badge>
                 </div>
 
                 {/* 6. Actions */}
-                <div className="flex items-center gap-3 ml-auto">
+                <div className="flex items-center gap-3 ml-auto w-[120px] justify-end">
                   <Button 
                     onClick={(e) => { 
                       e.stopPropagation(); 
@@ -246,7 +310,7 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
             <div className="p-5">
               <div className="flex items-center justify-between mb-2">
                 <Badge variant="secondary" className="text-[10px] font-bold uppercase tracking-widest">
-                  {equipment.category_id === 1 ? 'Excavators' : 'Equipment'}
+                  {equipment.category_display_name || 'Equipment'}
                 </Badge>
               </div>
               <h3 className="font-bold text-lg mb-2 line-clamp-1">{equipment.name}</h3>
@@ -261,7 +325,9 @@ export function EquipmentCard({ equipment, view = 'grid' }: EquipmentCardProps) 
                   </div>
                   <span className="font-bold text-gray-900">{equipment.organization_name || 'Tooli Supplier'}</span>
                 </div>
-                <div className="flex items-center gap-1"><MapPin className="w-4 h-4" /> United Kingdom</div>
+                <div className="text-xs">
+                  {renderLocationInfo()}
+                </div>
               </div>
               <div className="border-t pt-4">
                 <div className="flex items-end justify-between mb-6">
