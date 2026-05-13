@@ -52,36 +52,41 @@ const DialogContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   const internalRef = React.useRef<HTMLDivElement>(null);
   
-  // Combine refs
   React.useImperativeHandle(ref, () => internalRef.current!);
 
-  React.useEffect(() => {
-    if (internalRef.current) {
-      const timer = setTimeout(() => {
-        if (internalRef.current) {
-          internalRef.current.scrollTop = 0;
-        }
-      }, 10);
-      return () => clearTimeout(timer);
-    }
+  React.useLayoutEffect(() => {
+    const resetScroll = () => {
+      if (internalRef.current) {
+        internalRef.current.scrollTop = 0;
+      }
+    };
+    
+    // Multiple attempts to beat browser race conditions
+    resetScroll();
+    const raf = requestAnimationFrame(resetScroll);
+    const timer = setTimeout(resetScroll, 100);
+    
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
     <DialogPortal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-[2147483646] bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-      <div className="fixed inset-0 z-[2147483647] flex items-center justify-center p-3 pointer-events-none overflow-hidden h-[100dvh] w-screen">
+      <DialogPrimitive.Overlay className="!fixed !inset-0 !z-[2147483646] bg-black/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+      <div className="!fixed !inset-0 !z-[2147483647] flex items-center justify-center p-2 sm:p-4 pointer-events-none overflow-hidden h-[100dvh] w-screen">
         <DialogPrimitive.Content
           ref={internalRef}
-          onOpenAutoFocus={(e) => e.preventDefault()}
           className={cn(
-            "bg-white relative pointer-events-auto flex flex-col w-full max-w-[500px] max-h-[calc(100dvh-24px)] rounded-2xl shadow-2xl duration-200 outline-hidden overflow-y-auto transform-none top-auto left-auto m-0",
+            "!bg-white !relative pointer-events-auto flex flex-col w-full max-w-[550px] !max-h-[96dvh] sm:!max-h-[90dvh] rounded-2xl shadow-2xl duration-200 outline-hidden overflow-y-auto !transform-none !top-auto !left-auto !m-0",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",
             className
           )}
           {...props}
         >
           {children}
-          <DialogPrimitive.Close className="absolute top-4 right-4 rounded-full w-8 h-8 flex items-center justify-center bg-gray-100/50 hover:bg-gray-200/80 transition-all z-[10001]">
+          <DialogPrimitive.Close className="absolute top-3 right-3 sm:top-4 sm:right-4 rounded-full w-8 h-8 flex items-center justify-center bg-gray-100/80 hover:bg-gray-200 transition-all z-[10001] shadow-sm">
             <XIcon className="size-4 text-gray-900" />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
