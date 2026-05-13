@@ -156,11 +156,15 @@ export const equipmentApi = {
     return response.json();
   },
 
-  getCategories: async (page: number = 1, pageSize: number = 50): Promise<any> => {
+  getCategories: async (page: number = 1, pageSize: number = 50, skipPagination?: boolean): Promise<any> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
-    params.append('page', page.toString());
-    params.append('page_size', pageSize.toString());
+    if (skipPagination) {
+      params.append('skip_pagination', 'true');
+    } else {
+      params.append('page', page.toString());
+      params.append('page_size', pageSize.toString());
+    }
 
     const response = await fetch(`${API_URL}/category/?${params.toString()}`, {
       headers: {
@@ -175,11 +179,15 @@ export const equipmentApi = {
     return response.json();
   },
 
-  getLocations: async (page: number = 1, pageSize: number = 50): Promise<any> => {
+  getLocations: async (page: number = 1, pageSize: number = 50, skipPagination?: boolean): Promise<any> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
-    params.append('page', page.toString());
-    params.append('page_size', pageSize.toString());
+    if (skipPagination) {
+      params.append('skip_pagination', 'true');
+    } else {
+      params.append('page', page.toString());
+      params.append('page_size', pageSize.toString());
+    }
 
     const response = await fetch(`${API_URL}/location/?${params.toString()}`, {
       headers: {

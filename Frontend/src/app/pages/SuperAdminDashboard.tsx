@@ -330,11 +330,6 @@ export function SuperAdminDashboard() {
 
     if (!isUpdate) {
       // Format full payload for new equipment
-      const imagesMetadata = data.imagePreviews.map((url: string, index: number) => ({
-        sort_order: index,
-        is_active: true
-      }));
-
       payload = {
         name: data.name,
         description: data.description,
@@ -344,24 +339,19 @@ export function SuperAdminDashboard() {
         organization_id: parseInt(data.supplierId),
         created_by: parseInt(localStorage.getItem('user_id') || '10'),
         updated_by: parseInt(localStorage.getItem('user_id') || '10'),
-        location: {
-          location_id: parseInt(data.locationId),
-          is_active: true
-        },
+        locations: data.locations,
         prices: data.prices.map((p: any) => ({
           ...p,
-          location_id: parseInt(data.locationId),
           is_active: true,
         })),
-        images: imagesMetadata,
       };
     } else {
       payload.updated_by = parseInt(localStorage.getItem('user_id') || '10');
     }
 
     const equipPromise = isUpdate
-      ? equipmentApi.updateEquipmentFiles(payload, data.imageFiles || [])
-      : equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
+      ? equipmentApi.updateEquipment(payload.equipment_id, payload)
+      : equipmentApi.createEquipment(payload);
 
     await toast.promise(equipPromise, {
       loading: isUpdate ? 'Updating equipment...' : 'Listing equipment...',
@@ -370,13 +360,8 @@ export function SuperAdminDashboard() {
     });
 
     try {
-      if (isUpdate && data.imagesToDelete?.length > 0) {
-        for (const imgId of data.imagesToDelete) {
-          await equipmentApi.deleteEquipmentImage(imgId);
-        }
-      }
       await equipPromise;
-      await fetchEquipment();
+      await fetchEquipment(equipPage);
       setIsEquipFormOpen(false);
     } catch (error: any) {
       console.error('Error saving equipment:', error);
@@ -1420,10 +1405,6 @@ export function SuperAdminDashboard() {
         onClose={() => setIsEquipFormOpen(false)}
         onSubmit={handleEquipSubmit}
         equipment={selectedEquipment}
-        suppliers={suppliers}
-        intervals={intervals}
-        categories={categories}
-        locations={locations}
         isLoading={isFetchingDetail}
       />
 

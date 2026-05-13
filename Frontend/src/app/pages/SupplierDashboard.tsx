@@ -272,25 +272,11 @@ export function SupplierDashboard() {
         organization_id: parseInt(data.supplierId || localStorage.getItem('organization_id') || '0'),
         created_by: parseInt(localStorage.getItem('user_id') || '0'),
         updated_by: parseInt(localStorage.getItem('user_id') || '0'),
-        location: {
-          location_id: parseInt(data.locationId),
-          is_active: true
-        },
+        locations: data.locations,
         prices: data.prices.map((p: any) => ({
           ...p,
-          location_id: parseInt(data.locationId),
           is_active: true,
         })),
-        images: data.imagePreviews.map((url: string, index: number) => ({
-          sort_order: index,
-          is_active: true
-        })),
-        availabilities: data.availabilities.map((a: any) => ({
-          ...a,
-          availability_from: a.from ? new Date(a.from).toISOString() : undefined,
-          availability_to: a.to ? new Date(a.to).toISOString() : undefined,
-          is_active: true
-        }))
       };
     } else {
       payload.updated_by = parseInt(localStorage.getItem('user_id') || '0');
@@ -298,27 +284,10 @@ export function SupplierDashboard() {
 
     try {
       if (isUpdate) {
-        // 1. Handle queued image deletions FIRST
-        if (data.imagesToDelete?.length > 0) {
-          for (const imgId of data.imagesToDelete) {
-            await equipmentApi.deleteEquipmentImage(imgId);
-          }
-        }
-
-        // 2. Check if we actually need to send a PATCH
-        // We need to PATCH if there's any field in payload other than equipment_id, updated_by, imageFiles, or imagesToDelete
-        const patchFields = Object.keys(payload).filter(k => 
-          !['equipment_id', 'updated_by', 'imageFiles', 'imagesToDelete'].includes(k)
-        );
-
-        if (patchFields.length > 0 || (data.imageFiles && data.imageFiles.length > 0)) {
-          await equipmentApi.updateEquipmentFiles(payload, data.imageFiles || []);
-          toast.success('Equipment updated successfully');
-        } else if (data.imagesToDelete?.length > 0) {
-          toast.success('Images removed successfully');
-        }
+        await equipmentApi.updateEquipment(payload.equipment_id, payload);
+        toast.success('Equipment updated successfully');
       } else {
-        await equipmentApi.createEquipmentFiles(payload, data.imageFiles || []);
+        await equipmentApi.createEquipment(payload);
         toast.success('Equipment added successfully');
       }
       await fetchEquipment();
@@ -589,10 +558,6 @@ export function SupplierDashboard() {
         onClose={() => setIsEquipFormOpen(false)}
         onSubmit={handleEquipSubmit}
         equipment={selectedEquipment}
-        suppliers={userData ? [userData] : []}
-        intervals={intervals}
-        categories={categories}
-        locations={locations}
         isLoading={isFetchingDetail}
       />
 
