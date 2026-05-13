@@ -128,6 +128,8 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
     role_id = serializers.IntegerField(required=False, allow_null=True)
     is_active = serializers.BooleanField(required=False)
     is_approved = serializers.BooleanField(required=False)
+    approved_by = serializers.IntegerField(required=False, allow_null=True)
+    approved_datetime = serializers.DateTimeField(required=False, allow_null=True)
     created_by = serializers.IntegerField(required=False, allow_null=True)
     updated_by = serializers.IntegerField(required=False, allow_null=True)
 
@@ -351,6 +353,7 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         user_payload = validated_data.pop("user", None)
         org_payload = validated_data.pop("organization", None)
         validated_data.pop("created_by", None)
+        validated_data.pop("approved_datetime", None)
         updated_by = validated_data.pop("updated_by", None)
 
         if "user_id" in validated_data:
@@ -365,6 +368,15 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             instance.is_approved = validated_data.pop("is_approved")
             if instance.is_approved:
                 instance.is_active = True
+                if not instance.approved_datetime:
+                    instance.approved_datetime = now
+                approved_by_id = validated_data.pop("approved_by", None) or updated_by
+                if approved_by_id and not instance.approved_by_id:
+                    instance.approved_by_id = approved_by_id
+            else:
+                validated_data.pop("approved_by", None)
+        else:
+            validated_data.pop("approved_by", None)
 
         if user_payload:
             u = User.objects.get(pk=instance.user_id_id)

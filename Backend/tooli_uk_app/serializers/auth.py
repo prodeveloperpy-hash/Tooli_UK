@@ -40,7 +40,9 @@ class SignupSerializer(serializers.Serializer):
 
     def validate_email(self, value: str) -> str:
         if User.objects.filter(email__iexact=value).exists():
-            raise serializers.ValidationError("Email is already registered.")
+            raise serializers.ValidationError(
+                "This email is already registered. Please use a different email or log in."
+            )
         return value
 
     def _resolve_supplier_role_id(self) -> int:
@@ -148,18 +150,28 @@ class LoginSerializer(serializers.Serializer):
             .first()
         )
         if not user or not check_password(password, user.password):
-            raise serializers.ValidationError("Invalid email or password.")
+            raise serializers.ValidationError(
+                "Invalid email or password. Please check your credentials and try again."
+            )
 
         role_key = (user.role_id.role_key or "").upper() if user.role_id else ""
         if role_key == "SUPPLIER":
-            approved_supplier_link_exists = UserOrganization.objects.filter(
-                user_id=user.user_id,
-                is_active=True,
-                is_approved=True,
-            ).exists()
-            if not approved_supplier_link_exists:
+            supplier_link = (
+                UserOrganization.objects.filter(
+                    user_id=user.user_id,
+                    is_active=True,
+                )
+                .order_by("-user_organization_id")
+                .first()
+            )
+            if not supplier_link:
                 raise serializers.ValidationError(
-                    "Your account is not approved by admin."
+                    "No active organisation found for your account. Please contact support."
+                )
+            if not supplier_link.is_approved:
+                raise serializers.ValidationError(
+                    "Your account is pending approval by the admin. "
+                    "You will receive an email once your account is approved."
                 )
 
         attrs["is_hardcoded_superadmin"] = False
