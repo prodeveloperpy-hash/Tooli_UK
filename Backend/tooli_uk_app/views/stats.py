@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from tooli_uk_app.models import Category, Equipment, EquipmentLocation, User, UserOrganization
+from tooli_uk_app.models import Category, Equipment, EquipmentLocation, Location, User, UserOrganization
 
 
 class StatsAPIView(APIView):
@@ -94,13 +94,16 @@ class StatsAPIView(APIView):
                 .count()
             )
 
-        equipment_ids_subquery = equipment_qs.values("equipment_id")
-        total_locations = (
-            EquipmentLocation.objects.filter(equipment_id_id__in=equipment_ids_subquery)
-            .values("location_id_id")
-            .distinct()
-            .count()
-        )
+        if organization_ids is None:
+            total_locations = Location.objects.filter(is_active=True).count()
+        else:
+            equipment_ids_subquery = equipment_qs.values("equipment_id")
+            total_locations = (
+                EquipmentLocation.objects.filter(equipment_id_id__in=equipment_ids_subquery)
+                .values("location_id_id")
+                .distinct()
+                .count()
+            )
 
         category_counts_qs = Category.objects.all()
         if organization_ids is not None:
