@@ -86,16 +86,18 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden rounded-2xl border-none shadow-2xl">
-        <form onSubmit={handleSubmit} className="relative">
-          <DialogHeader className="p-8 bg-gray-50 border-b">
-            <DialogTitle className="text-2xl font-bold">{admin ? 'Edit Admin' : 'Add New Admin'}</DialogTitle>
-            <DialogDescription className="text-gray-500 mt-1">
-              {admin ? 'Update system administrator account details' : 'Create a new administrative account with full access'}
-            </DialogDescription>
+      <DialogContent className="max-w-[500px] p-0">
+        <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
+          <DialogHeader className="p-6 lg:p-8 bg-gray-50 border-b shrink-0">
+            <div className="flex items-center justify-between lg:block">
+              <div>
+                <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{admin ? 'Edit Admin' : 'Add Admin'}</DialogTitle>
+                <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Administrator account details</DialogDescription>
+              </div>
+            </div>
           </DialogHeader>
           
-          <div className="p-8 space-y-8 max-h-[60vh] overflow-y-auto">
+          <div className="p-6 lg:p-8 space-y-8 overflow-y-auto flex-1">
             {/* Simplified Status at Top */}
             <div className="flex items-center justify-end gap-3 mb-2">
               <span className={`text-sm font-bold ${formData.isActive ? 'text-green-600' : 'text-gray-400'}`}>
@@ -255,7 +257,7 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
             </div>
           </div>
 
-          <DialogFooter className="p-8 bg-gray-50 border-t gap-3 sm:gap-0">
+          <DialogFooter className="p-6 lg:p-8 bg-gray-50 border-t gap-3 sm:gap-0 shrink-0">
             <Button type="button" variant="ghost" onClick={onClose} className="font-bold">
               Cancel
             </Button>

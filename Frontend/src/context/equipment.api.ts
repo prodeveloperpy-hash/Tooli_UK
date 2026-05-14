@@ -1,25 +1,43 @@
 import { API_URL } from '../api-config';
 
+export interface EquipmentLocation {
+  equipment_location_id: number;
+  equipment_id: number;
+  location_id: number;
+  city_name: string;
+  country: string;
+  state: string | null;
+  is_active: boolean;
+  created_datetime: string;
+}
+
 export interface Equipment {
   equipment_id: number;
   name: string;
   description: string;
-  organization_name: string;
   is_active: boolean;
   category_id: number;
+  category_display_name: string;
   organization_id: number;
-  organization_logo?: string;
-  images: {
+  organization_name: string;
+  organization_logo: string | null;
+  redirect_url: string | null;
+  created_by: number;
+  updated_by: number;
+  created_datetime: string;
+  updated_datetime: string;
+  locations: EquipmentLocation[];
+  prices: {
+    equipment_price_id: number;
+    equipment_id: number;
+    interval_id: number;
+    price: string;
+    currency: string;
+  }[];
+  images?: {
     equipment_image_id: number;
     image_url: string;
     is_active: boolean;
-  }[];
-  prices: {
-    equipment_price_id: number;
-    price: string;
-    currency: string;
-    is_active: boolean;
-    interval_id?: number;
   }[];
   availabilities?: {
     equipment_availability_id: number;
@@ -27,7 +45,6 @@ export interface Equipment {
     availability_to: string;
     is_active: boolean;
   }[];
-  redirect_url?: string;
 }
 
 export interface EquipmentResponse {

@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '../components/ui/table';
+import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import {
   Tabs,
   TabsContent,
@@ -410,17 +411,17 @@ export function SupplierDashboard() {
                     <Table>
                       <TableHeader className="bg-gray-50/50">
                         <TableRow className="hover:bg-transparent border-b">
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Product Details</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Category</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Weekly Price</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs">Status</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs text-right">Actions</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-full min-w-[350px]">Product Details</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-[200px]">Category</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-[200px]">Weekly Price</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-[180px]">Status</TableHead>
+                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs text-right w-[150px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {isEquipmentLoading ? (
                           <TableRow>
-                            <TableCell colSpan={6} className="py-20 text-center">
+                            <TableCell colSpan={5} className="py-20 text-center">
                               <Loader2 className="w-10 h-10 animate-spin text-brand-primary mx-auto" />
                               <p className="mt-4 text-gray-500 font-bold tracking-widest uppercase text-xs">Loading Equipment...</p>
                             </TableCell>
@@ -437,11 +438,35 @@ export function SupplierDashboard() {
                               <TableCell className="py-8 px-12">
                                 <div className="min-w-0">
                                   <div className="font-black text-gray-900 text-lg tracking-tight truncate" title={item.name}>{item.name}</div>
+                                  <div className="text-[10px] text-gray-400 font-bold flex items-center gap-1 mt-1 uppercase tracking-widest">
+                                     <MapPin className="w-3 h-3" />
+                                     <span>{item.locations?.[0]?.city_name || 'Global'}</span>
+                                     {item.locations && item.locations.length > 1 && (
+                                       <Popover>
+                                         <PopoverTrigger asChild>
+                                           <span className="text-[9px] font-black text-brand-primary cursor-pointer hover:underline">
+                                             +{item.locations.length - 1} more
+                                           </span>
+                                         </PopoverTrigger>
+                                         <PopoverContent className="w-auto p-2" onClick={(e) => e.stopPropagation()}>
+                                           <div className="space-y-1">
+                                             <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Locations</p>
+                                             {item.locations.map((loc, i) => (
+                                               <div key={i} className="text-[10px] font-bold text-gray-700 whitespace-nowrap flex items-center gap-1.5">
+                                                 <div className="w-1 h-1 rounded-full bg-brand-primary" />
+                                                 {loc.city_name}, {loc.country}
+                                               </div>
+                                             ))}
+                                           </div>
+                                         </PopoverContent>
+                                       </Popover>
+                                     )}
+                                  </div>
                                 </div>
                               </TableCell>
                               <TableCell className="py-8 px-12">
                                 <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider">
-                                  {categories.find(c => c.category_id === item.category_id)?.category_display_name || 'General'}
+                                  {item.category_display_name || 'General'}
                                 </Badge>
                               </TableCell>
                               <TableCell className="py-8 px-12 font-black text-2xl text-gray-900 tracking-tight">
