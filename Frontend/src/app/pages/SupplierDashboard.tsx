@@ -33,6 +33,8 @@ import {
   Building,
   User,
   Loader2,
+  MapPin,
+  Trash2,
 } from 'lucide-react';
 import { products, pricing } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
@@ -42,7 +44,7 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { EquipmentForm } from '../components/EquipmentForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
-import { Trash2 } from 'lucide-react'; // Added for delete action
+
 
 export function SupplierDashboard() {
   const [userData, setUserData] = useState<UserOrganization | null>(null);
@@ -584,6 +586,8 @@ export function SupplierDashboard() {
         onSubmit={handleEquipSubmit}
         equipment={selectedEquipment}
         isLoading={isFetchingDetail}
+        fixedSupplierId={localStorage.getItem('organization_id') || undefined}
+        fixedSupplierName={userData?.organization_details.name}
       />
 
       <DeleteConfirmation 

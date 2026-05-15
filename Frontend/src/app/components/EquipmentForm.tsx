@@ -16,9 +16,11 @@ interface EquipmentFormProps {
   onSubmit: (data: any) => Promise<void>;
   equipment: Equipment | null;
   isLoading?: boolean;
+  fixedSupplierId?: string;
+  fixedSupplierName?: string;
 }
 
-export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading }: EquipmentFormProps) {
+export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading, fixedSupplierId, fixedSupplierName }: EquipmentFormProps) {
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
   const [intervals, setIntervals] = useState<Interval[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -42,14 +44,17 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
       const fetchData = async () => {
         setIsDataLoading(true);
         try {
+          // If fixedSupplierId is provided, we don't need to fetch all suppliers
           const [suppliersData, categoriesData, locationsData, intervalsData] = await Promise.all([
-            userApi.getUserOrganizations(undefined, undefined, 'SUPPLIER', 1, 50, true),
+            fixedSupplierId ? Promise.resolve([]) : userApi.getUserOrganizations(undefined, undefined, 'SUPPLIER', 1, 50, true),
             equipmentApi.getCategories(1, 50, true),
             equipmentApi.getLocations(1, 50, true),
             equipmentApi.getIntervals()
           ]);
           
-          setSuppliers(suppliersData?.results || (Array.isArray(suppliersData) ? suppliersData : []));
+          if (!fixedSupplierId) {
+            setSuppliers(suppliersData?.results || (Array.isArray(suppliersData) ? suppliersData : []));
+          }
           setCategories(categoriesData?.results || (Array.isArray(categoriesData) ? categoriesData : []));
           setLocations(locationsData?.results || (Array.isArray(locationsData) ? locationsData : []));
           setIntervals(Array.isArray(intervalsData) ? intervalsData : (intervalsData as any)?.results || []);
@@ -61,7 +66,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
       };
       fetchData();
     }
-  }, [isOpen]);
+  }, [isOpen, fixedSupplierId]);
 
   const weeklyIntervalId = intervals.find(i => 
     i.interval_display_name?.toLowerCase().includes('week') || 
@@ -90,7 +95,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
       setFormData({
         name: '',
         description: '',
-        supplierId: '',
+        supplierId: fixedSupplierId || '',
         categoryId: '',
         isActive: null,
         locationIds: [],
@@ -98,7 +103,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
         redirectUrl: '',
       });
     }
-  }, [isOpen, equipment, weeklyIntervalId]);
+  }, [isOpen, equipment, weeklyIntervalId, fixedSupplierId]);
 
   const handlePriceChange = (index: number, field: string, value: any) => {
     const newPrices = [...formData.prices];
@@ -194,18 +199,24 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="font-bold">Supplier</Label>
-                    <Select value={formData.supplierId} onValueChange={v => setFormData({...formData, supplierId: v})}>
-                      <SelectTrigger className="h-12 rounded-xl">
-                        <SelectValue placeholder="Select Supplier" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {suppliers.map(s => (
-                          <SelectItem key={s.user_organization_id} value={(s.organization_id || s.user_organization_id || '0').toString()}>
-                            {s.organization_details.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    {fixedSupplierId ? (
+                      <div className="h-12 flex items-center px-1 font-bold text-gray-900">
+                        {fixedSupplierName || 'Current Supplier'}
+                      </div>
+                    ) : (
+                      <Select value={formData.supplierId} onValueChange={v => setFormData({...formData, supplierId: v})}>
+                        <SelectTrigger className="h-12 rounded-xl">
+                          <SelectValue placeholder="Select Supplier" />
+                        </SelectTrigger>
+                        <SelectContent className="z-[10010]">
+                          {suppliers.map(s => (
+                            <SelectItem key={s.user_organization_id} value={(s.organization_id || s.user_organization_id || '0').toString()}>
+                              {s.organization_details.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label className="font-bold">Category</Label>
