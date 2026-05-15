@@ -560,10 +560,10 @@ export function AdminDashboard() {
                         ) : suppliers.map((s) => (
                           <TableRow key={s.user_organization_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
-                              <div className="flex items-center gap-3">
-                                <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
-                                  <AvatarImage src={s.user_details.avatar_url || ''} />
-                                  <AvatarFallback className="text-xs bg-brand-primary/10 text-brand-primary font-bold">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-15 w-15 rounded-lg border-2 border-white bg-white shadow-md">
+                                  <AvatarImage src={s.user_details.avatar_url || ''} className="object-contain" />
+                                  <AvatarFallback className="rounded-lg text-sm bg-brand-primary/10 text-brand-primary font-bold">
                                     {s.user_details.first_name[0]}{s.user_details.last_name[0]}
                                   </AvatarFallback>
                                 </Avatar>
@@ -571,12 +571,12 @@ export function AdminDashboard() {
                               </div>
                             </TableCell>
                             <TableCell>
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-white p-1.5 border border-gray-100 flex items-center justify-center shrink-0 shadow-sm">
+                              <div className="flex items-center gap-4">
+                                <div className="w-15 h-15 rounded-lg bg-white border border-gray-100 flex items-center justify-center shrink-0 shadow-sm">
                                   {s.organization_details.logo ? (
                                     <img src={s.organization_details.logo} alt="" className="max-h-full max-w-full object-contain" />
                                   ) : (
-                                    <Building2 className="w-5 h-5 text-gray-300" />
+                                    <Building2 className="w-6 h-6 text-gray-300" />
                                   )}
                                 </div>
                                 <div>
@@ -755,9 +755,11 @@ export function AdminDashboard() {
                                </Badge>
                              </TableCell>
                              <TableCell className="font-medium text-gray-700">
-                               <div className="flex items-center gap-2">
+                               <div className="flex items-center gap-3">
                                  {item.organization_logo && (
-                                   <img src={item.organization_logo} alt="" className="w-4 h-4 object-contain" />
+                                   <span className="w-15 h-15 rounded-lg bg-white border border-gray-100 flex items-center justify-center shrink-0 shadow-sm">
+                                     <img src={item.organization_logo} alt="" className="max-h-full max-w-full object-contain" />
+                                   </span>
                                  )}
                                  {item.organization_name}
                                </div>
@@ -922,9 +924,9 @@ export function AdminDashboard() {
                 {pendingSuppliers.map((s) => (
                   <div key={s.user_organization_id} className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-xl hover:border-brand-primary/20 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group">
                     <div className="flex items-center gap-4 sm:gap-6 flex-1">
-                      <Avatar className="h-14 w-14 sm:h-16 sm:w-16 border-4 border-gray-50 shadow-sm transition-transform group-hover:scale-105">
-                        <AvatarImage src={s.user_details.avatar_url || ''} />
-                        <AvatarFallback className="bg-brand-primary/5 text-brand-primary font-black text-xl">
+                      <Avatar className="h-15 w-15 rounded-xl border-4 border-gray-50 bg-white shadow-sm transition-transform group-hover:scale-105">
+                        <AvatarImage src={s.user_details.avatar_url || ''} className="object-contain" />
+                        <AvatarFallback className="rounded-xl bg-brand-primary/5 text-brand-primary font-black text-xl">
                           {s.user_details.first_name?.[0]}{s.user_details.last_name?.[0]}
                         </AvatarFallback>
                       </Avatar>
