@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { SearchBar } from '../components/SearchBar';
 import { Button } from '../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Loader2, Search, BarChart3, CheckCircle, ArrowRight, Filter } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { equipmentApi, Equipment } from '../../context/equipment.api';
 import { EquipmentCard } from '../components/EquipmentCard';
 
@@ -97,11 +97,6 @@ export function SearchResultsPage() {
                     </SelectContent>
                   </Select>
                   
-                  <Button variant="outline" className="h-9 md:h-10 border-gray-200 text-xs md:text-sm font-bold flex items-center gap-2 rounded-lg shrink-0">
-                    <Filter className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                    <span className="hidden sm:inline">Filters</span>
-                    <span className="sm:hidden">Filter</span>
-                  </Button>
                 </div>
               </div>
 

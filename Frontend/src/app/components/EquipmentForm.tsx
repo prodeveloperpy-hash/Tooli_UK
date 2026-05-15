@@ -33,7 +33,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
     description: '',
     supplierId: '',
     categoryId: '',
-    isActive: null as boolean | null,
+    isActive: true,
     locationIds: [] as string[],
     prices: [{ price: '', interval_id: 1, currency: 'GBP' }],
     redirectUrl: '',
@@ -97,7 +97,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
         description: '',
         supplierId: fixedSupplierId || '',
         categoryId: '',
-        isActive: null,
+        isActive: true,
         locationIds: [],
         prices: [{ price: '', interval_id: weeklyIntervalId, currency: 'GBP' }],
         redirectUrl: '',
@@ -177,7 +177,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
           {(isLoading || isDataLoading) && (
             <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center gap-4">
               <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
-              <p className="text-xs font-black text-gray-500 animate-pulse uppercase tracking-widest">Syncing with API...</p>
+              <p className="text-xs font-black text-gray-500 animate-pulse uppercase tracking-widest">Loading...</p>
             </div>
           )}
           <form id="equipment-form" onSubmit={handleSubmit} className="space-y-8 lg:space-y-10">
@@ -236,9 +236,9 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                 </div>
                 <div className="space-y-2">
                   <Label className="font-bold">Availability Status</Label>
-                  <Select value={formData.isActive === null ? "" : formData.isActive.toString()} onValueChange={v => setFormData({...formData, isActive: v === 'true'})}>
+                  <Select value={formData.isActive.toString()} onValueChange={v => setFormData({...formData, isActive: v === 'true'})}>
                     <SelectTrigger className="h-12 rounded-xl">
-                      <SelectValue placeholder="Select Status" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="true">Available</SelectItem>
