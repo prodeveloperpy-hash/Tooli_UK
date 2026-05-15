@@ -622,27 +622,27 @@ export function AdminDashboard() {
                   </div>
 
                   {/* Pagination Controls */}
-                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
-                    <div className="text-sm text-muted-foreground font-medium">
+                  <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50/30">
+                    <div className="text-xs sm:text-sm text-muted-foreground font-medium text-center sm:text-left">
                       Showing <span className="text-gray-900 font-bold">{suppliers.length}</span> of <span className="text-gray-900 font-bold">{totalSupplierCount}</span> suppliers
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setSupplierPage(prev => Math.max(1, prev - 1))}
                         disabled={supplierPage === 1}
-                        className="font-bold h-9 px-4 rounded-xl"
+                        className="font-bold h-9 px-3 sm:px-4 rounded-xl text-xs sm:text-sm"
                       >
-                        Previous
+                        Prev
                       </Button>
-                      <span className="text-sm font-bold px-2">Page {supplierPage} of {Math.ceil(totalSupplierCount / 50) || 1}</span>
+                      <span className="text-xs sm:text-sm font-bold px-1 sm:px-2 whitespace-nowrap">Page {supplierPage} of {Math.ceil(totalSupplierCount / 50) || 1}</span>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setSupplierPage(prev => prev + 1)}
                         disabled={supplierPage >= Math.ceil(totalSupplierCount / 50)}
-                        className="font-bold h-9 px-4 rounded-xl"
+                        className="font-bold h-9 px-3 sm:px-4 rounded-xl text-xs sm:text-sm"
                       >
                         Next
                       </Button>
@@ -793,22 +793,22 @@ export function AdminDashboard() {
                     </Table>
                   </div>
 
-                  <div className="p-6 border-t flex items-center justify-between bg-gray-50/30">
-                    <div className="text-sm text-muted-foreground font-medium">
+                  <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50/30">
+                    <div className="text-xs sm:text-sm text-muted-foreground font-medium text-center sm:text-left">
                       Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalEquipCount}</span> equipment
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setEquipPage(prev => Math.max(1, prev - 1))}
                         disabled={equipPage === 1}
-                        className="font-bold h-9 px-4 rounded-xl"
+                        className="font-bold h-9 px-3 sm:px-4 rounded-xl text-xs sm:text-sm"
                       >
-                        Previous
+                        Prev
                       </Button>
 
-                      <div className="flex items-center gap-1">
+                      <div className="hidden sm:flex items-center gap-1">
                         {Array.from({ length: totalEquipPages }, (_, i) => i + 1)
                           .filter(p => {
                             if (totalEquipPages <= 7) return true;
@@ -817,7 +817,7 @@ export function AdminDashboard() {
                           .map((pageNum, index, array) => (
                             <div key={pageNum} className="flex items-center gap-1">
                               {index > 0 && array[index - 1] !== pageNum - 1 && (
-                                <span className="px-1 text-muted-foreground">...</span>
+                                <span className="px-1 text-muted-foreground text-xs">...</span>
                               )}
                               <Button
                                 variant={equipPage === pageNum ? "default" : "outline"}
@@ -834,13 +834,14 @@ export function AdminDashboard() {
                             </div>
                           ))}
                       </div>
+                      <span className="sm:hidden text-xs font-bold px-1 whitespace-nowrap">Page {equipPage} of {totalEquipPages}</span>
 
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => setEquipPage(prev => Math.min(totalEquipPages, prev + 1))}
                         disabled={equipPage === totalEquipPages || totalEquipPages === 0}
-                        className="font-bold h-9 px-4 rounded-xl"
+                        className="font-bold h-9 px-3 sm:px-4 rounded-xl text-xs sm:text-sm"
                       >
                         Next
                       </Button>
