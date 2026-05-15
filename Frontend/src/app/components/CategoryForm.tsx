@@ -55,13 +55,13 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md p-0">
-        <DialogHeader className="p-4 sm:p-6 pr-14 sm:pr-16 border-b flex justify-between items-center bg-gray-50 shrink-0">
+        <DialogHeader className="p-5 sm:p-8 pr-14 sm:pr-16 border-b flex justify-between items-center bg-gray-50 shrink-0">
           <div>
-            <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-black text-gray-900">{category ? 'Edit Category' : 'Add Category'}</DialogTitle>
-            <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Define a new equipment category</DialogDescription>
+            <DialogTitle className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">{category ? 'Edit Category' : 'Add Category'}</DialogTitle>
+            <DialogDescription className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest font-bold mt-1">Define a new equipment category</DialogDescription>
           </div>
         </DialogHeader>
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+        <div className="flex-1 overflow-y-auto p-5 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
@@ -100,14 +100,14 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
             </div>
           </div>
 
-          <div className="pt-4 flex flex-col-reverse sm:flex-row gap-3">
-            <Button variant="outline" type="button" onClick={onClose} className="flex-1 h-12 rounded-xl">
+          <div className="pt-8 flex flex-col-reverse sm:flex-row gap-3">
+            <Button variant="ghost" type="button" onClick={onClose} className="flex-1 h-12 rounded-xl font-black uppercase tracking-widest text-xs">
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 h-12 rounded-xl bg-brand-primary hover:bg-brand-primary-hover"
+              className="flex-1 h-12 rounded-xl bg-[#030213] hover:bg-black text-white font-black uppercase tracking-widest text-xs shadow-xl shadow-black/10"
             >
               {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (category ? 'Update' : 'Create')}
             </Button>

@@ -903,62 +903,66 @@ export function AdminDashboard() {
           if (!open) setApprovalFilter('all');
         }}
       >
-        <DialogContent className="sm:max-w-[1200px] w-[95vw] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Pending Approvals</DialogTitle>
-            <p className="text-muted-foreground text-sm">Review and approve new supplier registrations</p>
+        <DialogContent className="sm:max-w-[1200px] w-[95vw] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto p-0 border-none shadow-3xl">
+          <DialogHeader className="p-6 sm:p-8 border-b bg-gray-50/50 sticky top-0 z-10 shrink-0">
+            <DialogTitle className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">Pending Approvals</DialogTitle>
+            <p className="text-muted-foreground text-xs sm:text-sm font-medium uppercase tracking-widest mt-1">Review and approve new supplier registrations</p>
           </DialogHeader>
           
-          <div className="mt-6">
+          <div className="p-4 sm:p-8 space-y-6">
             {pendingSuppliers.length === 0 ? (
-              <div className="py-12 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                  <Users className="w-8 h-8 text-gray-300" />
+              <div className="py-12 sm:py-20 text-center bg-gray-50/50 rounded-3xl border-2 border-dashed border-gray-200">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                  <Users className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300" />
                 </div>
-                <p className="text-gray-500 font-medium">No pending approvals at the moment</p>
+                <p className="text-gray-500 font-bold tracking-widest uppercase text-xs">No pending approvals found</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
                 {pendingSuppliers.map((s) => (
-                  <div key={s.user_organization_id} className="p-4 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1">
-                      <Avatar className="h-12 w-12 border-2 border-brand-primary/10">
+                  <div key={s.user_organization_id} className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-xl hover:border-brand-primary/20 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group">
+                    <div className="flex items-center gap-4 sm:gap-6 flex-1">
+                      <Avatar className="h-14 w-14 sm:h-16 sm:w-16 border-4 border-gray-50 shadow-sm transition-transform group-hover:scale-105">
                         <AvatarImage src={s.user_details.avatar_url || ''} />
-                        <AvatarFallback className="bg-brand-primary/5 text-brand-primary font-bold">
+                        <AvatarFallback className="bg-brand-primary/5 text-brand-primary font-black text-xl">
                           {s.user_details.first_name?.[0]}{s.user_details.last_name?.[0]}
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0">
-                        <div className="font-bold text-gray-900 truncate">
+                        <div className="font-black text-gray-900 text-lg sm:text-xl tracking-tight truncate">
                           {s.user_details.first_name} {s.user_details.last_name}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-brand-primary font-bold uppercase tracking-widest mt-1">
                           <Building2 className="w-3.5 h-3.5" />
                           <span className="truncate">{s.organization_details.name}</span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="hidden md:block flex-1">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <Mail className="w-3.5 h-3.5" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row gap-4 md:gap-10 flex-1 px-2 md:px-0">
+                      <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-500 font-medium">
+                        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                          <Mail className="w-4 h-4 text-gray-400" />
+                        </div>
                         <span className="truncate">{s.user_details.email}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin className="w-3.5 h-3.5" />
+                      <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-500 font-medium">
+                        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                          <MapPin className="w-4 h-4 text-gray-400" />
+                        </div>
                         <span className="truncate">{s.organization_details.city}</span>
                       </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-row md:flex-row gap-3 pt-4 md:pt-0 border-t md:border-none">
                       <Button 
                         onClick={() => handleOpenRejectConfirm(s)}
                         disabled={rejectingId === s.user_organization_id || approvingId === s.user_organization_id}
-                        variant="outline"
-                        className="border-red-200 text-red-600 hover:bg-red-50 font-bold px-6 rounded-xl min-w-[120px]"
+                        variant="ghost"
+                        className="flex-1 md:flex-none h-12 px-6 rounded-xl font-black text-xs uppercase tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all active:scale-95"
                       >
                         {rejectingId === s.user_organization_id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className="w-5 h-5 animate-spin" />
                         ) : (
                           'Reject'
                         )}
@@ -966,10 +970,10 @@ export function AdminDashboard() {
                       <Button 
                         onClick={() => handleApproveSupplier(s.user_organization_id)}
                         disabled={approvingId === s.user_organization_id || rejectingId === s.user_organization_id}
-                        className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 rounded-xl shadow-lg shadow-green-200 min-w-[120px]"
+                        className="flex-1 md:flex-none bg-[#030213] hover:bg-black text-white font-black h-12 px-8 rounded-xl shadow-xl shadow-black/10 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-xs"
                       >
                         {approvingId === s.user_organization_id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className="w-5 h-5 animate-spin text-white" />
                         ) : (
                           'Approve'
                         )}

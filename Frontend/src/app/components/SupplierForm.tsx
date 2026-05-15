@@ -114,20 +114,20 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[600px] p-0">
         <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
-          <DialogHeader className="p-4 sm:p-6 lg:p-8 pr-14 sm:pr-16 bg-gray-50 border-b shrink-0">
+          <DialogHeader className="p-5 sm:p-8 pr-14 sm:pr-16 bg-gray-50 border-b shrink-0">
             <div className="flex items-center justify-between lg:block">
               <div>
-                <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-black text-gray-900">{supplier ? 'Edit Supplier' : 'Add Supplier'}</DialogTitle>
-                <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Manage partner organization details</DialogDescription>
+                <DialogTitle className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">{supplier ? 'Edit Supplier' : 'Add Supplier'}</DialogTitle>
+                <DialogDescription className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest font-bold mt-1">Manage partner organization details</DialogDescription>
               </div>
             </div>
           </DialogHeader>
 
-          <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 overflow-y-auto relative flex-1">
+          <div className="p-5 sm:p-8 space-y-8 sm:space-y-10 overflow-y-auto relative flex-1">
             {(isLoading || isDataLoading) && (
               <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center gap-4">
                 <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
-                <p className="text-sm font-bold text-gray-500 animate-pulse">Syncing Supplier Data...</p>
+                <p className="text-xs font-black text-gray-500 animate-pulse uppercase tracking-widest">Syncing Supplier Data...</p>
               </div>
             )}
             {/* Profile Section */}
@@ -341,11 +341,11 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
             </div>
           </div>
 
-          <DialogFooter className="p-6 lg:p-8 bg-gray-50 border-t gap-3 sm:gap-0 shrink-0">
-            <Button type="button" variant="ghost" onClick={onClose} className="font-bold">
+          <DialogFooter className="p-6 sm:p-8 bg-gray-50 border-t gap-3 shrink-0 flex-col-reverse sm:flex-row">
+            <Button type="button" variant="ghost" onClick={onClose} className="font-black uppercase tracking-widest text-xs h-12">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold px-8 shadow-lg shadow-brand-primary/20">
+            <Button type="submit" disabled={isSubmitting} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
               {isSubmitting ? 'Saving...' : (supplier ? 'Update Supplier' : 'Create Account')}
             </Button>
           </DialogFooter>

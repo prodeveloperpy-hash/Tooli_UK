@@ -747,38 +747,40 @@ export function SuperAdminDashboard() {
           </div>
 
           <Tabs defaultValue="admins" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-white p-1 rounded-xl shadow-sm border">
-              <TabsTrigger value="admins" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+          <div className="flex overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+            <TabsList className="bg-white p-1 rounded-xl shadow-sm border inline-flex min-w-max sm:w-auto">
+              <TabsTrigger value="admins" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
                 <ShieldCheck className="w-4 h-4 mr-2" />
                 Admins
               </TabsTrigger>
-              <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+              <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
                 <Users className="w-4 h-4 mr-2" />
                 Suppliers
               </TabsTrigger>
-              <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+              <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
                 <Package className="w-4 h-4 mr-2" />
                 Equipments
               </TabsTrigger>
-              <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+              <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
                 <Tag className="w-4 h-4 mr-2" />
                 Categories
               </TabsTrigger>
-              <TabsTrigger value="locations" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+              <TabsTrigger value="locations" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
                 <MapPin className="w-4 h-4 mr-2" />
                 Locations
               </TabsTrigger>
             </TabsList>
+          </div>
 
             <TabsContent value="admins" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
                 <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <CardTitle className="text-xl">System Administrators</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Manage administrative access and permissions</p>
+                      <CardTitle className="text-xl font-black tracking-tight">System Administrators</CardTitle>
+                      <p className="text-sm text-muted-foreground font-medium mt-1 uppercase tracking-widest text-[10px]">Manage administrative access and permissions</p>
                     </div>
-                    <Button onClick={handleOpenAdminAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20 rounded-xl px-6">
+                    <Button onClick={handleOpenAdminAdd} className="bg-[#030213] hover:bg-black text-white font-black shadow-xl shadow-black/10 rounded-xl px-8 h-12 w-full sm:w-auto uppercase tracking-widest text-xs">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Admin
                     </Button>
@@ -788,12 +790,12 @@ export function SuperAdminDashboard() {
                   <div className="overflow-x-auto">
                     {/* ... table content ... */}
                     <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4">Admin</TableHead>
-                          <TableHead className="font-bold">Email</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                      <TableHeader className="bg-gray-50/50">
+                        <TableRow className="hover:bg-transparent border-none">
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[200px]">Admin Profile</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[250px]">Contact Info</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[120px]">Status</TableHead>
+                          <TableHead className="text-right font-black uppercase tracking-widest text-[10px] pr-8 min-w-[120px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -887,12 +889,12 @@ export function SuperAdminDashboard() {
             <TabsContent value="suppliers" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
                 <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <CardTitle className="text-xl">Manage Suppliers</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Review and update supplier accounts</p>
+                      <CardTitle className="text-xl font-black tracking-tight">Manage Suppliers</CardTitle>
+                      <p className="text-sm text-muted-foreground font-medium mt-1 uppercase tracking-widest text-[10px]">Review and update supplier accounts</p>
                     </div>
-                    <Button onClick={handleOpenAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                    <Button onClick={handleOpenAdd} className="bg-[#030213] hover:bg-black text-white font-black shadow-xl shadow-black/10 rounded-xl px-8 h-12 w-full sm:w-auto uppercase tracking-widest text-xs">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Supplier
                     </Button>
@@ -940,14 +942,14 @@ export function SuperAdminDashboard() {
 
                   <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4">Supplier</TableHead>
-                          <TableHead className="font-bold">Company</TableHead>
-                          <TableHead className="font-bold">Email</TableHead>
-                          <TableHead className="font-bold">Location</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                      <TableHeader className="bg-gray-50/50">
+                        <TableRow className="hover:bg-transparent border-none">
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[200px]">Supplier Detail</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[200px]">Company Info</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[200px]">Primary Email</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[150px]">Location</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[120px]">Status</TableHead>
+                          <TableHead className="text-right font-black uppercase tracking-widest text-[10px] pr-8 min-w-[120px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -1054,11 +1056,12 @@ export function SuperAdminDashboard() {
             <TabsContent value="products" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
                 <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <CardTitle className="text-xl">Manage Equipment</CardTitle>                      <p className="text-sm text-muted-foreground mt-1">Review and update equipment listings</p>
+                      <CardTitle className="text-xl font-black tracking-tight">Manage Equipment</CardTitle>
+                      <p className="text-sm text-muted-foreground font-medium mt-1 uppercase tracking-widest text-[10px]">Review and update equipment listings</p>
                     </div>
-                    <Button onClick={handleOpenEquipAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                    <Button onClick={handleOpenEquipAdd} className="bg-[#030213] hover:bg-black text-white font-black shadow-xl shadow-black/10 rounded-xl px-8 h-12 w-full sm:w-auto uppercase tracking-widest text-xs">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Equipment
                     </Button>
@@ -1066,15 +1069,15 @@ export function SuperAdminDashboard() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="p-6 border-b bg-gray-50/50">
-                    <div className="flex items-center gap-4">
-                      <div className="text-sm font-medium text-gray-500">Filter by Supplier:</div>
+                    <div className="flex flex-wrap items-center gap-4">
+                      <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Filter:</div>
                       <select
                         value={supplierFilter}
                         onChange={(e) => {
                           setSupplierFilter(e.target.value);
                           setEquipPage(1);
                         }}
-                        className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[200px]"
+                        className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[200px] shadow-sm"
                       >
                         <option value="all">All Suppliers</option>
                         {suppliers.map(s => (
@@ -1089,7 +1092,7 @@ export function SuperAdminDashboard() {
                           setEquipAvailabilityFilter(e.target.value);
                           setEquipPage(1);
                         }}
-                        className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[150px]"
+                        className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[150px] shadow-sm"
                       >
                         <option value="all">All Status</option>
                         <option value="available">Available</option>
@@ -1100,14 +1103,14 @@ export function SuperAdminDashboard() {
 
                   <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4 w-[25%]">Equipment</TableHead>
-                          <TableHead className="font-bold w-[15%]">Category</TableHead>
-                          <TableHead className="font-bold w-[20%]">Supplier</TableHead>
-                          <TableHead className="font-bold w-[15%]">Weekly Price</TableHead>
-                          <TableHead className="font-bold w-[15%]">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6 w-[10%]">Actions</TableHead>
+                      <TableHeader className="bg-gray-50/50">
+                        <TableRow className="hover:bg-transparent border-none">
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[200px]">Product Info</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[150px]">Category</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[180px]">Organization</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[140px]">Base Price</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[120px]">Availability</TableHead>
+                          <TableHead className="text-right font-black uppercase tracking-widest text-[10px] pr-8 min-w-[120px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -1250,12 +1253,12 @@ export function SuperAdminDashboard() {
             <TabsContent value="categories" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
                 <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <CardTitle className="text-xl">Equipment Categories</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Manage the types of equipment available</p>
+                      <CardTitle className="text-xl font-black tracking-tight">Product Categories</CardTitle>
+                      <p className="text-sm text-muted-foreground font-medium mt-1 uppercase tracking-widest text-[10px]">Define and organize equipment classifications</p>
                     </div>
-                    <Button onClick={handleOpenCategoryAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                    <Button onClick={handleOpenCategoryAdd} className="bg-[#030213] hover:bg-black text-white font-black shadow-xl shadow-black/10 rounded-xl px-8 h-12 w-full sm:w-auto uppercase tracking-widest text-xs">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Category
                     </Button>
@@ -1264,12 +1267,12 @@ export function SuperAdminDashboard() {
                 <CardContent className="p-0">
                   <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4">Display Name</TableHead>
-                          <TableHead className="font-bold">Technical Key</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                      <TableHeader className="bg-gray-50/50">
+                        <TableRow className="hover:bg-transparent border-none">
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[250px]">Display Name</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[200px]">Technical Key</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[120px]">Status</TableHead>
+                          <TableHead className="text-right font-black uppercase tracking-widest text-[10px] pr-8 min-w-[120px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -1330,12 +1333,12 @@ export function SuperAdminDashboard() {
             <TabsContent value="locations" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
                 <CardHeader className="bg-white border-b py-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <CardTitle className="text-xl">Service Locations</CardTitle>
-                      <p className="text-sm text-muted-foreground mt-1">Manage cities where suppliers operate</p>
+                      <CardTitle className="text-xl font-black tracking-tight">Service Locations</CardTitle>
+                      <p className="text-sm text-muted-foreground font-medium mt-1 uppercase tracking-widest text-[10px]">Manage geographic service areas</p>
                     </div>
-                    <Button onClick={handleOpenLocationAdd} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold shadow-lg shadow-brand-primary/20">
+                    <Button onClick={handleOpenLocationAdd} className="bg-[#030213] hover:bg-black text-white font-black shadow-xl shadow-black/10 rounded-xl px-8 h-12 w-full sm:w-auto uppercase tracking-widest text-xs">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Location
                     </Button>
@@ -1344,13 +1347,13 @@ export function SuperAdminDashboard() {
                 <CardContent className="p-0">
                   <div className="overflow-x-auto">
                     <Table>
-                      <TableHeader className="bg-gray-50">
-                        <TableRow>
-                          <TableHead className="font-bold py-4">City</TableHead>
-                          <TableHead className="font-bold">Country</TableHead>
-                          <TableHead className="font-bold">State/County</TableHead>
-                          <TableHead className="font-bold">Status</TableHead>
-                          <TableHead className="text-right font-bold pr-6">Actions</TableHead>
+                      <TableHeader className="bg-gray-50/50">
+                        <TableRow className="hover:bg-transparent border-none">
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[200px]">City Name</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[180px]">Country</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[180px]">State/County</TableHead>
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[120px]">Status</TableHead>
+                          <TableHead className="text-right font-black uppercase tracking-widest text-[10px] pr-8 min-w-[120px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -1511,62 +1514,66 @@ export function SuperAdminDashboard() {
           if (!open) setApprovalFilter('all');
         }}
       >
-        <DialogContent className="sm:max-w-[1200px] w-[95vw] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold">Pending Approvals</DialogTitle>
-            <p className="text-muted-foreground text-sm">Review and approve new supplier registrations</p>
+        <DialogContent className="sm:max-w-[1200px] w-[95vw] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto p-0 border-none shadow-3xl">
+          <DialogHeader className="p-6 sm:p-8 border-b bg-gray-50/50 sticky top-0 z-10 shrink-0">
+            <DialogTitle className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">Pending Approvals</DialogTitle>
+            <p className="text-muted-foreground text-xs sm:text-sm font-medium uppercase tracking-widest mt-1">Review and approve new supplier registrations</p>
           </DialogHeader>
           
-          <div className="mt-6">
+          <div className="p-4 sm:p-8 space-y-6">
             {pendingSuppliers.length === 0 ? (
-              <div className="py-12 text-center bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                  <Users className="w-8 h-8 text-gray-300" />
+              <div className="py-12 sm:py-20 text-center bg-gray-50/50 rounded-3xl border-2 border-dashed border-gray-200">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                  <Users className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300" />
                 </div>
-                <p className="text-gray-500 font-medium">No pending approvals at the moment</p>
+                <p className="text-gray-500 font-bold tracking-widest uppercase text-xs">No pending approvals found</p>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4">
                 {pendingSuppliers.map((s) => (
-                  <div key={s.user_organization_id} className="p-4 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1">
-                      <Avatar className="h-12 w-12 border-2 border-brand-primary/10">
+                  <div key={s.user_organization_id} className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-xl hover:border-brand-primary/20 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group">
+                    <div className="flex items-center gap-4 sm:gap-6 flex-1">
+                      <Avatar className="h-14 w-14 sm:h-16 sm:w-16 border-4 border-gray-50 shadow-sm transition-transform group-hover:scale-105">
                         <AvatarImage src={s.user_details.avatar_url || ''} />
-                        <AvatarFallback className="bg-brand-primary/5 text-brand-primary font-bold">
+                        <AvatarFallback className="bg-brand-primary/5 text-brand-primary font-black text-xl">
                           {s.user_details.first_name?.[0]}{s.user_details.last_name?.[0]}
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0">
-                        <div className="font-bold text-gray-900 truncate">
+                        <div className="font-black text-gray-900 text-lg sm:text-xl tracking-tight truncate">
                           {s.user_details.first_name} {s.user_details.last_name}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-brand-primary font-bold uppercase tracking-widest mt-1">
                           <Building2 className="w-3.5 h-3.5" />
                           <span className="truncate">{s.organization_details.name}</span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="hidden md:block flex-1">
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <Mail className="w-3.5 h-3.5" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row gap-4 md:gap-10 flex-1 px-2 md:px-0">
+                      <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-500 font-medium">
+                        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                          <Mail className="w-4 h-4 text-gray-400" />
+                        </div>
                         <span className="truncate">{s.user_details.email}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin className="w-3.5 h-3.5" />
+                      <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-500 font-medium">
+                        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                          <MapPin className="w-4 h-4 text-gray-400" />
+                        </div>
                         <span className="truncate">{s.organization_details.city}</span>
                       </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-row md:flex-row gap-3 pt-4 md:pt-0 border-t md:border-none">
                       <Button 
                         onClick={() => handleOpenRejectConfirm(s)}
                         disabled={rejectingId === s.user_organization_id || approvingId === s.user_organization_id}
-                        variant="outline"
-                        className="border-red-200 text-red-600 hover:bg-red-50 font-bold px-6 rounded-xl min-w-[120px]"
+                        variant="ghost"
+                        className="flex-1 md:flex-none h-12 px-6 rounded-xl font-black text-xs uppercase tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all active:scale-95"
                       >
                         {rejectingId === s.user_organization_id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className="w-5 h-5 animate-spin" />
                         ) : (
                           'Reject'
                         )}
@@ -1574,10 +1581,10 @@ export function SuperAdminDashboard() {
                       <Button 
                         onClick={() => handleApproveSupplier(s.user_organization_id)}
                         disabled={approvingId === s.user_organization_id || rejectingId === s.user_organization_id}
-                        className="bg-green-600 hover:bg-green-700 text-white font-bold px-6 rounded-xl shadow-lg shadow-green-200 min-w-[120px]"
+                        className="flex-1 md:flex-none bg-[#030213] hover:bg-black text-white font-black h-12 px-8 rounded-xl shadow-xl shadow-black/10 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-xs"
                       >
                         {approvingId === s.user_organization_id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className="w-5 h-5 animate-spin text-white" />
                         ) : (
                           'Approve'
                         )}
