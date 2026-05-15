@@ -58,13 +58,13 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md p-0">
-        <DialogHeader className="p-6 border-b flex justify-between items-center bg-gray-50 shrink-0">
+        <DialogHeader className="p-4 sm:p-6 pr-14 sm:pr-16 border-b flex justify-between items-center bg-gray-50 shrink-0">
           <div>
-            <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{location ? 'Edit Location' : 'Add Location'}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-black text-gray-900">{location ? 'Edit Location' : 'Add Location'}</DialogTitle>
             <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Configure service area details</DialogDescription>
           </div>
         </DialogHeader>
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
@@ -115,13 +115,13 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
             </div>
           </div>
 
-          <div className="pt-4 flex gap-3">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row gap-3">
             <Button variant="outline" type="button" onClick={onClose} className="flex-1 h-12 rounded-xl">
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              disabled={isSubmitting} 
+            <Button
+              type="submit"
+              disabled={isSubmitting}
               className="flex-1 h-12 rounded-xl bg-brand-primary hover:bg-brand-primary-hover"
             >
               {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (location ? 'Update' : 'Create')}

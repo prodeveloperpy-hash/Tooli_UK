@@ -114,16 +114,16 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[600px] p-0">
         <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
-          <DialogHeader className="p-6 lg:p-8 bg-gray-50 border-b shrink-0">
+          <DialogHeader className="p-4 sm:p-6 lg:p-8 pr-14 sm:pr-16 bg-gray-50 border-b shrink-0">
             <div className="flex items-center justify-between lg:block">
               <div>
-                <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{supplier ? 'Edit Supplier' : 'Add Supplier'}</DialogTitle>
+                <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-black text-gray-900">{supplier ? 'Edit Supplier' : 'Add Supplier'}</DialogTitle>
                 <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Manage partner organization details</DialogDescription>
               </div>
             </div>
           </DialogHeader>
-          
-          <div className="p-6 lg:p-8 space-y-8 overflow-y-auto relative flex-1">
+
+          <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 overflow-y-auto relative flex-1">
             {(isLoading || isDataLoading) && (
               <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center gap-4">
                 <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
