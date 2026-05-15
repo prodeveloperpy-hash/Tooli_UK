@@ -166,18 +166,18 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl p-0">
-        <DialogHeader className="p-4 sm:p-6 lg:p-8 border-b sticky top-0 bg-white z-10 flex justify-between items-center shrink-0">
-          <div>
-            <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{equipment ? 'Edit Equipment' : 'Add New Equipment'}</DialogTitle>
-            <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">List machinery & set pricing</DialogDescription>
+        <DialogHeader className="p-5 sm:p-8 border-b sticky top-0 bg-white z-10 shrink-0">
+          <div className="pr-8">
+            <DialogTitle className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">{equipment ? 'Edit Equipment' : 'Add New Equipment'}</DialogTitle>
+            <DialogDescription className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest font-bold mt-1">List machinery & set pricing</DialogDescription>
           </div>
         </DialogHeader>
 
-        <div className="p-4 sm:p-6 lg:p-10 relative">
+        <div className="p-5 sm:p-8 lg:p-10 relative">
           {(isLoading || isDataLoading) && (
             <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center gap-4">
               <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
-              <p className="text-sm font-bold text-gray-500 animate-pulse">Syncing with API...</p>
+              <p className="text-xs font-black text-gray-500 animate-pulse uppercase tracking-widest">Syncing with API...</p>
             </div>
           )}
           <form id="equipment-form" onSubmit={handleSubmit} className="space-y-8 lg:space-y-10">
@@ -196,7 +196,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                   <Label className="font-bold">Description</Label>
                   <Textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Includes two batteries and charger." className="min-h-[100px] rounded-xl" required />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="font-bold">Supplier</Label>
                     {fixedSupplierId ? (
@@ -310,7 +310,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                   <h3 className="font-bold uppercase tracking-widest text-xs">Weekly Pricing</h3>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 bg-gray-50 p-6 rounded-2xl border border-gray-100">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-5 sm:p-6 rounded-2xl border border-gray-100">
                 <div className="space-y-2">
                   <Label className="font-bold">Currency</Label>
                   <Select value={formData.prices[0].currency} onValueChange={v => handlePriceChange(0, 'currency', v)}>
@@ -343,9 +343,9 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
               </div>
             </section>
 
-            <div className="pt-8 border-t flex justify-end gap-4">
-              <Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting} className="font-bold">Cancel</Button>
-              <Button type="submit" disabled={isSubmitting} className="bg-brand-primary hover:bg-brand-primary-hover min-w-[180px] h-12 rounded-xl font-bold shadow-lg shadow-brand-primary/20">
+            <div className="pt-8 border-t flex flex-col-reverse sm:flex-row justify-end gap-4">
+              <Button type="button" variant="ghost" onClick={onClose} disabled={isSubmitting} className="font-black uppercase tracking-widest text-xs h-12">Cancel</Button>
+              <Button type="submit" disabled={isSubmitting} className="bg-[#030213] hover:bg-black text-white min-w-[180px] h-12 rounded-xl font-black uppercase tracking-widest text-xs shadow-xl shadow-black/10 transition-all hover:scale-105 active:scale-95">
                 {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (equipment ? 'Update Listing' : 'List Equipment')}
               </Button>
             </div>

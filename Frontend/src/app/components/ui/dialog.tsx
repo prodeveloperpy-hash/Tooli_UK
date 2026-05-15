@@ -79,7 +79,7 @@ const DialogContent = React.forwardRef<
         <DialogPrimitive.Content
           ref={internalRef}
           className={cn(
-            "!bg-white !relative pointer-events-auto flex flex-col w-full max-w-[550px] !max-h-[96dvh] sm:!max-h-[90dvh] rounded-2xl shadow-2xl duration-200 outline-hidden overflow-y-auto !transform-none !top-auto !left-auto !m-0",
+            "!bg-white !relative pointer-events-auto flex flex-col w-full max-w-[calc(100vw-1rem)] sm:max-w-xl !max-h-[96dvh] sm:!max-h-[90dvh] rounded-2xl shadow-2xl duration-200 outline-hidden overflow-y-auto !transform-none !top-auto !left-auto !m-0",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",
             className
           )}

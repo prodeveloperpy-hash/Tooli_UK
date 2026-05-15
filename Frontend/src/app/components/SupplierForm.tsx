@@ -3,11 +3,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Mail, Building2, MapPin, Camera, UploadCloud, Link as LinkIcon, Loader2, Globe } from 'lucide-react';
+import { Mail, Building2, Camera, UploadCloud, Loader2, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import { UserOrganization } from '../../context/user.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Checkbox } from './ui/checkbox';
 
 interface SupplierFormProps {
   isOpen: boolean;
@@ -21,6 +22,9 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locations, setLocations] = useState<Location[]>([]);
   const [isDataLoading, setIsDataLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -34,6 +38,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     logoUrl: '',
     logoFile: null as File | null,
     password: '',
+    confirmPassword: '',
     is_approved: true,
     is_active: true,
     approved_by: 7,
@@ -74,7 +79,9 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         logoUrl: supplier.organization_details.logo || '',
         logoFile: null,
         password: '',
+        confirmPassword: '',
       });
+      setIsChangingPassword(false);
     } else {
       setFormData({
         firstName: '',
@@ -89,19 +96,30 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         logoUrl: '',
         logoFile: null,
         password: '',
+        confirmPassword: '',
         is_approved: true,
         is_active: true,
         approved_by: 7,
         approved_datetime: new Date().toISOString(),
       });
+      setIsChangingPassword(true);
     }
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   }, [supplier, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isChangingPassword && formData.password !== formData.confirmPassword) {
+      alert("Passwords don't match!");
+      return;
+    }
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        isChangingPassword,
+      });
       onClose();
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -114,20 +132,20 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[600px] p-0">
         <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
-          <DialogHeader className="p-6 lg:p-8 bg-gray-50 border-b shrink-0">
+          <DialogHeader className="p-5 sm:p-8 pr-14 sm:pr-16 bg-gray-50 border-b shrink-0">
             <div className="flex items-center justify-between lg:block">
               <div>
-                <DialogTitle className="text-xl lg:text-2xl font-black text-gray-900">{supplier ? 'Edit Supplier' : 'Add Supplier'}</DialogTitle>
-                <DialogDescription className="text-[10px] lg:text-sm text-gray-500 uppercase tracking-widest font-medium">Manage partner organization details</DialogDescription>
+                <DialogTitle className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">{supplier ? 'Edit Supplier' : 'Add Supplier'}</DialogTitle>
+                <DialogDescription className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest font-bold mt-1">Manage partner organization details</DialogDescription>
               </div>
             </div>
           </DialogHeader>
-          
-          <div className="p-6 lg:p-8 space-y-8 overflow-y-auto relative flex-1">
+
+          <div className="p-5 sm:p-8 space-y-8 sm:space-y-10 overflow-y-auto relative flex-1">
             {(isLoading || isDataLoading) && (
               <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center gap-4">
                 <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
-                <p className="text-sm font-bold text-gray-500 animate-pulse">Syncing Supplier Data...</p>
+                <p className="text-xs font-black text-gray-500 animate-pulse uppercase tracking-widest">Syncing Supplier Data...</p>
               </div>
             )}
             {/* Profile Section */}
@@ -139,13 +157,13 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
               
               <div className="flex items-center gap-6">
                 <div className="relative group cursor-pointer" onClick={() => document.getElementById('avatar-upload')?.click()}>
-                  <Avatar className="h-24 w-24 border-4 border-white shadow-xl transition-transform group-hover:scale-105">
-                    <AvatarImage src={formData.avatarUrl} />
-                    <AvatarFallback className="bg-brand-primary/10 text-brand-primary text-2xl font-bold">
+                  <Avatar className="h-24 w-24 rounded-xl border-4 border-white bg-white shadow-xl transition-transform group-hover:scale-105">
+                    <AvatarImage src={formData.avatarUrl} className="object-contain" />
+                    <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary text-2xl font-bold">
                       {formData.firstName[0]}{formData.lastName[0]}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <Camera className="w-8 h-8 text-white" />
                   </div>
                   <input 
@@ -215,17 +233,91 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                 </div>
               </div>
 
-              {!supplier && (
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="font-bold">Password</Label>
-                  <Input 
-                    id="password" 
-                    type="password"
-                    value={formData.password} 
-                    onChange={(e) => setFormData({...formData, password: e.target.value})} 
-                    className="border-gray-200 focus:ring-brand-primary rounded-lg"
-                    required
+              {supplier && (
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                  <Checkbox
+                    id="supplier-change-password"
+                    checked={isChangingPassword}
+                    onCheckedChange={(checked) => {
+                      setIsChangingPassword(!!checked);
+                      setShowPassword(false);
+                      setShowConfirmPassword(false);
+                      setFormData(prev => ({
+                        ...prev,
+                        password: '',
+                        confirmPassword: '',
+                      }));
+                    }}
+                    className="data-[state=checked]:bg-brand-primary border-gray-300 h-5 w-5 rounded-md"
                   />
+                  <Label
+                    htmlFor="supplier-change-password"
+                    className="text-sm font-bold text-gray-700 cursor-pointer select-none flex-1 py-1"
+                  >
+                    Change Password
+                  </Label>
+                </div>
+              )}
+
+              {isChangingPassword && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="supplierNewPassword" className="font-bold">Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="supplierNewPassword"
+                        name="supplier-new-password"
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
+                          formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                        }`}
+                        required={isChangingPassword}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="supplierConfirmPassword" className="font-bold">Confirm Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="supplierConfirmPassword"
+                        name="supplier-confirm-new-password"
+                        type={showConfirmPassword ? "text" : "password"}
+                        autoComplete="new-password"
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                        className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
+                          formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                        }`}
+                        required={isChangingPassword}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                      <p className="text-xs font-bold text-red-500 mt-1">Passwords do not match</p>
+                    )}
+                    {formData.password && formData.confirmPassword && formData.password === formData.confirmPassword && (
+                      <p className="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> Passwords match
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -341,11 +433,11 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
             </div>
           </div>
 
-          <DialogFooter className="p-6 lg:p-8 bg-gray-50 border-t gap-3 sm:gap-0 shrink-0">
-            <Button type="button" variant="ghost" onClick={onClose} className="font-bold">
+          <DialogFooter className="p-6 sm:p-8 bg-gray-50 border-t gap-3 shrink-0 flex-col-reverse sm:flex-row">
+            <Button type="button" variant="ghost" onClick={onClose} className="font-black uppercase tracking-widest text-xs h-12">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold px-8 shadow-lg shadow-brand-primary/20">
+            <Button type="submit" disabled={isSubmitting || (isChangingPassword && formData.password !== formData.confirmPassword)} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
               {isSubmitting ? 'Saving...' : (supplier ? 'Update Supplier' : 'Create Account')}
             </Button>
           </DialogFooter>

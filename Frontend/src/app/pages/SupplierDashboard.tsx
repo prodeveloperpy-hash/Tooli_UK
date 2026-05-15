@@ -332,7 +332,7 @@ export function SupplierDashboard() {
                 className="relative"
               >
                 {userData?.organization_details.logo ? (
-                  <div className="w-28 h-28 rounded-3xl bg-white p-4 shadow-2xl transform hover:rotate-2 transition-transform duration-500">
+                  <div className="w-20 h-20 md:w-28 md:h-28 rounded-2xl md:rounded-3xl bg-white p-3 md:p-4 shadow-2xl transform hover:rotate-2 transition-transform duration-500">
                     <img 
                       src={userData.organization_details.logo} 
                       alt="Logo" 
@@ -340,18 +340,18 @@ export function SupplierDashboard() {
                     />
                   </div>
                 ) : (
-                  <div className="w-28 h-28 rounded-3xl bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30 shadow-2xl">
-                    <Building className="w-12 h-12 text-white" />
+                  <div className="w-20 h-20 md:w-28 md:h-28 rounded-2xl md:rounded-3xl bg-white/20 backdrop-blur-xl flex items-center justify-center border border-white/30 shadow-2xl">
+                    <Building className="w-10 h-10 md:w-12 md:h-12 text-white" />
                   </div>
                 )}
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 border-4 border-white rounded-full" />
+                <div className="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 w-6 h-6 md:w-8 md:h-8 bg-green-500 border-2 md:border-4 border-white rounded-full" />
               </motion.div>
 
               <div className="text-center md:text-left">
                 <motion.h1 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="text-5xl font-black mb-3 tracking-tight"
+                  className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 tracking-tight"
                 >
                   {supplierName}
                 </motion.h1>
@@ -361,7 +361,7 @@ export function SupplierDashboard() {
                   transition={{ delay: 0.1 }}
                   className="flex items-center justify-center md:justify-start gap-3"
                 >
-                  <p className="text-blue-100 font-bold text-lg opacity-90">
+                  <p className="text-blue-100 font-bold text-base md:text-lg opacity-90">
                     Welcome back, {userData?.user_details.first_name} {userData?.user_details.last_name}
                   </p>
                 </motion.div>
@@ -378,21 +378,21 @@ export function SupplierDashboard() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <Card className="border-none shadow-2xl rounded-[3rem] overflow-hidden bg-white">
-                <CardHeader className="p-10 border-b bg-gray-50/30">
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div>
-                      <CardTitle className="text-3xl font-black text-gray-900 tracking-tight">Equipment Inventory</CardTitle>
-                      <p className="text-gray-500 font-medium mt-2">Manage your listings and update real-time availability.</p>
+              <Card className="border-none shadow-2xl rounded-2xl md:rounded-[3rem] overflow-hidden bg-white">
+                <CardHeader className="p-6 md:p-10 border-b bg-gray-50/30">
+                  <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <div className="text-center lg:text-left">
+                      <CardTitle className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Equipment Inventory</CardTitle>
+                      <p className="text-gray-500 font-medium mt-2 text-sm md:text-base">Manage your listings and update real-time availability.</p>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
                       <select 
                         value={equipAvailabilityFilter}
                         onChange={(e) => {
                           setEquipAvailabilityFilter(e.target.value);
                           setEquipPage(1);
                         }}
-                        className="h-14 px-6 rounded-2xl border-none bg-white shadow-xl text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-brand-primary/20 appearance-none min-w-[200px]"
+                        className="h-12 md:h-14 px-4 md:px-6 rounded-xl md:rounded-2xl border-none bg-white shadow-lg text-xs md:text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-brand-primary/20 appearance-none w-full sm:min-w-[200px]"
                       >
                         <option value="all">All Status</option>
                         <option value="available">Available</option>
@@ -400,7 +400,7 @@ export function SupplierDashboard() {
                       </select>
                       <Button 
                         onClick={handleOpenEquipAdd}
-                        className="h-14 px-10 rounded-2xl bg-[#030213] hover:bg-black text-white font-black shadow-2xl shadow-black/20 transition-all hover:scale-105 active:scale-95"
+                        className="h-12 md:h-14 px-6 md:px-10 rounded-xl md:rounded-2xl bg-[#030213] hover:bg-black text-white font-black shadow-xl md:shadow-2xl shadow-black/20 transition-all hover:scale-105 active:scale-95 w-full sm:w-auto"
                       >
                         <Plus className="w-5 h-5 mr-2" />
                         Add Equipment
@@ -413,11 +413,11 @@ export function SupplierDashboard() {
                     <Table>
                       <TableHeader className="bg-gray-50/50">
                         <TableRow className="hover:bg-transparent border-b">
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-full min-w-[350px]">Product Details</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-[200px]">Category</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-[200px]">Weekly Price</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs w-[180px]">Status</TableHead>
-                          <TableHead className="py-8 px-12 font-black text-gray-900 uppercase tracking-wider text-xs text-right w-[150px]">Actions</TableHead>
+                          <TableHead className="py-8 px-6 md:px-12 font-black text-gray-900 uppercase tracking-wider text-[10px] md:text-xs w-full min-w-[300px]">Product Details</TableHead>
+                          <TableHead className="py-8 px-6 md:px-12 font-black text-gray-900 uppercase tracking-wider text-[10px] md:text-xs w-[150px] md:w-[200px] min-w-[150px]">Category</TableHead>
+                          <TableHead className="py-8 px-6 md:px-12 font-black text-gray-900 uppercase tracking-wider text-[10px] md:text-xs w-[150px] md:w-[200px] min-w-[120px]">Weekly Price</TableHead>
+                          <TableHead className="py-8 px-6 md:px-12 font-black text-gray-900 uppercase tracking-wider text-[10px] md:text-xs w-[150px] md:w-[180px] min-w-[150px]">Status</TableHead>
+                          <TableHead className="py-8 px-6 md:px-12 font-black text-gray-900 uppercase tracking-wider text-[10px] md:text-xs text-right w-[150px] min-w-[120px]">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -437,9 +437,9 @@ export function SupplierDashboard() {
                         ) : (
                           equipment.map((item) => (
                             <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors border-b last:border-0 group">
-                              <TableCell className="py-8 px-12">
+                              <TableCell className="py-6 md:py-8 px-6 md:px-12">
                                 <div className="min-w-0">
-                                  <div className="font-black text-gray-900 text-lg tracking-tight truncate" title={item.name}>{item.name}</div>
+                                  <div className="font-black text-gray-900 text-base md:text-lg tracking-tight truncate max-w-[200px] md:max-w-none" title={item.name}>{item.name}</div>
                                   <div className="text-[10px] text-gray-400 font-bold flex items-center gap-1 mt-1 uppercase tracking-widest">
                                      <MapPin className="w-3 h-3" />
                                      <span>{item.locations?.[0]?.city_name || 'Global'}</span>
@@ -466,44 +466,44 @@ export function SupplierDashboard() {
                                   </div>
                                 </div>
                               </TableCell>
-                              <TableCell className="py-8 px-12">
-                                <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none px-4 py-2 rounded-xl font-black text-xs uppercase tracking-wider">
+                              <TableCell className="py-6 md:py-8 px-6 md:px-12">
+                                <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 border-none px-3 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl font-black text-[10px] md:text-xs uppercase tracking-wider whitespace-nowrap">
                                   {item.category_display_name || 'General'}
                                 </Badge>
                               </TableCell>
-                              <TableCell className="py-8 px-12 font-black text-2xl text-gray-900 tracking-tight">
+                              <TableCell className="py-6 md:py-8 px-6 md:px-12 font-black text-xl md:text-2xl text-gray-900 tracking-tight">
                                 £{item.prices?.[0]?.price || 0}
                               </TableCell>
-                              <TableCell className="py-8 px-12">
+                              <TableCell className="py-6 md:py-8 px-6 md:px-12">
                                 {item.is_active ? (
-                                  <div className="flex items-center gap-2 text-emerald-600 font-black text-xs uppercase tracking-widest">
+                                  <div className="flex items-center gap-2 text-emerald-600 font-black text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap">
                                     <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                                     Available
                                   </div>
                                 ) : (
-                                  <div className="flex items-center gap-2 text-red-500 font-black text-xs uppercase tracking-widest opacity-60">
+                                  <div className="flex items-center gap-2 text-red-500 font-black text-[10px] md:text-xs uppercase tracking-widest opacity-60 whitespace-nowrap">
                                     <span className="w-2 h-2 rounded-full bg-red-400" />
                                     Not Available
                                   </div>
                                 )}
                               </TableCell>
-                              <TableCell className="py-8 px-12 text-right">
-                                <div className="flex justify-end gap-3">
+                              <TableCell className="py-6 md:py-8 px-6 md:px-12 text-right">
+                                <div className="flex justify-end gap-2 md:gap-3">
                                   <Button 
                                     size="icon" 
                                     variant="ghost" 
                                     onClick={() => handleOpenEquipEdit(item)}
-                                    className="h-12 w-12 rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all active:scale-90"
+                                    className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all active:scale-90"
                                   >
-                                    <Edit className="w-5 h-5" />
+                                    <Edit className="w-4 h-4 md:w-5 md:h-5" />
                                   </Button>
                                   <Button 
                                     size="icon" 
                                     variant="ghost" 
                                     onClick={() => handleOpenEquipDelete(item)}
-                                    className="h-12 w-12 rounded-2xl hover:bg-red-50 hover:text-red-600 transition-all active:scale-90"
+                                    className="h-10 w-10 md:h-12 md:w-12 rounded-xl md:rounded-2xl hover:bg-red-50 hover:text-red-600 transition-all active:scale-90"
                                   >
-                                    <Trash2 className="w-5 h-5" />
+                                    <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
                                   </Button>
                                 </div>
                               </TableCell>
@@ -515,8 +515,8 @@ export function SupplierDashboard() {
                   </div>
 
                   {/* Pagination Controls */}
-                  <div className="p-8 border-t flex items-center justify-between bg-gray-50/30">
-                    <div className="flex flex-col">
+                  <div className="p-6 md:p-8 border-t flex flex-col md:flex-row items-center justify-between bg-gray-50/30 gap-6">
+                    <div className="flex flex-col items-center md:items-start">
                       <div className="text-xs text-gray-400 font-black uppercase tracking-widest">
                         Showing <span className="text-gray-900">{equipment.length}</span> of <span className="text-gray-900">{totalEquipCount}</span> items
                       </div>
@@ -524,13 +524,13 @@ export function SupplierDashboard() {
                         Page {equipPage} of {totalEquipPages}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setEquipPage(prev => Math.max(1, prev - 1))}
                         disabled={equipPage === 1}
-                        className="font-black text-xs uppercase tracking-widest h-12 px-6 rounded-xl hover:bg-white hover:shadow-lg transition-all disabled:opacity-30"
+                        className="font-black text-[10px] md:text-xs uppercase tracking-widest h-10 md:h-12 px-4 md:px-6 rounded-xl hover:bg-white hover:shadow-lg transition-all disabled:opacity-30"
                       >
                         Prev
                       </Button>
@@ -538,19 +538,22 @@ export function SupplierDashboard() {
                       <div className="flex items-center gap-1">
                         {Array.from({ length: totalEquipPages }, (_, i) => i + 1)
                           .filter(p => {
-                            if (totalEquipPages <= 7) return true;
+                            if (totalEquipPages <= 5) return true;
+                            if (window.innerWidth < 640) {
+                              return p === 1 || p === totalEquipPages || Math.abs(p - equipPage) <= 0;
+                            }
                             return p === 1 || p === totalEquipPages || Math.abs(p - equipPage) <= 1;
                           })
                           .map((pageNum, index, array) => (
                             <div key={pageNum} className="flex items-center gap-1">
                               {index > 0 && array[index - 1] !== pageNum - 1 && (
-                                <span className="px-1 text-gray-400">...</span>
+                                <span className="px-1 text-gray-400 text-xs">...</span>
                               )}
                               <Button
                                 variant={equipPage === pageNum ? "default" : "ghost"}
                                 size="sm"
                                 onClick={() => setEquipPage(pageNum)}
-                                className={`font-black text-xs h-10 w-10 p-0 rounded-xl transition-all ${
+                                className={`font-black text-[10px] md:text-xs h-8 w-8 md:h-10 md:w-10 p-0 rounded-xl transition-all ${
                                   equipPage === pageNum 
                                     ? 'bg-[#030213] text-white shadow-lg' 
                                     : 'hover:bg-white text-gray-500 hover:shadow-md'
@@ -567,7 +570,7 @@ export function SupplierDashboard() {
                         size="sm"
                         onClick={() => setEquipPage(prev => Math.min(totalEquipPages, prev + 1))}
                         disabled={equipPage === totalEquipPages || totalEquipPages === 0}
-                        className="font-black text-xs uppercase tracking-widest h-12 px-6 rounded-xl hover:bg-white hover:shadow-lg transition-all disabled:opacity-30"
+                        className="font-black text-[10px] md:text-xs uppercase tracking-widest h-10 md:h-12 px-4 md:px-6 rounded-xl hover:bg-white hover:shadow-lg transition-all disabled:opacity-30"
                       >
                         Next
                       </Button>

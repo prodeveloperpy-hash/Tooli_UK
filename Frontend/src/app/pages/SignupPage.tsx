@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent } from '../components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock } from 'lucide-react';
 import { authApi } from '../../context/auth.api';
+import { equipmentApi, Location } from '../../context/equipment.api';
 import { SignupRequest } from '../../types';
 
 export function SignupPage() {
@@ -13,8 +15,10 @@ export function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLocationLoading, setIsLocationLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
+  const [locations, setLocations] = useState<Location[]>([]);
 
   const [formData, setFormData] = useState({
     organization_name: '',
@@ -26,10 +30,27 @@ export function SignupPage() {
     address1: '',
     address2: '',
     city: '',
+    locationId: '',
     postcode: '',
     delivery_radius: '',
-    service_area: '',
   });
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      setIsLocationLoading(true);
+      try {
+        const data = await equipmentApi.getLocations(1, 100, true);
+        const locList = data?.results || (Array.isArray(data) ? data : []);
+        setLocations(locList);
+      } catch (error) {
+        console.error('Error fetching locations:', error);
+      } finally {
+        setIsLocationLoading(false);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
@@ -43,7 +64,13 @@ export function SignupPage() {
         setError("Passwords don't match");
         return;
       }
+      setError(null);
       setCurrentStep(2);
+      return;
+    }
+
+    if (!formData.locationId) {
+      setError('Please select a city');
       return;
     }
 
@@ -166,10 +193,6 @@ export function SignupPage() {
                             </div>
                             <div className="grid md:grid-cols-2 gap-6">
                               <div className="space-y-2">
-                                <Label htmlFor="city" className="text-sm font-bold text-gray-900">City <span className="text-orange-500">*</span></Label>
-                                <Input id="city" placeholder="Enter city" value={formData.city} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
-                              </div>
-                              <div className="space-y-2">
                                 <Label htmlFor="postcode" className="text-sm font-bold text-gray-900">Postcode <span className="text-orange-500">*</span></Label>
                                 <Input id="postcode" placeholder="Enter postcode" value={formData.postcode} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
                               </div>
@@ -205,8 +228,30 @@ export function SignupPage() {
                           </select>
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="service_area" className="text-sm font-bold text-gray-900">Primary Service Area (Optional)</Label>
-                          <Input id="service_area" placeholder="e.g. London, Greater London" value={formData.service_area} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" />
+                          <Label htmlFor="locationId" className="text-sm font-bold text-gray-900">Primary Service Area <span className="text-orange-500">*</span></Label>
+                          <Select
+                            value={formData.locationId}
+                            onValueChange={(value) => {
+                              const selectedLocation = locations.find(location => location.location_id.toString() === value);
+                              setFormData(prev => ({
+                                ...prev,
+                                locationId: value,
+                                city: selectedLocation?.city_name || '',
+                              }));
+                            }}
+                            disabled={isLocationLoading}
+                          >
+                            <SelectTrigger id="locationId" className="h-14 bg-white border-gray-100 rounded-xl px-6 focus:ring-brand-primary">
+                              <SelectValue placeholder={isLocationLoading ? 'Loading cities...' : 'Select city'} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {locations.map((location) => (
+                                <SelectItem key={location.location_id} value={location.location_id.toString()}>
+                                  {location.city_name}, {location.country}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
 
