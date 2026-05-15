@@ -102,10 +102,6 @@ export function Navbar() {
                     <DropdownMenuContent align="end" className="w-56 mt-2">
                       <DropdownMenuLabel>My Account</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/dashboard')}>
-                        <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Dashboard
-                      </DropdownMenuItem>
                       <DropdownMenuItem className="cursor-pointer" onClick={() => setProfileModalOpen(true)}>
                         <User className="w-4 h-4 mr-2" />
                         Profile Settings
