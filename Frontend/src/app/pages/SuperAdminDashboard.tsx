@@ -266,10 +266,10 @@ export function SuperAdminDashboard() {
     try {
       const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId, isActive);
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId, isActive);
       setEquipment(response.results);
       setTotalEquipCount(response.count);
-      setTotalEquipPages(Math.ceil(response.count / 20));
+      setTotalEquipPages(Math.ceil(response.count / 10));
     } catch (error) {
       console.error('Error fetching equipment:', error);
     } finally {

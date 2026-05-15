@@ -49,10 +49,10 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
             equipmentApi.getIntervals()
           ]);
           
-          setSuppliers(Array.isArray(suppliersData) ? suppliersData : (suppliersData as any).results || []);
-          setCategories(Array.isArray(categoriesData) ? categoriesData : (categoriesData as any).results || []);
-          setLocations(Array.isArray(locationsData) ? locationsData : (locationsData as any).results || []);
-          setIntervals(intervalsData);
+          setSuppliers(suppliersData?.results || (Array.isArray(suppliersData) ? suppliersData : []));
+          setCategories(categoriesData?.results || (Array.isArray(categoriesData) ? categoriesData : []));
+          setLocations(locationsData?.results || (Array.isArray(locationsData) ? locationsData : []));
+          setIntervals(Array.isArray(intervalsData) ? intervalsData : (intervalsData as any)?.results || []);
         } catch (error) {
           console.error('Failed to fetch form data:', error);
         } finally {
@@ -64,8 +64,8 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
   }, [isOpen]);
 
   const weeklyIntervalId = intervals.find(i => 
-    i.interval_display_name.toLowerCase().includes('week') || 
-    i.interval_key.toLowerCase().includes('week')
+    i.interval_display_name?.toLowerCase().includes('week') || 
+    i.interval_key?.toLowerCase().includes('week')
   )?.interval_id || 2;
 
   useEffect(() => {
@@ -98,10 +98,9 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
         redirectUrl: '',
       });
     }
-  }, [equipment, isOpen, weeklyIntervalId]);
+  }, [isOpen, equipment, weeklyIntervalId]);
 
   const handlePriceChange = (index: number, field: string, value: any) => {
-    if (formData.prices[index][field as keyof typeof formData.prices[0]] === value) return;
     const newPrices = [...formData.prices];
     newPrices[index] = { ...newPrices[index], [field]: value };
     setFormData({ ...formData, prices: newPrices });
@@ -112,41 +111,29 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
     setIsSubmitting(true);
     try {
       if (equipment) {
+        // Find changes only
         const delta: any = { equipment_id: equipment.equipment_id };
-        const compare = (v1: any, v2: any) => (v1 ?? '').toString().trim() === (v2 ?? '').toString().trim();
-
-        if (!compare(formData.name, equipment.name)) delta.name = formData.name;
-        if (!compare(formData.description, equipment.description)) delta.description = formData.description;
-        if (!compare(formData.redirectUrl, (equipment as any).redirect_url)) delta.redirect_url = formData.redirectUrl;
+        if (formData.name !== equipment.name) delta.name = formData.name;
+        if (formData.description !== equipment.description) delta.description = formData.description;
         if (formData.isActive !== equipment.is_active) delta.is_active = formData.isActive;
-        if (parseInt(formData.categoryId) !== equipment.category_id) delta.category_id = parseInt(formData.categoryId);
-        if (parseInt(formData.supplierId) !== equipment.organization_id) delta.organization_id = parseInt(formData.supplierId);
+        if (formData.categoryId !== equipment.category_id.toString()) delta.category_id = parseInt(formData.categoryId);
+        if (formData.supplierId !== equipment.organization_id.toString()) delta.organization_id = parseInt(formData.supplierId);
+        if (formData.redirectUrl !== (equipment as any).redirect_url) delta.redirect_url = formData.redirectUrl;
         
-        const originalLocationIds = equipment.locations?.map(l => l.location_id.toString()) || [];
-        if (JSON.stringify(formData.locationIds.sort()) !== JSON.stringify(originalLocationIds.sort())) {
+        // Handle locations change
+        const currentLocationIds = equipment.locations?.map(l => l.location_id.toString()) || [];
+        if (JSON.stringify(formData.locationIds.sort()) !== JSON.stringify(currentLocationIds.sort())) {
           delta.locations = formData.locationIds.map(id => ({
             location_id: parseInt(id),
             is_active: true
           }));
         }
 
-        const originalPrices = equipment.prices?.map(p => ({
-          interval_id: p.interval_id,
-          price: p.price.toString(),
-          currency: p.currency
-        })) || [];
-        const currentPrices = formData.prices.map(p => ({
-          interval_id: p.interval_id,
-          price: p.price.toString(),
-          currency: p.currency
-        }));
-        if (JSON.stringify(originalPrices) !== JSON.stringify(currentPrices)) {
+        // Handle price change
+        if (formData.prices[0].price !== equipment.prices[0]?.price.toString()) {
           delta.prices = formData.prices.map(p => ({
-            equipment_price_id: (p as any).equipment_price_id,
-            interval_id: p.interval_id,
-            is_active: true,
-            price: p.price,
-            currency: p.currency
+            ...p,
+            is_active: true
           }));
         }
 
@@ -170,8 +157,6 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading 
       setIsSubmitting(false);
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

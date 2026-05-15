@@ -31,7 +31,7 @@ export function SearchResultsPage() {
         const response = await equipmentApi.getEquipment(categoryId, locationId, undefined, undefined, page);
         setEquipment(response.results);
         setTotalCount(response.count);
-        setTotalPages(Math.ceil(response.count / 20)); // Assuming 20 is the page size
+        setTotalPages(Math.ceil(response.count / 10)); // Updated to 10 as per new requirements
       } catch (error) {
         console.error('Error fetching equipment:', error);
       } finally {

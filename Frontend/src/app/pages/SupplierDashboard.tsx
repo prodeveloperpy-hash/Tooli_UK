@@ -91,11 +91,11 @@ export function SupplierDashboard() {
     try {
       const orgId = localStorage.getItem('organization_id');
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId || undefined, isActive);
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId || undefined, isActive);
       
       setEquipment(response.results);
       setTotalEquipCount(response.count);
-      setTotalEquipPages(Math.ceil(response.count / 20));
+      setTotalEquipPages(Math.ceil(response.count / 10));
     } catch (error) {
       console.error('Error fetching equipment:', error);
       toast.error('Failed to load equipment');

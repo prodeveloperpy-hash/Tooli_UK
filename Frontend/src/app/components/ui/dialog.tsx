@@ -74,8 +74,8 @@ const DialogContent = React.forwardRef<
 
   return (
     <DialogPortal>
-      <DialogPrimitive.Overlay className="!fixed !inset-0 !z-[2147483646] bg-black/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-      <div className="!fixed !inset-0 !z-[2147483647] flex items-center justify-center p-2 sm:p-4 pointer-events-none overflow-hidden h-[100dvh] w-screen">
+      <DialogPrimitive.Overlay className="!fixed !inset-0 !z-[10000] bg-black/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+      <div className="!fixed !inset-0 !z-[10001] flex items-center justify-center p-2 sm:p-4 pointer-events-none overflow-hidden h-[100dvh] w-screen">
         <DialogPrimitive.Content
           ref={internalRef}
           className={cn(
