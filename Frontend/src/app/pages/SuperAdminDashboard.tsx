@@ -816,9 +816,9 @@ export function SuperAdminDashboard() {
                             <TableRow key={a.user_organization_id || (a as any).user_id} className="hover:bg-gray-50/50 transition-colors">
                               <TableCell className="py-4">
                                 <div className="flex items-center gap-4">
-                                  <Avatar className="h-15 w-15 border-2 border-white shadow-md">
-                                    <AvatarImage src={avatarUrl} />
-                                    <AvatarFallback className="text-sm bg-brand-primary/10 text-brand-primary font-bold">
+                                  <Avatar className="h-15 w-15 rounded-lg border-2 border-white bg-white shadow-md">
+                                    <AvatarImage src={avatarUrl} className="object-contain" />
+                                    <AvatarFallback className="rounded-lg text-sm bg-brand-primary/10 text-brand-primary font-bold">
                                       {firstName[0]}{lastName[0]}
                                     </AvatarFallback>
                                   </Avatar>

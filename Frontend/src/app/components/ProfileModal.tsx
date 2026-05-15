@@ -182,13 +182,13 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
           <form onSubmit={handleSubmit} className="space-y-6 pt-2">
           <div className="flex flex-col items-center gap-4 mb-4">
             <div className="relative group">
-              <Avatar className="h-24 w-24 border-4 border-brand-primary/10 shadow-md">
-                <AvatarImage src={formData.avatarPreview} />
-                <AvatarFallback className="text-2xl font-bold bg-brand-primary/5 text-brand-primary">
+              <Avatar className="h-24 w-24 rounded-xl border-4 border-brand-primary/10 bg-white shadow-md">
+                <AvatarImage src={formData.avatarPreview} className="object-contain" />
+                <AvatarFallback className="rounded-xl text-2xl font-bold bg-brand-primary/5 text-brand-primary">
                   {formData.firstName[0]}{formData.lastName[0]}
                 </AvatarFallback>
               </Avatar>
-              <label className="absolute inset-0 flex items-center justify-center bg-black/40 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+              <label className="absolute inset-0 flex items-center justify-center bg-black/40 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                 <Camera className="w-6 h-6" />
                 <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
               </label>

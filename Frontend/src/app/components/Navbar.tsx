@@ -85,14 +85,14 @@ export function Navbar() {
                   <div className="h-8 w-px bg-gray-100 mx-2" />
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="flex items-center gap-3 p-1 rounded-full hover:bg-gray-50 transition-colors focus:outline-none group">
+                      <button className="flex items-center gap-3 p-1 rounded-xl hover:bg-gray-50 transition-colors focus:outline-none group">
                         <div className="text-right">
                           <p className="text-sm font-bold text-gray-900 leading-none">{user.name}</p>
                           <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">{user.role}</p>
                         </div>
-                        <Avatar className="h-9 w-9 border-2 border-brand-primary/20 shadow-sm transition-transform group-hover:scale-105">
-                          <AvatarImage src={user.avatar} alt={user.name} />
-                          <AvatarFallback className="bg-brand-primary/10 text-brand-primary font-bold">
+                        <Avatar className="h-9 w-9 rounded-lg border-2 border-brand-primary/20 bg-white shadow-sm transition-transform group-hover:scale-105">
+                          <AvatarImage src={user.avatar} alt={user.name} className="object-contain" />
+                          <AvatarFallback className="rounded-lg bg-brand-primary/10 text-brand-primary font-bold">
                             {user.name.split(' ').filter(Boolean).map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
@@ -148,9 +148,9 @@ export function Navbar() {
             <div className="flex flex-col gap-0.5">
               {user && (
                 <div className="flex items-center gap-3 mb-2 p-2 bg-gray-50 rounded-xl mx-1">
-                  <Avatar className="h-10 w-10 border border-brand-primary/20">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="bg-brand-primary/10 text-brand-primary font-bold text-xs">
+                  <Avatar className="h-10 w-10 rounded-lg border border-brand-primary/20 bg-white">
+                    <AvatarImage src={user.avatar} alt={user.name} className="object-contain" />
+                    <AvatarFallback className="rounded-lg bg-brand-primary/10 text-brand-primary font-bold text-xs">
                       {user.name.split(' ').filter(Boolean).map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>

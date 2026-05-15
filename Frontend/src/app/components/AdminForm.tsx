@@ -114,13 +114,13 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
             <div className="space-y-6">
               <div className="flex flex-col items-center gap-4">
                 <div className="relative group cursor-pointer" onClick={() => document.getElementById('admin-avatar-upload')?.click()}>
-                  <Avatar className="h-24 w-24 border-4 border-white shadow-xl transition-transform group-hover:scale-105">
-                    <AvatarImage src={formData.avatarUrl} />
-                    <AvatarFallback className="bg-brand-primary/10 text-brand-primary text-2xl font-bold">
+                  <Avatar className="h-24 w-24 rounded-xl border-4 border-white bg-white shadow-xl transition-transform group-hover:scale-105">
+                    <AvatarImage src={formData.avatarUrl} className="object-contain" />
+                    <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary text-2xl font-bold">
                       {formData.firstName?.[0]}{formData.lastName?.[0]}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <Camera className="w-8 h-8 text-white" />
                   </div>
                   <input 
