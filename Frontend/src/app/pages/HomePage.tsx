@@ -7,13 +7,14 @@ import { CheckCircle, Search, BarChart3, MapPin, Calendar as CalendarIcon, Chevr
 import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import { Calendar } from '../components/ui/calendar';
 import { format } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { equipmentApi, Category, Location } from '../../context/equipment.api';
 
 export function HomePage() {
   const navigate = useNavigate();
-  const [date, setDate] = useState<Date>();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [searchData, setSearchData] = useState({
@@ -41,7 +42,8 @@ export function HomePage() {
     const params = new URLSearchParams();
     if (searchData.categoryId) params.append('category', searchData.categoryId);
     if (searchData.locationId) params.append('location', searchData.locationId);
-    if (date) params.append('date', format(date, 'yyyy-MM-dd'));
+    if (dateRange?.from) params.append('date_from', format(dateRange.from, 'yyyy-MM-dd'));
+    if (dateRange?.to) params.append('date_to', format(dateRange.to, 'yyyy-MM-dd'));
     navigate(`/search?${params.toString()}`);
   };
 
@@ -135,16 +137,28 @@ export function HomePage() {
                     <PopoverTrigger asChild>
                       <button className="flex items-center w-full h-10 md:h-9 text-left font-bold text-sm sm:text-base bg-transparent pr-8">
                         <CalendarIcon className="w-4 h-4 text-gray-400 mr-2" />
-                        {date ? format(date, "PPP") : <span className="text-gray-300">Start — End date</span>}
+                        {dateRange?.from ? (
+                          dateRange.to ? (
+                            <span className="truncate">{format(dateRange.from, 'MMM d')} - {format(dateRange.to, 'MMM d')}</span>
+                          ) : (
+                            format(dateRange.from, 'PP')
+                          )
+                        ) : <span className="text-gray-300">Start - End date</span>}
                       </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[calc(100vw-2rem)] max-w-[330px] p-0 rounded-xl border-gray-100" align="start">
-                      <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                      <Calendar
+                        mode="range"
+                        selected={dateRange}
+                        onSelect={setDateRange}
+                        initialFocus
+                        numberOfMonths={1}
+                      />
                     </PopoverContent>
                   </Popover>
-                  {date && (
+                  {dateRange && (
                     <button 
-                      onClick={() => setDate(undefined)}
+                      onClick={() => setDateRange(undefined)}
                       className="absolute right-4 top-[60%] -translate-y-1/2 p-1 text-gray-300 hover:text-brand-primary transition-colors"
                     >
                       <X className="w-3 h-3" />
