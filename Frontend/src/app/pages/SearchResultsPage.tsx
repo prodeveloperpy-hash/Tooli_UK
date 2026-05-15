@@ -21,13 +21,14 @@ export function SearchResultsPage() {
 
   const categoryId = searchParams.get('category') || '';
   const locationId = searchParams.get('location') || '';
-  const date = searchParams.get('date') || '';
+  const dateFrom = searchParams.get('date_from') || '';
+  const dateTo = searchParams.get('date_to') || '';
 
   useEffect(() => {
     const fetchEquipment = async () => {
       setIsLoading(true);
       try {
-        const response = await equipmentApi.getEquipment(categoryId, locationId, undefined, page);
+        const response = await equipmentApi.getEquipment(categoryId, locationId, undefined, undefined, page);
         setEquipment(response.results);
         setTotalCount(response.count);
         setTotalPages(Math.ceil(response.count / 20)); // Assuming 20 is the page size
@@ -39,7 +40,7 @@ export function SearchResultsPage() {
     };
     fetchEquipment();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [categoryId, locationId, date, page]);
+  }, [categoryId, locationId, dateFrom, dateTo, page]);
 
   const sortedResults = useMemo(() => {
     let results = [...equipment];

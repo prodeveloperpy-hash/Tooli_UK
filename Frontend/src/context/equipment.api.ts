@@ -55,12 +55,13 @@ export interface EquipmentResponse {
 }
 
 export const equipmentApi = {
-  getEquipment: async (categoryId?: string, locationId?: string, availabilityFrom?: string, page: number = 1, pageSize: number = 20, organizationId?: string, isActive?: boolean): Promise<EquipmentResponse> => {
+  getEquipment: async (categoryId?: string, locationId?: string, availabilityFrom?: string, availabilityTo?: string, page: number = 1, pageSize: number = 20, organizationId?: string, isActive?: boolean): Promise<EquipmentResponse> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (categoryId) params.append('category_id', categoryId);
     if (locationId) params.append('location_id', locationId);
     if (availabilityFrom) params.append('availability_from', availabilityFrom);
+    if (availabilityTo) params.append('availability_to', availabilityTo);
     if (organizationId) params.append('organization_id', organizationId);
     if (isActive !== undefined) params.append('is_active', isActive.toString());
     params.append('page', page.toString());

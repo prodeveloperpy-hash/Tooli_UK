@@ -7,6 +7,7 @@ import { Calendar } from './ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Search, Calendar as CalendarIcon, MapPin, X, RotateCcw } from 'lucide-react';
 import { format, parse } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 import { equipmentApi, Category, Location } from '../../context/equipment.api';
 
 interface SearchBarProps {
@@ -21,9 +22,12 @@ export function SearchBar({ className = '' }: SearchBarProps) {
   
   const [categoryId, setCategoryId] = useState(searchParams.get('category') || '');
   const [locationId, setLocationId] = useState(searchParams.get('location') || '');
-  const [hireDate, setHireDate] = useState<Date | undefined>(() => {
-    const d = searchParams.get('date');
-    return d ? parse(d, 'yyyy-MM-dd', new Date()) : undefined;
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
+    const fromStr = searchParams.get('date_from');
+    const toStr = searchParams.get('date_to');
+    const from = fromStr ? parse(fromStr, 'yyyy-MM-dd', new Date()) : undefined;
+    const to = toStr ? parse(toStr, 'yyyy-MM-dd', new Date()) : undefined;
+    return from ? { from, to } : undefined;
   });
 
   useEffect(() => {
@@ -45,27 +49,31 @@ export function SearchBar({ className = '' }: SearchBarProps) {
   useEffect(() => {
     setCategoryId(searchParams.get('category') || '');
     setLocationId(searchParams.get('location') || '');
-    const d = searchParams.get('date');
-    setHireDate(d ? parse(d, 'yyyy-MM-dd', new Date()) : undefined);
+    const fromStr = searchParams.get('date_from');
+    const toStr = searchParams.get('date_to');
+    const from = fromStr ? parse(fromStr, 'yyyy-MM-dd', new Date()) : undefined;
+    const to = toStr ? parse(toStr, 'yyyy-MM-dd', new Date()) : undefined;
+    setDateRange(from ? { from, to } : undefined);
   }, [searchParams]);
 
   // Update URL when filters change immediately if triggered by X
-  const updateURL = (cat: string, loc: string, date: Date | undefined) => {
+  const updateURL = (cat: string, loc: string, range: DateRange | undefined) => {
     const params = new URLSearchParams();
     if (cat) params.set('category', cat);
     if (loc) params.set('location', loc);
-    if (date) params.set('date', format(date, 'yyyy-MM-dd'));
+    if (range?.from) params.set('date_from', format(range.from, 'yyyy-MM-dd'));
+    if (range?.to) params.set('date_to', format(range.to, 'yyyy-MM-dd'));
     navigate(`/search?${params.toString()}`);
   };
 
   const handleSearch = () => {
-    updateURL(categoryId, locationId, hireDate);
+    updateURL(categoryId, locationId, dateRange);
   };
 
   const handleReset = () => {
     setCategoryId('');
     setLocationId('');
-    setHireDate(undefined);
+    setDateRange(undefined);
     navigate('/search');
   };
 
@@ -94,7 +102,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
               <button 
                 onClick={() => {
                   setCategoryId('');
-                  updateURL('', locationId, hireDate);
+                  updateURL('', locationId, dateRange);
                 }}
                 className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
               >
@@ -126,7 +134,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
               <button 
                 onClick={() => {
                   setLocationId('');
-                  updateURL(categoryId, '', hireDate);
+                  updateURL(categoryId, '', dateRange);
                 }}
                 className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
               >
@@ -146,22 +154,29 @@ export function SearchBar({ className = '' }: SearchBarProps) {
                   className="h-12 w-full justify-start text-left font-bold bg-gray-50 border-gray-100 rounded-xl hover:bg-gray-100/50 pr-10"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 text-brand-primary" />
-                  {hireDate ? format(hireDate, 'PP') : <span className="text-gray-400 font-medium">When?</span>}
+                  {dateRange?.from ? (
+                    dateRange.to ? (
+                      <span className="text-[11px] truncate">{format(dateRange.from, 'MMM d')} - {format(dateRange.to, 'MMM d')}</span>
+                    ) : (
+                      format(dateRange.from, 'PP')
+                    )
+                  ) : <span className="text-gray-400 font-medium">When?</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 rounded-2xl shadow-2xl border-gray-100">
+              <PopoverContent className="w-auto p-0 rounded-2xl shadow-2xl border-gray-100" align="start">
                 <Calendar
-                  mode="single"
-                  selected={hireDate}
-                  onSelect={setHireDate}
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={setDateRange}
                   initialFocus
+                  numberOfMonths={1}
                 />
               </PopoverContent>
             </Popover>
-            {hireDate && (
+            {dateRange && (
               <button 
                 onClick={() => {
-                  setHireDate(undefined);
+                  setDateRange(undefined);
                   updateURL(categoryId, locationId, undefined);
                 }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
@@ -180,7 +195,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
             Update Search
           </Button>
 
-          {(categoryId || locationId || hireDate) && (
+          {(categoryId || locationId || dateRange) && (
             <button
               onClick={handleReset}
               className="text-[10px] font-bold text-gray-400 hover:text-brand-primary transition-colors flex items-center gap-1.5 uppercase tracking-widest mt-1"
