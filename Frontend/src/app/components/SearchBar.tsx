@@ -188,22 +188,22 @@ export function SearchBar({ className = '' }: SearchBarProps) {
         </div>
 
         <div className="flex flex-col items-center gap-1">
+          {(categoryId || locationId || dateRange) && (
+            <button
+              onClick={handleReset}
+              className="text-[10px] font-bold text-gray-400 hover:text-brand-primary transition-colors flex items-center gap-1.5 uppercase tracking-widest mb-1"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Reset All
+            </button>
+          )}
+
           <Button
             onClick={handleSearch}
             className="h-12 w-full px-8 bg-brand-primary hover:bg-brand-primary-hover text-white font-extrabold rounded-xl transition-all shadow-lg shadow-brand-primary/20 active:scale-[0.98]"
           >
             Update Search
           </Button>
-
-          {(categoryId || locationId || dateRange) && (
-            <button
-              onClick={handleReset}
-              className="text-[10px] font-bold text-gray-400 hover:text-brand-primary transition-colors flex items-center gap-1.5 uppercase tracking-widest mt-1"
-            >
-              <RotateCcw className="w-3 h-3" />
-              Reset All
-            </button>
-          )}
         </div>
       </div>
     </div>
