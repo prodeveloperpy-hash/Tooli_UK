@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Mail, Building2, MapPin, Camera, UploadCloud, Link as LinkIcon, Loader2, Globe } from 'lucide-react';
+import { Mail, Building2, Camera, UploadCloud, Loader2, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import { UserOrganization } from '../../context/user.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
@@ -21,6 +21,8 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locations, setLocations] = useState<Location[]>([]);
   const [isDataLoading, setIsDataLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -34,6 +36,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     logoUrl: '',
     logoFile: null as File | null,
     password: '',
+    confirmPassword: '',
     is_approved: true,
     is_active: true,
     approved_by: 7,
@@ -74,6 +77,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         logoUrl: supplier.organization_details.logo || '',
         logoFile: null,
         password: '',
+        confirmPassword: '',
       });
     } else {
       setFormData({
@@ -89,16 +93,23 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         logoUrl: '',
         logoFile: null,
         password: '',
+        confirmPassword: '',
         is_approved: true,
         is_active: true,
         approved_by: 7,
         approved_datetime: new Date().toISOString(),
       });
     }
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   }, [supplier, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!supplier && formData.password !== formData.confirmPassword) {
+      alert("Passwords don't match!");
+      return;
+    }
     setIsSubmitting(true);
     try {
       await onSubmit(formData);
@@ -139,13 +150,13 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
               
               <div className="flex items-center gap-6">
                 <div className="relative group cursor-pointer" onClick={() => document.getElementById('avatar-upload')?.click()}>
-                  <Avatar className="h-24 w-24 border-4 border-white shadow-xl transition-transform group-hover:scale-105">
-                    <AvatarImage src={formData.avatarUrl} />
-                    <AvatarFallback className="bg-brand-primary/10 text-brand-primary text-2xl font-bold">
+                  <Avatar className="h-24 w-24 rounded-xl border-4 border-white bg-white shadow-xl transition-transform group-hover:scale-105">
+                    <AvatarImage src={formData.avatarUrl} className="object-contain" />
+                    <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary text-2xl font-bold">
                       {formData.firstName[0]}{formData.lastName[0]}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <Camera className="w-8 h-8 text-white" />
                   </div>
                   <input 
@@ -216,16 +227,60 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
               </div>
 
               {!supplier && (
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="font-bold">Password</Label>
-                  <Input 
-                    id="password" 
-                    type="password"
-                    value={formData.password} 
-                    onChange={(e) => setFormData({...formData, password: e.target.value})} 
-                    className="border-gray-200 focus:ring-brand-primary rounded-lg"
-                    required
-                  />
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="font-bold">Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={formData.password}
+                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
+                          formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                        }`}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="confirmPassword" className="font-bold">Confirm Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="confirmPassword"
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                        className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
+                          formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                        }`}
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                      <p className="text-xs font-bold text-red-500 mt-1">Passwords do not match</p>
+                    )}
+                    {formData.password && formData.confirmPassword && formData.password === formData.confirmPassword && (
+                      <p className="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3" /> Passwords match
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -345,7 +400,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
             <Button type="button" variant="ghost" onClick={onClose} className="font-black uppercase tracking-widest text-xs h-12">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
+            <Button type="submit" disabled={isSubmitting || (!supplier && formData.password !== formData.confirmPassword)} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
               {isSubmitting ? 'Saving...' : (supplier ? 'Update Supplier' : 'Create Account')}
             </Button>
           </DialogFooter>

@@ -63,33 +63,31 @@ export function SearchResultsPage() {
   }, [equipment, sortBy]);
 
   return (
-    <div className="min-h-screen bg-[#F8F9FC]">
+    <div className="min-h-screen bg-[#F8F9FC] overflow-x-hidden">
       {/* Sticky Sub-Header with SearchBar */}
-      <div className="bg-white border-b shadow-sm">
-        <div className="container mx-auto px-4 py-4">
+      <div className="bg-white border-b shadow-sm sticky top-10 z-40">
+        <div className="container mx-auto px-4 py-3">
           <SearchBar className="shadow-none border-none bg-transparent p-0" />
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
-
-
+      <div className="container mx-auto px-2 md:px-4 py-6 md:py-12">
+        <div className="grid lg:grid-cols-12 gap-4 md:gap-8 items-start w-full">
           {/* Results Main Section */}
-          <main className="lg:col-span-12">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-50">
+          <main className="lg:col-span-12 w-full min-w-0">
+            <div className="bg-white rounded-xl md:rounded-2xl shadow-sm border border-gray-100 overflow-hidden w-full min-w-0">
+              <div className="p-4 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-50">
                 <div>
-                  <h1 className="text-2xl font-bold text-[#030213]">
+                  <h1 className="text-xl md:text-2xl font-bold text-[#030213]">
                     Available Equipment
                   </h1>
                 </div>
                 
-                <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto">
                   <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                    <SelectTrigger className="h-10 bg-white border-gray-200 rounded-lg text-sm w-full md:w-48 font-medium">
+                    <SelectTrigger className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm w-full md:w-48 font-medium">
                       <div className="flex items-center gap-2">
-                        <span className="text-gray-400 font-normal">Sort by:</span>
+                        <span className="text-gray-400 font-normal">Sort:</span>
                         <SelectValue />
                       </div>
                     </SelectTrigger>
@@ -99,47 +97,52 @@ export function SearchResultsPage() {
                     </SelectContent>
                   </Select>
                   
-                  <Button variant="outline" className="h-10 border-gray-200 text-sm font-bold flex items-center gap-2 rounded-lg">
-                    <Filter className="w-4 h-4" />
-                    Filters
+                  <Button variant="outline" className="h-9 md:h-10 border-gray-200 text-xs md:text-sm font-bold flex items-center gap-2 rounded-lg shrink-0">
+                    <Filter className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    <span className="hidden sm:inline">Filters</span>
+                    <span className="sm:hidden">Filter</span>
                   </Button>
                 </div>
               </div>
 
-              <div className="w-full">
+              <div className="w-full min-w-0">
                 {isLoading ? (
                   <div className="flex flex-col items-center justify-center py-24">
                     <Loader2 className="w-10 h-10 text-brand-primary animate-spin mb-4" />
                     <p className="text-gray-500 font-medium">Fetching the best deals for you...</p>
                   </div>
                 ) : (
-                  <div className="w-full">
+                  <div className="w-full min-w-0">
                     {sortedResults.length === 0 ? (
                       <div className="text-center py-24">
                         <h3 className="text-xl font-bold mb-2">No results found</h3>
                         <p className="text-gray-500">Try adjusting your search criteria</p>
                       </div>
                     ) : (
-                      <div className="w-full overflow-x-auto">
-                        {/* List Header */}
-                        <div className="flex items-center px-6 md:px-8 py-4 bg-gray-50 border-b border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 w-full min-w-[1060px]">
-                          <div className="w-[280px]">Equipment Details</div>
-                          <div className="w-[180px] ml-6">Supplier</div>
-                          <div className="flex-1 min-w-[320px] ml-6">Location</div>
-                          <div className="w-[120px] ml-6">Weekly Rate</div>
-                          <div className="w-[100px] ml-6">Availability</div>
-                          <div className="ml-auto w-[120px] text-right pr-4">Actions</div>
-                        </div>
+                      <div className="w-full min-w-0 overflow-hidden">
+                       
+                        
+                        <div className="w-full overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-200">
+                          {/* List Header */}
+                          <div className="flex items-center px-6 md:px-8 py-4 bg-gray-50 border-b border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 w-full min-w-[1060px]">
+                            <div className="w-[280px]">Equipment Details</div>
+                            <div className="w-[180px] ml-6">Supplier</div>
+                            <div className="flex-1 min-w-[320px] ml-6">Location</div>
+                            <div className="w-[120px] ml-6">Weekly Rate</div>
+                            <div className="w-[100px] ml-6">Availability</div>
+                            <div className="ml-auto w-[120px] text-right pr-4">Actions</div>
+                          </div>
 
-                        <div className="flex flex-col gap-px bg-gray-100 min-w-[1060px]">
-                          {sortedResults.map((result) => (
-                             <EquipmentCard 
-                               key={result.equipment_id} 
-                               equipment={result} 
-                               view="list" 
-                               searchedLocationId={locationId}
-                             />
-                          ))}
+                          <div className="flex flex-col gap-px bg-gray-100 min-w-[1060px]">
+                            {sortedResults.map((result) => (
+                               <EquipmentCard 
+                                 key={result.equipment_id} 
+                                 equipment={result} 
+                                 view="list" 
+                                 searchedLocationId={locationId}
+                               />
+                            ))}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -147,28 +150,29 @@ export function SearchResultsPage() {
                 )}
               </div>
               
-              <div className="p-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6 bg-gray-50/30">
-                <div className="flex flex-col">
-                  <div className="text-[11px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-1">
+              <div className="p-4 md:p-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6 bg-gray-50/30 w-full min-w-0">
+                <div className="flex flex-col items-center md:items-start">
+                  <div className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-1">
                     Results Overview
                   </div>
-                  <div className="text-sm font-medium text-gray-500">
+                  <div className="text-xs md:text-sm font-medium text-gray-500">
                     Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalCount}</span> available deals
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 md:gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setPage(prev => Math.max(1, prev - 1))}
                     disabled={page === 1}
-                    className="font-bold h-10 px-4 rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all"
+                    className="font-bold h-9 md:h-10 px-3 md:px-4 rounded-lg md:rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all text-xs md:text-sm"
                   >
-                    Previous
+                    Prev
                   </Button>
 
-                  <div className="flex items-center gap-1">
+                  {/* Desktop Pagination: Page Numbers */}
+                  <div className="hidden sm:flex items-center gap-1">
                     {Array.from({ length: totalPages }, (_, i) => i + 1)
                       .filter(p => {
                         if (totalPages <= 7) return true;
@@ -177,13 +181,13 @@ export function SearchResultsPage() {
                       .map((pageNum, index, array) => (
                         <div key={pageNum} className="flex items-center gap-1">
                           {index > 0 && array[index - 1] !== pageNum - 1 && (
-                            <span className="px-1 text-gray-400">...</span>
+                            <span className="px-1 text-gray-400 text-xs">...</span>
                           )}
                           <Button
                             variant={page === pageNum ? "default" : "outline"}
                             size="sm"
                             onClick={() => setPage(pageNum)}
-                            className={`font-bold h-10 w-10 p-0 rounded-xl transition-all ${
+                            className={`font-bold h-10 w-10 p-0 rounded-xl transition-all text-sm ${
                               page === pageNum 
                                 ? 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-lg' 
                                 : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:shadow-md'
@@ -195,20 +199,25 @@ export function SearchResultsPage() {
                       ))}
                   </div>
 
+                  {/* Mobile Pagination: Simple Status */}
+                  <div className="sm:hidden flex items-center px-2">
+                    <span className="text-[11px] font-bold text-gray-500 whitespace-nowrap">
+                      Page {page} <span className="text-gray-300 mx-1">/</span> {totalPages}
+                    </span>
+                  </div>
+
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={page === totalPages || totalPages === 0}
-                    className="font-bold h-10 px-4 rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all"
+                    className="font-bold h-9 md:h-10 px-3 md:px-4 rounded-lg md:rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all text-xs md:text-sm"
                   >
                     Next
                   </Button>
                 </div>
               </div>
             </div>
-
-           
           </main>
         </div>
       </div>
