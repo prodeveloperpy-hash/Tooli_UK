@@ -162,8 +162,8 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px] overflow-hidden">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[425px] p-6 sm:p-8">
+        <DialogHeader className="pr-8">
           <DialogTitle className="flex items-center gap-2 text-2xl font-bold">
             <User className="w-6 h-6 text-brand-primary" />
             Profile Settings
@@ -179,7 +179,7 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
             <p className="text-sm text-muted-foreground animate-pulse">Loading your profile...</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6 py-4">
+          <form onSubmit={handleSubmit} className="space-y-6 pt-2">
           <div className="flex flex-col items-center gap-4 mb-4">
             <div className="relative group">
               <Avatar className="h-24 w-24 border-4 border-brand-primary/10 shadow-md">
