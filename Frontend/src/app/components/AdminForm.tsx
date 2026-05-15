@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Mail, Camera, Loader2, ShieldCheck, Eye, EyeOff, Lock, CheckCircle2 } from 'lucide-react';
+import { Mail, Camera, Loader2, CheckCircle2 } from 'lucide-react';
 import { UserOrganization } from '../../context/user.api';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Checkbox } from './ui/checkbox';
@@ -18,8 +18,6 @@ interface AdminFormProps {
 
 export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -60,8 +58,6 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
       });
       setIsChangingPassword(true);
     }
-    setShowPassword(false);
-    setShowConfirmPassword(false);
   }, [admin, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -186,7 +182,14 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
                   <Checkbox 
                     id="change-password" 
                     checked={isChangingPassword}
-                    onCheckedChange={(checked) => setIsChangingPassword(!!checked)}
+                    onCheckedChange={(checked) => {
+                      setIsChangingPassword(!!checked);
+                      setFormData(prev => ({
+                        ...prev,
+                        password: '',
+                        confirmPassword: '',
+                      }));
+                    }}
                     className="data-[state=checked]:bg-brand-primary border-gray-300 h-5 w-5 rounded-md"
                   />
                   <Label 
@@ -201,47 +204,37 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
               {isChangingPassword && (
                 <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="font-bold">Password</Label>
+                    <Label htmlFor="adminNewPassword" className="font-bold">Password</Label>
                     <div className="relative">
                       <Input 
-                        id="password" 
-                        type={showPassword ? "text" : "password"}
+                        id="adminNewPassword" 
+                        name="admin-new-password"
+                        type="password"
+                        autoComplete="new-password"
                         value={formData.password} 
                         onChange={(e) => setFormData({...formData, password: e.target.value})} 
-                        className={`h-12 pr-10 border-gray-200 focus:ring-brand-primary rounded-xl ${
+                        className={`h-12 border-gray-200 focus:ring-brand-primary rounded-xl ${
                           formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
                         }`}
                         required
                       />
-                      <button 
-                        type="button" 
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="font-bold">Confirm Password</Label>
+                    <Label htmlFor="adminConfirmPassword" className="font-bold">Confirm Password</Label>
                     <div className="relative">
                       <Input 
-                        id="confirmPassword" 
-                        type={showConfirmPassword ? "text" : "password"}
+                        id="adminConfirmPassword" 
+                        name="admin-confirm-new-password"
+                        type="password"
+                        autoComplete="new-password"
                         value={formData.confirmPassword} 
                         onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})} 
-                        className={`h-12 pr-10 border-gray-200 focus:ring-brand-primary rounded-xl ${
+                        className={`h-12 border-gray-200 focus:ring-brand-primary rounded-xl ${
                           formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
                         }`}
                         required
                       />
-                      <button 
-                        type="button" 
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
-                        {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
                     </div>
                     {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
                       <p className="text-xs font-bold text-red-500 mt-1 animate-in shake-in">Passwords do not match</p>

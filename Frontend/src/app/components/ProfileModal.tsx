@@ -4,9 +4,10 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { User, Mail, Camera, Loader2, CheckCircle2 } from 'lucide-react';
+import { User, Mail, Camera, Loader2, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { userApi } from '../../context/user.api';
 import { toast } from 'sonner';
+import { Checkbox } from './ui/checkbox';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -18,12 +19,17 @@ interface ProfileModalProps {
 export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalProps) {
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     avatarFile: null as File | null,
     avatarPreview: '',
+    password: '',
+    confirmPassword: '',
   });
 
   useEffect(() => {
@@ -39,6 +45,8 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
             email: latestUser.email || '',
             avatarFile: null,
             avatarPreview: latestUser.avatar_url || '',
+            password: '',
+            confirmPassword: '',
           });
         } catch (error) {
           console.error('Failed to fetch latest user:', error);
@@ -51,6 +59,8 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
               email: user.email || localStorage.getItem('email') || '',
               avatarFile: null,
               avatarPreview: user.avatar,
+              password: '',
+              confirmPassword: '',
             });
           }
         } finally {
@@ -60,6 +70,9 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
     };
 
     fetchLatestUser();
+    setIsChangingPassword(false);
+    setShowPassword(false);
+    setShowConfirmPassword(false);
   }, [user, isOpen]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +88,10 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isChangingPassword && formData.password !== formData.confirmPassword) {
+      toast.error("Passwords don't match");
+      return;
+    }
     setIsSubmitting(true);
 
     try {
@@ -87,11 +104,14 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
       if (isSuperAdmin && !userId) throw new Error('User ID not found');
 
       if (isSuperAdmin) {
-        const payload = {
+        const payload: any = {
           first_name: formData.firstName,
           last_name: formData.lastName,
           email: formData.email,
         };
+        if (isChangingPassword && formData.password) {
+          payload.password = formData.password;
+        }
         
         const updatedData = await userApi.updateUser(parseInt(userId!), payload, formData.avatarFile || undefined);
         
@@ -109,13 +129,16 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
         });
       } else {
         const formDataToSend = new FormData();
-        const payload = {
+        const payload: any = {
           user: {
             first_name: formData.firstName,
             last_name: formData.lastName,
             email: formData.email,
           }
         };
+        if (isChangingPassword && formData.password) {
+          payload.user.password = formData.password;
+        }
         
         formDataToSend.append('payload', JSON.stringify(payload));
         if (formData.avatarFile) {
@@ -236,13 +259,98 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
                 />
               </div>
             </div>
+
+            <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+              <Checkbox
+                id="profile-change-password"
+                checked={isChangingPassword}
+                onCheckedChange={(checked) => {
+                  setIsChangingPassword(!!checked);
+                  setShowPassword(false);
+                  setShowConfirmPassword(false);
+                  setFormData(prev => ({
+                    ...prev,
+                    password: '',
+                    confirmPassword: '',
+                  }));
+                }}
+                className="data-[state=checked]:bg-brand-primary border-gray-300 h-5 w-5 rounded-md"
+              />
+              <Label
+                htmlFor="profile-change-password"
+                className="text-sm font-bold text-gray-700 cursor-pointer select-none flex-1 py-1"
+              >
+                Change Password
+              </Label>
+            </div>
+
+            {isChangingPassword && (
+              <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="space-y-2">
+                  <Label htmlFor="profilePassword" className="font-bold text-xs uppercase tracking-wider text-gray-500">New Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="profilePassword"
+                      name="profile-new-password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      value={formData.password}
+                      onChange={e => setFormData({...formData, password: e.target.value})}
+                      className={`h-11 pr-10 border-gray-200 focus:border-brand-primary transition-colors ${
+                        formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                      }`}
+                      required={isChangingPassword}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profileConfirmPassword" className="font-bold text-xs uppercase tracking-wider text-gray-500">Confirm Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="profileConfirmPassword"
+                      name="profile-confirm-new-password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      value={formData.confirmPassword}
+                      onChange={e => setFormData({...formData, confirmPassword: e.target.value})}
+                      className={`h-11 pr-10 border-gray-200 focus:border-brand-primary transition-colors ${
+                        formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                      }`}
+                      required={isChangingPassword}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                    <p className="text-xs font-bold text-red-500 mt-1">Passwords do not match</p>
+                  )}
+                  {formData.password && formData.confirmPassword && formData.password === formData.confirmPassword && (
+                    <p className="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" /> Passwords match
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           <DialogFooter className="pt-4 gap-2">
             <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting} className="font-bold">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold min-w-[120px] shadow-lg shadow-brand-primary/20">
+            <Button type="submit" disabled={isSubmitting || (isChangingPassword && formData.password !== formData.confirmPassword)} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold min-w-[120px] shadow-lg shadow-brand-primary/20">
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

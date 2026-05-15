@@ -569,6 +569,7 @@ export function SuperAdminDashboard() {
       if (compare(data.firstName, selectedSupplier.user_details.first_name)) userUpdates.first_name = data.firstName;
       if (compare(data.lastName, selectedSupplier.user_details.last_name)) userUpdates.last_name = data.lastName;
       if (compare(data.email, selectedSupplier.user_details.email)) userUpdates.email = data.email;
+      if (data.isChangingPassword && data.password) userUpdates.password = data.password;
       if (compare(data.companyName, selectedSupplier.organization_details.name)) orgUpdates.name = data.companyName;
       if (compare(data.domain, selectedSupplier.organization_details.domain)) orgUpdates.domain = data.domain;
       if (compare(data.city, selectedSupplier.organization_details.city)) orgUpdates.city = data.city;

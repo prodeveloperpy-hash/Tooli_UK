@@ -8,6 +8,7 @@ import { UserOrganization } from '../../context/user.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Checkbox } from './ui/checkbox';
 
 interface SupplierFormProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -79,6 +81,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         password: '',
         confirmPassword: '',
       });
+      setIsChangingPassword(false);
     } else {
       setFormData({
         firstName: '',
@@ -99,6 +102,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         approved_by: 7,
         approved_datetime: new Date().toISOString(),
       });
+      setIsChangingPassword(true);
     }
     setShowPassword(false);
     setShowConfirmPassword(false);
@@ -106,13 +110,16 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!supplier && formData.password !== formData.confirmPassword) {
+    if (isChangingPassword && formData.password !== formData.confirmPassword) {
       alert("Passwords don't match!");
       return;
     }
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        isChangingPassword,
+      });
       onClose();
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -226,20 +233,48 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                 </div>
               </div>
 
-              {!supplier && (
+              {supplier && (
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                  <Checkbox
+                    id="supplier-change-password"
+                    checked={isChangingPassword}
+                    onCheckedChange={(checked) => {
+                      setIsChangingPassword(!!checked);
+                      setShowPassword(false);
+                      setShowConfirmPassword(false);
+                      setFormData(prev => ({
+                        ...prev,
+                        password: '',
+                        confirmPassword: '',
+                      }));
+                    }}
+                    className="data-[state=checked]:bg-brand-primary border-gray-300 h-5 w-5 rounded-md"
+                  />
+                  <Label
+                    htmlFor="supplier-change-password"
+                    className="text-sm font-bold text-gray-700 cursor-pointer select-none flex-1 py-1"
+                  >
+                    Change Password
+                  </Label>
+                </div>
+              )}
+
+              {isChangingPassword && (
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="password" className="font-bold">Password</Label>
+                    <Label htmlFor="supplierNewPassword" className="font-bold">Password</Label>
                     <div className="relative">
                       <Input
-                        id="password"
+                        id="supplierNewPassword"
+                        name="supplier-new-password"
                         type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
                         value={formData.password}
                         onChange={(e) => setFormData({...formData, password: e.target.value})}
                         className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
                           formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
                         }`}
-                        required
+                        required={isChangingPassword}
                       />
                       <button
                         type="button"
@@ -252,17 +287,19 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="font-bold">Confirm Password</Label>
+                    <Label htmlFor="supplierConfirmPassword" className="font-bold">Confirm Password</Label>
                     <div className="relative">
                       <Input
-                        id="confirmPassword"
+                        id="supplierConfirmPassword"
+                        name="supplier-confirm-new-password"
                         type={showConfirmPassword ? "text" : "password"}
+                        autoComplete="new-password"
                         value={formData.confirmPassword}
                         onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                         className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
                           formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
                         }`}
-                        required
+                        required={isChangingPassword}
                       />
                       <button
                         type="button"
@@ -400,7 +437,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
             <Button type="button" variant="ghost" onClick={onClose} className="font-black uppercase tracking-widest text-xs h-12">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || (!supplier && formData.password !== formData.confirmPassword)} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
+            <Button type="submit" disabled={isSubmitting || (isChangingPassword && formData.password !== formData.confirmPassword)} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
               {isSubmitting ? 'Saving...' : (supplier ? 'Update Supplier' : 'Create Account')}
             </Button>
           </DialogFooter>
