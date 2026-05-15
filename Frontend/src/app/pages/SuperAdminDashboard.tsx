@@ -266,10 +266,10 @@ export function SuperAdminDashboard() {
     try {
       const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId, isActive);
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId, isActive);
       setEquipment(response.results);
       setTotalEquipCount(response.count);
-      setTotalEquipPages(Math.ceil(response.count / 20));
+      setTotalEquipPages(Math.ceil(response.count / 10));
     } catch (error) {
       console.error('Error fetching equipment:', error);
     } finally {
@@ -572,6 +572,9 @@ export function SuperAdminDashboard() {
       if (compare(data.companyName, selectedSupplier.organization_details.name)) orgUpdates.name = data.companyName;
       if (compare(data.domain, selectedSupplier.organization_details.domain)) orgUpdates.domain = data.domain;
       if (compare(data.city, selectedSupplier.organization_details.city)) orgUpdates.city = data.city;
+      if (data.locationId && compare(data.locationId, (selectedSupplier.organization_details as any).location_id)) {
+        orgUpdates.location_id = parseInt(data.locationId);
+      }
       
       if (Object.keys(userUpdates).length > 0) payload.user = userUpdates;
       if (Object.keys(orgUpdates).length > 0) payload.organization = orgUpdates;
@@ -590,7 +593,8 @@ export function SuperAdminDashboard() {
         organization: {
           name: data.companyName,
           domain: data.domain,
-          city: data.city
+          city: data.city,
+          location_id: data.locationId ? parseInt(data.locationId) : undefined
         }
       };
     }

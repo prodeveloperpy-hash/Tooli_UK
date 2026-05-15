@@ -3,9 +3,11 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { Mail, Building2, MapPin, Camera, UploadCloud, Link as LinkIcon, Loader2 } from 'lucide-react';
+import { Mail, Building2, MapPin, Camera, UploadCloud, Link as LinkIcon, Loader2, Globe } from 'lucide-react';
 import { UserOrganization } from '../../context/user.api';
+import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 interface SupplierFormProps {
   isOpen: boolean;
@@ -17,6 +19,8 @@ interface SupplierFormProps {
 
 export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }: SupplierFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [isDataLoading, setIsDataLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -26,6 +30,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     companyName: '',
     domain: '',
     city: '',
+    locationId: '',
     logoUrl: '',
     logoFile: null as File | null,
     password: '',
@@ -36,7 +41,26 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   });
 
   useEffect(() => {
+    if (isOpen) {
+      const fetchLocations = async () => {
+        setIsDataLoading(true);
+        try {
+          const data = await equipmentApi.getLocations(1, 100, true);
+          const locList = data?.results || (Array.isArray(data) ? data : []);
+          setLocations(locList);
+        } catch (error) {
+          console.error('Error fetching locations:', error);
+        } finally {
+          setIsDataLoading(false);
+        }
+      };
+      fetchLocations();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     if (supplier) {
+      const supplierLocationId = (supplier.organization_details as any).location_id?.toString() || '';
       setFormData({
         firstName: supplier.user_details.first_name,
         lastName: supplier.user_details.last_name,
@@ -46,6 +70,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         companyName: supplier.organization_details.name,
         domain: supplier.organization_details.domain,
         city: supplier.organization_details.city,
+        locationId: supplierLocationId,
         logoUrl: supplier.organization_details.logo || '',
         logoFile: null,
         password: '',
@@ -60,6 +85,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         companyName: '',
         domain: '',
         city: '',
+        locationId: '',
         logoUrl: '',
         logoFile: null,
         password: '',
@@ -98,7 +124,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
           </DialogHeader>
           
           <div className="p-6 lg:p-8 space-y-8 overflow-y-auto relative flex-1">
-            {isLoading && (
+            {(isLoading || isDataLoading) && (
               <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center gap-4">
                 <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
                 <p className="text-sm font-bold text-gray-500 animate-pulse">Syncing Supplier Data...</p>
@@ -287,17 +313,29 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="city" className="font-bold">City</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <Input 
-                      id="city" 
-                      value={formData.city} 
-                      onChange={(e) => setFormData({...formData, city: e.target.value})} 
-                      className="pl-10 border-gray-200 focus:ring-brand-primary rounded-lg"
-                      required
-                    />
-                  </div>
+                  <Label htmlFor="location" className="font-bold">Service Location</Label>
+                  <Select 
+                    value={formData.locationId} 
+                    onValueChange={(v) => {
+                      const selectedLoc = locations.find(l => l.location_id.toString() === v);
+                      setFormData({
+                        ...formData, 
+                        locationId: v,
+                        city: selectedLoc?.city_name || ''
+                      });
+                    }}
+                  >
+                    <SelectTrigger className="h-10 rounded-lg border-gray-200 focus:ring-brand-primary bg-white">
+                      <SelectValue placeholder="Select City" />
+                    </SelectTrigger>
+                    <SelectContent className="z-[10010]">
+                      {locations.map((loc) => (
+                        <SelectItem key={loc.location_id} value={loc.location_id.toString()}>
+                          {loc.city_name}, {loc.country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>

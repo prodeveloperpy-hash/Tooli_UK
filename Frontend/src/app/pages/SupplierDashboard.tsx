@@ -33,6 +33,8 @@ import {
   Building,
   User,
   Loader2,
+  MapPin,
+  Trash2,
 } from 'lucide-react';
 import { products, pricing } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
@@ -42,7 +44,7 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { EquipmentForm } from '../components/EquipmentForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
-import { Trash2 } from 'lucide-react'; // Added for delete action
+
 
 export function SupplierDashboard() {
   const [userData, setUserData] = useState<UserOrganization | null>(null);
@@ -91,11 +93,11 @@ export function SupplierDashboard() {
     try {
       const orgId = localStorage.getItem('organization_id');
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, equipPage, 20, orgId || undefined, isActive);
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId || undefined, isActive);
       
       setEquipment(response.results);
       setTotalEquipCount(response.count);
-      setTotalEquipPages(Math.ceil(response.count / 20));
+      setTotalEquipPages(Math.ceil(response.count / 10));
     } catch (error) {
       console.error('Error fetching equipment:', error);
       toast.error('Failed to load equipment');
@@ -584,6 +586,8 @@ export function SupplierDashboard() {
         onSubmit={handleEquipSubmit}
         equipment={selectedEquipment}
         isLoading={isFetchingDetail}
+        fixedSupplierId={localStorage.getItem('organization_id') || undefined}
+        fixedSupplierName={userData?.organization_details.name}
       />
 
       <DeleteConfirmation 
