@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.urls import reverse
 from django.utils import timezone
 from rest_framework import serializers
 
@@ -17,10 +18,22 @@ class EquipmentSerializer(serializers.ModelSerializer):
         source="organization_id.name",
         read_only=True,
     )
-    organization_logo = serializers.CharField(
-        source="organization_id.logo",
-        read_only=True,
-    )
+    organization_logo = serializers.SerializerMethodField()
+
+    def get_organization_logo(self, obj):
+        org = getattr(obj, "organization_id", None)
+        if org is None:
+            return None
+        raw = (org.logo or "").strip()
+        if not raw:
+            return None
+        if not gcs_images.should_use_api_url_in_json(raw):
+            return raw
+        request = self.context.get("request")
+        if request is None:
+            return raw
+        path = reverse("organization-logo", kwargs={"pk": org.pk})
+        return request.build_absolute_uri(path)
     category_display_name = serializers.CharField(
         source="category_id.category_display_name",
         read_only=True,
