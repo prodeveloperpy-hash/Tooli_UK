@@ -28,10 +28,14 @@ export function SearchResultsPage() {
     const fetchEquipment = async () => {
       setIsLoading(true);
       try {
-        const response = await equipmentApi.getEquipment(categoryId, locationId, undefined, undefined, page);
-        setEquipment(response.results);
-        setTotalCount(response.count);
-        setTotalPages(Math.ceil(response.count / 10)); // Updated to 10 as per new requirements
+        // Enforce the business logic: if only one parameter is in the URL, treat it as a "show all" (unfiltered query).
+        const activeCategory = (categoryId && locationId) ? categoryId : '';
+        const activeLocation = (categoryId && locationId) ? locationId : '';
+
+        const response = await equipmentApi.getEquipment(activeCategory, activeLocation, undefined, undefined, page);
+        setEquipment(response.results || []);
+        setTotalCount(response.count || 0);
+        setTotalPages(Math.ceil((response.count || 0) / 10)); // Updated to 10 as per new requirements
       } catch (error) {
         console.error('Error fetching equipment:', error);
       } finally {
@@ -96,7 +100,6 @@ export function SearchResultsPage() {
                       <SelectItem value="price-asc">Price (Low)</SelectItem>
                     </SelectContent>
                   </Select>
-                  
                 </div>
               </div>
 
@@ -115,8 +118,6 @@ export function SearchResultsPage() {
                       </div>
                     ) : (
                       <div className="w-full min-w-0 overflow-hidden">
-                       
-                        
                         <div className="w-full overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-200">
                           {/* List Header */}
                           <div className="flex items-center px-6 md:px-8 py-4 bg-gray-50 border-b border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 w-full min-w-[1060px]">
@@ -145,73 +146,75 @@ export function SearchResultsPage() {
                 )}
               </div>
               
-              <div className="p-4 md:p-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6 bg-gray-50/30 w-full min-w-0">
-                <div className="flex flex-col items-center md:items-start">
-                  <div className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-1">
-                    Results Overview
+              {!isLoading && sortedResults.length > 0 && (
+                <div className="p-4 md:p-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6 bg-gray-50/30 w-full min-w-0">
+                  <div className="flex flex-col items-center md:items-start">
+                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-1">
+                      Results Overview
+                    </div>
+                    <div className="text-xs md:text-sm font-medium text-gray-500">
+                      Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalCount}</span> available deals
+                    </div>
                   </div>
-                  <div className="text-xs md:text-sm font-medium text-gray-500">
-                    Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalCount}</span> available deals
+
+                  <div className="flex items-center gap-1.5 md:gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPage(prev => Math.max(1, prev - 1))}
+                      disabled={page === 1}
+                      className="font-bold h-9 md:h-10 px-3 md:px-4 rounded-lg md:rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all text-xs md:text-sm"
+                    >
+                      Prev
+                    </Button>
+
+                    {/* Desktop Pagination: Page Numbers */}
+                    <div className="hidden sm:flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1)
+                        .filter(p => {
+                          if (totalPages <= 7) return true;
+                          return p === 1 || p === totalPages || Math.abs(p - page) <= 1;
+                        })
+                        .map((pageNum, index, array) => (
+                          <div key={pageNum} className="flex items-center gap-1">
+                            {index > 0 && array[index - 1] !== pageNum - 1 && (
+                              <span className="px-1 text-gray-400 text-xs">...</span>
+                            )}
+                            <Button
+                              variant={page === pageNum ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => setPage(pageNum)}
+                              className={`font-bold h-10 w-10 p-0 rounded-xl transition-all text-sm ${
+                                page === pageNum 
+                                  ? 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-lg' 
+                                  : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:shadow-md'
+                              }`}
+                            >
+                              {pageNum}
+                            </Button>
+                          </div>
+                        ))}
+                    </div>
+
+                    {/* Mobile Pagination: Simple Status */}
+                    <div className="sm:hidden flex items-center px-2">
+                      <span className="text-[11px] font-bold text-gray-500 whitespace-nowrap">
+                        Page {page} <span className="text-gray-300 mx-1">/</span> {totalPages}
+                      </span>
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={page === totalPages || totalPages === 0}
+                      className="font-bold h-9 md:h-10 px-3 md:px-4 rounded-lg md:rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all text-xs md:text-sm"
+                    >
+                      Next
+                    </Button>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-1.5 md:gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPage(prev => Math.max(1, prev - 1))}
-                    disabled={page === 1}
-                    className="font-bold h-9 md:h-10 px-3 md:px-4 rounded-lg md:rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all text-xs md:text-sm"
-                  >
-                    Prev
-                  </Button>
-
-                  {/* Desktop Pagination: Page Numbers */}
-                  <div className="hidden sm:flex items-center gap-1">
-                    {Array.from({ length: totalPages }, (_, i) => i + 1)
-                      .filter(p => {
-                        if (totalPages <= 7) return true;
-                        return p === 1 || p === totalPages || Math.abs(p - page) <= 1;
-                      })
-                      .map((pageNum, index, array) => (
-                        <div key={pageNum} className="flex items-center gap-1">
-                          {index > 0 && array[index - 1] !== pageNum - 1 && (
-                            <span className="px-1 text-gray-400 text-xs">...</span>
-                          )}
-                          <Button
-                            variant={page === pageNum ? "default" : "outline"}
-                            size="sm"
-                            onClick={() => setPage(pageNum)}
-                            className={`font-bold h-10 w-10 p-0 rounded-xl transition-all text-sm ${
-                              page === pageNum 
-                                ? 'bg-brand-primary text-white hover:bg-brand-primary/90 shadow-lg' 
-                                : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:shadow-md'
-                            }`}
-                          >
-                            {pageNum}
-                          </Button>
-                        </div>
-                      ))}
-                  </div>
-
-                  {/* Mobile Pagination: Simple Status */}
-                  <div className="sm:hidden flex items-center px-2">
-                    <span className="text-[11px] font-bold text-gray-500 whitespace-nowrap">
-                      Page {page} <span className="text-gray-300 mx-1">/</span> {totalPages}
-                    </span>
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
-                    disabled={page === totalPages || totalPages === 0}
-                    className="font-bold h-9 md:h-10 px-3 md:px-4 rounded-lg md:rounded-xl border-gray-200 hover:bg-white hover:shadow-md transition-all text-xs md:text-sm"
-                  >
-                    Next
-                  </Button>
-                </div>
-              </div>
+              )}
             </div>
           </main>
         </div>

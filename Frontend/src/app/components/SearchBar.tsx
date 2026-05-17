@@ -22,6 +22,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
   
   const [categoryId, setCategoryId] = useState(searchParams.get('category') || '');
   const [locationId, setLocationId] = useState(searchParams.get('location') || '');
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
     const fromStr = searchParams.get('date_from');
     const toStr = searchParams.get('date_to');
@@ -54,6 +55,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
     const from = fromStr ? parse(fromStr, 'yyyy-MM-dd', new Date()) : undefined;
     const to = toStr ? parse(toStr, 'yyyy-MM-dd', new Date()) : undefined;
     setDateRange(from ? { from, to } : undefined);
+    setShowValidationErrors(false);
   }, [searchParams]);
 
   // Update URL when filters change immediately if triggered by X
@@ -67,6 +69,12 @@ export function SearchBar({ className = '' }: SearchBarProps) {
   };
 
   const handleSearch = () => {
+    // If only one of category or location is selected, validation error occurs
+    if ((categoryId && !locationId) || (!categoryId && locationId)) {
+      setShowValidationErrors(true);
+      return;
+    }
+    setShowValidationErrors(false);
     updateURL(categoryId, locationId, dateRange);
   };
 
@@ -74,6 +82,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
     setCategoryId('');
     setLocationId('');
     setDateRange(undefined);
+    setShowValidationErrors(false);
     navigate('/search');
   };
 
@@ -81,10 +90,22 @@ export function SearchBar({ className = '' }: SearchBarProps) {
     <div className={`bg-white rounded-2xl shadow-xl p-4 ${className}`}>
       <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1.5fr_1fr_auto] gap-3 items-end">
         <div className="space-y-2">
-          <label className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 ml-1">Equipment</label>
+          <label className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 ml-1">
+            Equipment
+          </label>
           <div className="relative group/field">
-            <Select value={categoryId} onValueChange={setCategoryId}>
-              <SelectTrigger className="h-12 bg-gray-50 border-gray-100 rounded-xl focus:ring-brand-primary/20 pr-10">
+            <Select 
+              value={categoryId} 
+              onValueChange={(val) => {
+                setCategoryId(val);
+                setShowValidationErrors(false);
+              }}
+            >
+              <SelectTrigger 
+                className={`h-12 bg-gray-50 rounded-xl focus:ring-brand-primary/20 pr-10 transition-all ${
+                  showValidationErrors && !categoryId ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-100'
+                }`}
+              >
                 <div className="flex items-center gap-2">
                   <Search className="w-4 h-4 text-brand-primary" />
                   <SelectValue placeholder="What do you need?" />
@@ -102,7 +123,12 @@ export function SearchBar({ className = '' }: SearchBarProps) {
               <button 
                 onClick={() => {
                   setCategoryId('');
-                  updateURL('', locationId, dateRange);
+                  // Instantly triggers error if the other is empty
+                  if (locationId) {
+                    updateURL('', locationId, dateRange);
+                  } else {
+                    setCategoryId('');
+                  }
                 }}
                 className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
               >
@@ -113,10 +139,22 @@ export function SearchBar({ className = '' }: SearchBarProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 ml-1">Location</label>
+          <label className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 ml-1">
+            Location
+          </label>
           <div className="relative group/field">
-            <Select value={locationId} onValueChange={setLocationId}>
-              <SelectTrigger className="h-12 bg-gray-50 border-gray-100 rounded-xl focus:ring-brand-primary/20 pr-10">
+            <Select 
+              value={locationId} 
+              onValueChange={(val) => {
+                setLocationId(val);
+                setShowValidationErrors(false);
+              }}
+            >
+              <SelectTrigger 
+                className={`h-12 bg-gray-50 rounded-xl focus:ring-brand-primary/20 pr-10 transition-all ${
+                  showValidationErrors && !locationId ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-100'
+                }`}
+              >
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-brand-primary" />
                   <SelectValue placeholder="Select location" />
@@ -134,7 +172,12 @@ export function SearchBar({ className = '' }: SearchBarProps) {
               <button 
                 onClick={() => {
                   setLocationId('');
-                  updateURL(categoryId, '', dateRange);
+                  // Instantly triggers error if the other is empty
+                  if (categoryId) {
+                    updateURL(categoryId, '', dateRange);
+                  } else {
+                    setLocationId('');
+                  }
                 }}
                 className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
               >
@@ -206,6 +249,11 @@ export function SearchBar({ className = '' }: SearchBarProps) {
           </Button>
         </div>
       </div>
+      {showValidationErrors && (
+        <p className="text-xs text-red-500 font-semibold mt-3 text-center">
+          To filter, both Equipment Category and Location must be selected. Leave both empty to see all listings.
+        </p>
+      )}
     </div>
   );
 }
