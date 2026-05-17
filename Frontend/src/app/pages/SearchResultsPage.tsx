@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { SearchBar } from '../components/SearchBar';
 import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Loader2 } from 'lucide-react';
 import { equipmentApi, Equipment } from '../../context/equipment.api';
@@ -13,6 +14,8 @@ type SortOption = 'price-asc' | 'price-desc' | 'rating-desc';
 export function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState<SortOption>('price-desc');
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -49,6 +52,27 @@ export function SearchResultsPage() {
   const sortedResults = useMemo(() => {
     let results = [...equipment];
 
+    // Apply client-side min/max price range filter
+    if (minPrice !== '') {
+      const minVal = parseFloat(minPrice);
+      if (!isNaN(minVal)) {
+        results = results.filter(item => {
+          const price = parseFloat(item.prices[0]?.price || '0');
+          return price >= minVal;
+        });
+      }
+    }
+
+    if (maxPrice !== '') {
+      const maxVal = parseFloat(maxPrice);
+      if (!isNaN(maxVal)) {
+        results = results.filter(item => {
+          const price = parseFloat(item.prices[0]?.price || '0');
+          return price <= maxVal;
+        });
+      }
+    }
+
     results.sort((a, b) => {
       const priceA = parseFloat(a.prices[0]?.price || '0');
       const priceB = parseFloat(b.prices[0]?.price || '0');
@@ -64,7 +88,7 @@ export function SearchResultsPage() {
     });
 
     return results;
-  }, [equipment, sortBy]);
+  }, [equipment, sortBy, minPrice, maxPrice]);
 
   return (
     <div className="min-h-screen bg-[#F8F9FC] overflow-x-hidden">
@@ -87,7 +111,32 @@ export function SearchResultsPage() {
                   </h1>
                 </div>
                 
-                <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto">
+                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                  <span className="text-xs md:text-sm font-bold text-gray-500 whitespace-nowrap">Price Range:</span>
+                  
+                  {/* Min Price Input */}
+                  <div className="w-[100px] sm:w-[120px]">
+                    <Input
+                      type="number"
+                      placeholder="Min £"
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm font-medium focus-visible:ring-brand-primary"
+                    />
+                  </div>
+
+                  {/* Max Price Input */}
+                  <div className="w-[100px] sm:w-[120px]">
+                    <Input
+                      type="number"
+                      placeholder="Max £"
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm font-medium focus-visible:ring-brand-primary"
+                    />
+                  </div>
+
+                  {/* Sort Select */}
                   <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                     <SelectTrigger className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm w-full md:w-48 font-medium">
                       <div className="flex items-center gap-2">
