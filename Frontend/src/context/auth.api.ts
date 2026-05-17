@@ -14,12 +14,26 @@ export const authApi = {
       }
     });
 
+    // Extract files if they exist
+    const avatarFile = (cleanedPayload as any).avatarFile;
+    const logoFile = (cleanedPayload as any).logoFile;
+    delete (cleanedPayload as any).avatarFile;
+    delete (cleanedPayload as any).logoFile;
+
+    // Set standard URL keys to null in JSON payload
+    (cleanedPayload as any).avatar_url = null;
+    (cleanedPayload as any).organization_logo = null;
+
     // Add the remaining payload as a JSON string
     formData.append('payload', JSON.stringify(cleanedPayload));
 
-    // Add files if they exist (though SignupRequest currently uses URLs/null, 
-    // we should check if SignupPage passes actual File objects in the future)
-    // For now, SignupPage doesn't seem to pass File objects for avatar/logo in signupData
+    // Add files if they exist
+    if (avatarFile) {
+      formData.append('avatar_url', avatarFile);
+    }
+    if (logoFile) {
+      formData.append('organization_logo', logoFile);
+    }
 
     const response = await fetch(`${API_URL}/signup/`, {
       method: 'POST',
