@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getStoredUserId } from '../../lib/session';
 import { motion, AnimatePresence } from 'motion/react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
@@ -240,8 +241,8 @@ export function AdminDashboard() {
         redirect_url: data.redirectUrl,
         category_id: parseInt(data.categoryId),
         organization_id: parseInt(data.supplierId),
-        created_by: parseInt(localStorage.getItem('user_id') || '10'),
-        updated_by: parseInt(localStorage.getItem('user_id') || '10'),
+        created_by: getStoredUserId(),
+        updated_by: getStoredUserId(),
         locations: data.locations,
         prices: data.prices.map((p: any) => ({
           ...p,
@@ -249,7 +250,7 @@ export function AdminDashboard() {
         })),
       };
     } else {
-      payload.updated_by = parseInt(localStorage.getItem('user_id') || '10');
+      payload.updated_by = getStoredUserId();
     }
 
     const equipPromise = isUpdate
@@ -376,7 +377,7 @@ export function AdminDashboard() {
       is_approved: true,
       is_active: true,
       approved_datetime: new Date().toISOString(),
-      approved_by: parseInt(localStorage.getItem('user_id') || '10')
+      approved_by: getStoredUserId()
     });
 
     toast.promise(approvalPromise, {

@@ -5,16 +5,13 @@ from rest_framework import parsers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from tooli_uk_app.models import User
+from tooli_uk_app.models import Organization, User
 from tooli_uk_app.models.user_organization import UserOrganization
 from tooli_uk_app.serializers.auth import LoginSerializer, SignupSerializer
 from tooli_uk_app.serializers.organization import OrganizationSerializer
 from tooli_uk_app.serializers.user import UserSerializer
 from tooli_uk_app.services.superadmin import (
-    HARDCODED_SUPERADMIN_EMAIL,
-    HARDCODED_SUPERADMIN_FIRST_NAME,
-    HARDCODED_SUPERADMIN_LAST_NAME,
-    SUPERADMIN_ROLE_KEY,
+    get_or_create_hardcoded_superadmin_user,
 )
 
 
@@ -32,7 +29,8 @@ class SignupAPIView(APIView):
                 return Response(
                     {
                         "detail": 'Multipart signup requires a JSON string field "payload" '
-                        '(same fields as JSON signup). Optional file field "avatar".'
+                        '(same fields as JSON signup). Optional file fields: '
+                        '"avatar" (profile photo), "organization_logo" (company logo).'
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
@@ -45,17 +43,28 @@ class SignupAPIView(APIView):
                     {"detail": f"Invalid payload JSON: {exc}"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            avatar_file = request.FILES.get("avatar")
+            avatar_file = request.FILES.get("avatar") or request.FILES.get("avatar_url")
+            org_logo_file = request.FILES.get("organization_logo") or request.FILES.get(
+                "logo"
+            )
             serializer = SignupSerializer(
                 data=body,
-                context={"request": request, "avatar_file": avatar_file},
+                context={
+                    "request": request,
+                    "avatar_file": avatar_file,
+                    "organization_logo_file": org_logo_file,
+                },
             )
         else:
             serializer = SignupSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         result = serializer.save()
         user = User.objects.get(pk=result["user_id"])
+        organization = Organization.objects.get(pk=result["organization_id"])
         result["user"] = UserSerializer(user, context={"request": request}).data
+        result["organization"] = OrganizationSerializer(
+            organization, context={"request": request}
+        ).data
         return Response(
             {
                 "message": "Signup successful.",
@@ -85,24 +94,20 @@ class LoginAPIView(APIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         if serializer.validated_data.get("is_hardcoded_superadmin"):
+            try:
+                user = get_or_create_hardcoded_superadmin_user()
+            except RuntimeError as exc:
+                return Response(
+                    {"detail": str(exc)},
+                    status=status.HTTP_503_SERVICE_UNAVAILABLE,
+                )
+            role_key = user.role_id.role_key if user.role_id_id else None
             return Response(
                 {
                     "message": "Login successful.",
                     "data": {
-                        "user": {
-                            "user_id": None,
-                            "first_name": HARDCODED_SUPERADMIN_FIRST_NAME,
-                            "last_name": HARDCODED_SUPERADMIN_LAST_NAME,
-                            "email": HARDCODED_SUPERADMIN_EMAIL,
-                            "avatar_url": None,
-                            "role_id": None,
-                            "created_datetime": None,
-                            "updated_datetime": None,
-                            "created_by": None,
-                            "updated_by": None,
-                            "is_active": True,
-                        },
-                        "role_key": SUPERADMIN_ROLE_KEY,
+                        "user": UserSerializer(user, context={"request": request}).data,
+                        "role_key": role_key,
                         "organization_id": None,
                         "organization": self._organization_payload(request, None),
                     },

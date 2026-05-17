@@ -95,12 +95,26 @@ class SignupSerializer(serializers.Serializer):
         user.updated_by_id = user.user_id
         user.save(update_fields=["created_by", "updated_by"])
 
+        from tooli_uk_app.services import gcs_images
+
         avatar_file = self.context.get("avatar_file")
         if avatar_file:
-            from tooli_uk_app.services import gcs_images
+            try:
+                user.avatar_url = gcs_images.upload_user_avatar(avatar_file, user.user_id)
+                user.save(update_fields=["avatar_url", "updated_datetime"])
+            except RuntimeError as exc:
+                raise serializers.ValidationError({"avatar": str(exc)}) from exc
 
-            user.avatar_url = gcs_images.upload_user_avatar(avatar_file, user.user_id)
-            user.save(update_fields=["avatar_url", "updated_datetime"])
+        org_logo_file = self.context.get("organization_logo_file")
+        if org_logo_file:
+            try:
+                organization.logo = gcs_images.upload_organization_logo(
+                    org_logo_file, organization.organization_id
+                )
+                organization.updated_datetime = now
+                organization.save(update_fields=["logo", "updated_datetime"])
+            except RuntimeError as exc:
+                raise serializers.ValidationError({"organization_logo": str(exc)}) from exc
 
         membership_role_id = resolved_role_id
         UserOrganization.objects.create(

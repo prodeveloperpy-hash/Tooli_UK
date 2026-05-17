@@ -13,6 +13,11 @@ from tooli_uk_app.models.location import Location
 from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.user import User
 from tooli_uk_app.services import gcs_images
+from tooli_uk_app.services.notifications import (
+    schedule_notify_equipment_approved,
+    schedule_notify_new_equipment_for_approval,
+)
+from tooli_uk_app.services.superadmin import should_auto_approve_equipment
 
 
 class CreateEquipmentLocationSerializer(serializers.Serializer):
@@ -84,6 +89,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     description = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     is_active = serializers.BooleanField(required=False, default=True)
+    is_approved = serializers.BooleanField(required=False)
     category_id = serializers.IntegerField(required=False, allow_null=True)
     organization_id = serializers.IntegerField(required=False, allow_null=True)
     created_by = serializers.IntegerField(required=False, allow_null=True)
@@ -171,14 +177,22 @@ class CreateEquipmentSerializer(serializers.Serializer):
         images_data = validated_data.pop("images", [])
         availabilities_data = validated_data.pop("availabilities", [])
 
+        created_by_id = validated_data.get("created_by")
+        updated_by_id = validated_data.get("updated_by")
+        auto_approve = should_auto_approve_equipment(
+            created_by_id=created_by_id,
+            updated_by_id=updated_by_id,
+        )
+
         equipment = Equipment.objects.create(
             name=validated_data["name"],
             description=validated_data.get("description"),
             is_active=validated_data.get("is_active", True),
+            is_approved=auto_approve,
             category_id_id=validated_data.get("category_id"),
             organization_id_id=validated_data.get("organization_id"),
-            created_by_id=validated_data.get("created_by"),
-            updated_by_id=validated_data.get("updated_by"),
+            created_by_id=created_by_id,
+            updated_by_id=updated_by_id,
             created_datetime=now,
             updated_datetime=now,
         )
@@ -195,6 +209,8 @@ class CreateEquipmentSerializer(serializers.Serializer):
         self._apply_images(equipment, images_data, now)
         self._apply_availabilities(equipment.equipment_id, availabilities_data, now)
 
+        if not auto_approve:
+            schedule_notify_new_equipment_for_approval(equipment.equipment_id)
         return equipment
 
     def _apply_prices(self, equipment_id: int, prices_data: list, now) -> None:
@@ -250,6 +266,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
     def update(self, instance: Equipment, validated_data):
         now = timezone.now()
         partial = self.partial
+        was_approved = bool(instance.is_approved)
 
         locations_data = self._extract_locations_payload(validated_data)
         prices_data = validated_data.pop("prices", None)
@@ -262,6 +279,10 @@ class CreateEquipmentSerializer(serializers.Serializer):
             instance.description = validated_data.get("description")
         if "is_active" in validated_data:
             instance.is_active = validated_data.get("is_active")
+        if "is_approved" in validated_data:
+            instance.is_approved = validated_data.get("is_approved")
+            if instance.is_approved:
+                instance.is_active = True
         if "category_id" in validated_data:
             instance.category_id_id = validated_data.get("category_id")
         if "organization_id" in validated_data:
@@ -301,4 +322,6 @@ class CreateEquipmentSerializer(serializers.Serializer):
 
         instance.updated_datetime = now
         instance.save()
+        if (not was_approved) and bool(instance.is_approved):
+            schedule_notify_equipment_approved(instance.equipment_id)
         return instance

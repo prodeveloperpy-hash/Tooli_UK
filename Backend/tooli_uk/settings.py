@@ -254,8 +254,26 @@ DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     EMAIL_HOST_USER or "noreply@tooli.uk",
 )
+EMAIL_BRAND_NAME = os.environ.get("EMAIL_BRAND_NAME", "Tooli UK").strip() or "Tooli UK"
+EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", EMAIL_BRAND_NAME).strip() or EMAIL_BRAND_NAME
+EMAIL_SUPPORT_ADDRESS = os.environ.get(
+    "EMAIL_SUPPORT_ADDRESS",
+    EMAIL_HOST_USER or "info@tooli.uk",
+).strip()
+SITE_URL = os.environ.get(
+    "SITE_URL",
+    "https://frontend-service-961815749151.us-central1.run.app",
+).strip()
 SUPPLIER_APPROVAL_URL = os.environ.get(
     "SUPPLIER_APPROVAL_URL",
+    "https://frontend-service-961815749151.us-central1.run.app/dashboard",
+)
+EQUIPMENT_APPROVAL_URL = os.environ.get(
+    "EQUIPMENT_APPROVAL_URL",
+    "https://frontend-service-961815749151.us-central1.run.app/dashboard",
+)
+SUPPLIER_DASHBOARD_URL = os.environ.get(
+    "SUPPLIER_DASHBOARD_URL",
     "https://frontend-service-961815749151.us-central1.run.app/dashboard",
 )
 
