@@ -280,6 +280,7 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                       e.stopPropagation(); 
                       equipment.redirect_url && window.open(equipment.redirect_url, '_blank'); 
                     }}
+                    disabled={!equipment.redirect_url}
                     size="sm"
                     className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold px-4 h-9 rounded-lg transition-all"
                   >
