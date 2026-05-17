@@ -377,6 +377,7 @@ export interface Category {
   category_key: string;
   category_display_name: string;
   is_active: boolean;
+  order_by?: number | null;
 }
 
 export interface Location {
@@ -385,4 +386,5 @@ export interface Location {
   country: string;
   state: string | null;
   is_active: boolean;
+  order_by?: number | null;
 }

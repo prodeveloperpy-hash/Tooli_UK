@@ -12,13 +12,15 @@ interface CategoryFormProps {
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
   category: Category | null;
+  maxOrder?: number;
 }
 
-export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFormProps) {
+export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1 }: CategoryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     category_key: '',
     category_display_name: '',
+    order_by: '',
     is_active: true,
   });
 
@@ -27,12 +29,14 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
       setFormData({
         category_key: category.category_key,
         category_display_name: category.category_display_name,
+        order_by: category.order_by?.toString() || '',
         is_active: category.is_active,
       });
     } else {
       setFormData({
         category_key: '',
         category_display_name: '',
+        order_by: '1',
         is_active: true,
       });
     }
@@ -40,9 +44,15 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const orderValue = Number(formData.order_by);
+    if (!orderValue || orderValue < 1 || orderValue > maxOrder) return;
+
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        order_by: orderValue,
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -64,6 +74,21 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category }: CategoryFo
         <div className="flex-1 overflow-y-auto p-5 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className="font-bold">Order</Label>
+              <Input
+                type="number"
+                min={1}
+                max={maxOrder}
+                value={formData.order_by}
+                onChange={e => setFormData({...formData, order_by: e.target.value})}
+                placeholder="e.g. 1"
+                required
+                className="h-12 rounded-xl"
+              />
+              <p className="text-[10px] text-gray-500 font-medium">Enter a number from 1 to {maxOrder}.</p>
+            </div>
+
             <div className="space-y-2">
               <Label className="font-bold flex items-center gap-2">
                 <Tag className="w-4 h-4" /> Category Name (Display)
