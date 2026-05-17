@@ -180,7 +180,7 @@ export function SignupPage() {
 
                       <div className="space-y-6">
                         <div className="grid md:grid-cols-1 gap-6">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-12">
+                          <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-4 sm:gap-12">
                             <div className="sm:w-2/3 max-w-[280px] w-full">
                               <div 
                                 className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 bg-white hover:bg-gray-50 transition-colors cursor-pointer group w-full" 
@@ -285,7 +285,7 @@ export function SignupPage() {
 
                       <div className="space-y-6">
                         <div className="grid md:grid-cols-1 gap-6">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-12">
+                          <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-4 sm:gap-12">
                             <div className="sm:w-2/3 max-w-[280px] w-full">
                               <div 
                                 className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500' : 'border-gray-200'} rounded-xl p-6 bg-white hover:bg-gray-50 transition-colors cursor-pointer group w-full`}

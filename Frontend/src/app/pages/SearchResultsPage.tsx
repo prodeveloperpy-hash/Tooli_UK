@@ -112,43 +112,41 @@ export function SearchResultsPage() {
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                  <span className="text-xs md:text-sm font-bold text-gray-500 whitespace-nowrap">Price Range:</span>
-                  
-                  {/* Min Price Input */}
-                  <div className="w-[100px] sm:w-[120px]">
-                    <Input
-                      type="number"
-                      placeholder="Min £"
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                      className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm font-medium focus-visible:ring-brand-primary"
-                    />
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+                    <span className="text-xs md:text-sm font-bold text-gray-500 whitespace-nowrap">Price Range:</span>
+                    <div className="flex items-center gap-2 flex-1 sm:flex-none">
+                      <Input
+                        type="number"
+                        placeholder="Min £"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm font-medium w-full sm:w-[90px] focus-visible:ring-brand-primary"
+                      />
+                      <span className="text-gray-300">-</span>
+                      <Input
+                        type="number"
+                        placeholder="Max £"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                        className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm font-medium w-full sm:w-[90px] focus-visible:ring-brand-primary"
+                      />
+                    </div>
                   </div>
 
-                  {/* Max Price Input */}
-                  <div className="w-[100px] sm:w-[120px]">
-                    <Input
-                      type="number"
-                      placeholder="Max £"
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                      className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm font-medium focus-visible:ring-brand-primary"
-                    />
+                  <div className="w-full sm:w-auto">
+                    <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+                      <SelectTrigger className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm w-full sm:w-48 font-medium">
+                        <div className="flex items-center gap-2">
+                          <span className="text-gray-400 font-normal">Sort:</span>
+                          <SelectValue />
+                        </div>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="price-desc">Price (High)</SelectItem>
+                        <SelectItem value="price-asc">Price (Low)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-
-                  {/* Sort Select */}
-                  <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                    <SelectTrigger className="h-9 md:h-10 bg-white border-gray-200 rounded-lg text-xs md:text-sm w-full md:w-48 font-medium">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-400 font-normal">Sort:</span>
-                        <SelectValue />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="price-desc">Price (High)</SelectItem>
-                      <SelectItem value="price-asc">Price (Low)</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </div>
 
