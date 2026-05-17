@@ -1,11 +1,10 @@
 import { motion } from 'motion/react';
 import { Button } from '../components/ui/button';
 import { Label } from '../components/ui/label';
-import { Input } from '../components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { CheckCircle, Search, BarChart3, MapPin, Calendar as CalendarIcon, ChevronRight, X } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '../components/ui/popover';
 import { Calendar } from '../components/ui/calendar';
+import { SearchableSelect } from '../components/ui/searchable-select';
 import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { useState, useEffect } from 'react';
@@ -79,21 +78,20 @@ export function HomePage() {
               <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1.5fr_1.5fr_auto] gap-2 md:gap-1 items-center">
                 <div className="px-4 md:px-5 py-3 border border-gray-100 md:border-0 md:border-r rounded-xl md:rounded-none relative group/field">
                   <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">What equipment do you need?</Label>
-                  <Select value={searchData.categoryId} onValueChange={(v) => setSearchData({...searchData, categoryId: v})}>
-                    <SelectTrigger className="h-10 md:h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8">
-                      <div className="flex items-center gap-2">
-                        <Search className="w-4 h-4 text-gray-400" />
-                        <SelectValue placeholder="e.g. Mini Excavator" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl border-gray-100 max-h-[300px]">
-                      {categories.map(cat => (
-                        <SelectItem key={cat.category_id} value={cat.category_id.toString()}>
-                          {cat.category_display_name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <SearchableSelect
+                    value={searchData.categoryId}
+                    onValueChange={(v) => setSearchData({...searchData, categoryId: v})}
+                    options={categories.map(cat => ({
+                      value: cat.category_id.toString(),
+                      label: cat.category_display_name,
+                    }))}
+                    placeholder="e.g. Mini Excavator"
+                    searchPlaceholder="Search equipment..."
+                    emptyText="No equipment found."
+                    icon={<Search className="w-4 h-4 text-gray-400" />}
+                    triggerClassName="h-10 md:h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent"
+                    contentClassName="rounded-xl border-gray-100"
+                  />
                   {searchData.categoryId && (
                     <button 
                       onClick={() => setSearchData({...searchData, categoryId: ''})}
@@ -106,21 +104,20 @@ export function HomePage() {
 
                 <div className="px-4 md:px-5 py-3 border border-gray-100 md:border-0 md:border-r rounded-xl md:rounded-none relative group/field">
                   <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Location</Label>
-                  <Select value={searchData.locationId} onValueChange={(v) => setSearchData({...searchData, locationId: v})}>
-                    <SelectTrigger className="h-10 md:h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8">
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-gray-400" />
-                        <SelectValue placeholder="Select Location" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl border-gray-100 max-h-[300px]">
-                      {locations.map(loc => (
-                        <SelectItem key={loc.location_id} value={loc.location_id.toString()}>
-                          {loc.city_name}, {loc.country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <SearchableSelect
+                    value={searchData.locationId}
+                    onValueChange={(v) => setSearchData({...searchData, locationId: v})}
+                    options={locations.map(loc => ({
+                      value: loc.location_id.toString(),
+                      label: `${loc.city_name}, ${loc.country}`,
+                    }))}
+                    placeholder="Select Location"
+                    searchPlaceholder="Search locations..."
+                    emptyText="No locations found."
+                    icon={<MapPin className="w-4 h-4 text-gray-400" />}
+                    triggerClassName="h-10 md:h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent"
+                    contentClassName="rounded-xl border-gray-100"
+                  />
                   {searchData.locationId && (
                     <button 
                       onClick={() => setSearchData({...searchData, locationId: ''})}

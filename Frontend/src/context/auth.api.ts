@@ -39,20 +39,33 @@ export const authApi = {
       }
     });
 
+
+    // Extract files if they exist
+    const avatarFile = (cleanedPayload as any).avatarFile;
+    const logoFile = (cleanedPayload as any).logoFile;
+    delete (cleanedPayload as any).avatarFile;
+    delete (cleanedPayload as any).logoFile;
+
+    // Set standard URL keys to null in JSON payload
+    (cleanedPayload as any).avatar_url = null;
+    (cleanedPayload as any).organization_logo = null;
+
+    // Add the remaining payload as a JSON string
     formData.append('payload', JSON.stringify(cleanedPayload));
 
-    let response: Response;
-    try {
-      response = await fetch(`${API_URL}/signup/`, {
-        method: 'POST',
-        body: formData,
-      });
-    } catch (err) {
-      if (isNetworkError(err)) {
-        throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
-      }
-      throw err;
+    // Add files if they exist
+    if (avatarFile) {
+      formData.append('avatar_url', avatarFile);
     }
+    if (logoFile) {
+      formData.append('organization_logo', logoFile);
+    }
+
+    const response = await fetch(`${API_URL}/signup/`, {
+      method: 'POST',
+      body: formData,
+    });
+
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

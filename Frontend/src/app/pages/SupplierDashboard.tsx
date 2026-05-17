@@ -5,6 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Label } from '../components/ui/label';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import {
   Table,
   TableBody,
@@ -64,6 +65,14 @@ export function SupplierDashboard() {
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState<string>('all');
+  const [isCompanyDialogOpen, setIsCompanyDialogOpen] = useState(false);
+  const [isCompanyLoading, setIsCompanyLoading] = useState(false);
+  const [isCompanySaving, setIsCompanySaving] = useState(false);
+  const [companyForm, setCompanyForm] = useState({
+    name: '',
+    domain: '',
+    city: '',
+  });
 
   useEffect(() => {
     fetchStaticData();
@@ -158,11 +167,14 @@ export function SupplierDashboard() {
 
     const fetchUserData = async () => {
       try {
-        const orgs = await userApi.getUserOrganizations();
+        const userId = localStorage.getItem('user_id');
+        if (!userId) return;
+
+        const orgs = await userApi.getUserOrganizationsByUserId(parseInt(userId));
+        const apiOrg = getFirstUserOrganization(orgs);
         // If the API returns data, we can update, but the login data is our primary source
         // for name and organization as per user request.
-        if (orgs.length > 0) {
-          const apiOrg = orgs[0];
+        if (apiOrg) {
           // Only update if the API data seems "real" (optional check)
           // For now, let's keep the login data as priority if it exists
           if (!cachedData) {
@@ -173,6 +185,7 @@ export function SupplierDashboard() {
               org_name: apiOrg.organization_details.name,
             });
           }
+          localStorage.setItem('user_organization_id', apiOrg.user_organization_id.toString());
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -218,6 +231,89 @@ export function SupplierDashboard() {
       toast.error(error.message || 'Failed to update profile');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const getFirstUserOrganization = (data: any): UserOrganization | null => {
+    if (Array.isArray(data)) return data[0] || null;
+    if (Array.isArray(data?.results)) return data.results[0] || null;
+    return data || null;
+  };
+
+  const handleOpenCompanyEdit = async () => {
+    const userId = localStorage.getItem('user_id') || userData?.user_id?.toString();
+    if (!userId) {
+      toast.error('User ID not found');
+      return;
+    }
+
+    setIsCompanyDialogOpen(true);
+    setIsCompanyLoading(true);
+    try {
+      const response = await userApi.getUserOrganizationsByUserId(parseInt(userId));
+      const latestUserOrg = getFirstUserOrganization(response);
+      if (!latestUserOrg) throw new Error('Company details not found');
+
+      setUserData(latestUserOrg);
+      localStorage.setItem('user_organization_id', latestUserOrg.user_organization_id.toString());
+      setCompanyForm({
+        name: latestUserOrg.organization_details?.name || '',
+        domain: latestUserOrg.organization_details?.domain || '',
+        city: latestUserOrg.organization_details?.city || '',
+      });
+    } catch (error: any) {
+      console.error('Error fetching company details:', error);
+      toast.error(error.message || 'Failed to load company details');
+      setIsCompanyDialogOpen(false);
+    } finally {
+      setIsCompanyLoading(false);
+    }
+  };
+
+  const handleUpdateCompany = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userData?.user_organization_id) {
+      toast.error('User organization ID not found');
+      return;
+    }
+
+    setIsCompanySaving(true);
+    try {
+      const updated = await userApi.updateUserOrganization(userData.user_organization_id, {
+        organization: {
+          name: companyForm.name.trim(),
+          domain: companyForm.domain.trim(),
+          city: companyForm.city.trim(),
+        },
+      });
+
+      setUserData(updated);
+      const cachedData = localStorage.getItem('user_data');
+      if (cachedData) {
+        try {
+          const parsed = JSON.parse(cachedData);
+          localStorage.setItem('user_data', JSON.stringify({
+            ...parsed,
+            organization: {
+              ...(parsed.organization || {}),
+              name: updated.organization_details?.name || companyForm.name.trim(),
+              domain: updated.organization_details?.domain || companyForm.domain.trim(),
+              city: updated.organization_details?.city || companyForm.city.trim(),
+            },
+            organization_name: updated.organization_details?.name || companyForm.name.trim(),
+          }));
+        } catch (cacheError) {
+          console.error('Error updating cached company data:', cacheError);
+        }
+      }
+
+      toast.success('Company details updated');
+      setIsCompanyDialogOpen(false);
+    } catch (error: any) {
+      console.error('Error updating company details:', error);
+      toast.error(error.message || 'Failed to update company details');
+    } finally {
+      setIsCompanySaving(false);
     }
   };
 
@@ -325,6 +421,16 @@ export function SupplierDashboard() {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-black/5 rounded-full blur-2xl -ml-24 -mb-24" />
           
           <div className="container mx-auto px-4 py-16 relative z-10">
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              onClick={handleOpenCompanyEdit}
+              className="absolute right-4 top-4 h-11 w-11 rounded-xl bg-white/15 text-white hover:bg-white hover:text-brand-primary backdrop-blur-md"
+              title="Edit company details"
+            >
+              <Edit className="w-5 h-5" />
+            </Button>
             <div className="flex flex-col md:flex-row items-center gap-10">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -600,6 +706,80 @@ export function SupplierDashboard() {
         title="Delete Equipment"
         description={`Are you sure you want to delete ${selectedEquipment?.name}? This action will remove the listing from the marketplace.`}
       />
+
+      <Dialog open={isCompanyDialogOpen} onOpenChange={setIsCompanyDialogOpen}>
+        <DialogContent className="max-w-[500px] p-0">
+          <form onSubmit={handleUpdateCompany}>
+            <DialogHeader className="p-6 sm:p-8 border-b bg-gray-50 pr-14">
+              <DialogTitle className="text-2xl font-black text-gray-900">Company Details</DialogTitle>
+              <DialogDescription className="text-xs font-bold uppercase tracking-widest text-gray-500">
+                Update your supplier company information
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="p-6 sm:p-8 space-y-5 relative">
+              {isCompanyLoading && (
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-10 flex items-center justify-center">
+                  <Loader2 className="w-8 h-8 text-brand-primary animate-spin" />
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="company-name" className="font-bold">Company Name</Label>
+                <Input
+                  id="company-name"
+                  value={companyForm.name}
+                  onChange={(e) => setCompanyForm(prev => ({ ...prev, name: e.target.value }))}
+                  className="h-12 rounded-xl"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="company-domain" className="font-bold">Domain</Label>
+                <Input
+                  id="company-domain"
+                  value={companyForm.domain}
+                  onChange={(e) => setCompanyForm(prev => ({ ...prev, domain: e.target.value }))}
+                  className="h-12 rounded-xl"
+                  placeholder="example.com"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="company-city" className="font-bold">City</Label>
+                <Input
+                  id="company-city"
+                  value={companyForm.city}
+                  onChange={(e) => setCompanyForm(prev => ({ ...prev, city: e.target.value }))}
+                  className="h-12 rounded-xl"
+                  required
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="p-6 sm:p-8 border-t bg-gray-50 gap-3">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setIsCompanyDialogOpen(false)}
+                disabled={isCompanySaving}
+                className="font-black uppercase tracking-widest text-xs"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isCompanySaving || isCompanyLoading}
+                className="bg-[#030213] hover:bg-black text-white font-black uppercase tracking-widest text-xs h-11 px-6"
+              >
+                {isCompanySaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save Details'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>

@@ -13,6 +13,7 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isApprovalRequired, setIsApprovalRequired] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(location.state?.message || null);
 
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ export function LoginPage() {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
+    setIsApprovalRequired(false);
     setIsLoading(true);
 
     try {
@@ -57,14 +59,51 @@ export function LoginPage() {
         navigate('/');
       }
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      const errMsg = err.message || '';
+      if (
+        errMsg.toLowerCase().includes('approval') || 
+        errMsg.toLowerCase().includes('approved') || 
+        errMsg.toLowerCase().includes('pending')
+      ) {
+        setIsApprovalRequired(true);
+      } else {
+        setError(errMsg || 'Login failed');
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#F8F9FC] py-12 px-4">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[#F8F9FC] py-12 px-4 relative">
+      {isApprovalRequired && (
+        <div className="fixed inset-0 bg-[#030213]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex flex-col items-center text-center">
+              <div className="h-16 w-16 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 mb-6">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              
+              <h3 className="text-xl font-extrabold text-gray-900 mb-3">Account Under Review</h3>
+              
+              <div className="text-sm text-gray-600 font-medium space-y-3 mb-8 leading-relaxed">
+                <p className="font-bold text-gray-800 text-left w-full">Dear Supplier,</p>
+                <p className="text-left w-full">Your account is under review. Our team will approve your listing shortly — usually within 24 hours. We'll email you once it's live.</p>
+              </div>
+
+              <Button 
+                onClick={() => setIsApprovalRequired(false)}
+                className="w-full h-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-2xl transition-all"
+              >
+                Got it, thank you!
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mb-12">
         <Link to="/">
           <img src="/images/logo.png" alt="Tooli.uk" className="h-16 w-auto" />

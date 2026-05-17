@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { SearchableSelect } from './ui/searchable-select';
 import { Package, MapPin, PoundSterling, Plus, Loader2, X } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
@@ -27,6 +28,8 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
   const [locations, setLocations] = useState<Location[]>([]);
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [redirectUrlError, setRedirectUrlError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
 
   const [formData, setFormData] = useState({
     name: '',
@@ -75,6 +78,8 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
 
   useEffect(() => {
     if (!isOpen) return;
+    setRedirectUrlError('');
+    setFieldErrors({});
     if (equipment) {
       setFormData({
         name: equipment.name || '',
@@ -111,8 +116,38 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
     setFormData({ ...formData, prices: newPrices });
   };
 
+  const isValidRedirectUrl = (url: string) => {
+    if (!url.trim()) return true;
+    try {
+      const parsedUrl = new URL(url);
+      return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedRedirectUrl = formData.redirectUrl.trim();
+    const nextFieldErrors: { [key: string]: string } = {};
+
+    if (!formData.supplierId) nextFieldErrors.supplierId = 'Please select a supplier';
+    if (!formData.categoryId) nextFieldErrors.categoryId = 'Please select a category';
+    if (formData.locationIds.length === 0) nextFieldErrors.locationIds = 'Please select at least one service location';
+    if (!trimmedRedirectUrl) nextFieldErrors.redirectUrl = 'Please enter a redirect URL';
+
+    if (!isValidRedirectUrl(trimmedRedirectUrl)) {
+      setRedirectUrlError('Enter a valid URL starting with http:// or https://');
+      nextFieldErrors.redirectUrl = 'Enter a valid URL starting with http:// or https://';
+    }
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors);
+      return;
+    }
+
+    setFieldErrors({});
+    setRedirectUrlError('');
     setIsSubmitting(true);
     try {
       if (equipment) {
@@ -123,7 +158,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
         if (formData.isActive !== equipment.is_active) delta.is_active = formData.isActive;
         if (formData.categoryId !== equipment.category_id.toString()) delta.category_id = parseInt(formData.categoryId);
         if (formData.supplierId !== equipment.organization_id.toString()) delta.organization_id = parseInt(formData.supplierId);
-        if (formData.redirectUrl !== (equipment as any).redirect_url) delta.redirect_url = formData.redirectUrl;
+        if (trimmedRedirectUrl !== ((equipment as any).redirect_url || '')) delta.redirect_url = trimmedRedirectUrl;
         
         // Handle locations change
         const currentLocationIds = equipment.locations?.map(l => l.location_id.toString()) || [];
@@ -148,6 +183,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
       } else {
         await onSubmit({
           ...formData,
+          redirectUrl: trimmedRedirectUrl,
           isActive: formData.isActive ?? true,
           locations: formData.locationIds.map(id => ({
             location_id: parseInt(id),
@@ -190,11 +226,11 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label className="font-bold">Equipment Name</Label>
-                  <Input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="e.g. Heavy duty drill kit" required className="h-12 rounded-xl" />
+                  <Input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Equipment name" required className="h-12 rounded-xl" />
                 </div>
                 <div className="space-y-2">
                   <Label className="font-bold">Description</Label>
-                  <Textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Includes two batteries and charger." className="min-h-[100px] rounded-xl" required />
+                  <Textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Description..." className="min-h-[100px] rounded-xl" required />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -204,34 +240,42 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                         {fixedSupplierName || 'Current Supplier'}
                       </div>
                     ) : (
-                      <Select value={formData.supplierId} onValueChange={v => setFormData({...formData, supplierId: v})}>
-                        <SelectTrigger className="h-12 rounded-xl">
-                          <SelectValue placeholder="Select Supplier" />
-                        </SelectTrigger>
-                        <SelectContent className="z-[10010]">
-                          {suppliers.map(s => (
-                            <SelectItem key={s.user_organization_id} value={(s.organization_id || s.user_organization_id || '0').toString()}>
-                              {s.organization_details.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <SearchableSelect
+                        value={formData.supplierId}
+                        onValueChange={v => {
+                          setFormData({...formData, supplierId: v});
+                          setFieldErrors(prev => ({ ...prev, supplierId: '' }));
+                        }}
+                        options={suppliers.map(s => ({
+                          value: (s.organization_id || s.user_organization_id || '0').toString(),
+                          label: s.organization_details.name,
+                        }))}
+                        placeholder="Select Supplier"
+                        searchPlaceholder="Search suppliers..."
+                        emptyText="No suppliers found."
+                        triggerClassName={`h-12 rounded-xl ${fieldErrors.supplierId ? 'border-red-500' : ''}`}
+                      />
                     )}
+                    {fieldErrors.supplierId && <p className="text-xs font-bold text-red-500">{fieldErrors.supplierId}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label className="font-bold">Category</Label>
-                    <Select value={formData.categoryId} onValueChange={v => setFormData({...formData, categoryId: v})}>
-                      <SelectTrigger className="h-12 rounded-xl">
-                        <SelectValue placeholder="Select Category" />
-                      </SelectTrigger>
-                      <SelectContent className="max-h-[300px]">
-                        {categories.map(cat => (
-                          <SelectItem key={cat.category_id} value={(cat.category_id || '0').toString()}>
-                            {cat.category_display_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <SearchableSelect
+                      value={formData.categoryId}
+                      onValueChange={v => {
+                        setFormData({...formData, categoryId: v});
+                        setFieldErrors(prev => ({ ...prev, categoryId: '' }));
+                      }}
+                      options={categories.map(cat => ({
+                        value: (cat.category_id || '0').toString(),
+                        label: cat.category_display_name,
+                      }))}
+                      placeholder="Select Category"
+                      searchPlaceholder="Search categories..."
+                      emptyText="No categories found."
+                      triggerClassName={`h-12 rounded-xl ${fieldErrors.categoryId ? 'border-red-500' : ''}`}
+                    />
+                    {fieldErrors.categoryId && <p className="text-xs font-bold text-red-500">{fieldErrors.categoryId}</p>}
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -250,10 +294,17 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                   <Label className="font-bold">External Redirect URL</Label>
                   <Input 
                     value={formData.redirectUrl} 
-                    onChange={e => setFormData({...formData, redirectUrl: e.target.value})} 
+                    onChange={e => {
+                      const nextUrl = e.target.value;
+                      setFormData({...formData, redirectUrl: nextUrl});
+                      setFieldErrors(prev => ({ ...prev, redirectUrl: '' }));
+                      if (!nextUrl || isValidRedirectUrl(nextUrl)) setRedirectUrlError('');
+                    }} 
                     placeholder="https://example.com/product" 
-                    className="h-12 rounded-xl" 
+                    className={`h-12 rounded-xl ${(redirectUrlError || fieldErrors.redirectUrl) ? 'border-red-500 focus-visible:ring-red-500' : ''}`} 
+                    required
                   />
+                  {(redirectUrlError || fieldErrors.redirectUrl) && <p className="text-xs font-bold text-red-500">{redirectUrlError || fieldErrors.redirectUrl}</p>}
                   <p className="text-[10px] text-muted-foreground font-medium">Link users directly to your external booking or detail page.</p>
                 </div>
               </div>
@@ -286,18 +337,24 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                     );
                   })}
                 </div>
-                <Select onValueChange={v => { if(!formData.locationIds.includes(v)) setFormData(prev => ({ ...prev, locationIds: [...prev.locationIds, v] })) }}>
-                  <SelectTrigger className="h-12 rounded-xl bg-white">
-                    <SelectValue placeholder="Add Service Location..." />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[300px]">
-                    {locations.map(loc => (
-                      <SelectItem key={loc.location_id} value={(loc.location_id || '0').toString()}>
-                        {loc.city_name}, {loc.country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SearchableSelect
+                  value=""
+                  onValueChange={v => {
+                    if(!formData.locationIds.includes(v)) {
+                      setFormData(prev => ({ ...prev, locationIds: [...prev.locationIds, v] }));
+                      setFieldErrors(prev => ({ ...prev, locationIds: '' }));
+                    }
+                  }}
+                  options={locations.map(loc => ({
+                    value: (loc.location_id || '0').toString(),
+                    label: `${loc.city_name}, ${loc.country}`,
+                  }))}
+                  placeholder="Add Service Location..."
+                  searchPlaceholder="Search locations..."
+                  emptyText="No locations found."
+                  triggerClassName={`h-12 rounded-xl bg-white ${fieldErrors.locationIds ? 'border-red-500' : ''}`}
+                />
+                {fieldErrors.locationIds && <p className="text-xs font-bold text-red-500 px-1">{fieldErrors.locationIds}</p>}
                 <p className="text-[10px] text-muted-foreground font-medium px-1">Select all cities where this equipment is available for hire.</p>
               </div>
             </section>
