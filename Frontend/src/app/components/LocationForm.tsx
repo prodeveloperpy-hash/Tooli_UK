@@ -12,14 +12,16 @@ interface LocationFormProps {
   onClose: () => void;
   onSubmit: (data: any) => Promise<void>;
   location: Location | null;
+  maxOrder?: number;
 }
 
-export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFormProps) {
+export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1 }: LocationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     city_name: '',
     country: 'United Kingdom',
     state: '',
+    order_by: '',
     is_active: true,
   });
 
@@ -29,6 +31,7 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
         city_name: location.city_name,
         country: location.country,
         state: location.state || '',
+        order_by: location.order_by?.toString() || '',
         is_active: location.is_active,
       });
     } else {
@@ -36,6 +39,7 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
         city_name: '',
         country: 'United Kingdom',
         state: '',
+        order_by: '1',
         is_active: true,
       });
     }
@@ -43,9 +47,15 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const orderValue = Number(formData.order_by);
+    if (!orderValue || orderValue < 1 || orderValue > maxOrder) return;
+
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        order_by: orderValue,
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -67,6 +77,21 @@ export function LocationForm({ isOpen, onClose, onSubmit, location }: LocationFo
         <div className="flex-1 overflow-y-auto p-5 sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
+            <div className="space-y-2">
+              <Label className="font-bold">Order</Label>
+              <Input
+                type="number"
+                min={1}
+                max={maxOrder}
+                value={formData.order_by}
+                onChange={e => setFormData({...formData, order_by: e.target.value})}
+                placeholder="e.g. 1"
+                required
+                className="h-12 rounded-xl"
+              />
+              <p className="text-[10px] text-gray-500 font-medium">Enter a number from 1 to {maxOrder}.</p>
+            </div>
+
             <div className="space-y-2">
               <Label className="font-bold flex items-center gap-2">
                 <MapPin className="w-4 h-4" /> City Name

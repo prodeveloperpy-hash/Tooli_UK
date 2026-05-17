@@ -268,11 +268,19 @@ export function SuperAdminDashboard() {
     }
   };
 
+  const sortByOrder = <T extends { order_by?: number | null }>(items: T[]) => {
+    return [...items].sort((a, b) => {
+      const orderA = a.order_by ?? Number.MAX_SAFE_INTEGER;
+      const orderB = b.order_by ?? Number.MAX_SAFE_INTEGER;
+      return orderA - orderB;
+    });
+  };
+
   const fetchCategories = async () => {
     try {
       const data = await equipmentApi.getCategories(categoryPage, 50);
       const list = Array.isArray(data) ? data : data.results || [];
-      setCategories(list);
+      setCategories(sortByOrder(list));
       setTotalCategoryCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -283,7 +291,7 @@ export function SuperAdminDashboard() {
     try {
       const data = await equipmentApi.getLocations(locationPage, 50);
       const list = Array.isArray(data) ? data : data.results || [];
-      setLocations(list);
+      setLocations(sortByOrder(list));
       setTotalLocationCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching locations:', error);
@@ -1386,6 +1394,7 @@ export function SuperAdminDashboard() {
                     <Table>
                       <TableHeader className="bg-gray-50/50">
                         <TableRow className="hover:bg-transparent border-none">
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[90px]">Order</TableHead>
                           <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[250px]">Display Name</TableHead>
                           <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[200px]">Technical Key</TableHead>
                           <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[120px]">Status</TableHead>
@@ -1395,6 +1404,7 @@ export function SuperAdminDashboard() {
                       <TableBody>
                         {categories.map((cat) => (
                           <TableRow key={cat.category_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4 font-black text-gray-900">{cat.order_by ?? '-'}</TableCell>
                             <TableCell className="py-4 font-bold text-gray-900">{cat.category_display_name}</TableCell>
                             <TableCell className="font-mono text-xs text-muted-foreground uppercase">{cat.category_key}</TableCell>
                             <TableCell>
@@ -1466,6 +1476,7 @@ export function SuperAdminDashboard() {
                     <Table>
                       <TableHeader className="bg-gray-50/50">
                         <TableRow className="hover:bg-transparent border-none">
+                          <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[90px]">Order</TableHead>
                           <TableHead className="font-black uppercase tracking-widest text-[10px] py-5 min-w-[200px]">City Name</TableHead>
                           <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[180px]">Country</TableHead>
                           <TableHead className="font-black uppercase tracking-widest text-[10px] min-w-[180px]">State/County</TableHead>
@@ -1476,6 +1487,7 @@ export function SuperAdminDashboard() {
                       <TableBody>
                         {locations.map((loc) => (
                           <TableRow key={loc.location_id} className="hover:bg-gray-50/50 transition-colors">
+                            <TableCell className="py-4 font-black text-gray-900">{loc.order_by ?? '-'}</TableCell>
                             <TableCell className="py-4 font-bold text-gray-900">{loc.city_name}</TableCell>
                             <TableCell className="text-sm text-muted-foreground">{loc.country}</TableCell>
                             <TableCell className="text-sm text-muted-foreground">{loc.state || '-'}</TableCell>
@@ -1582,6 +1594,7 @@ export function SuperAdminDashboard() {
         onClose={() => setIsCategoryFormOpen(false)}
         onSubmit={handleCategorySubmit}
         category={selectedCategory}
+        maxOrder={Math.max(totalCategoryCount, 1)}
       />
 
       <AdminForm
@@ -1613,6 +1626,7 @@ export function SuperAdminDashboard() {
         onClose={() => setIsLocationFormOpen(false)}
         onSubmit={handleLocationSubmit}
         location={selectedLocation}
+        maxOrder={Math.max(totalLocationCount, 1)}
       />
 
       <DeleteConfirmation
