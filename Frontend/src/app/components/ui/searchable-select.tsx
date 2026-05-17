@@ -70,10 +70,19 @@ export function SearchableSelect({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className={cn('w-[var(--radix-popover-trigger-width)] p-0', contentClassName)} align="start">
-        <Command>
+      <PopoverContent
+        className={cn('w-[var(--radix-popover-trigger-width)] p-0 overflow-hidden', contentClassName)}
+        align="start"
+        onWheelCapture={(event) => event.stopPropagation()}
+        onTouchMoveCapture={(event) => event.stopPropagation()}
+      >
+        <Command className="max-h-[320px]">
           <CommandInput placeholder={searchPlaceholder} />
-          <CommandList>
+          <CommandList
+            className="max-h-[260px] overflow-y-auto overscroll-contain"
+            onWheelCapture={(event) => event.stopPropagation()}
+            onTouchMoveCapture={(event) => event.stopPropagation()}
+          >
             <CommandEmpty>{emptyText}</CommandEmpty>
             <CommandGroup>
               {options.map(option => (
