@@ -14,6 +14,7 @@ from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.user import User
 from tooli_uk_app.services import gcs_images
 from tooli_uk_app.services.notifications import schedule_notify_new_equipment_for_approval
+from tooli_uk_app.services.superadmin import should_auto_approve_equipment
 
 
 class CreateEquipmentLocationSerializer(serializers.Serializer):
@@ -172,15 +173,22 @@ class CreateEquipmentSerializer(serializers.Serializer):
         images_data = validated_data.pop("images", [])
         availabilities_data = validated_data.pop("availabilities", [])
 
+        created_by_id = validated_data.get("created_by")
+        updated_by_id = validated_data.get("updated_by")
+        auto_approve = should_auto_approve_equipment(
+            created_by_id=created_by_id,
+            updated_by_id=updated_by_id,
+        )
+
         equipment = Equipment.objects.create(
             name=validated_data["name"],
             description=validated_data.get("description"),
             is_active=validated_data.get("is_active", True),
-            is_approved=False,
+            is_approved=auto_approve,
             category_id_id=validated_data.get("category_id"),
             organization_id_id=validated_data.get("organization_id"),
-            created_by_id=validated_data.get("created_by"),
-            updated_by_id=validated_data.get("updated_by"),
+            created_by_id=created_by_id,
+            updated_by_id=updated_by_id,
             created_datetime=now,
             updated_datetime=now,
         )
@@ -197,7 +205,8 @@ class CreateEquipmentSerializer(serializers.Serializer):
         self._apply_images(equipment, images_data, now)
         self._apply_availabilities(equipment.equipment_id, availabilities_data, now)
 
-        schedule_notify_new_equipment_for_approval(equipment.equipment_id)
+        if not auto_approve:
+            schedule_notify_new_equipment_for_approval(equipment.equipment_id)
         return equipment
 
     def _apply_prices(self, equipment_id: int, prices_data: list, now) -> None:

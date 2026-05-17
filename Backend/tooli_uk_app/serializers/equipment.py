@@ -12,6 +12,7 @@ from tooli_uk_app.serializers.equipment_location import EquipmentLocationSeriali
 from tooli_uk_app.serializers.equipment_price import EquipmentPriceSerializer
 from tooli_uk_app.services import gcs_images
 from tooli_uk_app.services.notifications import schedule_notify_new_equipment_for_approval
+from tooli_uk_app.services.superadmin import should_auto_approve_equipment
 
 
 class EquipmentSerializer(serializers.ModelSerializer):
@@ -128,17 +129,27 @@ class EquipmentMutateSerializer(serializers.ModelSerializer):
         now = timezone.now()
         images_data = list(validated_data.pop("images", []) or [])
         image_files = self.context.get("image_files") or []
+        created_by = validated_data.get("created_by")
+        created_by_id = getattr(created_by, "pk", created_by)
+        updated_by = validated_data.get("updated_by")
+        updated_by_id = getattr(updated_by, "pk", updated_by)
+        auto_approve = should_auto_approve_equipment(
+            created_by_id=created_by_id,
+            updated_by_id=updated_by_id,
+        )
+
         equipment = super().create(validated_data)
         if not equipment.created_datetime:
             equipment.created_datetime = now
         equipment.updated_datetime = now
-        equipment.is_approved = False
+        equipment.is_approved = auto_approve
         equipment.save(
             update_fields=["created_datetime", "updated_datetime", "is_approved"]
         )
         if images_data or image_files:
             self._save_images(equipment, images_data, image_files)
-        schedule_notify_new_equipment_for_approval(equipment.equipment_id)
+        if not auto_approve:
+            schedule_notify_new_equipment_for_approval(equipment.equipment_id)
         return equipment
 
     @transaction.atomic

@@ -41,12 +41,15 @@ export function LoginPage() {
       }
 
       const { user, role_key, organization_id } = response.data;
-      const normalizedUserId = user?.user_id ?? 10;
       const normalizedFirstName = user?.first_name || 'Super';
       const normalizedLastName = user?.last_name || 'Admin';
       const normalizedEmail = user?.email || formData.email;
       localStorage.setItem('user_data', JSON.stringify(response.data));
-      localStorage.setItem('user_id', String(normalizedUserId));
+      if (user?.user_id != null) {
+        localStorage.setItem('user_id', String(user.user_id));
+      } else {
+        localStorage.removeItem('user_id');
+      }
       localStorage.setItem('name', `${normalizedFirstName} ${normalizedLastName}`.trim());
       localStorage.setItem('email', normalizedEmail);
       localStorage.setItem('role_key', role_key);
