@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -17,6 +17,7 @@ export function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLocationLoading, setIsLocationLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const [currentStep, setCurrentStep] = useState(1);
   const [locations, setLocations] = useState<Location[]>([]);
 
@@ -53,15 +54,37 @@ export function SignupPage() {
     fetchLocations();
   }, []);
 
+  const validateField = (id: string, value: string) => {
+    let err = '';
+    if (id === 'domain') {
+      const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+      if (value && !domainRegex.test(value)) {
+        err = 'Please enter a valid domain (e.g., example.com or tooli.uk)';
+      }
+    } else if (id === 'confirmPassword' || id === 'password') {
+      const pass = id === 'password' ? value : formData.password;
+      const confirm = id === 'confirmPassword' ? value : formData.confirmPassword;
+      if (pass && confirm && pass !== confirm) {
+        setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
+        return;
+      } else {
+        setFieldErrors(prev => ({ ...prev, confirmPassword: '' }));
+        return;
+      }
+    }
+    setFieldErrors(prev => ({ ...prev, [id]: err }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
+    validateField(id, value);
   };
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords don't match");
+      setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
       return;
     }
     setError(null);
@@ -71,15 +94,25 @@ export function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    let hasError = false;
+
+    const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+    if (!domainRegex.test(formData.domain)) {
+      setFieldErrors(prev => ({ ...prev, domain: 'Please enter a valid domain (e.g., example.com or tooli.uk)' }));
+      hasError = true;
+    }
+
     if (!formData.logoFile && !formData.logoUrl) {
-      setError('Please upload a company logo');
-      return;
+      setFieldErrors(prev => ({ ...prev, logo: 'Please upload a company logo' }));
+      hasError = true;
     }
 
     if (!formData.locationId) {
-      setError('Please select a city');
-      return;
+      setFieldErrors(prev => ({ ...prev, locationId: 'Please select a city' }));
+      hasError = true;
     }
+
+    if (hasError) return;
 
     setError(null);
     setIsLoading(true);
@@ -108,6 +141,7 @@ export function SignupPage() {
       navigate('/login', { state: { message: 'Account created and sent for approval to superadmin' } });
     } catch (err: any) {
       setError(err.message || 'Something went wrong during signup');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setIsLoading(false);
     }
@@ -172,10 +206,12 @@ export function SignupPage() {
                                   if (file) {
                                     const url = URL.createObjectURL(file);
                                     setFormData({...formData, avatarUrl: url, avatarFile: file});
+                                    setFieldErrors(prev => ({...prev, avatar: ''}));
                                   }
                                 }}
                               />
                             </div>
+                            {fieldErrors.avatar && <p className="text-xs text-red-500">{fieldErrors.avatar}</p>}
                           </div>
                         </div>
 
@@ -183,16 +219,19 @@ export function SignupPage() {
                           <div className="space-y-2">
                             <Label htmlFor="firstName" className="text-sm font-bold text-gray-900">First Name <span className="text-orange-500">*</span></Label>
                             <Input id="firstName" placeholder="First name" value={formData.firstName} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                            {fieldErrors.firstName && <p className="text-xs text-red-500">{fieldErrors.firstName}</p>}
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="lastName" className="text-sm font-bold text-gray-900">Last Name <span className="text-orange-500">*</span></Label>
                             <Input id="lastName" placeholder="Last name" value={formData.lastName} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                            {fieldErrors.lastName && <p className="text-xs text-red-500">{fieldErrors.lastName}</p>}
                           </div>
                         </div>
 
                         <div className="space-y-2">
                           <Label htmlFor="email" className="text-sm font-bold text-gray-900">Email Address <span className="text-orange-500">*</span></Label>
                           <Input id="email" type="email" placeholder="Enter email address" value={formData.email} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                          {fieldErrors.email && <p className="text-xs text-red-500">{fieldErrors.email}</p>}
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-6">
@@ -204,15 +243,17 @@ export function SignupPage() {
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                               </button>
                             </div>
+                            {fieldErrors.password && <p className="text-xs text-red-500">{fieldErrors.password}</p>}
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="confirmPassword" className="text-sm font-bold text-gray-900">Confirm Password <span className="text-orange-500">*</span></Label>
                             <div className="relative">
-                              <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 pr-12 focus-visible:ring-brand-primary" required />
+                              <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} className={`h-14 bg-white border-gray-100 rounded-xl px-6 pr-12 focus-visible:ring-brand-primary ${fieldErrors.confirmPassword ? 'border-red-500' : ''}`} required />
                               <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                                 {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                               </button>
                             </div>
+                            {fieldErrors.confirmPassword && <p className="text-xs text-red-500">{fieldErrors.confirmPassword}</p>}
                           </div>
                         </div>
                       </div>
@@ -242,7 +283,7 @@ export function SignupPage() {
                           <div className="space-y-2">
                             <Label className="text-sm font-bold text-gray-900">Company Logo <span className="text-orange-500">*</span></Label>
                             <div 
-                              className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group" 
+                              className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500' : 'border-gray-200'} rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group`}
                               onClick={() => document.getElementById('logo-upload')?.click()}
                             >
                               <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm group-hover:scale-105 transition-transform">
@@ -266,10 +307,12 @@ export function SignupPage() {
                                   if (file) {
                                     const url = URL.createObjectURL(file);
                                     setFormData({...formData, logoUrl: url, logoFile: file});
+                                    setFieldErrors(prev => ({...prev, logo: ''}));
                                   }
                                 }}
                               />
                             </div>
+                            {fieldErrors.logo && <p className="text-xs text-red-500">{fieldErrors.logo}</p>}
                           </div>
                         </div>
 
@@ -277,10 +320,12 @@ export function SignupPage() {
                           <div className="space-y-2">
                             <Label htmlFor="companyName" className="text-sm font-bold text-gray-900">Company Name <span className="text-orange-500">*</span></Label>
                             <Input id="companyName" placeholder="Enter company name" value={formData.companyName} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                            {fieldErrors.companyName && <p className="text-xs text-red-500">{fieldErrors.companyName}</p>}
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="domain" className="text-sm font-bold text-gray-900">Domain <span className="text-orange-500">*</span></Label>
-                            <Input id="domain" placeholder="example.com" value={formData.domain} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                            <Input id="domain" placeholder="example.com" value={formData.domain} onChange={handleChange} className={`h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary ${fieldErrors.domain ? 'border-red-500' : ''}`} required />
+                            {fieldErrors.domain && <p className="text-xs text-red-500">{fieldErrors.domain}</p>}
                           </div>
                         </div>
 
@@ -296,10 +341,11 @@ export function SignupPage() {
                                   locationId: value,
                                   city: selectedLocation?.city_name || '',
                                 }));
+                                setFieldErrors(prev => ({...prev, locationId: ''}));
                               }}
                               disabled={isLocationLoading}
                             >
-                              <SelectTrigger id="locationId" className="h-14 bg-white border-gray-100 rounded-xl px-6 focus:ring-brand-primary text-base">
+                              <SelectTrigger id="locationId" className={`h-14 bg-white border-gray-100 rounded-xl px-6 focus:ring-brand-primary text-base ${fieldErrors.locationId ? 'border-red-500' : ''}`}>
                                 <SelectValue placeholder={isLocationLoading ? 'Loading cities...' : 'Select city'} />
                               </SelectTrigger>
                               <SelectContent>
@@ -310,6 +356,7 @@ export function SignupPage() {
                                 ))}
                               </SelectContent>
                             </Select>
+                            {fieldErrors.locationId && <p className="text-xs text-red-500">{fieldErrors.locationId}</p>}
                           </div>
                         </div>
                       </div>

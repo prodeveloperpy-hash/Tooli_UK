@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -25,6 +25,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const scrollRef = useRef<HTMLDivElement>(null);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -80,6 +84,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         logoFile: null,
         password: '',
         confirmPassword: '',
+        is_approved: true,
+        is_active: true,
+        approved_by: 7,
+        approved_datetime: new Date().toISOString(),
       });
       setIsChangingPassword(false);
     } else {
@@ -106,14 +114,63 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     }
     setShowPassword(false);
     setShowConfirmPassword(false);
+    setError(null);
+    setFieldErrors({});
   }, [supplier, isOpen]);
+
+  const handleFieldChange = (id: string, value: string) => {
+    setFormData(prev => ({ ...prev, [id]: value }));
+    let err = '';
+    if (id === 'domain') {
+      const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+      if (value && !domainRegex.test(value)) {
+        err = 'Please enter a valid domain (e.g., example.com or tooli.uk)';
+      }
+    } else if (id === 'confirmPassword' || id === 'password') {
+      const pass = id === 'password' ? value : formData.password;
+      const confirm = id === 'confirmPassword' ? value : formData.confirmPassword;
+      if (pass && confirm && pass !== confirm) {
+        setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
+        return;
+      } else {
+        setFieldErrors(prev => ({ ...prev, confirmPassword: '' }));
+        return;
+      }
+    }
+    setFieldErrors(prev => ({ ...prev, [id]: err }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    let hasError = false;
+    
+    const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+    if (!domainRegex.test(formData.domain)) {
+      setFieldErrors(prev => ({ ...prev, domain: 'Please enter a valid domain (e.g., example.com or tooli.uk)' }));
+      hasError = true;
+    }
+
+    if (!formData.logoFile && !formData.logoUrl) {
+      setFieldErrors(prev => ({ ...prev, logo: 'Please upload a company logo' }));
+      hasError = true;
+    }
+
     if (isChangingPassword && formData.password !== formData.confirmPassword) {
-      alert("Passwords don't match!");
+      setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
+      hasError = true;
+    }
+
+    if (!formData.locationId) {
+      setFieldErrors(prev => ({ ...prev, locationId: 'Please select a city' }));
+      hasError = true;
+    }
+
+    if (hasError) {
+      if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
+
     setIsSubmitting(true);
     try {
       await onSubmit({
@@ -121,8 +178,9 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
         isChangingPassword,
       });
       onClose();
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    } catch (err: any) {
+      setError(err.message || 'Error submitting form');
+      if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setIsSubmitting(false);
     }
@@ -141,13 +199,20 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
             </div>
           </DialogHeader>
 
-          <div className="p-5 sm:p-8 space-y-8 sm:space-y-10 overflow-y-auto relative flex-1">
+          <div ref={scrollRef} className="p-5 sm:p-8 space-y-8 sm:space-y-10 overflow-y-auto relative flex-1">
             {(isLoading || isDataLoading) && (
               <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px] z-50 flex flex-col items-center justify-center gap-4">
                 <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
                 <p className="text-xs font-black text-gray-500 animate-pulse uppercase tracking-widest">Syncing Supplier Data...</p>
               </div>
             )}
+
+            {error && (
+              <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-4 rounded-xl">
+                {error}
+              </div>
+            )}
+
             {/* Profile Section */}
             <div className="space-y-6">
               <div className="flex items-center gap-2 text-brand-primary">
@@ -155,16 +220,21 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                 <h3 className="font-bold uppercase tracking-wider text-xs">Supplier Profile</h3>
               </div>
               
-              <div className="flex items-center gap-6">
-                <div className="relative group cursor-pointer" onClick={() => document.getElementById('avatar-upload')?.click()}>
-                  <Avatar className="h-24 w-24 rounded-xl border-4 border-white bg-white shadow-xl transition-transform group-hover:scale-105">
+              <div className="space-y-2">
+                <Label className="font-bold">Profile Photo (Optional)</Label>
+                <div 
+                  className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group" 
+                  onClick={() => document.getElementById('avatar-upload')?.click()}
+                >
+                  <Avatar className="h-20 w-20 rounded-xl mb-4 shadow-sm group-hover:scale-105 transition-transform">
                     <AvatarImage src={formData.avatarUrl} className="object-contain" />
-                    <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary text-2xl font-bold">
-                      {formData.firstName[0]}{formData.lastName[0]}
+                    <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary font-bold text-xl">
+                      {formData.firstName ? formData.firstName[0] : ''}{formData.lastName ? formData.lastName[0] : ''}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-white" />
+                  <div className="text-center">
+                    <p className="text-sm font-bold text-brand-primary">Click to upload profile photo</p>
+                    <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
                   </div>
                   <input 
                     type="file" 
@@ -180,19 +250,6 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     }}
                   />
                 </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-gray-900 mb-1">Supplier Photo</h4>
-                  <p className="text-xs text-gray-500 mb-3">Recommended: Square 250x250px</p>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm" 
-                    className="h-8 text-xs font-bold border-brand-primary/20 text-brand-primary hover:bg-brand-primary/5"
-                    onClick={() => document.getElementById('avatar-upload')?.click()}
-                  >
-                    Change Photo
-                  </Button>
-                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -201,20 +258,22 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                   <Input 
                     id="firstName" 
                     value={formData.firstName} 
-                    onChange={(e) => setFormData({...formData, firstName: e.target.value})} 
+                    onChange={(e) => handleFieldChange('firstName', e.target.value)} 
                     className="border-gray-200 focus:ring-brand-primary rounded-lg"
                     required
                   />
+                  {fieldErrors.firstName && <p className="text-xs text-red-500">{fieldErrors.firstName}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="lastName" className="font-bold">Last Name</Label>
                   <Input 
                     id="lastName" 
                     value={formData.lastName} 
-                    onChange={(e) => setFormData({...formData, lastName: e.target.value})} 
+                    onChange={(e) => handleFieldChange('lastName', e.target.value)} 
                     className="border-gray-200 focus:ring-brand-primary rounded-lg"
                     required
                   />
+                  {fieldErrors.lastName && <p className="text-xs text-red-500">{fieldErrors.lastName}</p>}
                 </div>
               </div>
 
@@ -226,11 +285,12 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     id="email" 
                     type="email"
                     value={formData.email} 
-                    onChange={(e) => setFormData({...formData, email: e.target.value})} 
+                    onChange={(e) => handleFieldChange('email', e.target.value)} 
                     className="pl-10 border-gray-200 focus:ring-brand-primary rounded-lg"
                     required
                   />
                 </div>
+                {fieldErrors.email && <p className="text-xs text-red-500">{fieldErrors.email}</p>}
               </div>
 
               {supplier && (
@@ -247,6 +307,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                         password: '',
                         confirmPassword: '',
                       }));
+                      setFieldErrors(prev => ({ ...prev, confirmPassword: '', password: '' }));
                     }}
                     className="data-[state=checked]:bg-brand-primary border-gray-300 h-5 w-5 rounded-md"
                   />
@@ -270,9 +331,9 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                         type={showPassword ? "text" : "password"}
                         autoComplete="new-password"
                         value={formData.password}
-                        onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        onChange={(e) => handleFieldChange('password', e.target.value)}
                         className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
-                          formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                          fieldErrors.password ? 'border-red-500' : ''
                         }`}
                         required={isChangingPassword}
                       />
@@ -284,6 +345,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
+                    {fieldErrors.password && <p className="text-xs text-red-500">{fieldErrors.password}</p>}
                   </div>
 
                   <div className="space-y-2">
@@ -295,9 +357,9 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                         type={showConfirmPassword ? "text" : "password"}
                         autoComplete="new-password"
                         value={formData.confirmPassword}
-                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                        onChange={(e) => handleFieldChange('confirmPassword', e.target.value)}
                         className={`pr-10 border-gray-200 focus:ring-brand-primary rounded-lg ${
-                          formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                          fieldErrors.confirmPassword ? 'border-red-500' : ''
                         }`}
                         required={isChangingPassword}
                       />
@@ -309,10 +371,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                         {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
-                    {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                      <p className="text-xs font-bold text-red-500 mt-1">Passwords do not match</p>
+                    {fieldErrors.confirmPassword && (
+                      <p className="text-xs font-bold text-red-500 mt-1">{fieldErrors.confirmPassword}</p>
                     )}
-                    {formData.password && formData.confirmPassword && formData.password === formData.confirmPassword && (
+                    {formData.password && formData.confirmPassword && !fieldErrors.confirmPassword && (
                       <p className="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" /> Passwords match
                       </p>
@@ -331,24 +393,23 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                 <h3 className="font-bold uppercase tracking-wider text-xs">Organization Details</h3>
               </div>
 
-              <div className="flex items-center gap-6">
+              <div className="space-y-2">
+                <Label className="font-bold">Company Logo <span className="text-orange-500">*</span></Label>
                 <div 
-                  className="shrink-0 w-24 h-24 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden cursor-pointer hover:border-brand-primary/50 hover:bg-brand-primary/5 transition-all group relative"
+                  className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500' : 'border-gray-200'} rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group`}
                   onClick={() => document.getElementById('logo-upload')?.click()}
                 >
-                  {formData.logoUrl ? (
-                    <>
-                      <img src={formData.logoUrl} alt="Logo Preview" className="max-h-full max-w-full object-contain p-2" />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <UploadCloud className="w-8 h-8 text-white" />
-                      </div>
-                    </>
-                  ) : (
-                    <div className="flex flex-col items-center gap-1">
-                      <UploadCloud className="w-8 h-8 text-gray-300 group-hover:text-brand-primary transition-colors" />
-                      <span className="text-[10px] text-gray-400 font-bold">Logo</span>
-                    </div>
-                  )}
+                  <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm group-hover:scale-105 transition-transform">
+                    {formData.logoUrl ? (
+                      <img src={formData.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain p-2" />
+                    ) : (
+                      <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-brand-primary transition-colors" />
+                    )}
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-bold text-brand-primary">Click to upload company logo</p>
+                    <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                  </div>
                   <input 
                     type="file" 
                     id="logo-upload" 
@@ -359,23 +420,12 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                       if (file) {
                         const url = URL.createObjectURL(file);
                         setFormData({...formData, logoUrl: url, logoFile: file});
+                        setFieldErrors(prev => ({...prev, logo: ''}));
                       }
                     }}
                   />
                 </div>
-                <div className="flex-1">
-                  <h4 className="font-bold text-gray-900 mb-1">Company Logo</h4>
-                  <p className="text-xs text-gray-500 mb-3">PNG or SVG, transparent bg preferred</p>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    size="sm" 
-                    className="h-8 text-xs font-bold border-brand-primary/20 text-brand-primary hover:bg-brand-primary/5"
-                    onClick={() => document.getElementById('logo-upload')?.click()}
-                  >
-                    Upload Logo
-                  </Button>
-                </div>
+                {fieldErrors.logo && <p className="text-xs text-red-500">{fieldErrors.logo}</p>}
               </div>
 
               <div className="space-y-2">
@@ -385,11 +435,12 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                   <Input 
                     id="companyName" 
                     value={formData.companyName} 
-                    onChange={(e) => setFormData({...formData, companyName: e.target.value})} 
+                    onChange={(e) => handleFieldChange('companyName', e.target.value)} 
                     className="pl-10 border-gray-200 focus:ring-brand-primary rounded-lg"
                     required
                   />
                 </div>
+                {fieldErrors.companyName && <p className="text-xs text-red-500">{fieldErrors.companyName}</p>}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -399,10 +450,11 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     id="domain" 
                     placeholder="example.tooli.uk"
                     value={formData.domain} 
-                    onChange={(e) => setFormData({...formData, domain: e.target.value})} 
-                    className="border-gray-200 focus:ring-brand-primary rounded-lg"
+                    onChange={(e) => handleFieldChange('domain', e.target.value)} 
+                    className={`border-gray-200 focus:ring-brand-primary rounded-lg ${fieldErrors.domain ? 'border-red-500' : ''}`}
                     required
                   />
+                  {fieldErrors.domain && <p className="text-xs text-red-500">{fieldErrors.domain}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="location" className="font-bold">Service Location</Label>
@@ -415,9 +467,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                         locationId: v,
                         city: selectedLoc?.city_name || ''
                       });
+                      setFieldErrors(prev => ({...prev, locationId: ''}));
                     }}
                   >
-                    <SelectTrigger className="h-10 rounded-lg border-gray-200 focus:ring-brand-primary bg-white">
+                    <SelectTrigger className={`h-10 rounded-lg border-gray-200 focus:ring-brand-primary bg-white ${fieldErrors.locationId ? 'border-red-500' : ''}`}>
                       <SelectValue placeholder="Select City" />
                     </SelectTrigger>
                     <SelectContent className="z-[10010]">
@@ -428,6 +481,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                       ))}
                     </SelectContent>
                   </Select>
+                  {fieldErrors.locationId && <p className="text-xs text-red-500">{fieldErrors.locationId}</p>}
                 </div>
               </div>
             </div>
@@ -437,7 +491,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
             <Button type="button" variant="ghost" onClick={onClose} className="font-black uppercase tracking-widest text-xs h-12">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || (isChangingPassword && formData.password !== formData.confirmPassword)} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
+            <Button type="submit" disabled={isSubmitting} className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 uppercase tracking-widest text-xs">
               {isSubmitting ? 'Saving...' : (supplier ? 'Update Supplier' : 'Create Account')}
             </Button>
           </DialogFooter>
