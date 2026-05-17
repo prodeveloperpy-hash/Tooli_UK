@@ -64,14 +64,17 @@ class EquipmentViewSet(viewsets.ModelViewSet):
                         {"detail": f"Invalid payload JSON: {exc}"},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
+            # Merge possible extra fields (e.g., redirect_url) sent as regular form fields
+            extra_fields = request.POST.dict() if hasattr(request, "POST") else {}
+            for key, value in extra_fields.items():
                 if key not in body:
                     body[key] = value
-                # Gather uploaded image files (if any)
-                image_files = list(request.FILES.getlist("images"))
-                serializer = self.get_serializer(
-                    data=body,
-                    context={**self.get_serializer_context(), "image_files": image_files},
-                )
+            # Gather uploaded image files (if any)
+            image_files = list(request.FILES.getlist("images"))
+            serializer = self.get_serializer(
+                data=body,
+                context={**self.get_serializer_context(), "image_files": image_files},
+            )
         else:
             data = request.data
             serializer = self.get_serializer(
