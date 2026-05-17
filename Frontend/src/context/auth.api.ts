@@ -53,9 +53,9 @@ export const authApi = {
     // Add the remaining payload as a JSON string
     formData.append('payload', JSON.stringify(cleanedPayload));
 
-    // Add files if they exist
+    // Backend expects multipart file fields "avatar" and "organization_logo"
     if (avatarFile) {
-      formData.append('avatar_url', avatarFile);
+      formData.append('avatar', avatarFile);
     }
     if (logoFile) {
       formData.append('organization_logo', logoFile);

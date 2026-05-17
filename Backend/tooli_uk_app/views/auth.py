@@ -5,7 +5,7 @@ from rest_framework import parsers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from tooli_uk_app.models import User
+from tooli_uk_app.models import Organization, User
 from tooli_uk_app.models.user_organization import UserOrganization
 from tooli_uk_app.serializers.auth import LoginSerializer, SignupSerializer
 from tooli_uk_app.serializers.organization import OrganizationSerializer
@@ -32,7 +32,8 @@ class SignupAPIView(APIView):
                 return Response(
                     {
                         "detail": 'Multipart signup requires a JSON string field "payload" '
-                        '(same fields as JSON signup). Optional file field "avatar".'
+                        '(same fields as JSON signup). Optional file fields: '
+                        '"avatar" (profile photo), "organization_logo" (company logo).'
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
@@ -45,17 +46,28 @@ class SignupAPIView(APIView):
                     {"detail": f"Invalid payload JSON: {exc}"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
-            avatar_file = request.FILES.get("avatar")
+            avatar_file = request.FILES.get("avatar") or request.FILES.get("avatar_url")
+            org_logo_file = request.FILES.get("organization_logo") or request.FILES.get(
+                "logo"
+            )
             serializer = SignupSerializer(
                 data=body,
-                context={"request": request, "avatar_file": avatar_file},
+                context={
+                    "request": request,
+                    "avatar_file": avatar_file,
+                    "organization_logo_file": org_logo_file,
+                },
             )
         else:
             serializer = SignupSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         result = serializer.save()
         user = User.objects.get(pk=result["user_id"])
+        organization = Organization.objects.get(pk=result["organization_id"])
         result["user"] = UserSerializer(user, context={"request": request}).data
+        result["organization"] = OrganizationSerializer(
+            organization, context={"request": request}
+        ).data
         return Response(
             {
                 "message": "Signup successful.",
