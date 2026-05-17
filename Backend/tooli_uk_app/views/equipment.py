@@ -53,23 +53,23 @@ class EquipmentViewSet(viewsets.ModelViewSet):
         if request.content_type and "multipart/form-data" in request.content_type:
             raw = request.data.get("payload")
             if raw is None or raw == "":
-                return Response(
-                    {
-                        "detail": 'Multipart create needs a JSON string field "payload" with '
-                        'equipment fields and optional images[]. '
-                        'Repeat form field "images" for each file upload.'
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            if isinstance(raw, (bytes, bytearray)):
-                raw = raw.decode()
-            try:
-                body = json.loads(raw)
-            except json.JSONDecodeError as exc:
-                return Response(
-                    {"detail": f"Invalid payload JSON: {exc}"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+                body = {}
+            else:
+                if isinstance(raw, (bytes, bytearray)):
+                    raw = raw.decode()
+                try:
+                    body = json.loads(raw)
+                except json.JSONDecodeError as exc:
+                    return Response(
+                        {"detail": f"Invalid payload JSON: {exc}"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            # Merge possible extra fields (e.g., redirect_url) sent as regular form fields
+            extra_fields = request.POST.dict() if hasattr(request, "POST") else {}
+            for key, value in extra_fields.items():
+                if key not in body:
+                    body[key] = value
+            # Gather uploaded image files (if any)
             image_files = list(request.FILES.getlist("images"))
             serializer = self.get_serializer(
                 data=body,
@@ -104,6 +104,11 @@ class EquipmentViewSet(viewsets.ModelViewSet):
                         {"detail": f"Invalid payload JSON: {exc}"},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
+            # Merge possible extra fields (e.g., redirect_url) sent as regular form fields
+            extra_fields = request.POST.dict() if hasattr(request, "POST") else {}
+            for key, value in extra_fields.items():
+                if key not in data:
+                    data[key] = value
             image_files = list(request.FILES.getlist("images"))
         serializer = self.get_serializer(
             instance,

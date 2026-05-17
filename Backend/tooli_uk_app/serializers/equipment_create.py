@@ -84,6 +84,8 @@ class CreateEquipmentAvailabilitySerializer(serializers.Serializer):
 
 
 class CreateEquipmentSerializer(serializers.Serializer):
+    redirect_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+
     """Equipment ``organization_id`` is optional; images inherit it unless an image sets its own."""
 
     name = serializers.CharField(max_length=200)
@@ -193,6 +195,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
             organization_id_id=validated_data.get("organization_id"),
             created_by_id=created_by_id,
             updated_by_id=updated_by_id,
+            redirect_url=validated_data.get("redirect_url"),
             created_datetime=now,
             updated_datetime=now,
         )
