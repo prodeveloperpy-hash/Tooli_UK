@@ -17,6 +17,7 @@ interface LocationFormProps {
 
 export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1 }: LocationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderError, setOrderError] = useState('');
   const [formData, setFormData] = useState({
     city_name: '',
     country: 'United Kingdom',
@@ -43,12 +44,25 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
         is_active: true,
       });
     }
+    setOrderError('');
   }, [location, isOpen]);
+
+  const validateOrder = (value: string) => {
+    const orderValue = Number(value);
+    if (!value || !orderValue) return 'Order is required';
+    if (orderValue < 1) return 'Order must be at least 1';
+    if (orderValue > maxOrder) return `Order cannot be greater than ${maxOrder}`;
+    return '';
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const orderValue = Number(formData.order_by);
-    if (!orderValue || orderValue < 1 || orderValue > maxOrder) return;
+    const nextOrderError = validateOrder(formData.order_by);
+    if (nextOrderError) {
+      setOrderError(nextOrderError);
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -84,12 +98,20 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
                 min={1}
                 max={maxOrder}
                 value={formData.order_by}
-                onChange={e => setFormData({...formData, order_by: e.target.value})}
+                onChange={e => {
+                  const nextValue = e.target.value;
+                  setFormData({...formData, order_by: nextValue});
+                  setOrderError(validateOrder(nextValue));
+                }}
                 placeholder="e.g. 1"
                 required
-                className="h-12 rounded-xl"
+                className={`h-12 rounded-xl ${orderError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
               />
-              <p className="text-[10px] text-gray-500 font-medium">Enter a number from 1 to {maxOrder}.</p>
+              {orderError ? (
+                <p className="text-xs font-bold text-red-500">{orderError}</p>
+              ) : (
+                <p className="text-[10px] text-gray-500 font-medium">Enter a number from 1 to {maxOrder}.</p>
+              )}
             </div>
 
             <div className="space-y-2">
