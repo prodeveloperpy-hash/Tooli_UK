@@ -529,7 +529,7 @@ export function SupplierDashboard() {
                 <CardHeader className="p-6 md:p-10 border-b bg-gray-50/30">
                   <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                     <div className="text-center lg:text-left">
-                      <CardTitle className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight flex flex-col sm:flex-row sm:items-center justify-center lg:justify-start gap-3">
+                      <CardTitle className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight flex flex-col sm:flex-row sm:items-center justify-center gap-3">
                         <span>Equipment Inventory</span>
                         {pendingApprovalCount > 0 && (
                           <Badge 
@@ -537,7 +537,7 @@ export function SupplierDashboard() {
                               setEquipAvailabilityFilter('pending');
                               setEquipPage(1);
                             }}
-                            className="bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs px-3 py-1 rounded-full cursor-pointer animate-pulse transition-all shadow-md shadow-amber-500/20 w-fit mx-auto sm:mx-0"
+                            className="bg-red-600 hover:bg-red-700 text-white font-black text-sm md:text-base px-5 py-2 rounded-full cursor-pointer animate-pulse transition-all shadow-lg shadow-red-600/25 w-fit mx-auto"
                           >
                             {pendingApprovalCount} Requires Approval
                           </Badge>
