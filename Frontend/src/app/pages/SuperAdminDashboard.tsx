@@ -268,19 +268,11 @@ export function SuperAdminDashboard() {
     }
   };
 
-  const sortByOrder = <T extends { order_by?: number | null }>(items: T[]) => {
-    return [...items].sort((a, b) => {
-      const orderA = a.order_by ?? Number.MAX_SAFE_INTEGER;
-      const orderB = b.order_by ?? Number.MAX_SAFE_INTEGER;
-      return orderA - orderB;
-    });
-  };
-
   const fetchCategories = async () => {
     try {
       const data = await equipmentApi.getCategories(categoryPage, 50);
       const list = Array.isArray(data) ? data : data.results || [];
-      setCategories(sortByOrder(list));
+      setCategories(list);
       setTotalCategoryCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -291,7 +283,7 @@ export function SuperAdminDashboard() {
     try {
       const data = await equipmentApi.getLocations(locationPage, 50);
       const list = Array.isArray(data) ? data : data.results || [];
-      setLocations(sortByOrder(list));
+      setLocations(list);
       setTotalLocationCount(data.count || list.length);
     } catch (error) {
       console.error('Error fetching locations:', error);
@@ -495,6 +487,7 @@ export function SuperAdminDashboard() {
         error: (err) => err.message || 'Failed to save category'
       });
 
+      await categoryPromise;
       await fetchCategories();
       setIsCategoryFormOpen(false);
     } catch (error: any) {
@@ -538,6 +531,7 @@ export function SuperAdminDashboard() {
         error: (err) => err.message || 'Failed to save location'
       });
 
+      await locationPromise;
       await fetchLocations();
       setIsLocationFormOpen(false);
     } catch (error: any) {
