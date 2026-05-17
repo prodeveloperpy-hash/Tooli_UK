@@ -5,10 +5,10 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent } from '../components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock } from 'lucide-react';
+import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock, UploadCloud } from 'lucide-react';
 import { authApi } from '../../context/auth.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
-import { SignupRequest } from '../../types';
+import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -21,18 +21,19 @@ export function SignupPage() {
   const [locations, setLocations] = useState<Location[]>([]);
 
   const [formData, setFormData] = useState({
-    organization_name: '',
-    full_name: '',
+    firstName: '',
+    lastName: '',
     email: '',
-    phone: '',
+    companyName: '',
+    domain: '',
     password: '',
     confirmPassword: '',
-    address1: '',
-    address2: '',
-    city: '',
     locationId: '',
-    postcode: '',
-    delivery_radius: '',
+    city: '',
+    avatarUrl: '',
+    avatarFile: null as File | null,
+    logoUrl: '',
+    logoFile: null as File | null,
   });
 
   useEffect(() => {
@@ -57,15 +58,21 @@ export function SignupPage() {
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
+  const handleNextStep = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords don't match");
+      return;
+    }
+    setError(null);
+    setCurrentStep(2);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (currentStep === 1) {
-      if (formData.password !== formData.confirmPassword) {
-        setError("Passwords don't match");
-        return;
-      }
-      setError(null);
-      setCurrentStep(2);
+    
+    if (!formData.logoFile && !formData.logoUrl) {
+      setError('Please upload a company logo');
       return;
     }
 
@@ -77,25 +84,26 @@ export function SignupPage() {
     setError(null);
     setIsLoading(true);
     try {
-      const names = formData.full_name.split(' ');
-      const signupData: SignupRequest = {
-        first_name: names[0] || '',
-        last_name: names.slice(1).join(' ') || 'User',
+      const signupData: any = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
         email: formData.email,
         password: formData.password,
-        avatar_url: null,
-        organization_name: formData.organization_name,
-        organization_domain: formData.organization_name.toLowerCase().replace(/\s+/g, '') + '.com',
-        organization_logo: null,
-        organization_address1: formData.address1,
-        organization_address2: formData.address2,
+        organization_name: formData.companyName,
+        organization_domain: formData.domain,
         organization_city: formData.city,
+        organization_address1: '',
+        organization_address2: '',
         organization_state: '',
-        organization_postal_code: formData.postcode,
+        organization_postal_code: '',
         organization_country: 'UK',
         user_organization_role_id: 1,
         is_approved: false,
       };
+      
+      if (formData.avatarFile) signupData.avatarFile = formData.avatarFile;
+      if (formData.logoFile) signupData.logoFile = formData.logoFile;
+
       await authApi.signup(signupData);
       navigate('/login', { state: { message: 'Account created and sent for approval to superadmin' } });
     } catch (err: any) {
@@ -123,42 +131,71 @@ export function SignupPage() {
           <div className="lg:col-span-2 space-y-6">
             <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[24px] overflow-hidden">
               <CardContent className="p-8 md:p-12">
-                <form onSubmit={handleSubmit} className="space-y-10">
-                  {error && (
-                    <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-4 rounded-xl">
-                      {error}
-                    </div>
-                  )}
-
-                  {currentStep === 1 ? (
+                {currentStep === 1 ? (
+                  <form onSubmit={handleNextStep} className="space-y-10">
+                    {error && (
+                      <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-4 rounded-xl">
+                        {error}
+                      </div>
+                    )}
                     <div className="space-y-8 animate-in fade-in duration-500">
                       <div className="mb-10">
-                        <h2 className="text-2xl font-bold text-[#030213] mb-2">Step 1 of 2 – Create Your Account</h2>
+                        <h2 className="text-2xl font-bold text-[#030213] mb-2">Step 1 of 2 – Personal Information</h2>
                         <p className="text-gray-500 font-medium">Create your account to get started.</p>
                       </div>
 
                       <div className="space-y-6">
+                        <div className="grid md:grid-cols-1 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-gray-900">Profile Photo (Optional)</Label>
+                            <div 
+                              className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group" 
+                              onClick={() => document.getElementById('avatar-upload')?.click()}
+                            >
+                              <Avatar className="h-20 w-20 rounded-xl mb-4 shadow-sm group-hover:scale-105 transition-transform">
+                                <AvatarImage src={formData.avatarUrl} className="object-contain" />
+                                <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary font-bold text-xl">
+                                  {formData.firstName ? formData.firstName[0] : ''}{formData.lastName ? formData.lastName[0] : ''}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="text-center">
+                                <p className="text-sm font-bold text-brand-primary">Click to upload profile photo</p>
+                                <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                              </div>
+                              <input 
+                                type="file" 
+                                id="avatar-upload" 
+                                className="hidden" 
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    const url = URL.createObjectURL(file);
+                                    setFormData({...formData, avatarUrl: url, avatarFile: file});
+                                  }
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="firstName" className="text-sm font-bold text-gray-900">First Name <span className="text-orange-500">*</span></Label>
+                            <Input id="firstName" placeholder="First name" value={formData.firstName} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="lastName" className="text-sm font-bold text-gray-900">Last Name <span className="text-orange-500">*</span></Label>
+                            <Input id="lastName" placeholder="Last name" value={formData.lastName} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                          </div>
+                        </div>
+
                         <div className="space-y-2">
-                          <Label htmlFor="organization_name" className="text-sm font-bold text-gray-900">Company Name <span className="text-orange-500">*</span></Label>
-                          <Input id="organization_name" placeholder="Enter company name" value={formData.organization_name} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                          <Label htmlFor="email" className="text-sm font-bold text-gray-900">Email Address <span className="text-orange-500">*</span></Label>
+                          <Input id="email" type="email" placeholder="Enter email address" value={formData.email} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <Label htmlFor="full_name" className="text-sm font-bold text-gray-900">Contact Name <span className="text-orange-500">*</span></Label>
-                            <Input id="full_name" placeholder="Enter your full name" value={formData.full_name} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
-                          </div>
-                          <div className="space-y-2">
-                            <Label htmlFor="email" className="text-sm font-bold text-gray-900">Email Address <span className="text-orange-500">*</span></Label>
-                            <Input id="email" type="email" placeholder="Enter email address" value={formData.email} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
-                          </div>
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <Label htmlFor="phone" className="text-sm font-bold text-gray-900">Phone Number (Optional)</Label>
-                            <Input id="phone" placeholder="Enter phone number" value={formData.phone} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" />
-                          </div>
                           <div className="space-y-2">
                             <Label htmlFor="password" className="text-sm font-bold text-gray-900">Password <span className="text-orange-500">*</span></Label>
                             <div className="relative">
@@ -168,102 +205,127 @@ export function SignupPage() {
                               </button>
                             </div>
                           </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="confirmPassword" className="text-sm font-bold text-gray-900">Confirm Password <span className="text-orange-500">*</span></Label>
-                          <div className="relative">
-                            <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 pr-12 focus-visible:ring-brand-primary" required />
-                            <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                              {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="pt-4 space-y-6">
-                          <Label className="text-sm font-bold text-gray-900 uppercase tracking-widest text-orange-500">Company Address *</Label>
-                          <div className="space-y-6">
-                            <div className="space-y-2">
-                              <Label htmlFor="address1" className="text-sm font-bold text-gray-600">Address Line 1</Label>
-                              <Input id="address1" placeholder="Enter address line 1" value={formData.address1} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
-                            </div>
-                            <div className="space-y-2">
-                              <Label htmlFor="address2" className="text-sm font-bold text-gray-600">Address Line 2 (Optional)</Label>
-                              <Input id="address2" placeholder="Enter address line 2" value={formData.address2} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" />
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-6">
-                              <div className="space-y-2">
-                                <Label htmlFor="postcode" className="text-sm font-bold text-gray-900">Postcode <span className="text-orange-500">*</span></Label>
-                                <Input id="postcode" placeholder="Enter postcode" value={formData.postcode} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
-                              </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="confirmPassword" className="text-sm font-bold text-gray-900">Confirm Password <span className="text-orange-500">*</span></Label>
+                            <div className="relative">
+                              <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 pr-12 focus-visible:ring-brand-primary" required />
+                              <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                              </button>
                             </div>
                           </div>
                         </div>
                       </div>
 
                       <div className="pt-6 border-t border-gray-100">
-                        <p className="text-sm text-gray-500 font-medium mb-8">By creating an account, you agree to our <Link to="#" className="text-brand-primary font-bold">Terms & Conditions</Link> and <Link to="#" className="text-brand-primary font-bold">Privacy Policy</Link>.</p>
                         <div className="flex justify-end">
-                          <Button type="submit" className="h-14 px-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-lg transition-all">Continue</Button>
+                          <Button type="submit" className="h-14 px-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-lg transition-all">Next Step</Button>
                         </div>
                       </div>
                     </div>
-                  ) : (
+                  </form>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-10">
+                    {error && (
+                      <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-4 rounded-xl">
+                        {error}
+                      </div>
+                    )}
                     <div className="space-y-8 animate-in fade-in duration-500">
                       <div className="mb-10">
                         <h2 className="text-2xl font-bold text-[#030213] mb-2">Step 2 of 2 – Business Information</h2>
                         <p className="text-gray-500 font-medium">Tell us a bit more about your business.</p>
                       </div>
 
-                      <div className="grid md:grid-cols-2 gap-8">
-                        <div className="space-y-2">
-                          <Label htmlFor="delivery_radius" className="text-sm font-bold text-gray-900">Delivery Radius <span className="text-orange-500">*</span></Label>
-                          <select id="delivery_radius" value={formData.delivery_radius} onChange={handleChange} className="w-full h-14 bg-white border border-gray-100 rounded-xl px-6 focus:outline-none focus:ring-2 focus:ring-brand-primary appearance-none font-medium text-gray-900" required>
-                            <option value="">Select radius</option>
-                            <option value="10">Up to 10 miles</option>
-                            <option value="25">Up to 25 miles</option>
-                            <option value="50">Up to 50 miles</option>
-                            <option value="100">Up to 100 miles</option>
-                            <option value="national">National</option>
-                          </select>
+                      <div className="space-y-6">
+                        <div className="grid md:grid-cols-1 gap-6">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-bold text-gray-900">Company Logo <span className="text-orange-500">*</span></Label>
+                            <div 
+                              className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group" 
+                              onClick={() => document.getElementById('logo-upload')?.click()}
+                            >
+                              <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm group-hover:scale-105 transition-transform">
+                                {formData.logoUrl ? (
+                                  <img src={formData.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain p-2" />
+                                ) : (
+                                  <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-brand-primary transition-colors" />
+                                )}
+                              </div>
+                              <div className="text-center">
+                                <p className="text-sm font-bold text-brand-primary">Click to upload company logo</p>
+                                <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                              </div>
+                              <input 
+                                type="file" 
+                                id="logo-upload" 
+                                className="hidden" 
+                                accept="image/*"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    const url = URL.createObjectURL(file);
+                                    setFormData({...formData, logoUrl: url, logoFile: file});
+                                  }
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="locationId" className="text-sm font-bold text-gray-900">Primary Service Area <span className="text-orange-500">*</span></Label>
-                          <Select
-                            value={formData.locationId}
-                            onValueChange={(value) => {
-                              const selectedLocation = locations.find(location => location.location_id.toString() === value);
-                              setFormData(prev => ({
-                                ...prev,
-                                locationId: value,
-                                city: selectedLocation?.city_name || '',
-                              }));
-                            }}
-                            disabled={isLocationLoading}
-                          >
-                            <SelectTrigger id="locationId" className="h-14 bg-white border-gray-100 rounded-xl px-6 focus:ring-brand-primary">
-                              <SelectValue placeholder={isLocationLoading ? 'Loading cities...' : 'Select city'} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {locations.map((location) => (
-                                <SelectItem key={location.location_id} value={location.location_id.toString()}>
-                                  {location.city_name}, {location.country}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <Label htmlFor="companyName" className="text-sm font-bold text-gray-900">Company Name <span className="text-orange-500">*</span></Label>
+                            <Input id="companyName" placeholder="Enter company name" value={formData.companyName} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="domain" className="text-sm font-bold text-gray-900">Domain <span className="text-orange-500">*</span></Label>
+                            <Input id="domain" placeholder="example.com" value={formData.domain} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
+                          </div>
+                        </div>
+
+                        <div className="grid md:grid-cols-1 gap-8">
+                          <div className="space-y-2">
+                            <Label htmlFor="locationId" className="text-sm font-bold text-gray-900">Primary Service Area <span className="text-orange-500">*</span></Label>
+                            <Select
+                              value={formData.locationId}
+                              onValueChange={(value) => {
+                                const selectedLocation = locations.find(location => location.location_id.toString() === value);
+                                setFormData(prev => ({
+                                  ...prev,
+                                  locationId: value,
+                                  city: selectedLocation?.city_name || '',
+                                }));
+                              }}
+                              disabled={isLocationLoading}
+                            >
+                              <SelectTrigger id="locationId" className="h-14 bg-white border-gray-100 rounded-xl px-6 focus:ring-brand-primary text-base">
+                                <SelectValue placeholder={isLocationLoading ? 'Loading cities...' : 'Select city'} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {locations.map((location) => (
+                                  <SelectItem key={location.location_id} value={location.location_id.toString()} className="text-base">
+                                    {location.city_name}, {location.country}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="pt-10 flex items-center justify-between border-t border-gray-100">
-                        <Button type="button" onClick={() => setCurrentStep(1)} variant="outline" className="h-14 px-10 border-gray-200 rounded-xl font-bold">Back</Button>
-                        <Button type="submit" disabled={isLoading} className="h-14 px-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-lg transition-all">
-                          {isLoading ? 'Processing...' : 'Complete Registration'}
-                        </Button>
+                      <div className="pt-10 border-t border-gray-100">
+                        <p className="text-sm text-gray-500 font-medium mb-8">By creating an account, you agree to our <Link to="#" className="text-brand-primary font-bold">Terms & Conditions</Link> and <Link to="#" className="text-brand-primary font-bold">Privacy Policy</Link>.</p>
+                        <div className="flex items-center justify-between">
+                          <Button type="button" onClick={() => setCurrentStep(1)} variant="outline" className="h-14 px-10 border-gray-200 rounded-xl font-bold">Back</Button>
+                          <Button type="submit" disabled={isLoading} className="h-14 px-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-lg transition-all">
+                            {isLoading ? 'Processing...' : 'Complete Registration'}
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  )}
-                </form>
+                  </form>
+                )}
               </CardContent>
             </Card>
 
