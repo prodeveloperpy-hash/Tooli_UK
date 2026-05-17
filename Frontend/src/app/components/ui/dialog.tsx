@@ -48,8 +48,10 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    hideClose?: boolean;
+  }
+>(({ className, children, hideClose = false, ...props }, ref) => {
   const internalRef = React.useRef<HTMLDivElement>(null);
   
   React.useImperativeHandle(ref, () => internalRef.current!);
@@ -86,10 +88,12 @@ const DialogContent = React.forwardRef<
           {...props}
         >
           {children}
-          <DialogPrimitive.Close className="absolute top-3 right-3 sm:top-4 sm:right-4 rounded-full w-8 h-8 flex items-center justify-center bg-gray-100/80 hover:bg-gray-200 transition-all z-[10001] shadow-sm">
-            <XIcon className="size-4 text-gray-900" />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
+          {!hideClose && (
+            <DialogPrimitive.Close className="absolute top-3 right-3 sm:top-4 sm:right-4 rounded-full w-8 h-8 flex items-center justify-center bg-gray-100/80 hover:bg-gray-200 transition-all z-[10001] shadow-sm">
+              <XIcon className="size-4 text-gray-900" />
+              <span className="sr-only">Close</span>
+            </DialogPrimitive.Close>
+          )}
         </DialogPrimitive.Content>
       </div>
     </DialogPortal>

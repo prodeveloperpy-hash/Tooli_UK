@@ -76,6 +76,10 @@ export function SupplierDashboard() {
     logoUrl: '',
   });
   const [companyLogoFile, setCompanyLogoFile] = useState<File | undefined>();
+  const [requiredLogoFile, setRequiredLogoFile] = useState<File | undefined>();
+  const [requiredLogoPreview, setRequiredLogoPreview] = useState('');
+  const [requiredLogoError, setRequiredLogoError] = useState('');
+  const [isRequiredLogoSaving, setIsRequiredLogoSaving] = useState(false);
   const [isAddEquipmentApprovalOpen, setIsAddEquipmentApprovalOpen] = useState(false);
   const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
 
@@ -191,7 +195,9 @@ export function SupplierDashboard() {
           user_details: parsed.user,
           organization_details: {
             name: parsed.organization?.name || parsed.organization_name || '',
-            logo: parsed.organization?.logo || parsed.user.avatar_url, 
+            domain: parsed.organization?.domain || '',
+            logo: parsed.organization?.logo || '',
+            city: parsed.organization?.city || '',
           },
           role_details: {
             role_key: parsed.role_key,
@@ -364,6 +370,86 @@ export function SupplierDashboard() {
     }
   };
 
+  const updateCachedOrganization = (updated: UserOrganization, fallbackLogo?: string) => {
+    const cachedData = localStorage.getItem('user_data');
+    if (!cachedData) return;
+
+    try {
+      const parsed = JSON.parse(cachedData);
+      localStorage.setItem('user_data', JSON.stringify({
+        ...parsed,
+        organization: {
+          ...(parsed.organization || {}),
+          name: updated.organization_details?.name || parsed.organization?.name || '',
+          domain: updated.organization_details?.domain || parsed.organization?.domain || '',
+          city: updated.organization_details?.city || parsed.organization?.city || '',
+          logo: updated.organization_details?.logo || fallbackLogo || parsed.organization?.logo || '',
+        },
+        organization_name: updated.organization_details?.name || parsed.organization_name || '',
+      }));
+    } catch (cacheError) {
+      console.error('Error updating cached organization data:', cacheError);
+    }
+  };
+
+  const handleRequiredLogoSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!requiredLogoFile) {
+      setRequiredLogoError('Please upload your company logo first');
+      return;
+    }
+
+    setIsRequiredLogoSaving(true);
+    setRequiredLogoError('');
+
+    try {
+      const userId = localStorage.getItem('user_id') || userData?.user_id?.toString();
+      if (!userId) throw new Error('User ID not found');
+
+      const response = await userApi.getUserOrganizationsByUserId(parseInt(userId));
+      const latestUserOrg = getFirstUserOrganization(response);
+      if (!latestUserOrg) throw new Error('Company details not found');
+
+      const updated = await userApi.updateUserOrganizationFiles(
+        latestUserOrg.user_organization_id,
+        {
+          organization: {
+            name: latestUserOrg.organization_details?.name || userData?.organization_details?.name || '',
+            domain: latestUserOrg.organization_details?.domain || userData?.organization_details?.domain || '',
+            city: latestUserOrg.organization_details?.city || userData?.organization_details?.city || '',
+          },
+        },
+        undefined,
+        requiredLogoFile
+      );
+
+      const unlockedData = {
+        ...updated,
+        organization_details: {
+          ...updated.organization_details,
+          logo: updated.organization_details?.logo || requiredLogoPreview,
+        },
+      };
+
+      setUserData(unlockedData);
+      localStorage.setItem('user_organization_id', updated.user_organization_id.toString());
+      updateCachedOrganization(unlockedData, requiredLogoPreview);
+      setCompanyForm(prev => ({
+        ...prev,
+        logoUrl: unlockedData.organization_details.logo || '',
+      }));
+      setRequiredLogoFile(undefined);
+      setRequiredLogoPreview('');
+      toast.success('Company logo saved');
+    } catch (error: any) {
+      console.error('Error saving required logo:', error);
+      toast.error(error.message || 'Failed to save company logo');
+    } finally {
+      setIsRequiredLogoSaving(false);
+    }
+  };
+
   const handleOpenEquipAdd = () => {
     setSelectedEquipment(null);
     setIsEquipFormOpen(true);
@@ -448,6 +534,7 @@ export function SupplierDashboard() {
 
 
   const supplierName = userData?.organization_details.name || 'Loading...';
+  const isCompanyLogoMissing = Boolean(userData && !userData.organization_details?.logo);
 
 
   if (isLoadingUser) {
@@ -875,6 +962,73 @@ export function SupplierDashboard() {
                 className="bg-[#030213] hover:bg-black text-white font-black uppercase tracking-widest text-xs h-11 px-6"
               >
                 {isCompanySaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save Details'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isCompanyLogoMissing} onOpenChange={() => {}}>
+        <DialogContent
+          hideClose
+          className="max-w-[500px] p-0"
+          onEscapeKeyDown={(event) => event.preventDefault()}
+          onPointerDownOutside={(event) => event.preventDefault()}
+          onInteractOutside={(event) => event.preventDefault()}
+        >
+          <form onSubmit={handleRequiredLogoSubmit}>
+            <DialogHeader className="p-6 sm:p-8 border-b bg-red-600 text-white">
+              <DialogTitle className="text-2xl font-black text-white">Logo Required</DialogTitle>
+              <DialogDescription className="text-sm font-semibold text-red-50">
+                Please add your company logo first to continue to your dashboard.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="p-6 sm:p-8 space-y-5">
+              <div
+                className={`flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-8 text-center transition-colors cursor-pointer ${
+                  requiredLogoError ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white hover:bg-gray-50'
+                }`}
+                onClick={() => document.getElementById('required-company-logo-upload')?.click()}
+              >
+                <div className="h-28 w-28 rounded-2xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm">
+                  {requiredLogoPreview ? (
+                    <img src={requiredLogoPreview} alt="Company logo preview" className="max-h-full max-w-full object-contain p-3" />
+                  ) : (
+                    <UploadCloud className="w-10 h-10 text-gray-400" />
+                  )}
+                </div>
+                <p className="text-base font-black text-gray-900">Upload company logo</p>
+                <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                <input
+                  id="required-company-logo-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  required
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const previewUrl = URL.createObjectURL(file);
+                    setRequiredLogoFile(file);
+                    setRequiredLogoPreview(previewUrl);
+                    setRequiredLogoError('');
+                  }}
+                />
+              </div>
+
+              {requiredLogoError && (
+                <p className="text-sm font-bold text-red-600 text-center">{requiredLogoError}</p>
+              )}
+            </div>
+
+            <DialogFooter className="p-6 sm:p-8 border-t bg-gray-50">
+              <Button
+                type="submit"
+                disabled={isRequiredLogoSaving}
+                className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-widest text-xs rounded-xl"
+              >
+                {isRequiredLogoSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Save Logo'}
               </Button>
             </DialogFooter>
           </form>
