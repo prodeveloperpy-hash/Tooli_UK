@@ -94,6 +94,7 @@ class EquipmentFilter(BasePartialFilterSet):
         lookup_expr="gte",
     )
     available_on = django_filters.DateFilter(method="filter_available_on")
+    is_approved = django_filters.BooleanFilter(field_name="is_approved")
 
     def filter_queryset(self, queryset):
         qs = super().filter_queryset(queryset)
@@ -128,6 +129,7 @@ class EquipmentFilter(BasePartialFilterSet):
             "name_exact",
             "description",
             "is_active",
+            "is_approved",
             "category_id",
             "organization_id",
             "created_by",
