@@ -69,6 +69,12 @@ export function AdminDashboard() {
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [approvingId, setApprovingId] = useState<number | null>(null);
   const [rejectingId, setRejectingId] = useState<number | null>(null);
+  const [allSuppliers, setAllSuppliers] = useState<UserOrganization[]>([]);
+  const [pendingEquipment, setPendingEquipment] = useState<Equipment[]>([]);
+  const [isEquipApprovalModalOpen, setIsEquipApprovalModalOpen] = useState(false);
+  const [equipApprovalFilter, setEquipApprovalFilter] = useState<string>('all');
+  const [approvingEquipId, setApprovingEquipId] = useState<number | null>(null);
+  const [rejectingEquipId, setRejectingEquipId] = useState<number | null>(null);
   
   // Modal states
   const [isAddEditOpen, setIsAddEditOpen] = useState(false);
@@ -135,10 +141,41 @@ export function AdminDashboard() {
     }
   }, [activeTab, equipPage, supplierFilter, equipAvailabilityFilter]);
 
+  const fetchAllSuppliers = async () => {
+    try {
+      const data = await userApi.getUserOrganizations(undefined, true, 'SUPPLIER', 1, 50, true);
+      const supplierList = Array.isArray(data) ? data : data.results || [];
+      setAllSuppliers(supplierList);
+    } catch (error) {
+      console.error('Error fetching all suppliers for filter:', error);
+    }
+  };
+
+  const fetchPendingEquipment = async () => {
+    try {
+      const response = await equipmentApi.getEquipment(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        1,
+        100,
+        undefined,
+        undefined,
+        false // isApproved = false
+      );
+      setPendingEquipment(response.results || []);
+    } catch (error) {
+      console.error('Error fetching pending equipment:', error);
+    }
+  };
+
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
     fetchStats();
+    fetchAllSuppliers();
+    fetchPendingEquipment();
   }, []);
 
   const fetchStats = async () => {
@@ -170,10 +207,11 @@ export function AdminDashboard() {
     try {
       const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId, isActive);
+      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId, isActive, true);
       setEquipment(response.results);
       setTotalEquipCount(response.count);
       setTotalEquipPages(Math.ceil(response.count / 10));
+      fetchPendingEquipment();
     } catch (error) {
       console.error('Error fetching equipment:', error);
     } finally {
@@ -281,6 +319,48 @@ export function AdminDashboard() {
     } catch (error) {
       console.error('Error deleting equipment:', error);
       toast.error('Failed to delete equipment');
+    }
+  };
+
+  const handleApproveEquipment = async (id: number) => {
+    setApprovingEquipId(id);
+    const approvePromise = equipmentApi.updateEquipment({ equipment_id: id, is_approved: true });
+    
+    toast.promise(approvePromise, {
+      loading: 'Approving equipment...',
+      success: 'Equipment approved successfully',
+      error: 'Failed to approve equipment'
+    });
+
+    try {
+      await approvePromise;
+      await fetchEquipment();
+      await fetchPendingEquipment();
+    } catch (error) {
+      console.error('Error approving equipment:', error);
+    } finally {
+      setApprovingEquipId(null);
+    }
+  };
+
+  const handleRejectEquipment = async (id: number) => {
+    setRejectingEquipId(id);
+    const rejectPromise = equipmentApi.deleteEquipment(id);
+
+    toast.promise(rejectPromise, {
+      loading: 'Rejecting and deleting listing...',
+      success: 'Listing rejected and deleted',
+      error: 'Failed to reject equipment'
+    });
+
+    try {
+      await rejectPromise;
+      await fetchEquipment();
+      await fetchPendingEquipment();
+    } catch (error) {
+      console.error('Error rejecting equipment:', error);
+    } finally {
+      setRejectingEquipId(null);
     }
   };
 
@@ -477,13 +557,19 @@ export function AdminDashboard() {
 
           <Tabs defaultValue="suppliers" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-white p-1 rounded-xl shadow-sm border">
-              <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+              <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white relative">
                 <Users className="w-4 h-4 mr-2" />
                 Suppliers
+                {pendingSuppliers.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse" />
+                )}
               </TabsTrigger>
-              <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+              <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-brand-primary data-[state=active]:text-white relative">
                 <Package className="w-4 h-4 mr-2" />
                 Equipments
+                {pendingEquipment.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse" />
+                )}
               </TabsTrigger>
             </TabsList>
 
@@ -673,7 +759,7 @@ export function AdminDashboard() {
                 <CardContent className="p-0">
                   <div className="p-6 border-b bg-gray-50/50">
                     <div className="flex items-center gap-4">
-                      <div className="text-sm font-medium text-gray-500">Filter by Supplier:</div>
+                      <div className="text-sm font-medium text-gray-500">Filter:</div>
                       <select
                         value={supplierFilter}
                         onChange={(e) => {
@@ -683,7 +769,7 @@ export function AdminDashboard() {
                         className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[200px]"
                       >
                         <option value="all">All Suppliers</option>
-                        {suppliers.map(s => (
+                        {allSuppliers.map(s => (
                           <option key={s.user_organization_id} value={s.organization_id}>
                             {s.organization_details.name}
                           </option>
@@ -701,6 +787,30 @@ export function AdminDashboard() {
                         <option value="available">Available</option>
                         <option value="unavailable">Not Available</option>
                       </select>
+
+                      <div className="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm transition-all hover:border-brand-primary/30 relative">
+                        <Checkbox 
+                          id="equip-approval-required" 
+                          checked={equipApprovalFilter === 'not_approved'}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setEquipApprovalFilter('not_approved');
+                              setIsEquipApprovalModalOpen(true);
+                            } else {
+                              setEquipApprovalFilter('all');
+                            }
+                          }}
+                        />
+                        <Label 
+                          htmlFor="equip-approval-required" 
+                          className="text-sm font-bold text-gray-700 cursor-pointer flex items-center gap-2"
+                        >
+                          Approval Requests
+                          {pendingEquipment.length > 0 && (
+                            <div className="w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm animate-pulse" title="Pending Approvals" />
+                          )}
+                        </Label>
+                      </div>
                     </div>
                   </div>
 
@@ -981,6 +1091,102 @@ export function AdminDashboard() {
                         className="flex-1 md:flex-none bg-[#030213] hover:bg-black text-white font-black h-12 px-8 rounded-xl shadow-xl shadow-black/10 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-xs"
                       >
                         {approvingId === s.user_organization_id ? (
+                          <Loader2 className="w-5 h-5 animate-spin text-white" />
+                        ) : (
+                          'Approve'
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Pending Equipment Approvals Modal */}
+      <Dialog 
+        open={isEquipApprovalModalOpen} 
+        onOpenChange={(open) => {
+          setIsEquipApprovalModalOpen(open);
+          if (!open) setEquipApprovalFilter('all');
+        }}
+      >
+        <DialogContent className="sm:max-w-[1200px] w-[95vw] max-h-[95vh] sm:max-h-[90vh] overflow-y-auto p-0 border-none shadow-3xl">
+          <DialogHeader className="p-6 sm:p-8 border-b bg-gray-50/50 sticky top-0 z-10 shrink-0">
+            <DialogTitle className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">Pending Equipment Listings</DialogTitle>
+            <p className="text-muted-foreground text-xs sm:text-sm font-medium uppercase tracking-widest mt-1">Review and approve new equipment listings before they go live</p>
+          </DialogHeader>
+          
+          <div className="p-4 sm:p-8 space-y-6">
+            {pendingEquipment.length === 0 ? (
+              <div className="py-12 sm:py-20 text-center bg-gray-50/50 rounded-3xl border-2 border-dashed border-gray-200">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                  <Package className="w-8 h-8 sm:w-10 sm:h-10 text-gray-300" />
+                </div>
+                <p className="text-gray-500 font-bold tracking-widest uppercase text-xs">No pending equipment approvals found</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {pendingEquipment.map((e) => (
+                  <div key={e.equipment_id} className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-100 bg-white shadow-sm hover:shadow-xl hover:border-brand-primary/20 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 group">
+                    <div className="flex items-center gap-4 sm:gap-6 flex-1">
+                      <Avatar className="h-15 w-15 rounded-xl border-4 border-gray-50 bg-white shadow-sm transition-transform group-hover:scale-105">
+                        <AvatarImage src={e.images?.[0]?.image_url || ''} className="object-contain" />
+                        <AvatarFallback className="rounded-xl bg-brand-primary/5 text-brand-primary font-black text-xl">
+                          {e.name?.[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0">
+                        <div className="font-black text-gray-900 text-lg sm:text-xl tracking-tight truncate">
+                          {e.name}
+                        </div>
+                        <div className="flex items-center gap-2 text-xs sm:text-sm text-brand-primary font-bold uppercase tracking-widest mt-1">
+                          <Tag className="w-3.5 h-3.5" />
+                          <span className="truncate">{e.category_display_name}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-row gap-4 md:gap-10 flex-1 px-2 md:px-0">
+                      <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-500 font-medium">
+                        <div className="w-8 h-8 rounded-lg bg-white border border-gray-100 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                          {e.organization_logo ? (
+                            <img src={e.organization_logo} alt="" className="max-h-full max-w-full object-contain" />
+                          ) : (
+                            <Building2 className="w-4 h-4 text-gray-400" />
+                          )}
+                        </div>
+                        <span className="truncate font-semibold text-gray-900">{e.organization_name}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-500 font-medium">
+                        <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0">
+                          <MapPin className="w-4 h-4 text-gray-400" />
+                        </div>
+                        <span className="truncate">{e.locations?.[0]?.city_name || 'Generic Location'}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-row md:flex-row gap-3 pt-4 md:pt-0 border-t md:border-none">
+                      <Button 
+                        onClick={() => handleRejectEquipment(e.equipment_id)}
+                        disabled={rejectingEquipId === e.equipment_id || approvingEquipId === e.equipment_id}
+                        variant="ghost"
+                        className="flex-1 md:flex-none h-12 px-6 rounded-xl font-black text-xs uppercase tracking-widest text-red-500 hover:bg-red-50 hover:text-red-600 transition-all active:scale-95"
+                      >
+                        {rejectingEquipId === e.equipment_id ? (
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                        ) : (
+                          'Reject'
+                        )}
+                      </Button>
+                      <Button 
+                        onClick={() => handleApproveEquipment(e.equipment_id)}
+                        disabled={approvingEquipId === e.equipment_id || rejectingEquipId === e.equipment_id}
+                        className="flex-1 md:flex-none bg-[#030213] hover:bg-black text-white font-black h-12 px-8 rounded-xl shadow-xl shadow-black/10 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-xs"
+                      >
+                        {approvingEquipId === e.equipment_id ? (
                           <Loader2 className="w-5 h-5 animate-spin text-white" />
                         ) : (
                           'Approve'

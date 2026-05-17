@@ -4,6 +4,7 @@ import { Menu, Search, User, LogOut, LayoutDashboard, ChevronDown } from 'lucide
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { authApi } from '../../context/auth.api';
+import { userApi } from '../../context/user.api';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,22 +15,81 @@ import {
 } from './ui/dropdown-menu';
 import { ProfileModal } from './ProfileModal';
 
+type NavbarUser = { name: string; avatar: string; role: string; email?: string };
+
 export function Navbar() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [user, setUser] = useState<{ name: string; avatar: string; role: string; email?: string } | null>(null);
+  const [user, setUser] = useState<NavbarUser | null>(null);
+  const [avatarVersion, setAvatarVersion] = useState(Date.now());
+
+  const getAvatarSrc = (avatar?: string) => {
+    if (!avatar) return '';
+    const separator = avatar.includes('?') ? '&' : '?';
+    return `${avatar}${separator}v=${avatarVersion}`;
+  };
 
   useEffect(() => {
-    const userId = localStorage.getItem('user_id');
-    const name = localStorage.getItem('name');
-    const avatar = localStorage.getItem('avatar_url');
-    const role = localStorage.getItem('role_key');
-    const email = localStorage.getItem('email');
+    const readStoredUser = () => {
+      const userId = localStorage.getItem('user_id');
+      const name = localStorage.getItem('name');
+      const avatar = localStorage.getItem('avatar_url');
+      const role = localStorage.getItem('role_key');
+      const email = localStorage.getItem('email');
 
-    if (userId && name) {
-      setUser({ name, avatar: avatar || '', role: role || '', email: email || '' });
-    }
+      if (userId && name) {
+        setUser({ name, avatar: avatar || '', role: role || '', email: email || '' });
+        setAvatarVersion(Date.now());
+      } else {
+        setUser(null);
+      }
+    };
+
+    const refreshLatestUser = async () => {
+      const userId = localStorage.getItem('user_id');
+      const role = localStorage.getItem('role_key') || '';
+      if (!userId) return;
+
+      readStoredUser();
+
+      try {
+        const latestUser = await userApi.getUser(parseInt(userId));
+        const firstName = latestUser.first_name || '';
+        const lastName = latestUser.last_name || '';
+        const latestName = `${firstName} ${lastName}`.trim();
+        const latestAvatar = latestUser.avatar_url || '';
+        const latestEmail = latestUser.email || '';
+
+        if (latestName) localStorage.setItem('name', latestName);
+        localStorage.setItem('avatar_url', latestAvatar);
+        localStorage.setItem('email', latestEmail);
+
+        setUser({
+          name: latestName || localStorage.getItem('name') || '',
+          avatar: latestAvatar,
+          role,
+          email: latestEmail,
+        });
+        setAvatarVersion(Date.now());
+      } catch (error) {
+        console.error('Failed to refresh navbar profile:', error);
+      }
+    };
+
+    const handleProfileUpdated = () => {
+      readStoredUser();
+      setAvatarVersion(Date.now());
+    };
+
+    refreshLatestUser();
+    window.addEventListener('profile-updated', handleProfileUpdated);
+    window.addEventListener('storage', handleProfileUpdated);
+
+    return () => {
+      window.removeEventListener('profile-updated', handleProfileUpdated);
+      window.removeEventListener('storage', handleProfileUpdated);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -91,7 +151,7 @@ export function Navbar() {
                           <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider">{user.role}</p>
                         </div>
                         <Avatar className="h-9 w-9 rounded-lg border-2 border-brand-primary/20 bg-white shadow-sm transition-transform group-hover:scale-105">
-                          <AvatarImage src={user.avatar} alt={user.name} className="object-contain" />
+                          <AvatarImage key={getAvatarSrc(user.avatar)} src={getAvatarSrc(user.avatar)} alt={user.name} className="object-contain" />
                           <AvatarFallback className="rounded-lg bg-brand-primary/10 text-brand-primary font-bold">
                             {user.name.split(' ').filter(Boolean).map(n => n[0]).join('')}
                           </AvatarFallback>
@@ -145,7 +205,7 @@ export function Navbar() {
               {user && (
                 <div className="flex items-center gap-3 mb-2 p-2 bg-gray-50 rounded-xl mx-1">
                   <Avatar className="h-10 w-10 rounded-lg border border-brand-primary/20 bg-white">
-                    <AvatarImage src={user.avatar} alt={user.name} className="object-contain" />
+                    <AvatarImage key={getAvatarSrc(user.avatar)} src={getAvatarSrc(user.avatar)} alt={user.name} className="object-contain" />
                     <AvatarFallback className="rounded-lg bg-brand-primary/10 text-brand-primary font-bold text-xs">
                       {user.name.split(' ').filter(Boolean).map(n => n[0]).join('')}
                     </AvatarFallback>
@@ -214,7 +274,10 @@ export function Navbar() {
         isOpen={profileModalOpen} 
         onClose={() => setProfileModalOpen(false)} 
         user={user}
-        onUpdate={(updatedUser) => setUser({...user, ...updatedUser})}
+        onUpdate={(updatedUser) => {
+          setUser(prev => ({ ...(prev || { name: '', avatar: '', role: '' }), ...updatedUser }));
+          setAvatarVersion(Date.now());
+        }}
       />
     </nav>
   );

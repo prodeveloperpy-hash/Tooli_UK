@@ -13,7 +13,7 @@ interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   user: { name: string; avatar: string; role: string; email?: string } | null;
-  onUpdate: (updatedUser: { name: string; avatar: string; role: string }) => void;
+  onUpdate: (updatedUser: { name: string; avatar: string; role: string; email?: string }) => void;
 }
 
 export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalProps) {
@@ -22,6 +22,8 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [avatarVersion, setAvatarVersion] = useState(Date.now());
+  const [isAvatarImageLoading, setIsAvatarImageLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -48,6 +50,7 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
             password: '',
             confirmPassword: '',
           });
+          setAvatarVersion(Date.now());
         } catch (error) {
           console.error('Failed to fetch latest user:', error);
           // Fallback to passed user prop if API fails
@@ -62,6 +65,7 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
               password: '',
               confirmPassword: '',
             });
+            setAvatarVersion(Date.now());
           }
         } finally {
           setIsLoadingProfile(false);
@@ -78,13 +82,31 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (formData.avatarPreview.startsWith('blob:')) {
+        URL.revokeObjectURL(formData.avatarPreview);
+      }
+      const previewUrl = URL.createObjectURL(file);
+      setIsAvatarImageLoading(true);
       setFormData(prev => ({
         ...prev,
         avatarFile: file,
-        avatarPreview: URL.createObjectURL(file)
+        avatarPreview: previewUrl
       }));
+      setAvatarVersion(Date.now());
     }
   };
+
+  const getAvatarPreviewSrc = () => {
+    if (!formData.avatarPreview || formData.avatarPreview.startsWith('blob:')) {
+      return formData.avatarPreview;
+    }
+    const separator = formData.avatarPreview.includes('?') ? '&' : '?';
+    return `${formData.avatarPreview}${separator}v=${avatarVersion}`;
+  };
+
+  useEffect(() => {
+    setIsAvatarImageLoading(Boolean(formData.avatarPreview));
+  }, [formData.avatarPreview, avatarVersion]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,16 +138,20 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
         const updatedData = await userApi.updateUser(parseInt(userId!), payload, formData.avatarFile || undefined);
         
         // Update local storage
-        const newName = `${updatedData.first_name} ${updatedData.last_name}`;
+        const newName = `${updatedData.first_name || ''} ${updatedData.last_name || ''}`.trim();
+        const newAvatar = updatedData.avatar_url || localStorage.getItem('avatar_url') || formData.avatarPreview || '';
+        const newEmail = updatedData.email || formData.email;
+
         localStorage.setItem('name', newName);
-        if (updatedData.avatar_url) {
-          localStorage.setItem('avatar_url', updatedData.avatar_url);
-        }
+        localStorage.setItem('avatar_url', newAvatar);
+        localStorage.setItem('email', newEmail);
+        setAvatarVersion(Date.now());
 
         onUpdate({
           name: newName,
-          avatar: updatedData.avatar_url || '',
+          avatar: newAvatar,
           role: roleKey || 'SUPERADMIN',
+          email: newEmail,
         });
       } else {
         const formDataToSend = new FormData();
@@ -160,19 +186,24 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
         const updatedData = await response.json();
         
         // Update local storage
-        const newName = `${updatedData.user_details.first_name} ${updatedData.user_details.last_name}`;
+        const newName = `${updatedData.user_details.first_name || ''} ${updatedData.user_details.last_name || ''}`.trim();
+        const newAvatar = updatedData.user_details.avatar_url || localStorage.getItem('avatar_url') || formData.avatarPreview || '';
+        const newEmail = updatedData.user_details.email || formData.email;
+
         localStorage.setItem('name', newName);
-        if (updatedData.user_details.avatar_url) {
-          localStorage.setItem('avatar_url', updatedData.user_details.avatar_url);
-        }
+        localStorage.setItem('avatar_url', newAvatar);
+        localStorage.setItem('email', newEmail);
+        setAvatarVersion(Date.now());
 
         onUpdate({
           name: newName,
-          avatar: updatedData.user_details.avatar_url || '',
+          avatar: newAvatar,
           role: updatedData.role_details.role_key,
+          email: newEmail,
         });
       }
 
+      window.dispatchEvent(new Event('profile-updated'));
       toast.success('Profile updated successfully');
       onClose();
     } catch (error: any) {
@@ -182,6 +213,8 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
       setIsSubmitting(false);
     }
   };
+
+  const avatarPreviewSrc = getAvatarPreviewSrc();
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -206,10 +239,21 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
           <div className="flex flex-col items-center gap-4 mb-4">
             <div className="relative group">
               <Avatar className="h-24 w-24 rounded-xl border-4 border-brand-primary/10 bg-white shadow-md">
-                <AvatarImage src={formData.avatarPreview} className="object-contain" />
+                <AvatarImage
+                  key={avatarPreviewSrc}
+                  src={avatarPreviewSrc}
+                  className={`object-contain transition-opacity ${isAvatarImageLoading ? 'opacity-30' : 'opacity-100'}`}
+                  onLoad={() => setIsAvatarImageLoading(false)}
+                  onError={() => setIsAvatarImageLoading(false)}
+                />
                 <AvatarFallback className="rounded-xl text-2xl font-bold bg-brand-primary/5 text-brand-primary">
                   {formData.firstName[0]}{formData.lastName[0]}
                 </AvatarFallback>
+                {isAvatarImageLoading && avatarPreviewSrc && (
+                  <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-white/70">
+                    <Loader2 className="w-6 h-6 animate-spin text-brand-primary" />
+                  </div>
+                )}
               </Avatar>
               <label className="absolute inset-0 flex items-center justify-center bg-black/40 text-white rounded-xl opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                 <Camera className="w-6 h-6" />
