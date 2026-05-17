@@ -68,8 +68,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
   };
 
   const handleSearch = () => {
-    // If only one of category or location is selected, validation error occurs
-    if ((categoryId && !locationId) || (!categoryId && locationId)) {
+    if (!categoryId || !locationId) {
       setShowValidationErrors(true);
       return;
     }
@@ -238,7 +237,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
       </div>
       {showValidationErrors && (
         <p className="text-xs text-red-500 font-semibold mt-3 text-center">
-          To filter, both Equipment Category and Location must be selected. Leave both empty to see all listings.
+          Please select both Equipment Category and Location to search.
         </p>
       )}
     </div>

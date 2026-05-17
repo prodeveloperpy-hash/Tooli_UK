@@ -20,6 +20,7 @@ export function HomePage() {
     categoryId: '',
     locationId: '',
   });
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +39,12 @@ export function HomePage() {
   }, []);
 
   const handleSearch = () => {
+    if (!searchData.categoryId || !searchData.locationId) {
+      setShowValidationErrors(true);
+      return;
+    }
+
+    setShowValidationErrors(false);
     const params = new URLSearchParams();
     if (searchData.categoryId) params.append('category', searchData.categoryId);
     if (searchData.locationId) params.append('location', searchData.locationId);
@@ -80,7 +87,10 @@ export function HomePage() {
                   <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">What equipment do you need?</Label>
                   <SearchableSelect
                     value={searchData.categoryId}
-                    onValueChange={(v) => setSearchData({...searchData, categoryId: v})}
+                    onValueChange={(v) => {
+                      setSearchData({...searchData, categoryId: v});
+                      setShowValidationErrors(false);
+                    }}
                     options={categories.map(cat => ({
                       value: cat.category_id.toString(),
                       label: cat.category_display_name,
@@ -89,7 +99,9 @@ export function HomePage() {
                     searchPlaceholder="Search equipment..."
                     emptyText="No equipment found."
                     icon={<Search className="w-4 h-4 text-gray-400" />}
-                    triggerClassName="h-10 md:h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent"
+                    triggerClassName={`h-10 md:h-9 bg-transparent p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent ${
+                      showValidationErrors && !searchData.categoryId ? 'border-red-500 ring-1 ring-red-500' : 'border-none'
+                    }`}
                     contentClassName="rounded-xl border-gray-100"
                   />
                   {searchData.categoryId && (
@@ -106,7 +118,10 @@ export function HomePage() {
                   <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Location</Label>
                   <SearchableSelect
                     value={searchData.locationId}
-                    onValueChange={(v) => setSearchData({...searchData, locationId: v})}
+                    onValueChange={(v) => {
+                      setSearchData({...searchData, locationId: v});
+                      setShowValidationErrors(false);
+                    }}
                     options={locations.map(loc => ({
                       value: loc.location_id.toString(),
                       label: `${loc.city_name}, ${loc.country}`,
@@ -115,7 +130,9 @@ export function HomePage() {
                     searchPlaceholder="Search locations..."
                     emptyText="No locations found."
                     icon={<MapPin className="w-4 h-4 text-gray-400" />}
-                    triggerClassName="h-10 md:h-9 bg-transparent border-none p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent"
+                    triggerClassName={`h-10 md:h-9 bg-transparent p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent ${
+                      showValidationErrors && !searchData.locationId ? 'border-red-500 ring-1 ring-red-500' : 'border-none'
+                    }`}
                     contentClassName="rounded-xl border-gray-100"
                   />
                   {searchData.locationId && (
@@ -172,6 +189,11 @@ export function HomePage() {
                   </Button>
                 </div>
               </div>
+              {showValidationErrors && (
+                <p className="px-3 pb-2 text-center text-xs font-semibold text-red-500">
+                  Please select both equipment and location to search.
+                </p>
+              )}
             </div>
 
             {/* Badges below search */}

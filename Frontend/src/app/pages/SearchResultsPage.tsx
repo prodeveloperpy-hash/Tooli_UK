@@ -26,16 +26,21 @@ export function SearchResultsPage() {
   const locationId = searchParams.get('location') || '';
   const dateFrom = searchParams.get('date_from') || '';
   const dateTo = searchParams.get('date_to') || '';
+  const hasRequiredSearch = Boolean(categoryId && locationId);
 
   useEffect(() => {
     const fetchEquipment = async () => {
+      if (!hasRequiredSearch) {
+        setEquipment([]);
+        setTotalCount(0);
+        setTotalPages(1);
+        setIsLoading(false);
+        return;
+      }
+
       setIsLoading(true);
       try {
-        // Enforce the business logic: if only one parameter is in the URL, treat it as a "show all" (unfiltered query).
-        const activeCategory = (categoryId && locationId) ? categoryId : '';
-        const activeLocation = (categoryId && locationId) ? locationId : '';
-
-        const response = await equipmentApi.getEquipment(activeCategory, activeLocation, undefined, undefined, page);
+        const response = await equipmentApi.getEquipment(categoryId, locationId, undefined, undefined, page);
         setEquipment(response.results || []);
         setTotalCount(response.count || 0);
         setTotalPages(Math.ceil((response.count || 0) / 10)); // Updated to 10 as per new requirements
@@ -47,7 +52,7 @@ export function SearchResultsPage() {
     };
     fetchEquipment();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [categoryId, locationId, dateFrom, dateTo, page]);
+  }, [categoryId, locationId, dateFrom, dateTo, page, hasRequiredSearch]);
 
   const sortedResults = useMemo(() => {
     let results = [...equipment];
@@ -166,8 +171,12 @@ export function SearchResultsPage() {
                   <div className="w-full min-w-0">
                     {sortedResults.length === 0 ? (
                       <div className="text-center py-24">
-                        <h3 className="text-xl font-bold mb-2">No results found</h3>
-                        <p className="text-gray-500">Try adjusting your search criteria</p>
+                        <h3 className="text-xl font-bold mb-2">
+                          {hasRequiredSearch ? 'No results found' : 'Select equipment and location'}
+                        </h3>
+                        <p className="text-gray-500">
+                          {hasRequiredSearch ? 'Try adjusting your search criteria' : 'Choose both fields above to search available equipment.'}
+                        </p>
                       </div>
                     ) : (
                       <div className="w-full min-w-0 overflow-hidden">
