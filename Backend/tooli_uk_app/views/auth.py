@@ -8,7 +8,14 @@ from rest_framework.views import APIView
 from tooli_uk_app.models import User
 from tooli_uk_app.models.user_organization import UserOrganization
 from tooli_uk_app.serializers.auth import LoginSerializer, SignupSerializer
+from tooli_uk_app.serializers.organization import OrganizationSerializer
 from tooli_uk_app.serializers.user import UserSerializer
+from tooli_uk_app.services.superadmin import (
+    HARDCODED_SUPERADMIN_EMAIL,
+    HARDCODED_SUPERADMIN_FIRST_NAME,
+    HARDCODED_SUPERADMIN_LAST_NAME,
+    SUPERADMIN_ROLE_KEY,
+)
 
 
 class SignupAPIView(APIView):
@@ -59,16 +66,63 @@ class SignupAPIView(APIView):
 
 
 class LoginAPIView(APIView):
+    @staticmethod
+    def _organization_payload(request, organization):
+        if organization is None:
+            return {
+                "id": None,
+                "name": None,
+                "logo": None,
+            }
+        org_data = OrganizationSerializer(organization, context={"request": request}).data
+        return {
+            "id": org_data.get("organization_id"),
+            "name": org_data.get("name"),
+            "logo": org_data.get("logo"),
+        }
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if serializer.validated_data.get("is_hardcoded_superadmin"):
+            return Response(
+                {
+                    "message": "Login successful.",
+                    "data": {
+                        "user": {
+                            "user_id": None,
+                            "first_name": HARDCODED_SUPERADMIN_FIRST_NAME,
+                            "last_name": HARDCODED_SUPERADMIN_LAST_NAME,
+                            "email": HARDCODED_SUPERADMIN_EMAIL,
+                            "avatar_url": None,
+                            "role_id": None,
+                            "created_datetime": None,
+                            "updated_datetime": None,
+                            "created_by": None,
+                            "updated_by": None,
+                            "is_active": True,
+                        },
+                        "role_key": SUPERADMIN_ROLE_KEY,
+                        "organization_id": None,
+                        "organization": self._organization_payload(request, None),
+                    },
+                },
+                status=status.HTTP_200_OK,
+            )
+
         user = serializer.validated_data["user"]
 
-        organization_id = (
+        organization_link = (
             UserOrganization.objects.filter(user_id=user, is_active=True)
-            .order_by("user_organization_id")
-            .values_list("organization_id", flat=True)
+            .select_related("organization_id")
+            .order_by("-user_organization_id")
             .first()
+        )
+        organization_id = organization_link.organization_id_id if organization_link else None
+        organization_obj = (
+            organization_link.organization_id
+            if organization_link and organization_link.organization_id_id
+            else None
         )
         role_key = user.role_id.role_key if user.role_id_id else None
 
@@ -79,6 +133,7 @@ class LoginAPIView(APIView):
                     "user": UserSerializer(user, context={"request": request}).data,
                     "role_key": role_key,
                     "organization_id": organization_id,
+                    "organization": self._organization_payload(request, organization_obj),
                 },
             },
             status=status.HTTP_200_OK,

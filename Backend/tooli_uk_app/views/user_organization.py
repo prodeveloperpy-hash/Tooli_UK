@@ -5,6 +5,7 @@ from rest_framework.response import Response
 
 from tooli_uk_app.filters.user_organization import UserOrganizationFilter
 from tooli_uk_app.models import UserOrganization
+from tooli_uk_app.paginations import UserOrganizationPagination
 from tooli_uk_app.serializers.user_organization import (
     UserOrganizationMutateSerializer,
     UserOrganizationSerializer,
@@ -14,8 +15,9 @@ from tooli_uk_app.serializers.user_organization import (
 class UserOrganizationViewSet(viewsets.ModelViewSet):
     queryset = UserOrganization.objects.select_related(
         "user_id", "organization_id", "role_id"
-    ).all()
+    ).order_by("-user_organization_id")
     filterset_class = UserOrganizationFilter
+    pagination_class = UserOrganizationPagination
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update"):

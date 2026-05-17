@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from rest_framework import parsers, status, viewsets
 from rest_framework.decorators import action
@@ -8,15 +8,16 @@ from rest_framework.response import Response
 
 from tooli_uk_app.filters.organization import OrganizationFilter
 from tooli_uk_app.models import Organization
+from tooli_uk_app.paginations import OrganizationPagination
 from tooli_uk_app.serializers.organization import OrganizationSerializer
-from tooli_uk_app.serializers.user import _is_public_http_url
 from tooli_uk_app.services import gcs_images
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.all().order_by("-organization_id")
     serializer_class = OrganizationSerializer
     filterset_class = OrganizationFilter
+    pagination_class = OrganizationPagination
     parser_classes = [
         parsers.JSONParser,
         parsers.MultiPartParser,
@@ -85,30 +86,32 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], url_path="logo")
     def logo(self, request, pk=None):
-        """Serve ``Organization.logo`` from GCS or redirect when it is an external URL."""
+        """Serve org logo via API (GCS with SA/ADC or local); redirect only external URLs."""
         org = get_object_or_404(Organization, pk=pk)
         raw = (org.logo or "").strip()
         if not raw:
             return HttpResponse(status=404)
-        if _is_public_http_url(raw):
-            return HttpResponseRedirect(raw)
         try:
-            payload = gcs_images.download_blob(raw)
+            payload = gcs_images.open_stored_image(raw)
         except RuntimeError:
             return HttpResponse(
                 "Image storage is not configured.",
                 status=503,
                 content_type="text/plain",
             )
-        except Exception as exc:
+        except Exception as exc:  # e.g. GCS client / credentials
             return HttpResponse(
                 f"Image storage error: {exc}",
                 status=503,
                 content_type="text/plain",
             )
-        if payload is None:
-            return HttpResponse(status=404)
-        data, content_type = payload
-        response = HttpResponse(data, content_type=content_type)
-        response["Cache-Control"] = "private, max-age=3600"
-        return response
+        if payload is not None:
+            file_obj, content_type, content_length = payload
+            response = FileResponse(file_obj, content_type=content_type)
+            if content_length is not None:
+                response["Content-Length"] = str(content_length)
+            response["Cache-Control"] = "private, max-age=3600"
+            return response
+        if gcs_images.is_external_public_image_url(raw):
+            return HttpResponseRedirect(raw)
+        return HttpResponse(status=404)

@@ -1,6 +1,31 @@
 import { API_URL } from '../api-config';
 import { SignupRequest, AuthResponse, LoginRequest } from '../types';
 
+function parseApiError(errorData: unknown, fallback: string): string {
+  if (!errorData || typeof errorData !== 'object') return fallback;
+  const entries = Object.entries(errorData as Record<string, unknown>);
+  if (entries.length === 0) return fallback;
+
+  const messages: string[] = [];
+  for (const [key, value] of entries) {
+    const vals = Array.isArray(value) ? value : [value];
+    const text = vals.filter(Boolean).join(', ');
+    if (!text) continue;
+    if (key === 'non_field_errors' || key === 'detail') {
+      messages.push(text);
+    } else {
+      messages.push(`${key}: ${text}`);
+    }
+  }
+  return messages.join(' | ') || fallback;
+}
+
+function isNetworkError(err: unknown): boolean {
+  if (!(err instanceof TypeError)) return false;
+  const msg = (err as TypeError).message.toLowerCase();
+  return msg.includes('failed to fetch') || msg.includes('load failed') || msg.includes('networkerror');
+}
+
 export const authApi = {
   signup: async (data: SignupRequest): Promise<AuthResponse> => {
     const formData = new FormData();
@@ -13,6 +38,7 @@ export const authApi = {
         delete (cleanedPayload as any)[field];
       }
     });
+
 
     // Extract files if they exist
     const avatarFile = (cleanedPayload as any).avatarFile;
@@ -40,32 +66,33 @@ export const authApi = {
       body: formData,
     });
 
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      const errorMsg = typeof errorData === 'object' 
-        ? Object.values(errorData).flat().join(', ') 
-        : 'Signup failed';
-      throw new Error(errorMsg || 'Signup failed');
+      throw new Error(parseApiError(errorData, 'Signup failed. Please try again.'));
     }
 
     return response.json();
   },
 
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await fetch(`${API_URL}/login/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    let response: Response;
+    try {
+      response = await fetch(`${API_URL}/login/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    } catch (err) {
+      if (isNetworkError(err)) {
+        throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
+      }
+      throw err;
+    }
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      const errorMsg = typeof errorData === 'object' 
-        ? Object.values(errorData).flat().join(', ') 
-        : 'Login failed';
-      throw new Error(errorMsg || 'Login failed');
+      throw new Error(parseApiError(errorData, 'Login failed. Please try again.'));
     }
 
     return response.json();

@@ -31,9 +31,13 @@ SECRET_KEY = os.environ.get(
     "replace-this-with-a-strong-static-secret-key",
 )
 
-DEBUG = False
+DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() in ("1", "true", "yes")
 
-ALLOWED_HOSTS = ["*"]
+# Comma-separated hostnames, no scheme (e.g. "api.example.com,.run.app"). Empty = allow all (dev only).
+_allowed = os.environ.get("DJANGO_ALLOWED_HOSTS", "").strip()
+ALLOWED_HOSTS = (
+    [h.strip() for h in _allowed.split(",") if h.strip()] if _allowed else ["*"]
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -128,8 +132,37 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Private GCS bucket for equipment images; Cloud Run uses the service account (ADC).
+# Local uploads (when GCS uploads are disabled) — e.g. Windows dev without ADC.
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+
+# --- Image storage (shared): user avatars, org logos, equipment images — all via
+# tooli_uk_app.services.gcs_images (POST/PATCH /equipment/, /create_equipment/, etc.).
+# Private GCS bucket for images; Cloud Run should use the runtime service account (ADC).
 GCS_IMAGE_BUCKET = os.environ.get("GCS_IMAGE_BUCKET", "tooli-uk-images")
+
+# Optional path to a service account JSON key. If unset, ``google.cloud.storage.Client``
+# uses Application Default Credentials (recommended on Cloud Run with the deploy SA).
+_gcs_sa = os.environ.get("GCS_SERVICE_ACCOUNT_FILE") or os.environ.get(
+    "GOOGLE_APPLICATION_CREDENTIALS", ""
+)
+GCS_SERVICE_ACCOUNT_FILE = _gcs_sa.strip() or None
+GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "").strip() or None
+
+# When False, multipart uploads go to MEDIA_ROOT (offline dev only). Default: always GCS.
+# Set GCS_UPLOAD_ENABLED=false only if you run locally without GCP credentials.
+GCS_UPLOAD_ENABLED = os.environ.get("GCS_UPLOAD_ENABLED", "true").lower() in (
+    "1",
+    "true",
+    "yes",
+)
+
+# Per-request timeout (seconds) for GCS JSON API (upload/download).
+# Keep this lower than Gunicorn worker timeout to avoid WORKER TIMEOUT crashes.
+try:
+    GCS_HTTP_TIMEOUT_SECONDS = float(os.environ.get("GCS_HTTP_TIMEOUT_SECONDS", "250"))
+except ValueError:
+    GCS_HTTP_TIMEOUT_SECONDS = 250.0
 
 # API supports JSON and DRF Browsable API form testing.
 REST_FRAMEWORK = {
@@ -151,12 +184,86 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://frontend-service-961815749151.us-central1.run.app",
-    "http://localhost:5173",
-]
+# Browser origins allowed to call the API (scheme + host + port). Override in production via env.
+_cors = os.environ.get("CORS_ALLOWED_ORIGINS", "").strip()
+if _cors:
+    CORS_ALLOWED_ORIGINS = [x.strip() for x in _cors.split(",") if x.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "https://frontend-service-961815749151.us-central1.run.app",
+        "http://localhost:5173",
+    ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://frontend-service-961815749151.us-central1.run.app",
-    "http://localhost:5173",
-]
+_csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "").strip()
+if _csrf:
+    CSRF_TRUSTED_ORIGINS = [x.strip() for x in _csrf.split(",") if x.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = list(CORS_ALLOWED_ORIGINS)
+
+CORS_ALLOW_CREDENTIALS = os.environ.get("CORS_ALLOW_CREDENTIALS", "false").lower() in (
+    "1",
+    "true",
+    "yes",
+)
+
+# Email (supplier approval notifications).
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend",
+)
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "info@tooli.uk").strip()
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "ejHp9RtXThFY").strip()
+
+# Auto-pick SMTP host/port from sender email when host/port are not provided.
+_email_domain = EMAIL_HOST_USER.split("@")[-1].lower() if "@" in EMAIL_HOST_USER else ""
+_smtp_defaults = {
+    # Gmail / Google Workspace
+    "gmail.com": ("smtp.gmail.com", 587, True, False),
+    "googlemail.com": ("smtp.gmail.com", 587, True, False),
+    "tooli.uk": ("smtp.zoho.eu", 587, True, False),
+    # Microsoft
+    "outlook.com": ("smtp.office365.com", 587, True, False),
+    "hotmail.com": ("smtp.office365.com", 587, True, False),
+    "live.com": ("smtp.office365.com", 587, True, False),
+    # Yahoo
+    "yahoo.com": ("smtp.mail.yahoo.com", 587, True, False),
+    # Zoho
+    "zoho.com": ("smtp.zoho.com", 587, True, False),
+    "zoho.eu": ("smtp.zoho.eu", 587, True, False),
+}
+_default_host, _default_port, _default_tls, _default_ssl = _smtp_defaults.get(
+    _email_domain,
+    ("smtp.zoho.eu", 587, True, False),
+)
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST", _default_host)
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", str(_default_port)))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", str(_default_tls)).lower() in (
+    "1",
+    "true",
+    "yes",
+)
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", str(_default_ssl)).lower() in (
+    "1",
+    "true",
+    "yes",
+)
+# SMTP timeout to prevent long blocking requests in API handlers.
+EMAIL_TIMEOUT = int(os.environ.get("EMAIL_TIMEOUT", "20"))
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL",
+    EMAIL_HOST_USER or "noreply@tooli.uk",
+)
+SUPPLIER_APPROVAL_URL = os.environ.get(
+    "SUPPLIER_APPROVAL_URL",
+    "https://frontend-service-961815749151.us-central1.run.app/dashboard",
+)
+
+# Cloud Run / reverse proxy: correct scheme and host for absolute URLs (e.g. avatar links) and CSRF.
+if os.environ.get("K_SERVICE") or os.environ.get("USE_CLOUD_RUN_PROXY_HEADERS", "").lower() in (
+    "1",
+    "true",
+    "yes",
+):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    USE_X_FORWARDED_HOST = True

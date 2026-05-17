@@ -16,7 +16,7 @@ class Equipment(models.Model):
     updated_datetime = models.DateTimeField(null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="created_by", null=True, blank=True, related_name="equipment_created")
     updated_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="updated_by", null=True, blank=True, related_name="equipment_updated")
-
+    redirect_url = models.TextField(null=True, blank=True)
     class Meta:
         managed = False
         db_table = "equipment"

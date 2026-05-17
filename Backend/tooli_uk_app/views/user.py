@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import FileResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -6,14 +6,16 @@ from rest_framework.response import Response
 
 from tooli_uk_app.filters.user import UserFilter
 from tooli_uk_app.models import User
-from tooli_uk_app.serializers.user import UserSerializer, _is_public_http_url
+from tooli_uk_app.paginations import UserPagination
+from tooli_uk_app.serializers.user import UserSerializer
 from tooli_uk_app.services import gcs_images
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by("-user_id")
     serializer_class = UserSerializer
     filterset_class = UserFilter
+    pagination_class = UserPagination
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -30,24 +32,26 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], url_path="avatar")
     def avatar(self, request, pk=None):
-        """Serve profile image from GCS or redirect for external ``avatar_url``."""
+        """Serve profile image via API (GCS with SA/ADC or local); redirect only external URLs."""
         user = get_object_or_404(User, pk=pk)
         raw = (user.avatar_url or "").strip()
         if not raw:
             return HttpResponse(status=404)
-        if _is_public_http_url(raw):
-            return HttpResponseRedirect(raw)
         try:
-            payload = gcs_images.download_blob(raw)
+            payload = gcs_images.open_stored_image(raw)
         except Exception as exc:
             return HttpResponse(
                 f"Image storage error: {exc}",
                 status=503,
                 content_type="text/plain",
             )
-        if payload is None:
-            return HttpResponse(status=404)
-        data, content_type = payload
-        response = HttpResponse(data, content_type=content_type)
-        response["Cache-Control"] = "private, max-age=3600"
-        return response
+        if payload is not None:
+            file_obj, content_type, content_length = payload
+            response = FileResponse(file_obj, content_type=content_type)
+            if content_length is not None:
+                response["Content-Length"] = str(content_length)
+            response["Cache-Control"] = "private, max-age=3600"
+            return response
+        if gcs_images.is_external_public_image_url(raw):
+            return HttpResponseRedirect(raw)
+        return HttpResponse(status=404)

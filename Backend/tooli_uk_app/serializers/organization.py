@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import serializers
 
 from tooli_uk_app.models import Organization
-from tooli_uk_app.serializers.user import _is_public_http_url
+from tooli_uk_app.services.gcs_images import should_use_api_url_in_json
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         raw = (instance.logo or "").strip()
-        if not raw or _is_public_http_url(raw):
+        if not raw or not should_use_api_url_in_json(raw):
             return data
         request = self.context.get("request")
         if request is None:

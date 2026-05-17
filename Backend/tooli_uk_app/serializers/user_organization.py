@@ -5,7 +5,11 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from tooli_uk_app.models import Organization, Role, User, UserOrganization
-from tooli_uk_app.serializers.user import _is_public_http_url
+from tooli_uk_app.services.gcs_images import should_use_api_url_in_json
+from tooli_uk_app.services.notifications import (
+    notify_new_supplier_for_approval,
+    notify_supplier_approved,
+)
 
 
 class UserOrganizationUserDetailSerializer(serializers.Serializer):
@@ -17,8 +21,10 @@ class UserOrganizationUserDetailSerializer(serializers.Serializer):
 
     def get_avatar_url(self, obj):
         raw = (obj.avatar_url or "").strip() if obj else ""
-        if not raw or _is_public_http_url(raw):
-            return raw or None
+        if not raw:
+            return None
+        if not should_use_api_url_in_json(raw):
+            return raw
         request = self.context.get("request")
         if request is None:
             return raw
@@ -37,8 +43,10 @@ class UserOrganizationOrganizationDetailSerializer(serializers.Serializer):
 
     def get_logo(self, obj):
         raw = (obj.logo or "").strip() if obj else ""
-        if not raw or _is_public_http_url(raw):
-            return raw or None
+        if not raw:
+            return None
+        if not should_use_api_url_in_json(raw):
+            return raw
         request = self.context.get("request")
         if request is None:
             return raw
@@ -119,6 +127,9 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
     organization = UserOrganizationOrganizationNestedSerializer(required=False)
     role_id = serializers.IntegerField(required=False, allow_null=True)
     is_active = serializers.BooleanField(required=False)
+    is_approved = serializers.BooleanField(required=False)
+    approved_by = serializers.IntegerField(required=False, allow_null=True)
+    approved_datetime = serializers.DateTimeField(required=False, allow_null=True)
     created_by = serializers.IntegerField(required=False, allow_null=True)
     updated_by = serializers.IntegerField(required=False, allow_null=True)
 
@@ -210,6 +221,7 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         organization_id = validated_data.pop("organization_id", None)
         role_id = validated_data.pop("role_id")
         is_active = validated_data.pop("is_active", True)
+        is_approved = validated_data.pop("is_approved", None)
         created_by = validated_data.pop("created_by", None)
         updated_by = validated_data.pop("updated_by", None)
 
@@ -288,24 +300,60 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
                 "This user is already linked to this organization."
             )
 
-        link = UserOrganization.objects.create(
-            user_id_id=user_id,
-            organization_id_id=organization_id,
-            role_id_id=role_id,
-            is_active=is_active,
-            created_datetime=now,
-            updated_datetime=now,
-            created_by_id=created_by or user_id,
-            updated_by_id=updated_by or user_id,
-        )
+        role = Role.objects.filter(role_id=role_id).first()
+        is_supplier = bool(role and role.role_key and role.role_key.upper() == "SUPPLIER")
+        create_kwargs = {
+            "user_id_id": user_id,
+            "organization_id_id": organization_id,
+            "role_id_id": role_id,
+            "is_active": is_active,
+            "created_datetime": now,
+            "updated_datetime": now,
+            "created_by_id": created_by or user_id,
+            "updated_by_id": updated_by or user_id,
+        }
+        if is_approved is not None:
+            create_kwargs["is_approved"] = is_approved
+            if is_approved:
+                create_kwargs["is_active"] = True
+        if is_supplier and "is_approved" not in create_kwargs:
+            # Admin-side UserOrganization create for supplier defaults to approved.
+            # Public signup path uses a different serializer and still sets False.
+            create_kwargs["is_approved"] = True
+            create_kwargs["is_active"] = True
+
+        link = UserOrganization.objects.create(**create_kwargs)
+        if is_supplier:
+            supplier = User.objects.filter(pk=user_id).first()
+            org = Organization.objects.filter(pk=organization_id).first()
+            if supplier and supplier.email and org:
+                supplier_name = f"{supplier.first_name} {supplier.last_name}".strip()
+                if bool(link.is_approved):
+                    transaction.on_commit(
+                        lambda: notify_supplier_approved(
+                            supplier_name=supplier_name or supplier.email,
+                            supplier_email=supplier.email,
+                            organization_name=org.name,
+                        )
+                    )
+                else:
+                    transaction.on_commit(
+                        lambda: notify_new_supplier_for_approval(
+                            supplier_name=supplier_name or supplier.email,
+                            supplier_email=supplier.email,
+                            organization_name=org.name,
+                        )
+                    )
         return link
 
     @transaction.atomic
     def update(self, instance, validated_data):
         now = timezone.now()
+        was_approved = bool(instance.is_approved)
         user_payload = validated_data.pop("user", None)
         org_payload = validated_data.pop("organization", None)
         validated_data.pop("created_by", None)
+        validated_data.pop("approved_datetime", None)
         updated_by = validated_data.pop("updated_by", None)
 
         if "user_id" in validated_data:
@@ -316,6 +364,19 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
             instance.role_id_id = validated_data.pop("role_id")
         if "is_active" in validated_data:
             instance.is_active = validated_data.pop("is_active")
+        if "is_approved" in validated_data:
+            instance.is_approved = validated_data.pop("is_approved")
+            if instance.is_approved:
+                instance.is_active = True
+                if not instance.approved_datetime:
+                    instance.approved_datetime = now
+                approved_by_id = validated_data.pop("approved_by", None) or updated_by
+                if approved_by_id and not instance.approved_by_id:
+                    instance.approved_by_id = approved_by_id
+            else:
+                validated_data.pop("approved_by", None)
+        else:
+            validated_data.pop("approved_by", None)
 
         if user_payload:
             u = User.objects.get(pk=instance.user_id_id)
@@ -362,6 +423,25 @@ class UserOrganizationMutateSerializer(serializers.Serializer):
         if updated_by is not None:
             instance.updated_by_id = updated_by
         instance.save()
+
+        role = Role.objects.filter(role_id=instance.role_id_id).first()
+        is_supplier_membership = bool(
+            role and role.role_key and role.role_key.upper() == "SUPPLIER"
+        )
+        if is_supplier_membership and (not was_approved) and bool(instance.is_approved):
+            supplier = User.objects.filter(pk=instance.user_id_id).first()
+            organization = Organization.objects.filter(
+                pk=instance.organization_id_id
+            ).first()
+            if supplier and supplier.email and organization:
+                supplier_name = f"{supplier.first_name} {supplier.last_name}".strip()
+                transaction.on_commit(
+                    lambda: notify_supplier_approved(
+                        supplier_name=supplier_name or supplier.email,
+                        supplier_email=supplier.email,
+                        organization_name=organization.name,
+                    )
+                )
 
         avatar_file = self.context.get("avatar_file")
         if avatar_file:

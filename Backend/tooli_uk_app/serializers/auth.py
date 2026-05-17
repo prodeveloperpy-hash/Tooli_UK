@@ -7,6 +7,10 @@ from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.role import Role
 from tooli_uk_app.models.user import User
 from tooli_uk_app.models.user_organization import UserOrganization
+from tooli_uk_app.services.notifications import notify_new_supplier_for_approval
+from tooli_uk_app.services.superadmin import (
+    is_hardcoded_superadmin_login,
+)
 
 
 class SignupSerializer(serializers.Serializer):
@@ -14,6 +18,7 @@ class SignupSerializer(serializers.Serializer):
     last_name = serializers.CharField(max_length=100)
     email = serializers.EmailField(max_length=150)
     password = serializers.CharField(write_only=True, min_length=8, max_length=128)
+    # Signup is supplier-only. Role is forced to SUPPLIER in backend.
     role_id = serializers.IntegerField(required=False, allow_null=True)
     avatar_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     is_active = serializers.BooleanField(required=False, default=True)
@@ -29,24 +34,18 @@ class SignupSerializer(serializers.Serializer):
     organization_country = serializers.CharField(required=False, allow_blank=True, allow_null=True, max_length=100)
     organization_is_active = serializers.BooleanField(required=False, default=True)
 
+    # Signup is supplier-only. Membership role is forced to SUPPLIER in backend.
     user_organization_role_id = serializers.IntegerField(required=False, allow_null=True)
-    def validate_user_organization_role_id(self, value):
-        if value is not None and not Role.objects.filter(role_id=value).exists():
-            raise serializers.ValidationError("Invalid user_organization_role_id.")
-        return value
 
 
     def validate_email(self, value: str) -> str:
         if User.objects.filter(email__iexact=value).exists():
-            raise serializers.ValidationError("Email is already registered.")
+            raise serializers.ValidationError(
+                "This email is already registered. Please use a different email or log in."
+            )
         return value
 
-    def _resolve_role_id(self, role_id: int | None) -> int:
-        if role_id is not None:
-            if not Role.objects.filter(role_id=role_id).exists():
-                raise serializers.ValidationError({"role_id": "Invalid role_id."})
-            return role_id
-
+    def _resolve_supplier_role_id(self) -> int:
         supplier_role = Role.objects.filter(role_key__iexact="SUPPLIER").first()
         if not supplier_role:
             raise serializers.ValidationError(
@@ -57,7 +56,8 @@ class SignupSerializer(serializers.Serializer):
     @transaction.atomic
     def create(self, validated_data):
         now = timezone.now()
-        resolved_role_id = self._resolve_role_id(validated_data.get("role_id"))
+        # Force supplier-only signup regardless of any role fields sent by client.
+        resolved_role_id = self._resolve_supplier_role_id()
 
         organization = Organization.objects.create(
             name=validated_data["organization_name"],
@@ -102,16 +102,27 @@ class SignupSerializer(serializers.Serializer):
             user.avatar_url = gcs_images.upload_user_avatar(avatar_file, user.user_id)
             user.save(update_fields=["avatar_url", "updated_datetime"])
 
-        user_org_role = validated_data.get("user_organization_role_id")
+        membership_role_id = resolved_role_id
         UserOrganization.objects.create(
             user_id_id=user.user_id,
             organization_id_id=organization.organization_id,
-            role_id_id=user_org_role if user_org_role is not None else resolved_role_id,
+            role_id_id=membership_role_id,
             is_active=True,
+            # Supplier signups are always pending admin approval.
+            is_approved=False,
             created_datetime=now,
             updated_datetime=now,
             created_by_id=user.user_id,
             updated_by_id=user.user_id,
+        )
+
+        full_name = f"{user.first_name} {user.last_name}".strip()
+        transaction.on_commit(
+            lambda: notify_new_supplier_for_approval(
+                supplier_name=full_name or user.email,
+                supplier_email=user.email,
+                organization_name=organization.name,
+            )
         )
 
         return {
@@ -129,13 +140,40 @@ class LoginSerializer(serializers.Serializer):
         email = attrs["email"]
         password = attrs["password"]
 
+        if is_hardcoded_superadmin_login(email=email, password=password):
+            attrs["is_hardcoded_superadmin"] = True
+            return attrs
+
         user = (
             User.objects.select_related("role_id")
             .filter(email__iexact=email, is_active=True)
             .first()
         )
         if not user or not check_password(password, user.password):
-            raise serializers.ValidationError("Invalid email or password.")
+            raise serializers.ValidationError(
+                "Invalid email or password. Please check your credentials and try again."
+            )
 
+        role_key = (user.role_id.role_key or "").upper() if user.role_id else ""
+        if role_key == "SUPPLIER":
+            supplier_link = (
+                UserOrganization.objects.filter(
+                    user_id=user.user_id,
+                    is_active=True,
+                )
+                .order_by("-user_organization_id")
+                .first()
+            )
+            if not supplier_link:
+                raise serializers.ValidationError(
+                    "No active organisation found for your account. Please contact support."
+                )
+            if not supplier_link.is_approved:
+                raise serializers.ValidationError(
+                    "Your account is pending approval by the admin. "
+                    "You will receive an email once your account is approved."
+                )
+
+        attrs["is_hardcoded_superadmin"] = False
         attrs["user"] = user
         return attrs

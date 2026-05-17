@@ -15,7 +15,9 @@ class UserOrganization(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="created_by", null=True, blank=True, related_name="user_organizations_created")
     updated_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="updated_by", null=True, blank=True, related_name="user_organizations_updated")
     is_active = models.BooleanField(default=True, null=True, blank=True)
-
+    is_approved = models.BooleanField(default=False, null=True, blank=True)
+    approved_datetime = models.DateTimeField(null=True, blank=True)
+    approved_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, db_column="approved_by", null=True, blank=True, related_name="user_organizations_approved")
     class Meta:
         managed = False
         db_table = "user_organization"
