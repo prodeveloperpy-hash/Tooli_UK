@@ -518,9 +518,12 @@ export function AdminDashboard() {
                         />
                         <Label 
                           htmlFor="approval-required" 
-                          className="text-sm font-bold text-gray-700 cursor-pointer"
+                          className="text-sm font-bold text-gray-700 cursor-pointer flex items-center gap-2"
                         >
                           Approval Requests
+                          {pendingSuppliers.length > 0 && (
+                            <div className="w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm" title="Pending Approvals" />
+                          )}
                         </Label>
                       </div>
 

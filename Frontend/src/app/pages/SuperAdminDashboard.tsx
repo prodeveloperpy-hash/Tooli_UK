@@ -904,7 +904,7 @@ export function SuperAdminDashboard() {
                 <CardContent className="p-0">
                   <div className="p-6 border-b bg-gray-50/50">
                     <div className="flex flex-wrap items-center gap-6">
-                      <div className="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm transition-all hover:border-brand-primary/30">
+                      <div className="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm transition-all hover:border-brand-primary/30 relative">
                         <Checkbox 
                           id="approval-required" 
                           checked={approvalFilter === 'not_approved'}
@@ -919,9 +919,12 @@ export function SuperAdminDashboard() {
                         />
                         <Label 
                           htmlFor="approval-required" 
-                          className="text-sm font-bold text-gray-700 cursor-pointer"
+                          className="text-sm font-bold text-gray-700 cursor-pointer flex items-center gap-2"
                         >
                           Approval Requests
+                          {pendingSuppliers.length > 0 && (
+                            <div className="w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm" title="Pending Approvals" />
+                          )}
                         </Label>
                       </div>
 
@@ -937,7 +940,6 @@ export function SuperAdminDashboard() {
                           <option value="inactive">Inactive</option>
                         </select>
                       </div>
-
                     </div>
                   </div>
 
@@ -956,7 +958,7 @@ export function SuperAdminDashboard() {
                       <TableBody>
                         {isLoading ? (
                           <TableRow>
-                            <TableCell colSpan={5} className="text-center py-20">
+                            <TableCell colSpan={6} className="text-center py-20">
                               <div className="h-10 w-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin mx-auto" />
                             </TableCell>
                           </TableRow>
