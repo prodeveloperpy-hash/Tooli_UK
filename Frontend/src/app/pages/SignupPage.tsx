@@ -180,38 +180,43 @@ export function SignupPage() {
 
                       <div className="space-y-6">
                         <div className="grid md:grid-cols-1 gap-6">
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-gray-900">Profile Photo (Optional)</Label>
-                            <div 
-                              className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group" 
-                              onClick={() => document.getElementById('avatar-upload')?.click()}
-                            >
-                              <Avatar className="h-20 w-20 rounded-xl mb-4 shadow-sm group-hover:scale-105 transition-transform">
-                                <AvatarImage src={formData.avatarUrl} className="object-contain" />
-                                <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary font-bold text-xl">
-                                  {formData.firstName ? formData.firstName[0] : ''}{formData.lastName ? formData.lastName[0] : ''}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div className="text-center">
-                                <p className="text-sm font-bold text-brand-primary">Click to upload profile photo</p>
-                                <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-12">
+                            <div className="sm:w-2/3 max-w-[280px] w-full">
+                              <div 
+                                className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl p-6 bg-white hover:bg-gray-50 transition-colors cursor-pointer group w-full" 
+                                onClick={() => document.getElementById('avatar-upload')?.click()}
+                              >
+                                <Avatar className="h-16 w-16 rounded-xl mb-3 shadow-sm group-hover:scale-105 transition-transform">
+                                  <AvatarImage src={formData.avatarUrl} className="object-contain" />
+                                  <AvatarFallback className="rounded-xl bg-brand-primary/10 text-brand-primary font-bold text-lg">
+                                    {formData.firstName ? formData.firstName[0] : ''}{formData.lastName ? formData.lastName[0] : ''}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="text-center">
+                                  <p className="text-sm font-bold text-brand-primary">Click to upload photo</p>
+                                  <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                                </div>
+                                <input 
+                                  type="file" 
+                                  id="avatar-upload" 
+                                  className="hidden" 
+                                  accept="image/*"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                      const url = URL.createObjectURL(file);
+                                      setFormData({...formData, avatarUrl: url, avatarFile: file});
+                                      setFieldErrors(prev => ({...prev, avatar: ''}));
+                                    }
+                                  }}
+                                />
                               </div>
-                              <input 
-                                type="file" 
-                                id="avatar-upload" 
-                                className="hidden" 
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    const url = URL.createObjectURL(file);
-                                    setFormData({...formData, avatarUrl: url, avatarFile: file});
-                                    setFieldErrors(prev => ({...prev, avatar: ''}));
-                                  }
-                                }}
-                              />
+                              {fieldErrors.avatar && <p className="text-xs text-red-500 mt-1">{fieldErrors.avatar}</p>}
                             </div>
-                            {fieldErrors.avatar && <p className="text-xs text-red-500">{fieldErrors.avatar}</p>}
+                            <div className="flex-1">
+                              <Label className="text-sm font-bold text-gray-900 block mb-1">Profile Photo (Optional)</Label>
+                              <p className="text-xs text-gray-500">Add a photo to personalize your account</p>
+                            </div>
                           </div>
                         </div>
 
@@ -280,39 +285,44 @@ export function SignupPage() {
 
                       <div className="space-y-6">
                         <div className="grid md:grid-cols-1 gap-6">
-                          <div className="space-y-2">
-                            <Label className="text-sm font-bold text-gray-900">Company Logo <span className="text-orange-500">*</span></Label>
-                            <div 
-                              className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500' : 'border-gray-200'} rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group`}
-                              onClick={() => document.getElementById('logo-upload')?.click()}
-                            >
-                              <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm group-hover:scale-105 transition-transform">
-                                {formData.logoUrl ? (
-                                  <img src={formData.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain p-2" />
-                                ) : (
-                                  <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-brand-primary transition-colors" />
-                                )}
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-12">
+                            <div className="sm:w-2/3 max-w-[280px] w-full">
+                              <div 
+                                className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500' : 'border-gray-200'} rounded-xl p-6 bg-white hover:bg-gray-50 transition-colors cursor-pointer group w-full`}
+                                onClick={() => document.getElementById('logo-upload')?.click()}
+                              >
+                                <div className="h-16 w-16 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-3 shadow-sm group-hover:scale-105 transition-transform">
+                                  {formData.logoUrl ? (
+                                    <img src={formData.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain p-2" />
+                                  ) : (
+                                    <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-brand-primary transition-colors" />
+                                  )}
+                                </div>
+                                <div className="text-center">
+                                  <p className="text-sm font-bold text-brand-primary">Click to upload logo</p>
+                                  <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                                </div>
+                                <input 
+                                  type="file" 
+                                  id="logo-upload" 
+                                  className="hidden" 
+                                  accept="image/*"
+                                  onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                      const url = URL.createObjectURL(file);
+                                      setFormData({...formData, logoUrl: url, logoFile: file});
+                                      setFieldErrors(prev => ({...prev, logo: ''}));
+                                    }
+                                  }}
+                                />
                               </div>
-                              <div className="text-center">
-                                <p className="text-sm font-bold text-brand-primary">Click to upload company logo</p>
-                                <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
-                              </div>
-                              <input 
-                                type="file" 
-                                id="logo-upload" 
-                                className="hidden" 
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    const url = URL.createObjectURL(file);
-                                    setFormData({...formData, logoUrl: url, logoFile: file});
-                                    setFieldErrors(prev => ({...prev, logo: ''}));
-                                  }
-                                }}
-                              />
+                              {fieldErrors.logo && <p className="text-xs text-red-500 mt-1">{fieldErrors.logo}</p>}
                             </div>
-                            {fieldErrors.logo && <p className="text-xs text-red-500">{fieldErrors.logo}</p>}
+                            <div className="flex-1">
+                              <Label className="text-sm font-bold text-gray-900 block mb-1">Company Logo <span className="text-orange-500">*</span></Label>
+                              <p className="text-xs text-gray-500">This will be displayed on your listings</p>
+                            </div>
                           </div>
                         </div>
 
