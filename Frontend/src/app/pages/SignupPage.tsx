@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent } from '../components/ui/card';
-import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock, UploadCloud } from 'lucide-react';
+import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock } from 'lucide-react';
 import { authApi } from '../../context/auth.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
@@ -33,8 +33,6 @@ export function SignupPage() {
     city: '',
     avatarUrl: '',
     avatarFile: null as File | null,
-    logoUrl: '',
-    logoFile: null as File | null,
   });
 
   useEffect(() => {
@@ -102,11 +100,6 @@ export function SignupPage() {
       hasError = true;
     }
 
-    if (!formData.logoFile && !formData.logoUrl) {
-      setFieldErrors(prev => ({ ...prev, logo: 'Please upload a company logo' }));
-      hasError = true;
-    }
-
     if (!formData.locationId) {
       setFieldErrors(prev => ({ ...prev, locationId: 'Please select a city' }));
       hasError = true;
@@ -132,7 +125,6 @@ export function SignupPage() {
       };
       
       if (formData.avatarFile) signupData.avatarFile = formData.avatarFile;
-      if (formData.logoFile) signupData.logoFile = formData.logoFile;
 
       await authApi.signup(signupData);
       navigate('/login', { state: { message: 'Account created and sent for approval to superadmin' } });
@@ -281,48 +273,6 @@ export function SignupPage() {
                       </div>
 
                       <div className="space-y-6">
-                        <div className="grid md:grid-cols-1 gap-6">
-                          <div className="flex flex-col-reverse sm:flex-row sm:items-center gap-4 sm:gap-12">
-                            <div className="sm:w-2/3 max-w-[280px] w-full">
-                              <div 
-                                className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500' : 'border-gray-200'} rounded-xl p-6 bg-white hover:bg-gray-50 transition-colors cursor-pointer group w-full`}
-                                onClick={() => document.getElementById('logo-upload')?.click()}
-                              >
-                                <div className="h-16 w-16 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-3 shadow-sm group-hover:scale-105 transition-transform">
-                                  {formData.logoUrl ? (
-                                    <img src={formData.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain p-2" />
-                                  ) : (
-                                    <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-brand-primary transition-colors" />
-                                  )}
-                                </div>
-                                <div className="text-center">
-                                  <p className="text-sm font-bold text-brand-primary">Click to upload logo</p>
-                                  <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
-                                </div>
-                                <input 
-                                  type="file" 
-                                  id="logo-upload" 
-                                  className="hidden" 
-                                  accept="image/*"
-                                  onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                                      const url = URL.createObjectURL(file);
-                                      setFormData({...formData, logoUrl: url, logoFile: file});
-                                      setFieldErrors(prev => ({...prev, logo: ''}));
-                                    }
-                                  }}
-                                />
-                              </div>
-                              {fieldErrors.logo && <p className="text-xs text-red-500 mt-1">{fieldErrors.logo}</p>}
-                            </div>
-                            <div className="flex-1">
-                              <Label className="text-sm font-bold text-gray-900 block mb-1">Company Logo <span className="text-orange-500">*</span></Label>
-                              <p className="text-xs text-gray-500">This will be displayed on your listings</p>
-                            </div>
-                          </div>
-                        </div>
-
                         <div className="grid md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <Label htmlFor="companyName" className="text-sm font-bold text-gray-900">Company Name <span className="text-orange-500">*</span></Label>

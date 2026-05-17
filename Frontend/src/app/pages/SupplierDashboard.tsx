@@ -36,6 +36,7 @@ import {
   Loader2,
   MapPin,
   Trash2,
+  UploadCloud,
 } from 'lucide-react';
 import { products, pricing } from '../../data/mockData';
 import { userApi, UserOrganization } from '../../context/user.api';
@@ -72,7 +73,9 @@ export function SupplierDashboard() {
     name: '',
     domain: '',
     city: '',
+    logoUrl: '',
   });
+  const [companyLogoFile, setCompanyLogoFile] = useState<File | undefined>();
   const [isAddEquipmentApprovalOpen, setIsAddEquipmentApprovalOpen] = useState(false);
   const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
 
@@ -300,7 +303,9 @@ export function SupplierDashboard() {
         name: latestUserOrg.organization_details?.name || '',
         domain: latestUserOrg.organization_details?.domain || '',
         city: latestUserOrg.organization_details?.city || '',
+        logoUrl: latestUserOrg.organization_details?.logo || '',
       });
+      setCompanyLogoFile(undefined);
     } catch (error: any) {
       console.error('Error fetching company details:', error);
       toast.error(error.message || 'Failed to load company details');
@@ -319,13 +324,13 @@ export function SupplierDashboard() {
 
     setIsCompanySaving(true);
     try {
-      const updated = await userApi.updateUserOrganization(userData.user_organization_id, {
+      const updated = await userApi.updateUserOrganizationFiles(userData.user_organization_id, {
         organization: {
           name: companyForm.name.trim(),
           domain: companyForm.domain.trim(),
           city: companyForm.city.trim(),
         },
-      });
+      }, undefined, companyLogoFile);
 
       setUserData(updated);
       const cachedData = localStorage.getItem('user_data');
@@ -339,6 +344,7 @@ export function SupplierDashboard() {
               name: updated.organization_details?.name || companyForm.name.trim(),
               domain: updated.organization_details?.domain || companyForm.domain.trim(),
               city: updated.organization_details?.city || companyForm.city.trim(),
+              logo: updated.organization_details?.logo || companyForm.logoUrl,
             },
             organization_name: updated.organization_details?.name || companyForm.name.trim(),
           }));
@@ -348,6 +354,7 @@ export function SupplierDashboard() {
       }
 
       toast.success('Company details updated');
+      setCompanyLogoFile(undefined);
       setIsCompanyDialogOpen(false);
     } catch (error: any) {
       console.error('Error updating company details:', error);
@@ -783,6 +790,39 @@ export function SupplierDashboard() {
                   <Loader2 className="w-8 h-8 text-brand-primary animate-spin" />
                 </div>
               )}
+
+              <div className="space-y-2">
+                <Label className="font-bold">Company Logo</Label>
+                <div
+                  className="flex items-center gap-4 rounded-2xl border-2 border-dashed border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50 cursor-pointer"
+                  onClick={() => document.getElementById('company-logo-upload')?.click()}
+                >
+                  <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
+                    {companyForm.logoUrl ? (
+                      <img src={companyForm.logoUrl} alt="Company logo" className="max-h-full max-w-full object-contain p-2" />
+                    ) : (
+                      <UploadCloud className="w-8 h-8 text-gray-400" />
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-brand-primary">Click to upload company logo</p>
+                    <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                  </div>
+                  <input
+                    id="company-logo-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const previewUrl = URL.createObjectURL(file);
+                      setCompanyLogoFile(file);
+                      setCompanyForm(prev => ({ ...prev, logoUrl: previewUrl }));
+                    }}
+                  />
+                </div>
+              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="company-name" className="font-bold">Company Name</Label>
