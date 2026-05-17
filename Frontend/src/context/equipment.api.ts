@@ -16,6 +16,7 @@ export interface Equipment {
   name: string;
   description: string;
   is_active: boolean;
+  is_approved?: boolean;
   category_id: number;
   category_display_name: string;
   organization_id: number;

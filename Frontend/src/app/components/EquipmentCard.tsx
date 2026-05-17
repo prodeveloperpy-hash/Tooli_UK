@@ -196,9 +196,10 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                       const url = (detailedEquipment || equipment).redirect_url;
                       if (url) window.open(url, '_blank');
                     }}
-                    className="w-full h-14 lg:h-16 bg-brand-primary hover:bg-brand-primary-hover text-white font-black text-lg rounded-2xl shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+                    disabled={!(detailedEquipment || equipment).redirect_url}
+                    className="w-full h-14 lg:h-16 bg-brand-primary hover:bg-brand-primary-hover text-white font-black text-lg rounded-2xl shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none"
                   >
-                    Book this Equipment
+                    {(detailedEquipment || equipment).redirect_url ? 'Book this Equipment' : 'Booking Unavailable'}
                     <ArrowRight className="w-5 h-5" />
                   </Button>
                   <p className="text-center text-[10px] text-gray-400 mt-5 font-bold uppercase tracking-[0.15em]">
@@ -339,7 +340,8 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                 </div>
                 <Button 
                   onClick={(e) => { e.stopPropagation(); equipment.redirect_url && window.open(equipment.redirect_url, '_blank'); }}
-                  className="w-full bg-brand-primary hover:bg-brand-primary-hover"
+                  disabled={!equipment.redirect_url}
+                  className="w-full bg-brand-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   View Deal
                 </Button>

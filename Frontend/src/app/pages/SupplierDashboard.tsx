@@ -73,6 +73,8 @@ export function SupplierDashboard() {
     domain: '',
     city: '',
   });
+  const [isAddEquipmentApprovalOpen, setIsAddEquipmentApprovalOpen] = useState(false);
+  const [pendingApprovalCount, setPendingApprovalCount] = useState(0);
 
   useEffect(() => {
     fetchStaticData();
@@ -97,11 +99,38 @@ export function SupplierDashboard() {
     }
   };
 
+  const fetchPendingCount = async () => {
+    try {
+      const orgId = localStorage.getItem('organization_id');
+      if (!orgId) return;
+      const response = await equipmentApi.getEquipment(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        1,
+        1,
+        orgId,
+        undefined,
+        false // isApproved = false
+      );
+      setPendingApprovalCount(response.count);
+    } catch (error) {
+      console.error('Error fetching pending approval count:', error);
+    }
+  };
+
   const fetchEquipment = async () => {
     setIsEquipmentLoading(true);
     try {
       const orgId = localStorage.getItem('organization_id');
-      const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
+      const isActive = equipAvailabilityFilter === 'available' 
+        ? true 
+        : equipAvailabilityFilter === 'unavailable' 
+          ? false 
+          : undefined;
+      const isApproved = equipAvailabilityFilter === 'pending' ? false : true;
+
       const response = await equipmentApi.getEquipment(
         undefined,
         undefined,
@@ -111,12 +140,13 @@ export function SupplierDashboard() {
         10,
         orgId || undefined,
         isActive,
-        true // isApproved = true
+        isApproved
       );
       
       setEquipment(response.results);
       setTotalEquipCount(response.count);
       setTotalEquipPages(Math.ceil(response.count / 10));
+      fetchPendingCount();
     } catch (error) {
       console.error('Error fetching equipment:', error);
       toast.error('Failed to load equipment');
@@ -398,6 +428,7 @@ export function SupplierDashboard() {
       } else {
         await equipmentApi.createEquipment(payload);
         toast.success('Equipment added successfully');
+        setIsAddEquipmentApprovalOpen(true);
       }
       await fetchEquipment();
       setIsEquipFormOpen(false);
@@ -498,7 +529,20 @@ export function SupplierDashboard() {
                 <CardHeader className="p-6 md:p-10 border-b bg-gray-50/30">
                   <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
                     <div className="text-center lg:text-left">
-                      <CardTitle className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Equipment Inventory</CardTitle>
+                      <CardTitle className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight flex flex-col sm:flex-row sm:items-center justify-center lg:justify-start gap-3">
+                        <span>Equipment Inventory</span>
+                        {pendingApprovalCount > 0 && (
+                          <Badge 
+                            onClick={() => {
+                              setEquipAvailabilityFilter('pending');
+                              setEquipPage(1);
+                            }}
+                            className="bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs px-3 py-1 rounded-full cursor-pointer animate-pulse transition-all shadow-md shadow-amber-500/20 w-fit mx-auto sm:mx-0"
+                          >
+                            {pendingApprovalCount} Requires Approval
+                          </Badge>
+                        )}
+                      </CardTitle>
                       <p className="text-gray-500 font-medium mt-2 text-sm md:text-base">Manage your listings and update real-time availability.</p>
                     </div>
                     <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
@@ -513,6 +557,7 @@ export function SupplierDashboard() {
                         <option value="all">All Status</option>
                         <option value="available">Available</option>
                         <option value="unavailable">Not Available</option>
+                        <option value="pending">Requires Approval ({pendingApprovalCount})</option>
                       </select>
                       <Button 
                         onClick={handleOpenEquipAdd}
@@ -591,7 +636,12 @@ export function SupplierDashboard() {
                                 £{item.prices?.[0]?.price || 0}
                               </TableCell>
                               <TableCell className="py-6 md:py-8 px-6 md:px-12">
-                                {item.is_active ? (
+                                {!item.is_approved ? (
+                                  <div className="flex items-center gap-2 text-amber-500 font-black text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap">
+                                    <span className="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)] animate-pulse" />
+                                    Pending Approval
+                                  </div>
+                                ) : item.is_active ? (
                                   <div className="flex items-center gap-2 text-emerald-600 font-black text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap">
                                     <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
                                     Available
@@ -790,6 +840,34 @@ export function SupplierDashboard() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {isAddEquipmentApprovalOpen && (
+        <div className="fixed inset-0 bg-[#030213]/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex flex-col items-center text-center">
+              <div className="h-16 w-16 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 mb-6">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              
+              <h3 className="text-xl font-extrabold text-gray-900 mb-3">Equipment Under Review</h3>
+              
+              <div className="text-sm text-gray-600 font-medium space-y-3 mb-8 leading-relaxed">
+                <p className="font-bold text-gray-800 text-left w-full">Dear Supplier,</p>
+                <p className="text-left w-full">Your equipment listing has been submitted and is currently under review. Our team will approve it shortly — usually within 24 hours. We'll email you once it's live.</p>
+              </div>
+
+              <Button 
+                onClick={() => setIsAddEquipmentApprovalOpen(false)}
+                className="w-full h-12 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-2xl transition-all"
+              >
+                Got it, thank you!
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
