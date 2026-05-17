@@ -84,7 +84,7 @@ export function HomePage() {
             <div className="bg-white rounded-2xl md:rounded-[24px] shadow-2xl p-3 md:p-2 max-w-4xl">
               <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1.5fr_1.5fr_auto] gap-2 md:gap-1 items-center">
                 <div className="px-4 md:px-5 py-3 border border-gray-100 md:border-0 md:border-r rounded-xl md:rounded-none relative group/field">
-                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">What equipment do you need?</Label>
+                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Equipment Category</Label>
                   <SearchableSelect
                     value={searchData.categoryId}
                     onValueChange={(v) => {
@@ -95,7 +95,7 @@ export function HomePage() {
                       value: cat.category_id.toString(),
                       label: cat.category_display_name,
                     }))}
-                    placeholder="e.g. Mini Excavator"
+                    placeholder="Select Category"
                     searchPlaceholder="Search equipment..."
                     emptyText="No equipment found."
                     icon={<Search className="w-4 h-4 text-gray-400" />}
@@ -191,7 +191,7 @@ export function HomePage() {
               </div>
               {showValidationErrors && (
                 <p className="px-3 pb-2 text-center text-xs font-semibold text-red-500">
-                  Please select both equipment and location to search.
+                  To filter, both Equipment Category and Location must be selected. Leave both empty to see all listings.
                 </p>
               )}
             </div>

@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Calendar } from './ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { SearchableSelect } from './ui/searchable-select';
-import { Search, Calendar as CalendarIcon, MapPin, X, RotateCcw } from 'lucide-react';
+import { Search, Calendar as CalendarIcon, MapPin } from 'lucide-react';
 import { format, parse } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { equipmentApi, Category, Location } from '../../context/equipment.api';
@@ -57,7 +57,6 @@ export function SearchBar({ className = '' }: SearchBarProps) {
     setShowValidationErrors(false);
   }, [searchParams]);
 
-  // Update URL when filters change immediately if triggered by X
   const updateURL = (cat: string, loc: string, range: DateRange | undefined) => {
     const params = new URLSearchParams();
     if (cat) params.set('category', cat);
@@ -74,14 +73,6 @@ export function SearchBar({ className = '' }: SearchBarProps) {
     }
     setShowValidationErrors(false);
     updateURL(categoryId, locationId, dateRange);
-  };
-
-  const handleReset = () => {
-    setCategoryId('');
-    setLocationId('');
-    setDateRange(undefined);
-    setShowValidationErrors(false);
-    navigate('/search');
   };
 
   return (
@@ -111,22 +102,6 @@ export function SearchBar({ className = '' }: SearchBarProps) {
                 }`}
               contentClassName="rounded-xl border-gray-100"
             />
-            {categoryId && (
-              <button 
-                onClick={() => {
-                  setCategoryId('');
-                  // Instantly triggers error if the other is empty
-                  if (locationId) {
-                    updateURL('', locationId, dateRange);
-                  } else {
-                    setCategoryId('');
-                  }
-                }}
-                className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
           </div>
         </div>
 
@@ -154,22 +129,6 @@ export function SearchBar({ className = '' }: SearchBarProps) {
                 }`}
               contentClassName="rounded-xl border-gray-100"
             />
-            {locationId && (
-              <button 
-                onClick={() => {
-                  setLocationId('');
-                  // Instantly triggers error if the other is empty
-                  if (categoryId) {
-                    updateURL(categoryId, '', dateRange);
-                  } else {
-                    setLocationId('');
-                  }
-                }}
-                className="absolute right-10 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
           </div>
         </div>
 
@@ -202,31 +161,10 @@ export function SearchBar({ className = '' }: SearchBarProps) {
                 />
               </PopoverContent>
             </Popover>
-            {dateRange && (
-              <button 
-                onClick={() => {
-                  setDateRange(undefined);
-                  updateURL(categoryId, locationId, undefined);
-                }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-destructive transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            )}
           </div>
         </div>
 
         <div className="flex flex-col items-center gap-1">
-          {(categoryId || locationId || dateRange) && (
-            <button
-              onClick={handleReset}
-              className="text-[10px] font-bold text-gray-400 hover:text-brand-primary transition-colors flex items-center gap-1.5 uppercase tracking-widest mb-1"
-            >
-              <RotateCcw className="w-3 h-3" />
-              Reset All
-            </button>
-          )}
-
           <Button
             onClick={handleSearch}
             className="h-12 w-full px-8 bg-brand-primary hover:bg-brand-primary-hover text-white font-extrabold rounded-xl transition-all shadow-lg shadow-brand-primary/20 active:scale-[0.98]"

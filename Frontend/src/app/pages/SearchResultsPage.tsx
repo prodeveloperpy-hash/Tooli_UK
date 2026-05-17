@@ -186,7 +186,7 @@ export function SearchResultsPage() {
                             <div className="w-[280px]">Equipment Details</div>
                             <div className="w-[180px] ml-6">Supplier</div>
                             <div className="flex-1 min-w-[320px] ml-6">Location</div>
-                            <div className="w-[120px] ml-6">Weekly Rate</div>
+                            <div className="w-[120px] ml-6">Weekly Rate from</div>
                             <div className="w-[100px] ml-6">Availability</div>
                             <div className="ml-auto w-[120px] text-right pr-4">Actions</div>
                           </div>
