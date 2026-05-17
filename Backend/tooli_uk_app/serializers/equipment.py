@@ -11,6 +11,7 @@ from tooli_uk_app.serializers.equipment_image import EquipmentImageSerializer
 from tooli_uk_app.serializers.equipment_location import EquipmentLocationSerializer
 from tooli_uk_app.serializers.equipment_price import EquipmentPriceSerializer
 from tooli_uk_app.services import gcs_images
+from tooli_uk_app.services.notifications import schedule_notify_new_equipment_for_approval
 
 
 class EquipmentSerializer(serializers.ModelSerializer):
@@ -131,9 +132,13 @@ class EquipmentMutateSerializer(serializers.ModelSerializer):
         if not equipment.created_datetime:
             equipment.created_datetime = now
         equipment.updated_datetime = now
-        equipment.save(update_fields=["created_datetime", "updated_datetime"])
+        equipment.is_approved = False
+        equipment.save(
+            update_fields=["created_datetime", "updated_datetime", "is_approved"]
+        )
         if images_data or image_files:
             self._save_images(equipment, images_data, image_files)
+        schedule_notify_new_equipment_for_approval(equipment.equipment_id)
         return equipment
 
     @transaction.atomic

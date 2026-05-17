@@ -5,7 +5,9 @@ import threading
 from django.core.mail import send_mail
 from django.conf import settings
 
-from tooli_uk_app.models import User
+from django.db.models import Q
+
+from tooli_uk_app.models import Equipment, User
 from tooli_uk_app.services.superadmin import HARDCODED_SUPERADMIN_EMAIL
 
 logger = logging.getLogger(__name__)
@@ -76,18 +78,29 @@ def _send_email_with_status_async(
     ).start()
 
 
-def _superadmin_recipients() -> list[str]:
-    db_emails = list(
-        User.objects.filter(
-            role_id__role_key__iexact="SUPERADMIN",
-            is_active=True,
+def _recipients_for_roles(
+    *role_keys: str,
+    always_include_hardcoded_superadmin: bool = False,
+) -> list[str]:
+    role_filter = Q()
+    for role_key in role_keys:
+        role_filter |= Q(role_id__role_key__iexact=role_key)
+
+    db_emails: list[str] = []
+    if role_filter:
+        db_emails = list(
+            User.objects.filter(role_filter, is_active=True)
+            .exclude(email__isnull=True)
+            .exclude(email__exact="")
+            .values_list("email", flat=True)
         )
-        .exclude(email__isnull=True)
-        .exclude(email__exact="")
-        .values_list("email", flat=True)
-    )
-    deduped = {HARDCODED_SUPERADMIN_EMAIL.lower()}
-    recipients = [HARDCODED_SUPERADMIN_EMAIL]
+
+    deduped: set[str] = set()
+    recipients: list[str] = []
+    if always_include_hardcoded_superadmin:
+        deduped.add(HARDCODED_SUPERADMIN_EMAIL.lower())
+        recipients.append(HARDCODED_SUPERADMIN_EMAIL)
+
     for email in db_emails:
         lowered = email.lower()
         if lowered in deduped:
@@ -95,6 +108,22 @@ def _superadmin_recipients() -> list[str]:
         deduped.add(lowered)
         recipients.append(email)
     return recipients
+
+
+def _superadmin_recipients() -> list[str]:
+    return _recipients_for_roles(
+        "SUPERADMIN",
+        always_include_hardcoded_superadmin=True,
+    )
+
+
+def _equipment_approval_recipients() -> list[str]:
+    """SUPERADMIN + ADMIN users in DB, plus hardcoded superadmin email."""
+    return _recipients_for_roles(
+        "SUPERADMIN",
+        "ADMIN",
+        always_include_hardcoded_superadmin=True,
+    )
 
 
 def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, organization_name: str) -> None:
@@ -127,6 +156,91 @@ def notify_new_supplier_for_approval(supplier_name: str, supplier_email: str, or
             recipients=recipients,
             log_context="new_supplier_for_superadmin_approval",
         )
+
+
+def notify_new_equipment_for_approval(
+    *,
+    equipment_id: int,
+    equipment_name: str,
+    organization_name: str = "",
+    supplier_name: str = "",
+    supplier_email: str = "",
+) -> None:
+    recipients = _equipment_approval_recipients()
+    approval_url = getattr(
+        settings,
+        "EQUIPMENT_APPROVAL_URL",
+        getattr(
+            settings,
+            "SUPPLIER_APPROVAL_URL",
+            "https://frontend-service-961815749151.us-central1.run.app/dashboard",
+        ),
+    )
+    subject = f"New equipment pending approval: {equipment_name}"
+    message = (
+        "New equipment has been submitted and is waiting for approval.\n\n"
+        f"Equipment ID: {equipment_id}\n"
+        f"Equipment name: {equipment_name}\n"
+        f"Organization: {organization_name or '—'}\n"
+        f"Submitted by: {supplier_name or '—'}\n"
+        f"Supplier email: {supplier_email or '—'}\n\n"
+        "Please review and approve this equipment listing.\n"
+        f"Approval page: {approval_url}"
+    )
+    if _env_bool("EMAIL_SEND_ASYNC", True):
+        _send_email_with_status_async(
+            subject=subject,
+            message=message,
+            recipients=recipients,
+            log_context="new_equipment_for_admin_approval",
+        )
+    else:
+        _send_email_with_status(
+            subject=subject,
+            message=message,
+            recipients=recipients,
+            log_context="new_equipment_for_admin_approval",
+        )
+
+
+def schedule_notify_new_equipment_for_approval(equipment_id: int) -> None:
+    """Enqueue approval email after the surrounding DB transaction commits."""
+
+    def _on_commit() -> None:
+        equipment = (
+            Equipment.objects.select_related("organization_id", "created_by")
+            .filter(pk=equipment_id)
+            .first()
+        )
+        if equipment is None:
+            logger.warning(
+                "Equipment approval email skipped: equipment_id=%s not found.",
+                equipment_id,
+            )
+            return
+
+        creator = equipment.created_by
+        supplier_name = ""
+        supplier_email = ""
+        if creator is not None:
+            supplier_name = f"{creator.first_name} {creator.last_name}".strip()
+            supplier_email = creator.email or ""
+
+        org_name = ""
+        if equipment.organization_id is not None:
+            org_name = equipment.organization_id.name or ""
+
+        notify_new_equipment_for_approval(
+            equipment_id=equipment.equipment_id,
+            equipment_name=equipment.name,
+            organization_name=org_name,
+            supplier_name=supplier_name,
+            supplier_email=supplier_email,
+        )
+
+    from django.db import transaction
+
+    transaction.on_commit(_on_commit)
 
 
 def notify_supplier_approved(

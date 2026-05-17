@@ -13,6 +13,7 @@ from tooli_uk_app.models.location import Location
 from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.user import User
 from tooli_uk_app.services import gcs_images
+from tooli_uk_app.services.notifications import schedule_notify_new_equipment_for_approval
 
 
 class CreateEquipmentLocationSerializer(serializers.Serializer):
@@ -175,6 +176,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
             name=validated_data["name"],
             description=validated_data.get("description"),
             is_active=validated_data.get("is_active", True),
+            is_approved=False,
             category_id_id=validated_data.get("category_id"),
             organization_id_id=validated_data.get("organization_id"),
             created_by_id=validated_data.get("created_by"),
@@ -195,6 +197,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
         self._apply_images(equipment, images_data, now)
         self._apply_availabilities(equipment.equipment_id, availabilities_data, now)
 
+        schedule_notify_new_equipment_for_approval(equipment.equipment_id)
         return equipment
 
     def _apply_prices(self, equipment_id: int, prices_data: list, now) -> None:
