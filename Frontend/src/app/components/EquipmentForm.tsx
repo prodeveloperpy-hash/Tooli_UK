@@ -6,7 +6,7 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { SearchableSelect } from './ui/searchable-select';
-import { Package, MapPin, PoundSterling, Plus, Loader2, X } from 'lucide-react';
+import { Package, MapPin, PoundSterling, Plus, Loader2 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { userApi, UserOrganization } from '../../context/user.api';
@@ -49,7 +49,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
         try {
           // If fixedSupplierId is provided, we don't need to fetch all suppliers
           const [suppliersData, categoriesData, locationsData, intervalsData] = await Promise.all([
-            fixedSupplierId ? Promise.resolve([]) : userApi.getUserOrganizations(undefined, undefined, 'SUPPLIER', 1, 50, true),
+            fixedSupplierId ? Promise.resolve([]) : userApi.getUserOrganizations(undefined, true, 'SUPPLIER', 1, 50, true),
             equipmentApi.getCategories(1, 50, true),
             equipmentApi.getLocations(1, 50, true),
             equipmentApi.getIntervals()

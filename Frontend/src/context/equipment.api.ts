@@ -55,7 +55,7 @@ export interface EquipmentResponse {
 }
 
 export const equipmentApi = {
-  getEquipment: async (categoryId?: string, locationId?: string, availabilityFrom?: string, availabilityTo?: string, page: number = 1, pageSize: number = 10, organizationId?: string, isActive?: boolean): Promise<EquipmentResponse> => {
+  getEquipment: async (categoryId?: string, locationId?: string, availabilityFrom?: string, availabilityTo?: string, page: number = 1, pageSize: number = 10, organizationId?: string, isActive?: boolean, isApproved?: boolean): Promise<EquipmentResponse> => {
     const token = localStorage.getItem('token');
     const params = new URLSearchParams();
     if (categoryId) params.append('category_id', categoryId);
@@ -63,6 +63,7 @@ export const equipmentApi = {
 
     if (organizationId) params.append('organization_id', organizationId);
     if (isActive !== undefined) params.append('is_active', isActive.toString());
+    if (isApproved !== undefined) params.append('is_approved', isApproved.toString());
     params.append('page', page.toString());
     params.append('page_size', pageSize.toString());
 

@@ -102,7 +102,17 @@ export function SupplierDashboard() {
     try {
       const orgId = localStorage.getItem('organization_id');
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId || undefined, isActive);
+      const response = await equipmentApi.getEquipment(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        equipPage,
+        10,
+        orgId || undefined,
+        isActive,
+        true // isApproved = true
+      );
       
       setEquipment(response.results);
       setTotalEquipCount(response.count);
