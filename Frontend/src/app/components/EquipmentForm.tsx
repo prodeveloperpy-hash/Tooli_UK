@@ -49,7 +49,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
         try {
           // If fixedSupplierId is provided, we don't need to fetch all suppliers
           const [suppliersData, categoriesData, locationsData, intervalsData] = await Promise.all([
-            fixedSupplierId ? Promise.resolve([]) : userApi.getUserOrganizations(undefined, undefined, 'SUPPLIER', 1, 50, true),
+            fixedSupplierId ? Promise.resolve([]) : userApi.getUserOrganizations(undefined, true, 'SUPPLIER', 1, 50, true),
             equipmentApi.getCategories(1, 50, true),
             equipmentApi.getLocations(1, 50, true),
             equipmentApi.getIntervals()
