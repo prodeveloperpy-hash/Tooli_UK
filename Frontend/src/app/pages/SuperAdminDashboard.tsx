@@ -64,6 +64,7 @@ import { DeleteConfirmation } from '../components/DeleteConfirmation';
 export function SuperAdminDashboard() {
   const [supplierFilter, setSupplierFilter] = useState<string>('all');
   const [suppliers, setSuppliers] = useState<UserOrganization[]>([]);
+  const [allSuppliers, setAllSuppliers] = useState<UserOrganization[]>([]);
   const [pendingSuppliers, setPendingSuppliers] = useState<UserOrganization[]>([]);
   const [admins, setAdmins] = useState<UserOrganization[]>([]);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
@@ -192,10 +193,21 @@ export function SuperAdminDashboard() {
     }
   }, [activeTab]);
 
+  const fetchAllSuppliers = async () => {
+    try {
+      const data = await userApi.getUserOrganizations(undefined, true, 'SUPPLIER', 1, 50, true);
+      const supplierList = Array.isArray(data) ? data : data.results || [];
+      setAllSuppliers(supplierList);
+    } catch (error) {
+      console.error('Error fetching all suppliers for filter:', error);
+    }
+  };
+
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
     fetchStats();
+    fetchAllSuppliers();
   }, []);
 
   useEffect(() => {
@@ -1084,7 +1096,7 @@ export function SuperAdminDashboard() {
                         className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[200px] shadow-sm"
                       >
                         <option value="all">All Suppliers</option>
-                        {suppliers.map(s => (
+                        {allSuppliers.map(s => (
                           <option key={s.user_organization_id} value={s.organization_id}>
                             {s.organization_details.name}
                           </option>
