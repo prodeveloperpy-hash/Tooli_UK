@@ -243,6 +243,127 @@ def schedule_notify_new_equipment_for_approval(equipment_id: int) -> None:
     transaction.on_commit(_on_commit)
 
 
+def _equipment_supplier_recipient_emails(equipment: Equipment) -> list[str]:
+    """Supplier contact(s) for an equipment listing (creator + org members)."""
+    from tooli_uk_app.models.user_organization import UserOrganization
+
+    deduped: set[str] = set()
+    recipients: list[str] = []
+
+    creator = equipment.created_by
+    if creator and creator.email:
+        email = creator.email.strip()
+        if email:
+            deduped.add(email.lower())
+            recipients.append(email)
+
+    if equipment.organization_id_id:
+        links = (
+            UserOrganization.objects.filter(
+                organization_id_id=equipment.organization_id_id,
+                is_active=True,
+                role_id__role_key__iexact="SUPPLIER",
+            )
+            .select_related("user_id")
+        )
+        for link in links:
+            user = link.user_id
+            if not user or not user.email:
+                continue
+            email = user.email.strip()
+            if not email:
+                continue
+            lowered = email.lower()
+            if lowered in deduped:
+                continue
+            deduped.add(lowered)
+            recipients.append(email)
+
+    return recipients
+
+
+def notify_equipment_approved(
+    *,
+    equipment_id: int,
+    equipment_name: str,
+    organization_name: str,
+    recipient_emails: list[str],
+) -> None:
+    if not recipient_emails:
+        logger.warning(
+            "Equipment approved email skipped: no supplier email for equipment_id=%s.",
+            equipment_id,
+        )
+        return
+
+    dashboard_url = getattr(
+        settings,
+        "SUPPLIER_DASHBOARD_URL",
+        getattr(
+            settings,
+            "SUPPLIER_APPROVAL_URL",
+            "https://frontend-service-961815749151.us-central1.run.app/dashboard",
+        ),
+    )
+    subject = f"Your equipment listing is approved: {equipment_name}"
+    message = (
+        "Good news — your equipment listing has been approved and is now live on Tooli UK.\n\n"
+        f"Equipment: {equipment_name}\n"
+        f"Equipment ID: {equipment_id}\n"
+        f"Organization: {organization_name or '—'}\n\n"
+        "You can sign in to manage your listings, update prices, and availability.\n"
+        f"Supplier dashboard: {dashboard_url}\n\n"
+        "Thank you for listing with Tooli UK."
+    )
+    if _env_bool("EMAIL_SEND_ASYNC", True):
+        _send_email_with_status_async(
+            subject=subject,
+            message=message,
+            recipients=recipient_emails,
+            log_context="equipment_approved_supplier_notification",
+        )
+    else:
+        _send_email_with_status(
+            subject=subject,
+            message=message,
+            recipients=recipient_emails,
+            log_context="equipment_approved_supplier_notification",
+        )
+
+
+def schedule_notify_equipment_approved(equipment_id: int) -> None:
+    """Email supplier(s) after admin/superadmin sets is_approved=true."""
+
+    def _on_commit() -> None:
+        equipment = (
+            Equipment.objects.select_related("organization_id", "created_by")
+            .filter(pk=equipment_id)
+            .first()
+        )
+        if equipment is None:
+            logger.warning(
+                "Equipment approved email skipped: equipment_id=%s not found.",
+                equipment_id,
+            )
+            return
+
+        recipients = _equipment_supplier_recipient_emails(equipment)
+        org_name = ""
+        if equipment.organization_id is not None:
+            org_name = equipment.organization_id.name or ""
+
+        notify_equipment_approved(
+            equipment_id=equipment.equipment_id,
+            equipment_name=equipment.name,
+            organization_name=org_name,
+            recipient_emails=recipients,
+        )
+
+    from django.db import transaction
+
+    transaction.on_commit(_on_commit)
+
+
 def notify_supplier_approved(
     supplier_name: str,
     supplier_email: str,

@@ -13,7 +13,10 @@ from tooli_uk_app.models.location import Location
 from tooli_uk_app.models.organization import Organization
 from tooli_uk_app.models.user import User
 from tooli_uk_app.services import gcs_images
-from tooli_uk_app.services.notifications import schedule_notify_new_equipment_for_approval
+from tooli_uk_app.services.notifications import (
+    schedule_notify_equipment_approved,
+    schedule_notify_new_equipment_for_approval,
+)
 from tooli_uk_app.services.superadmin import should_auto_approve_equipment
 
 
@@ -86,6 +89,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     description = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     is_active = serializers.BooleanField(required=False, default=True)
+    is_approved = serializers.BooleanField(required=False)
     category_id = serializers.IntegerField(required=False, allow_null=True)
     organization_id = serializers.IntegerField(required=False, allow_null=True)
     created_by = serializers.IntegerField(required=False, allow_null=True)
@@ -262,6 +266,7 @@ class CreateEquipmentSerializer(serializers.Serializer):
     def update(self, instance: Equipment, validated_data):
         now = timezone.now()
         partial = self.partial
+        was_approved = bool(instance.is_approved)
 
         locations_data = self._extract_locations_payload(validated_data)
         prices_data = validated_data.pop("prices", None)
@@ -274,6 +279,10 @@ class CreateEquipmentSerializer(serializers.Serializer):
             instance.description = validated_data.get("description")
         if "is_active" in validated_data:
             instance.is_active = validated_data.get("is_active")
+        if "is_approved" in validated_data:
+            instance.is_approved = validated_data.get("is_approved")
+            if instance.is_approved:
+                instance.is_active = True
         if "category_id" in validated_data:
             instance.category_id_id = validated_data.get("category_id")
         if "organization_id" in validated_data:
@@ -313,4 +322,6 @@ class CreateEquipmentSerializer(serializers.Serializer):
 
         instance.updated_datetime = now
         instance.save()
+        if (not was_approved) and bool(instance.is_approved):
+            schedule_notify_equipment_approved(instance.equipment_id)
         return instance

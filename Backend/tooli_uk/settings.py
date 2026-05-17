@@ -262,6 +262,10 @@ EQUIPMENT_APPROVAL_URL = os.environ.get(
     "EQUIPMENT_APPROVAL_URL",
     "https://frontend-service-961815749151.us-central1.run.app/dashboard",
 )
+SUPPLIER_DASHBOARD_URL = os.environ.get(
+    "SUPPLIER_DASHBOARD_URL",
+    "https://frontend-service-961815749151.us-central1.run.app/dashboard",
+)
 
 # Cloud Run / reverse proxy: correct scheme and host for absolute URLs (e.g. avatar links) and CSRF.
 if os.environ.get("K_SERVICE") or os.environ.get("USE_CLOUD_RUN_PROXY_HEADERS", "").lower() in (
