@@ -118,90 +118,37 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
 
     try {
       const roleKey = localStorage.getItem('role_key');
-      const isSuperAdmin = roleKey === 'SUPERADMIN';
-      const userOrgId = localStorage.getItem('user_organization_id');
       const userId = localStorage.getItem('user_id');
 
-      if (!isSuperAdmin && !userOrgId) throw new Error('User organization ID not found');
-      if (isSuperAdmin && !userId) throw new Error('User ID not found');
+      if (!userId) throw new Error('User ID not found');
 
-      if (isSuperAdmin) {
-        const payload: any = {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-        };
-        if (isChangingPassword && formData.password) {
-          payload.password = formData.password;
-        }
-        
-        const updatedData = await userApi.updateUser(parseInt(userId!), payload, formData.avatarFile || undefined);
-        
-        // Update local storage
-        const newName = `${updatedData.first_name || ''} ${updatedData.last_name || ''}`.trim();
-        const newAvatar = updatedData.avatar_url || localStorage.getItem('avatar_url') || formData.avatarPreview || '';
-        const newEmail = updatedData.email || formData.email;
+      const payload: any = {
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        email: formData.email,
+      };
 
-        localStorage.setItem('name', newName);
-        localStorage.setItem('avatar_url', newAvatar);
-        localStorage.setItem('email', newEmail);
-        setAvatarVersion(Date.now());
-
-        onUpdate({
-          name: newName,
-          avatar: newAvatar,
-          role: roleKey || 'SUPERADMIN',
-          email: newEmail,
-        });
-      } else {
-        const formDataToSend = new FormData();
-        const payload: any = {
-          user: {
-            first_name: formData.firstName,
-            last_name: formData.lastName,
-            email: formData.email,
-          }
-        };
-        if (isChangingPassword && formData.password) {
-          payload.user.password = formData.password;
-        }
-        
-        formDataToSend.append('payload', JSON.stringify(payload));
-        if (formData.avatarFile) {
-          formDataToSend.append('avatar', formData.avatarFile);
-        }
-
-        // Update via userApi (I might need to adjust the update method to handle FormData)
-        const token = localStorage.getItem('token');
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://backend-service-961815749151.us-central1.run.app/'}user-organization/${userOrgId}/`, {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-          body: formDataToSend,
-        });
-
-        if (!response.ok) throw new Error('Failed to update profile');
-
-        const updatedData = await response.json();
-        
-        // Update local storage
-        const newName = `${updatedData.user_details.first_name || ''} ${updatedData.user_details.last_name || ''}`.trim();
-        const newAvatar = updatedData.user_details.avatar_url || localStorage.getItem('avatar_url') || formData.avatarPreview || '';
-        const newEmail = updatedData.user_details.email || formData.email;
-
-        localStorage.setItem('name', newName);
-        localStorage.setItem('avatar_url', newAvatar);
-        localStorage.setItem('email', newEmail);
-        setAvatarVersion(Date.now());
-
-        onUpdate({
-          name: newName,
-          avatar: newAvatar,
-          role: updatedData.role_details.role_key,
-          email: newEmail,
-        });
+      if (isChangingPassword && formData.password) {
+        payload.password = formData.password;
       }
+
+      const updatedData = await userApi.updateUser(parseInt(userId), payload, formData.avatarFile || undefined);
+
+      const newName = `${updatedData.first_name || ''} ${updatedData.last_name || ''}`.trim();
+      const newAvatar = updatedData.avatar_url || localStorage.getItem('avatar_url') || formData.avatarPreview || '';
+      const newEmail = updatedData.email || formData.email;
+
+      localStorage.setItem('name', newName);
+      localStorage.setItem('avatar_url', newAvatar);
+      localStorage.setItem('email', newEmail);
+      setAvatarVersion(Date.now());
+
+      onUpdate({
+        name: newName,
+        avatar: newAvatar,
+        role: roleKey || '',
+        email: newEmail,
+      });
 
       window.dispatchEvent(new Event('profile-updated'));
       toast.success('Profile updated successfully');

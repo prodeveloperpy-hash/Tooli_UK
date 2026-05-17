@@ -407,7 +407,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     )}
                   </div>
                   <div className="text-center">
-                    <p className="text-sm font-bold text-brand-primary">Click to upload company logo</p>
+                    <p className="text-sm font-bold text-brand-primary">Click to upload required company logo</p>
                     <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
                   </div>
                   <input 
@@ -415,6 +415,8 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     id="logo-upload" 
                     className="hidden" 
                     accept="image/*"
+                    required={!formData.logoUrl && !formData.logoFile}
+                    aria-required="true"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
