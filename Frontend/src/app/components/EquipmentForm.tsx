@@ -6,7 +6,7 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { SearchableSelect } from './ui/searchable-select';
-import { Package, MapPin, PoundSterling, Plus, Loader2, X } from 'lucide-react';
+import { Package, MapPin, PoundSterling, Plus, Loader2 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
 import { userApi, UserOrganization } from '../../context/user.api';
