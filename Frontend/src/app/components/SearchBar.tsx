@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Calendar } from './ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { SearchableSelect } from './ui/searchable-select';
 import { Search, Calendar as CalendarIcon, MapPin, X, RotateCcw } from 'lucide-react';
 import { format, parse } from 'date-fns';
 import { DateRange } from 'react-day-picker';
@@ -94,31 +93,25 @@ export function SearchBar({ className = '' }: SearchBarProps) {
             Equipment
           </label>
           <div className="relative group/field">
-            <Select 
+            <SearchableSelect
               value={categoryId} 
               onValueChange={(val) => {
                 setCategoryId(val);
                 setShowValidationErrors(false);
               }}
-            >
-              <SelectTrigger 
-                className={`h-12 bg-gray-50 rounded-xl focus:ring-brand-primary/20 pr-10 transition-all ${
+              options={categories.map(cat => ({
+                value: cat.category_id.toString(),
+                label: cat.category_display_name,
+              }))}
+              placeholder="What do you need?"
+              searchPlaceholder="Search equipment..."
+              emptyText="No equipment found."
+              icon={<Search className="w-4 h-4 text-brand-primary" />}
+              triggerClassName={`h-12 bg-gray-50 rounded-xl focus:ring-brand-primary/20 pr-10 transition-all ${
                   showValidationErrors && !categoryId ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-100'
                 }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Search className="w-4 h-4 text-brand-primary" />
-                  <SelectValue placeholder="What do you need?" />
-                </div>
-              </SelectTrigger>
-              <SelectContent className="rounded-xl border-gray-100 max-h-[300px]">
-                {categories.map(cat => (
-                  <SelectItem key={cat.category_id} value={cat.category_id.toString()}>
-                    {cat.category_display_name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              contentClassName="rounded-xl border-gray-100"
+            />
             {categoryId && (
               <button 
                 onClick={() => {
@@ -143,31 +136,25 @@ export function SearchBar({ className = '' }: SearchBarProps) {
             Location
           </label>
           <div className="relative group/field">
-            <Select 
+            <SearchableSelect
               value={locationId} 
               onValueChange={(val) => {
                 setLocationId(val);
                 setShowValidationErrors(false);
               }}
-            >
-              <SelectTrigger 
-                className={`h-12 bg-gray-50 rounded-xl focus:ring-brand-primary/20 pr-10 transition-all ${
+              options={locations.map(loc => ({
+                value: loc.location_id.toString(),
+                label: `${loc.city_name}, ${loc.country}`,
+              }))}
+              placeholder="Select location"
+              searchPlaceholder="Search locations..."
+              emptyText="No locations found."
+              icon={<MapPin className="w-4 h-4 text-brand-primary" />}
+              triggerClassName={`h-12 bg-gray-50 rounded-xl focus:ring-brand-primary/20 pr-10 transition-all ${
                   showValidationErrors && !locationId ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-100'
                 }`}
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-brand-primary" />
-                  <SelectValue placeholder="Select location" />
-                </div>
-              </SelectTrigger>
-              <SelectContent className="rounded-xl border-gray-100 max-h-[300px]">
-                {locations.map(loc => (
-                  <SelectItem key={loc.location_id} value={loc.location_id.toString()}>
-                    {loc.city_name}, {loc.country}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              contentClassName="rounded-xl border-gray-100"
+            />
             {locationId && (
               <button 
                 onClick={() => {

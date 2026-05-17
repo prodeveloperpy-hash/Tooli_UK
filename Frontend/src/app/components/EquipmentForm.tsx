@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { SearchableSelect } from './ui/searchable-select';
 import { Package, MapPin, PoundSterling, Plus, Loader2, X } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { equipmentApi, Equipment, Interval, Category, Location } from '../../context/equipment.api';
@@ -204,34 +205,34 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                         {fixedSupplierName || 'Current Supplier'}
                       </div>
                     ) : (
-                      <Select value={formData.supplierId} onValueChange={v => setFormData({...formData, supplierId: v})}>
-                        <SelectTrigger className="h-12 rounded-xl">
-                          <SelectValue placeholder="Select Supplier" />
-                        </SelectTrigger>
-                        <SelectContent className="z-[10010]">
-                          {suppliers.map(s => (
-                            <SelectItem key={s.user_organization_id} value={(s.organization_id || s.user_organization_id || '0').toString()}>
-                              {s.organization_details.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <SearchableSelect
+                        value={formData.supplierId}
+                        onValueChange={v => setFormData({...formData, supplierId: v})}
+                        options={suppliers.map(s => ({
+                          value: (s.organization_id || s.user_organization_id || '0').toString(),
+                          label: s.organization_details.name,
+                        }))}
+                        placeholder="Select Supplier"
+                        searchPlaceholder="Search suppliers..."
+                        emptyText="No suppliers found."
+                        triggerClassName="h-12 rounded-xl"
+                      />
                     )}
                   </div>
                   <div className="space-y-2">
                     <Label className="font-bold">Category</Label>
-                    <Select value={formData.categoryId} onValueChange={v => setFormData({...formData, categoryId: v})}>
-                      <SelectTrigger className="h-12 rounded-xl">
-                        <SelectValue placeholder="Select Category" />
-                      </SelectTrigger>
-                      <SelectContent className="max-h-[300px]">
-                        {categories.map(cat => (
-                          <SelectItem key={cat.category_id} value={(cat.category_id || '0').toString()}>
-                            {cat.category_display_name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <SearchableSelect
+                      value={formData.categoryId}
+                      onValueChange={v => setFormData({...formData, categoryId: v})}
+                      options={categories.map(cat => ({
+                        value: (cat.category_id || '0').toString(),
+                        label: cat.category_display_name,
+                      }))}
+                      placeholder="Select Category"
+                      searchPlaceholder="Search categories..."
+                      emptyText="No categories found."
+                      triggerClassName="h-12 rounded-xl"
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -286,18 +287,18 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                     );
                   })}
                 </div>
-                <Select onValueChange={v => { if(!formData.locationIds.includes(v)) setFormData(prev => ({ ...prev, locationIds: [...prev.locationIds, v] })) }}>
-                  <SelectTrigger className="h-12 rounded-xl bg-white">
-                    <SelectValue placeholder="Add Service Location..." />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[300px]">
-                    {locations.map(loc => (
-                      <SelectItem key={loc.location_id} value={(loc.location_id || '0').toString()}>
-                        {loc.city_name}, {loc.country}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SearchableSelect
+                  value=""
+                  onValueChange={v => { if(!formData.locationIds.includes(v)) setFormData(prev => ({ ...prev, locationIds: [...prev.locationIds, v] })) }}
+                  options={locations.map(loc => ({
+                    value: (loc.location_id || '0').toString(),
+                    label: `${loc.city_name}, ${loc.country}`,
+                  }))}
+                  placeholder="Add Service Location..."
+                  searchPlaceholder="Search locations..."
+                  emptyText="No locations found."
+                  triggerClassName="h-12 rounded-xl bg-white"
+                />
                 <p className="text-[10px] text-muted-foreground font-medium px-1">Select all cities where this equipment is available for hire.</p>
               </div>
             </section>

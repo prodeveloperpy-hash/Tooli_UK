@@ -7,8 +7,8 @@ import { Mail, Building2, Camera, UploadCloud, Loader2, Eye, EyeOff, CheckCircle
 import { UserOrganization } from '../../context/user.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Checkbox } from './ui/checkbox';
+import { SearchableSelect } from './ui/searchable-select';
 
 interface SupplierFormProps {
   isOpen: boolean;
@@ -458,7 +458,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="location" className="font-bold">Service Location</Label>
-                  <Select 
+                  <SearchableSelect
                     value={formData.locationId} 
                     onValueChange={(v) => {
                       const selectedLoc = locations.find(l => l.location_id.toString() === v);
@@ -469,18 +469,15 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                       });
                       setFieldErrors(prev => ({...prev, locationId: ''}));
                     }}
-                  >
-                    <SelectTrigger className={`h-10 rounded-lg border-gray-200 focus:ring-brand-primary bg-white ${fieldErrors.locationId ? 'border-red-500' : ''}`}>
-                      <SelectValue placeholder="Select City" />
-                    </SelectTrigger>
-                    <SelectContent className="z-[10010]">
-                      {locations.map((loc) => (
-                        <SelectItem key={loc.location_id} value={loc.location_id.toString()}>
-                          {loc.city_name}, {loc.country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    options={locations.map(loc => ({
+                      value: loc.location_id.toString(),
+                      label: `${loc.city_name}, ${loc.country}`,
+                    }))}
+                    placeholder="Select City"
+                    searchPlaceholder="Search cities..."
+                    emptyText="No cities found."
+                    triggerClassName={`h-10 rounded-lg border-gray-200 focus:ring-brand-primary bg-white ${fieldErrors.locationId ? 'border-red-500' : ''}`}
+                  />
                   {fieldErrors.locationId && <p className="text-xs text-red-500">{fieldErrors.locationId}</p>}
                 </div>
               </div>

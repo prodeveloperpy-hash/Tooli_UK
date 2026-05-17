@@ -229,13 +229,13 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                 {/* 1. Equipment Info */}
                 <div className="w-[280px]">
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-bold text-gray-900 group-hover:text-brand-primary transition-colors line-clamp-1">
-                      {equipment.name}
+                    <h3 className="text-sm font-black text-gray-900 group-hover:text-brand-primary transition-colors line-clamp-1 uppercase tracking-wide">
+                      {equipment.category_display_name || 'Machinery'}
                     </h3>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-medium">
-                    <span className="uppercase tracking-wider">
-                      {equipment.category_display_name || 'Machinery'}
+                  <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-medium">
+                    <span className="line-clamp-1">
+                      {equipment.name}
                     </span>
                   </div>
                 </div>

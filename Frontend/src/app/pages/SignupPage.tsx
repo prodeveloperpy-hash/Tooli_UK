@@ -4,11 +4,11 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent } from '../components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock, UploadCloud } from 'lucide-react';
 import { authApi } from '../../context/auth.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
+import { SearchableSelect } from '../components/ui/searchable-select';
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -339,7 +339,7 @@ export function SignupPage() {
                         <div className="grid md:grid-cols-1 gap-8">
                           <div className="space-y-2">
                             <Label htmlFor="locationId" className="text-sm font-bold text-gray-900">Primary Service Area <span className="text-orange-500">*</span></Label>
-                            <Select
+                            <SearchableSelect
                               value={formData.locationId}
                               onValueChange={(value) => {
                                 const selectedLocation = locations.find(location => location.location_id.toString() === value);
@@ -350,19 +350,16 @@ export function SignupPage() {
                                 }));
                                 setFieldErrors(prev => ({...prev, locationId: ''}));
                               }}
+                              options={locations.map(location => ({
+                                value: location.location_id.toString(),
+                                label: `${location.city_name}, ${location.country}`,
+                              }))}
+                              placeholder={isLocationLoading ? 'Loading cities...' : 'Select city'}
+                              searchPlaceholder="Search cities..."
+                              emptyText="No cities found."
                               disabled={isLocationLoading}
-                            >
-                              <SelectTrigger id="locationId" className={`h-14 bg-white border-gray-100 rounded-xl px-6 focus:ring-brand-primary text-base ${fieldErrors.locationId ? 'border-red-500' : ''}`}>
-                                <SelectValue placeholder={isLocationLoading ? 'Loading cities...' : 'Select city'} />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {locations.map((location) => (
-                                  <SelectItem key={location.location_id} value={location.location_id.toString()} className="text-base">
-                                    {location.city_name}, {location.country}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                              triggerClassName={`h-14 bg-white border-gray-100 rounded-xl px-6 focus:ring-brand-primary text-base ${fieldErrors.locationId ? 'border-red-500' : ''}`}
+                            />
                             {fieldErrors.locationId && <p className="text-xs text-red-500">{fieldErrors.locationId}</p>}
                           </div>
                         </div>

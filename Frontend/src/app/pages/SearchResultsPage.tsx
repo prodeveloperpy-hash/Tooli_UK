@@ -13,7 +13,7 @@ type SortOption = 'price-asc' | 'price-desc' | 'rating-desc';
 
 export function SearchResultsPage() {
   const [searchParams] = useSearchParams();
-  const [sortBy, setSortBy] = useState<SortOption>('price-desc');
+  const [sortBy, setSortBy] = useState<SortOption>('price-asc');
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
   const [equipment, setEquipment] = useState<Equipment[]>([]);
