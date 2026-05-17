@@ -154,11 +154,11 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                   <div>
                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Listed By</div>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-white p-1.5 border border-gray-100 flex items-center justify-center shadow-sm overflow-hidden">
+                      <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-2xl bg-white p-2.5 border border-gray-100 flex items-center justify-center shadow-sm overflow-hidden shrink-0">
                         {(detailedEquipment || equipment).organization_logo ? (
                           <img src={(detailedEquipment || equipment).organization_logo} alt="" className="w-full h-full object-contain" />
                         ) : (
-                          <Building2 className="w-5 h-5 text-brand-primary" />
+                          <Building2 className="w-10 h-10 lg:w-12 lg:h-12 text-brand-primary" />
                         )}
                       </div>
                       <span className="font-bold text-gray-900 lg:text-lg leading-tight">
@@ -168,7 +168,7 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                   </div>
                   <div className="pt-4 lg:pt-0 border-t lg:border-none border-gray-100">
                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5 text-brand-success">Verified Partner</div>
-                    <div className="text-xs font-medium text-gray-500">Trusted equipment provider in United Kingdom</div>
+                    <div className="text-xs font-medium text-gray-500">Trusted equipment supplier in United Kingdom</div>
                   </div>
                 </div>
 
@@ -242,11 +242,11 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
 
                 {/* 2. Supplier Info */}
                 <div className="flex items-center gap-3 w-[180px]">
-                  <div className="w-8 h-8 rounded-lg bg-gray-50 p-1 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="w-16 h-16 rounded-xl bg-gray-50 p-2 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
                     {equipment.organization_logo ? (
                       <img src={equipment.organization_logo} alt="" className="w-full h-full object-contain" />
                     ) : (
-                      <Building2 className="w-4 h-4 text-gray-300" />
+                      <Building2 className="w-7 h-7 text-gray-300" />
                     )}
                   </div>
                   <div>

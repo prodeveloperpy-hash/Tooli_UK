@@ -13,6 +13,7 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isApprovalRequired, setIsApprovalRequired] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(location.state?.message || null);
 
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ export function LoginPage() {
     e.preventDefault();
     setError(null);
     setSuccessMessage(null);
+    setIsApprovalRequired(false);
     setIsLoading(true);
 
     try {
@@ -52,7 +54,12 @@ export function LoginPage() {
         navigate('/');
       }
     } catch (err: any) {
-      setError(err.message || 'Login failed');
+      const errMsg = err.message || '';
+      if (errMsg.toLowerCase().includes('approval required') || errMsg.toLowerCase().includes('not approved')) {
+        setIsApprovalRequired(true);
+      } else {
+        setError(errMsg || 'Login failed');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -76,6 +83,11 @@ export function LoginPage() {
           {error && (
             <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-4 rounded-xl">
               {error}
+            </div>
+          )}
+          {isApprovalRequired && (
+            <div className="bg-amber-50 border border-amber-200 text-amber-900 text-sm p-4 rounded-xl leading-relaxed shadow-sm">
+              Your account is under review. Our team will approve your listing shortly — usually within 24 hours. We'll email you once it's live.
             </div>
           )}
           {successMessage && (
