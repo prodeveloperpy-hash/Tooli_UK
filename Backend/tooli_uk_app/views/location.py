@@ -7,7 +7,7 @@ from tooli_uk_app.serializers.location import LocationSerializer
 
 
 class LocationViewSet(viewsets.ModelViewSet):
-    queryset = Location.objects.all().order_by("-location_id")
+    queryset = Location.objects.all().order_by("order_by")
     serializer_class = LocationSerializer
     filterset_class = LocationFilter
     pagination_class = LocationPagination

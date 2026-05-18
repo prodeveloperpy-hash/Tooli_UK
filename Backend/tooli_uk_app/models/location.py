@@ -16,10 +16,34 @@ class Location(models.Model):
         ordering = ["order_by"]
 
     def save(self, *args, **kwargs):
-        # Ensure order_by is set and unique
+        # Keep location order behavior consistent with Category.
         if self.order_by is None:
-            max_order = Location.objects.aggregate(models.Max('order_by'))['order_by__max'] or 0
+            max_order = type(self).objects.aggregate(models.Max("order_by"))[
+                "order_by__max"
+            ] or 0
             self.order_by = max_order + 1
+        elif self.pk:
+            try:
+                original = type(self).objects.values("order_by").get(pk=self.pk)[
+                    "order_by"
+                ]
+            except type(self).DoesNotExist:
+                original = None
+
+            if original is not None and original != self.order_by:
+                if self.order_by > original:
+                    type(self).objects.filter(
+                        order_by__gt=original,
+                        order_by__lte=self.order_by,
+                    ).exclude(pk=self.pk).update(order_by=models.F("order_by") - 1)
+                else:
+                    type(self).objects.filter(
+                        order_by__lt=original,
+                        order_by__gte=self.order_by,
+                    ).exclude(pk=self.pk).update(order_by=models.F("order_by") + 1)
         else:
-            Location.objects.filter(order_by=self.order_by).exclude(pk=self.pk).update(order_by=models.F('order_by') + 1)
+            type(self).objects.filter(order_by__gte=self.order_by).update(
+                order_by=models.F("order_by") + 1
+            )
+
         super().save(*args, **kwargs)

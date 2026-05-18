@@ -7,7 +7,7 @@ from tooli_uk_app.serializers.category import CategorySerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all().order_by("-category_id")
+    queryset = Category.objects.all().order_by("order_by")
     serializer_class = CategorySerializer
     filterset_class = CategoryFilter
     pagination_class = CategoryPagination
