@@ -204,16 +204,16 @@ export function SearchResultsPage() {
                       <div className="w-full min-w-0 overflow-hidden">
                         <div className="w-full overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-200">
                           {/* List Header */}
-                          <div className="flex items-center px-6 md:px-8 py-4 bg-gray-50 border-b border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-400 w-full min-w-[1060px]">
-                            <div className="w-[280px]">Equipment Details</div>
-                            <div className="w-[180px] ml-6">Supplier</div>
+                          <div className="flex items-center px-6 md:px-8 py-4 bg-gray-50 border-b border-gray-100 text-xs font-black uppercase tracking-widest text-gray-400 w-full min-w-[1160px]">
+                            <div className="w-[300px]">Equipment Details</div>
+                            <div className="w-[220px] ml-6">Supplier</div>
                             <div className="flex-1 min-w-[320px] ml-6">Location</div>
                             <div className="w-[120px] ml-6">Weekly Rate from</div>
                             <div className="w-[100px] ml-6">Availability</div>
                             <div className="ml-auto w-[120px] text-right pr-4">Actions</div>
                           </div>
 
-                          <div className="flex flex-col gap-px bg-gray-100 min-w-[1060px]">
+                          <div className="flex flex-col gap-px bg-gray-100 min-w-[1160px]">
                             {sortedResults.map((result) => (
                                <EquipmentCard 
                                  key={result.equipment_id} 

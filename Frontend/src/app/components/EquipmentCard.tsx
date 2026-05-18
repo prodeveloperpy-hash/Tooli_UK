@@ -226,15 +226,15 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
         >
           <Card className="rounded-none border-none shadow-none hover:bg-gray-50 transition-colors border-b border-gray-100">
             <CardContent className="p-0">
-              <div className="flex flex-row items-center px-6 md:px-8 py-4 gap-6 w-full min-w-[1060px]">
+              <div className="flex flex-row items-center px-6 md:px-8 py-5 gap-6 w-full min-w-[1160px]">
                 {/* 1. Equipment Info */}
-                <div className="w-[280px]">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-black text-gray-900 group-hover:text-brand-primary transition-colors line-clamp-1 uppercase tracking-wide">
+                <div className="w-[300px]">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <h3 className="text-base font-black text-gray-900 group-hover:text-brand-primary transition-colors line-clamp-1 uppercase tracking-wide">
                       {equipment.category_display_name || 'Machinery'}
                     </h3>
                   </div>
-                  <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-medium">
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground font-semibold">
                     <span className="line-clamp-1">
                       {equipment.name}
                     </span>
@@ -242,35 +242,35 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                 </div>
 
                 {/* 2. Supplier Info */}
-                <div className="flex items-center gap-3 w-[180px]">
-                  <div className="w-16 h-16 rounded-xl bg-gray-50 p-2 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+                <div className="flex items-center gap-4 w-[220px]">
+                  <div className="w-24 h-24 rounded-2xl bg-gray-50 p-3 border border-gray-100 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                     {equipment.organization_logo ? (
                       <img src={equipment.organization_logo} alt="" className="w-full h-full object-contain" />
                     ) : (
-                      <Building2 className="w-7 h-7 text-gray-300" />
+                      <Building2 className="w-11 h-11 text-gray-300" />
                     )}
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-xs">{equipment.organization_name || 'Tooli Supplier'}</div>
+                    <div className="font-black text-gray-900 text-base leading-tight">{equipment.organization_name || 'Tooli Supplier'}</div>
                   </div>
                 </div>
 
                 {/* 3. Location */}
-                <div className="flex-1 min-w-[320px] text-xs">
+                <div className="flex-1 min-w-[320px] text-sm">
                   {renderLocationInfo()}
                 </div>
 
                 {/* 4. Price */}
                 <div className="w-[120px]">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-base font-black text-brand-primary">£{displayPrice}</span>
+                    <span className="text-xl font-black text-brand-primary">£{displayPrice}</span>
                   </div>
                 </div>
 
                 {/* 5. Status */}
                 <div className="w-[100px]">
-                  <Badge className="bg-green-50 text-green-700 border-green-100 font-bold text-[9px] px-2 py-0.5">
-                    <Clock className="w-3 h-3 mr-1" /> Available
+                  <Badge className="bg-green-50 text-green-700 border-green-100 font-black text-[11px] px-2.5 py-1">
+                    <Clock className="w-3.5 h-3.5 mr-1" /> Available
                   </Badge>
                 </div>
 
@@ -283,7 +283,7 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                     }}
                     disabled={!equipment.redirect_url}
                     size="sm"
-                    className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold px-4 h-9 rounded-lg transition-all"
+                    className="bg-brand-primary hover:bg-brand-primary-hover text-white font-black px-5 h-10 rounded-lg transition-all text-sm"
                   >
                     View Deal
                   </Button>
