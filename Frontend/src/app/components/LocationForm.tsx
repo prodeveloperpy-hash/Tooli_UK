@@ -13,9 +13,10 @@ interface LocationFormProps {
   onSubmit: (data: any) => Promise<void>;
   location: Location | null;
   maxOrder?: number;
+  defaultOrder?: number;
 }
 
-export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1 }: LocationFormProps) {
+export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1, defaultOrder = 1 }: LocationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderError, setOrderError] = useState('');
   const [formData, setFormData] = useState({
@@ -40,12 +41,12 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
         city_name: '',
         country: 'United Kingdom',
         state: '',
-        order_by: '1',
+        order_by: defaultOrder.toString(),
         is_active: true,
       });
     }
     setOrderError('');
-  }, [location, isOpen]);
+  }, [location, defaultOrder, isOpen]);
 
   const validateOrder = (value: string) => {
     const orderValue = Number(value);
@@ -98,6 +99,7 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
                 min={1}
                 max={maxOrder}
                 value={formData.order_by}
+                onWheel={(e) => e.currentTarget.blur()}
                 onChange={e => {
                   const nextValue = e.target.value;
                   setFormData({...formData, order_by: nextValue});

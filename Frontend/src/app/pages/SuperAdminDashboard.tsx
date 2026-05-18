@@ -1591,7 +1591,8 @@ export function SuperAdminDashboard() {
         onClose={() => setIsCategoryFormOpen(false)}
         onSubmit={handleCategorySubmit}
         category={selectedCategory}
-        maxOrder={Math.max(totalCategoryCount, 1)}
+        maxOrder={selectedCategory ? Math.max(totalCategoryCount, 1) : totalCategoryCount + 1}
+        defaultOrder={totalCategoryCount + 1}
       />
 
       <AdminForm
@@ -1623,7 +1624,8 @@ export function SuperAdminDashboard() {
         onClose={() => setIsLocationFormOpen(false)}
         onSubmit={handleLocationSubmit}
         location={selectedLocation}
-        maxOrder={Math.max(totalLocationCount, 1)}
+        maxOrder={selectedLocation ? Math.max(totalLocationCount, 1) : totalLocationCount + 1}
+        defaultOrder={totalLocationCount + 1}
       />
 
       <DeleteConfirmation

@@ -13,9 +13,10 @@ interface CategoryFormProps {
   onSubmit: (data: any) => Promise<void>;
   category: Category | null;
   maxOrder?: number;
+  defaultOrder?: number;
 }
 
-export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1 }: CategoryFormProps) {
+export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1, defaultOrder = 1 }: CategoryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderError, setOrderError] = useState('');
   const [formData, setFormData] = useState({
@@ -37,12 +38,12 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1
       setFormData({
         category_key: '',
         category_display_name: '',
-        order_by: '1',
+        order_by: defaultOrder.toString(),
         is_active: true,
       });
     }
     setOrderError('');
-  }, [category, isOpen]);
+  }, [category, defaultOrder, isOpen]);
 
   const validateOrder = (value: string) => {
     const orderValue = Number(value);
@@ -95,6 +96,7 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1
                 min={1}
                 max={maxOrder}
                 value={formData.order_by}
+                onWheel={(e) => e.currentTarget.blur()}
                 onChange={e => {
                   const nextValue = e.target.value;
                   setFormData({...formData, order_by: nextValue});
