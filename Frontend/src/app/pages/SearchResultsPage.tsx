@@ -1,6 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { SearchBar } from '../components/SearchBar';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -27,9 +26,22 @@ export function SearchResultsPage() {
   const dateFrom = searchParams.get('date_from') || '';
   const dateTo = searchParams.get('date_to') || '';
   const hasRequiredSearch = Boolean(categoryId && locationId);
+  const searchKey = useMemo(
+    () => `${categoryId}|${locationId}|${dateFrom}|${dateTo}`,
+    [categoryId, locationId, dateFrom, dateTo]
+  );
+  const lastSearchKeyRef = useRef(searchKey);
 
   useEffect(() => {
     const fetchEquipment = async () => {
+      if (lastSearchKeyRef.current !== searchKey) {
+        lastSearchKeyRef.current = searchKey;
+        if (page !== 1) {
+          setPage(1);
+          return;
+        }
+      }
+
       if (!hasRequiredSearch) {
         setEquipment([]);
         setTotalCount(0);
@@ -40,7 +52,17 @@ export function SearchResultsPage() {
 
       setIsLoading(true);
       try {
-        const response = await equipmentApi.getEquipment(categoryId, locationId, undefined, undefined, page);
+        const response = await equipmentApi.getEquipment(
+          categoryId,
+          locationId,
+          undefined,
+          undefined,
+          page,
+          10,
+          undefined,
+          true,
+          true
+        );
         setEquipment(response.results || []);
         setTotalCount(response.count || 0);
         setTotalPages(Math.ceil((response.count || 0) / 10)); // Updated to 10 as per new requirements
@@ -52,7 +74,7 @@ export function SearchResultsPage() {
     };
     fetchEquipment();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [categoryId, locationId, dateFrom, dateTo, page, hasRequiredSearch]);
+  }, [categoryId, locationId, dateFrom, dateTo, page, hasRequiredSearch, searchKey]);
 
   const sortedResults = useMemo(() => {
     let results = [...equipment];
@@ -100,7 +122,7 @@ export function SearchResultsPage() {
       {/* Sticky Sub-Header with SearchBar */}
       <div className="bg-white border-b shadow-sm sticky top-10 z-40">
         <div className="container mx-auto px-4 py-3">
-          <SearchBar className="shadow-none border-none bg-transparent p-0" />
+          <SearchBar className="shadow-none border-none bg-transparent p-0" onSearch={() => setPage(1)} />
         </div>
       </div>
 

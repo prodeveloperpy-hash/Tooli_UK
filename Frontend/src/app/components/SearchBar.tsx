@@ -11,9 +11,10 @@ import { equipmentApi, Category, Location } from '../../context/equipment.api';
 
 interface SearchBarProps {
   className?: string;
+  onSearch?: () => void;
 }
 
-export function SearchBar({ className = '' }: SearchBarProps) {
+export function SearchBar({ className = '', onSearch }: SearchBarProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -72,6 +73,7 @@ export function SearchBar({ className = '' }: SearchBarProps) {
       return;
     }
     setShowValidationErrors(false);
+    onSearch?.();
     updateURL(categoryId, locationId, dateRange);
   };
 
