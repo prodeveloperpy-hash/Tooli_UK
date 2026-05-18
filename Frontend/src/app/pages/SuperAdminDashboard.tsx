@@ -60,6 +60,7 @@ import { EquipmentForm } from '../components/EquipmentForm';
 import { CategoryForm } from '../components/CategoryForm';
 import { LocationForm } from '../components/LocationForm';
 import { DeleteConfirmation } from '../components/DeleteConfirmation';
+import { ApprovalDetailDialog } from '../components/ApprovalDetailDialog';
 
 export function SuperAdminDashboard() {
   const [supplierFilter, setSupplierFilter] = useState<string>('all');
@@ -88,6 +89,7 @@ export function SuperAdminDashboard() {
   const [isRejectConfirmOpen, setIsRejectConfirmOpen] = useState(false);
   const [selectedSupplier, setSelectedSupplier] = useState<UserOrganization | null>(null);
   const [supplierToReject, setSupplierToReject] = useState<UserOrganization | null>(null);
+  const [supplierToView, setSupplierToView] = useState<UserOrganization | null>(null);
 
   const [isEquipFormOpen, setIsEquipFormOpen] = useState(false);
   const [isEquipDeleteOpen, setIsEquipDeleteOpen] = useState(false);
@@ -95,6 +97,7 @@ export function SuperAdminDashboard() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [equipmentToView, setEquipmentToView] = useState<Equipment | null>(null);
   const [isFetchingDetail, setIsFetchingDetail] = useState(false);
   const [equipPage, setEquipPage] = useState(1);
   const [totalEquipPages, setTotalEquipPages] = useState(1);
@@ -1691,6 +1694,17 @@ export function SuperAdminDashboard() {
                     </div>
 
                     <div className="flex flex-row md:flex-row gap-3 pt-4 md:pt-0 border-t md:border-none">
+                      <Button
+                        type="button"
+                        onClick={() => setSupplierToView(s)}
+                        disabled={rejectingId === s.user_organization_id || approvingId === s.user_organization_id}
+                        variant="outline"
+                        className="h-12 w-12 p-0 rounded-xl border-gray-200 text-gray-500 hover:text-brand-primary hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all active:scale-95"
+                        title="View details"
+                        aria-label="View supplier request details"
+                      >
+                        <Eye className="w-5 h-5" />
+                      </Button>
                       <Button 
                         onClick={() => handleOpenRejectConfirm(s)}
                         disabled={rejectingId === s.user_organization_id || approvingId === s.user_organization_id}
@@ -1787,6 +1801,17 @@ export function SuperAdminDashboard() {
                     </div>
 
                     <div className="flex flex-row md:flex-row gap-3 pt-4 md:pt-0 border-t md:border-none">
+                      <Button
+                        type="button"
+                        onClick={() => setEquipmentToView(e)}
+                        disabled={rejectingEquipId === e.equipment_id || approvingEquipId === e.equipment_id}
+                        variant="outline"
+                        className="h-12 w-12 p-0 rounded-xl border-gray-200 text-gray-500 hover:text-brand-primary hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all active:scale-95"
+                        title="View details"
+                        aria-label="View equipment request details"
+                      >
+                        <Eye className="w-5 h-5" />
+                      </Button>
                       <Button 
                         onClick={() => handleRejectEquipment(e.equipment_id)}
                         disabled={rejectingEquipId === e.equipment_id || approvingEquipId === e.equipment_id}
@@ -1818,6 +1843,15 @@ export function SuperAdminDashboard() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <ApprovalDetailDialog
+        supplier={supplierToView}
+        equipment={equipmentToView}
+        onClose={() => {
+          setSupplierToView(null);
+          setEquipmentToView(null);
+        }}
+      />
     </div>
   );
 }
