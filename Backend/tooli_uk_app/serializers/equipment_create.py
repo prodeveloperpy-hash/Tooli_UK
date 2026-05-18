@@ -294,6 +294,8 @@ class CreateEquipmentSerializer(serializers.Serializer):
             instance.created_by_id = validated_data.get("created_by")
         if "updated_by" in validated_data:
             instance.updated_by_id = validated_data.get("updated_by")
+        if "redirect_url" in validated_data:
+            instance.redirect_url = validated_data.get("redirect_url")
 
         if locations_data is not None:
             EquipmentLocation.objects.filter(equipment_id_id=instance.equipment_id).delete()

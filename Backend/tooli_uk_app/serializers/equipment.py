@@ -74,6 +74,7 @@ class EquipmentMutateSerializer(serializers.ModelSerializer):
             "redirect_url",
             "is_approved",
             "images",
+        
         )
         read_only_fields = ("equipment_id", "created_datetime", "updated_datetime")
 

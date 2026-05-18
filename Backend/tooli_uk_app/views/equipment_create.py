@@ -45,6 +45,11 @@ def _parse_equipment_payload(request):
             body = json.loads(raw_payload)
         except json.JSONDecodeError as exc:
             raise ValueError(str(exc)) from exc
+        extra_fields = request.POST.dict() if hasattr(request, "POST") else {}
+        extra_fields.pop("payload", None)
+        for key, value in extra_fields.items():
+            if key not in body:
+                body[key] = value
         image_files = list(request.FILES.getlist("images"))
         return body, image_files, True
     return request.data, [], False
