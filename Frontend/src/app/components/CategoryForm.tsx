@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -19,6 +19,10 @@ interface CategoryFormProps {
 export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1, defaultOrder = 1 }: CategoryFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderError, setOrderError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const orderRef = useRef<HTMLDivElement>(null);
+  const displayNameRef = useRef<HTMLDivElement>(null);
+  const keyRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     category_key: '',
     category_display_name: '',
@@ -43,6 +47,7 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1
       });
     }
     setOrderError('');
+    setFieldErrors({});
   }, [category, defaultOrder, isOpen]);
 
   const validateOrder = (value: string) => {
@@ -57,8 +62,21 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1
     e.preventDefault();
     const orderValue = Number(formData.order_by);
     const nextOrderError = validateOrder(formData.order_by);
-    if (nextOrderError) {
-      setOrderError(nextOrderError);
+    const nextErrors: { [key: string]: string } = {};
+    if (nextOrderError) nextErrors.order_by = nextOrderError;
+    if (!formData.category_display_name.trim()) nextErrors.category_display_name = 'Category name is required';
+    if (!formData.category_key.trim()) nextErrors.category_key = 'Technical key is required';
+
+    if (Object.keys(nextErrors).length > 0) {
+      setOrderError(nextErrors.order_by || '');
+      setFieldErrors(nextErrors);
+      const firstField = Object.keys(nextErrors)[0];
+      const refs: Record<string, React.RefObject<HTMLDivElement | null>> = {
+        order_by: orderRef,
+        category_display_name: displayNameRef,
+        category_key: keyRef,
+      };
+      refs[firstField]?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -87,9 +105,9 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1
           </div>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto p-5 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
           <div className="space-y-4">
-            <div className="space-y-2">
+            <div ref={orderRef} className="space-y-2">
               <Label className="font-bold">Order</Label>
               <Input
                 type="number"
@@ -101,10 +119,11 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1
                   const nextValue = e.target.value;
                   setFormData({...formData, order_by: nextValue});
                   setOrderError(validateOrder(nextValue));
+                  setFieldErrors(prev => ({ ...prev, order_by: '' }));
                 }}
                 placeholder="e.g. 1"
                 required
-                className={`h-12 rounded-xl ${orderError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                className={`h-12 rounded-xl ${(orderError || fieldErrors.order_by) ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
               />
               {orderError ? (
                 <p className="text-xs font-bold text-red-500">{orderError}</p>
@@ -113,28 +132,36 @@ export function CategoryForm({ isOpen, onClose, onSubmit, category, maxOrder = 1
               )}
             </div>
 
-            <div className="space-y-2">
+            <div ref={displayNameRef} className="space-y-2">
               <Label className="font-bold flex items-center gap-2">
                 <Tag className="w-4 h-4" /> Category Name (Display)
               </Label>
               <Input 
                 value={formData.category_display_name} 
-                onChange={e => setFormData({...formData, category_display_name: e.target.value})} 
+                onChange={e => {
+                  setFormData({...formData, category_display_name: e.target.value});
+                  setFieldErrors(prev => ({ ...prev, category_display_name: '' }));
+                }} 
                 placeholder="e.g. Mini Excavator (1-3T)" 
                 required 
-                className="h-12 rounded-xl" 
+                className={`h-12 rounded-xl ${fieldErrors.category_display_name ? 'border-red-500 focus-visible:ring-red-500' : ''}`} 
               />
+              {fieldErrors.category_display_name && <p className="text-xs font-bold text-red-500">{fieldErrors.category_display_name}</p>}
             </div>
             
-            <div className="space-y-2">
+            <div ref={keyRef} className="space-y-2">
               <Label className="font-bold">Technical Key (Unique)</Label>
               <Input 
                 value={formData.category_key} 
-                onChange={e => setFormData({...formData, category_key: e.target.value.toUpperCase().replace(/\s+/g, '_')})} 
+                onChange={e => {
+                  setFormData({...formData, category_key: e.target.value.toUpperCase().replace(/\s+/g, '_')});
+                  setFieldErrors(prev => ({ ...prev, category_key: '' }));
+                }} 
                 placeholder="e.g. MINI_EXCAVATOR_1_3T" 
                 required 
-                className="h-12 rounded-xl uppercase" 
+                className={`h-12 rounded-xl uppercase ${fieldErrors.category_key ? 'border-red-500 focus-visible:ring-red-500' : ''}`} 
               />
+              {fieldErrors.category_key && <p className="text-xs font-bold text-red-500">{fieldErrors.category_key}</p>}
             </div>
 
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">

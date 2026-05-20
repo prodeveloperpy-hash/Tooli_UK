@@ -28,9 +28,14 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const scrollRef = useRef<HTMLDivElement>(null);
+  const firstNameRef = useRef<HTMLDivElement>(null);
+  const lastNameRef = useRef<HTMLDivElement>(null);
+  const emailRef = useRef<HTMLDivElement>(null);
   const passwordRef = useRef<HTMLDivElement>(null);
   const confirmPasswordRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
+  const companyNameRef = useRef<HTMLDivElement>(null);
+  const domainRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
@@ -146,10 +151,15 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   };
 
   const scrollToFirstError = (fields: string[]) => {
-    const fieldRefs: Record<string, React.RefObject<HTMLDivElement>> = {
+    const fieldRefs: Record<string, React.RefObject<HTMLDivElement | null>> = {
+      firstName: firstNameRef,
+      lastName: lastNameRef,
+      email: emailRef,
       password: passwordRef,
       confirmPassword: confirmPasswordRef,
       logo: logoRef,
+      companyName: companyNameRef,
+      domain: domainRef,
       locationId: locationRef,
     };
     const target = fields.map(field => fieldRefs[field]?.current).find(Boolean);
@@ -180,10 +190,20 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     e.preventDefault();
     setError(null);
     let hasError = false;
+    const nextRequiredErrors: { [key: string]: string } = {};
+    if (!formData.firstName.trim()) nextRequiredErrors.firstName = 'First name is required';
+    if (!formData.lastName.trim()) nextRequiredErrors.lastName = 'Last name is required';
+    if (!formData.email.trim()) nextRequiredErrors.email = 'Email address is required';
+    if (!formData.companyName.trim()) nextRequiredErrors.companyName = 'Company name is required';
+    if (!formData.domain.trim()) nextRequiredErrors.domain = 'Domain is required';
     
     const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
-    if (!domainRegex.test(formData.domain)) {
-      setFieldErrors(prev => ({ ...prev, domain: 'Please enter a valid domain (e.g., example.com or tooli.uk)' }));
+    if (formData.domain.trim() && !domainRegex.test(formData.domain)) {
+      nextRequiredErrors.domain = 'Please enter a valid domain (e.g., example.com or tooli.uk)';
+    }
+
+    if (Object.keys(nextRequiredErrors).length > 0) {
+      setFieldErrors(prev => ({ ...prev, ...nextRequiredErrors }));
       hasError = true;
     }
 
@@ -211,6 +231,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
 
     if (hasError) {
       const errorFields = [
+        ...Object.keys(nextRequiredErrors),
         passwordError ? 'password' : '',
         confirmPasswordError ? 'confirmPassword' : '',
         !formData.logoFile && !formData.logoUrl ? 'logo' : '',
@@ -238,7 +259,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[600px] p-0">
-        <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
+        <form onSubmit={handleSubmit} noValidate className="relative flex flex-col h-full">
           <DialogHeader className="p-5 sm:p-8 pr-14 sm:pr-16 bg-gray-50 border-b shrink-0">
             <div className="flex items-center justify-between lg:block">
               <div>
@@ -302,31 +323,31 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div ref={firstNameRef} className="space-y-2">
                   <Label htmlFor="firstName" className="font-bold">First Name</Label>
                   <Input 
                     id="firstName" 
                     value={formData.firstName} 
                     onChange={(e) => handleFieldChange('firstName', e.target.value)} 
-                    className="border-gray-200 focus:ring-brand-primary rounded-lg"
+                    className={`border-gray-200 focus:ring-brand-primary rounded-lg ${fieldErrors.firstName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     required
                   />
                   {fieldErrors.firstName && <p className="text-xs text-red-500">{fieldErrors.firstName}</p>}
                 </div>
-                <div className="space-y-2">
+                <div ref={lastNameRef} className="space-y-2">
                   <Label htmlFor="lastName" className="font-bold">Last Name</Label>
                   <Input 
                     id="lastName" 
                     value={formData.lastName} 
                     onChange={(e) => handleFieldChange('lastName', e.target.value)} 
-                    className="border-gray-200 focus:ring-brand-primary rounded-lg"
+                    className={`border-gray-200 focus:ring-brand-primary rounded-lg ${fieldErrors.lastName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     required
                   />
                   {fieldErrors.lastName && <p className="text-xs text-red-500">{fieldErrors.lastName}</p>}
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div ref={emailRef} className="space-y-2">
                 <Label htmlFor="email" className="font-bold">Email Address</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -335,7 +356,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     type="email"
                     value={formData.email} 
                     onChange={(e) => handleFieldChange('email', e.target.value)} 
-                    className="pl-10 border-gray-200 focus:ring-brand-primary rounded-lg"
+                    className={`pl-10 border-gray-200 focus:ring-brand-primary rounded-lg ${fieldErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     required
                   />
                 </div>
@@ -479,7 +500,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                 {fieldErrors.logo && <p className="text-xs text-red-500">{fieldErrors.logo}</p>}
               </div>
 
-              <div className="space-y-2">
+              <div ref={companyNameRef} className="space-y-2">
                 <Label htmlFor="companyName" className="font-bold">Company Name</Label>
                 <div className="relative">
                   <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -487,7 +508,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     id="companyName" 
                     value={formData.companyName} 
                     onChange={(e) => handleFieldChange('companyName', e.target.value)} 
-                    className="pl-10 border-gray-200 focus:ring-brand-primary rounded-lg"
+                    className={`pl-10 border-gray-200 focus:ring-brand-primary rounded-lg ${fieldErrors.companyName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     required
                   />
                 </div>
@@ -495,7 +516,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div ref={locationRef} className="space-y-2">
+                <div ref={domainRef} className="space-y-2">
                   <Label htmlFor="domain" className="font-bold">Domain</Label>
                   <Input 
                     id="domain" 
@@ -507,7 +528,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                   />
                   {fieldErrors.domain && <p className="text-xs text-red-500">{fieldErrors.domain}</p>}
                 </div>
-                <div className="space-y-2">
+                <div ref={locationRef} className="space-y-2">
                   <Label htmlFor="location" className="font-bold">Service Location</Label>
                   <SearchableSelect
                     value={formData.locationId} 

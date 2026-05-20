@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -22,6 +22,12 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const firstNameRef = useRef<HTMLDivElement>(null);
+  const lastNameRef = useRef<HTMLDivElement>(null);
+  const emailRef = useRef<HTMLDivElement>(null);
+  const passwordRef = useRef<HTMLDivElement>(null);
+  const confirmPasswordRef = useRef<HTMLDivElement>(null);
   
   const [formData, setFormData] = useState({
     firstName: '',
@@ -77,19 +83,36 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
     return { passwordError, confirmPasswordError };
   };
 
+  const scrollToFirstError = (fields: string[]) => {
+    const refs: Record<string, React.RefObject<HTMLDivElement | null>> = {
+      firstName: firstNameRef,
+      lastName: lastNameRef,
+      email: emailRef,
+      password: passwordRef,
+      confirmPassword: confirmPasswordRef,
+    };
+    const target = fields.map(field => refs[field]?.current).find(Boolean);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const nextErrors: { [key: string]: string } = {};
+    if (!formData.firstName.trim()) nextErrors.firstName = 'First name is required';
+    if (!formData.lastName.trim()) nextErrors.lastName = 'Last name is required';
+    if (!formData.email.trim()) nextErrors.email = 'Email address is required';
     if (isChangingPassword) {
-      const passwordError = !formData.password || formData.password.length < 8 ? 'Password must be at least 8 characters' : '';
-      const confirmPasswordError = formData.password !== formData.confirmPassword ? "Passwords don't match" : '';
-      if (passwordError || confirmPasswordError) {
-        setFieldErrors(prev => ({
-          ...prev,
-          password: passwordError,
-          confirmPassword: confirmPasswordError,
-        }));
-        return;
-      }
+      if (!formData.password || formData.password.length < 8) nextErrors.password = 'Password must be at least 8 characters';
+      if (formData.password !== formData.confirmPassword) nextErrors.confirmPassword = "Passwords don't match";
+    }
+    if (Object.keys(nextErrors).length > 0) {
+      setFieldErrors(prev => ({ ...prev, ...nextErrors }));
+      scrollToFirstError(Object.keys(nextErrors));
+      return;
     }
     setIsSubmitting(true);
     try {
@@ -108,7 +131,7 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-[500px] p-0">
-        <form onSubmit={handleSubmit} className="relative flex flex-col h-full">
+        <form onSubmit={handleSubmit} noValidate className="relative flex flex-col h-full">
           <DialogHeader className="p-5 sm:p-8 pr-14 sm:pr-16 bg-gray-50 border-b shrink-0">
             <div className="flex items-center justify-between lg:block">
               <div>
@@ -118,7 +141,7 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
             </div>
           </DialogHeader>
 
-          <div className="p-5 sm:p-8 space-y-8 overflow-y-auto flex-1">
+          <div ref={scrollRef} className="p-5 sm:p-8 space-y-8 overflow-y-auto flex-1">
             {/* Simplified Status at Top */}
             <div className="flex items-center justify-end gap-3 mb-2">
               <span className={`text-sm font-bold ${formData.isActive ? 'text-green-600' : 'text-gray-400'}`}>
@@ -165,29 +188,37 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div ref={firstNameRef} className="space-y-2">
                   <Label htmlFor="firstName" className="font-bold">First Name</Label>
                   <Input 
                     id="firstName" 
                     value={formData.firstName} 
-                    onChange={(e) => setFormData({...formData, firstName: e.target.value})} 
-                    className="h-12 border-gray-200 focus:ring-brand-primary rounded-xl"
+                    onChange={(e) => {
+                      setFormData({...formData, firstName: e.target.value});
+                      setFieldErrors(prev => ({ ...prev, firstName: '' }));
+                    }} 
+                    className={`h-12 border-gray-200 focus:ring-brand-primary rounded-xl ${fieldErrors.firstName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     required
                   />
+                  {fieldErrors.firstName && <p className="text-xs font-bold text-red-500">{fieldErrors.firstName}</p>}
                 </div>
-                <div className="space-y-2">
+                <div ref={lastNameRef} className="space-y-2">
                   <Label htmlFor="lastName" className="font-bold">Last Name</Label>
                   <Input 
                     id="lastName" 
                     value={formData.lastName} 
-                    onChange={(e) => setFormData({...formData, lastName: e.target.value})} 
-                    className="h-12 border-gray-200 focus:ring-brand-primary rounded-xl"
+                    onChange={(e) => {
+                      setFormData({...formData, lastName: e.target.value});
+                      setFieldErrors(prev => ({ ...prev, lastName: '' }));
+                    }} 
+                    className={`h-12 border-gray-200 focus:ring-brand-primary rounded-xl ${fieldErrors.lastName ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                     required
                   />
+                  {fieldErrors.lastName && <p className="text-xs font-bold text-red-500">{fieldErrors.lastName}</p>}
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div ref={emailRef} className="space-y-2">
                 <Label htmlFor="email" className="font-bold">Email Address</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -195,11 +226,15 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
                     id="email" 
                     type="email"
                     value={formData.email} 
-                    onChange={(e) => setFormData({...formData, email: e.target.value})} 
-                    className="h-12 pl-10 border-gray-200 focus:ring-brand-primary rounded-xl"
-                    required
+                    onChange={(e) => {
+                      setFormData({...formData, email: e.target.value});
+                      setFieldErrors(prev => ({ ...prev, email: '' }));
+                    }} 
+                    className={`h-12 pl-10 border-gray-200 focus:ring-brand-primary rounded-xl ${fieldErrors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    required 
                   />
                 </div>
+                {fieldErrors.email && <p className="text-xs font-bold text-red-500">{fieldErrors.email}</p>}
               </div>
 
               {admin && (
@@ -231,7 +266,7 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
 
               {isChangingPassword && (
                 <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <div className="space-y-2">
+                  <div ref={passwordRef} className="space-y-2">
                     <Label htmlFor="adminNewPassword" className="font-bold">Password</Label>
                     <div className="relative">
                       <Input 
@@ -261,7 +296,7 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
                     </div>
                     {fieldErrors.password && <p className="text-xs font-bold text-red-500 mt-1">{fieldErrors.password}</p>}
                   </div>
-                  <div className="space-y-2">
+                  <div ref={confirmPasswordRef} className="space-y-2">
                     <Label htmlFor="adminConfirmPassword" className="font-bold">Confirm Password</Label>
                     <div className="relative">
                       <Input 
@@ -309,7 +344,7 @@ export function AdminForm({ isOpen, onClose, onSubmit, admin }: AdminFormProps) 
             </Button>
             <Button
               type="submit"
-              disabled={isSubmitting || (isChangingPassword && (!formData.password || !!fieldErrors.password || !!fieldErrors.confirmPassword || formData.password !== formData.confirmPassword))}
+              disabled={isSubmitting}
               className="bg-[#030213] hover:bg-black text-white font-black px-10 h-12 shadow-xl shadow-black/10 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-xs w-full sm:w-auto"
             >
               {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : (admin ? 'Update Admin' : 'Create Admin')}

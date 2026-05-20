@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -19,6 +19,10 @@ interface LocationFormProps {
 export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1, defaultOrder = 1 }: LocationFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderError, setOrderError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const orderRef = useRef<HTMLDivElement>(null);
+  const cityRef = useRef<HTMLDivElement>(null);
+  const countryRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     city_name: '',
     country: 'United Kingdom',
@@ -46,6 +50,7 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
       });
     }
     setOrderError('');
+    setFieldErrors({});
   }, [location, defaultOrder, isOpen]);
 
   const validateOrder = (value: string) => {
@@ -60,8 +65,21 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
     e.preventDefault();
     const orderValue = Number(formData.order_by);
     const nextOrderError = validateOrder(formData.order_by);
-    if (nextOrderError) {
-      setOrderError(nextOrderError);
+    const nextErrors: { [key: string]: string } = {};
+    if (nextOrderError) nextErrors.order_by = nextOrderError;
+    if (!formData.city_name.trim()) nextErrors.city_name = 'City name is required';
+    if (!formData.country.trim()) nextErrors.country = 'Country is required';
+
+    if (Object.keys(nextErrors).length > 0) {
+      setOrderError(nextErrors.order_by || '');
+      setFieldErrors(nextErrors);
+      const firstField = Object.keys(nextErrors)[0];
+      const refs: Record<string, React.RefObject<HTMLDivElement | null>> = {
+        order_by: orderRef,
+        city_name: cityRef,
+        country: countryRef,
+      };
+      refs[firstField]?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -90,9 +108,9 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
           </div>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto p-5 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} noValidate className="space-y-6">
           <div className="space-y-4">
-            <div className="space-y-2">
+            <div ref={orderRef} className="space-y-2">
               <Label className="font-bold">Order</Label>
               <Input
                 type="number"
@@ -104,10 +122,11 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
                   const nextValue = e.target.value;
                   setFormData({...formData, order_by: nextValue});
                   setOrderError(validateOrder(nextValue));
+                  setFieldErrors(prev => ({ ...prev, order_by: '' }));
                 }}
                 placeholder="e.g. 1"
                 required
-                className={`h-12 rounded-xl ${orderError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                className={`h-12 rounded-xl ${(orderError || fieldErrors.order_by) ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
               />
               {orderError ? (
                 <p className="text-xs font-bold text-red-500">{orderError}</p>
@@ -116,30 +135,38 @@ export function LocationForm({ isOpen, onClose, onSubmit, location, maxOrder = 1
               )}
             </div>
 
-            <div className="space-y-2">
+            <div ref={cityRef} className="space-y-2">
               <Label className="font-bold flex items-center gap-2">
                 <MapPin className="w-4 h-4" /> City Name
               </Label>
               <Input 
                 value={formData.city_name} 
-                onChange={e => setFormData({...formData, city_name: e.target.value})} 
+                onChange={e => {
+                  setFormData({...formData, city_name: e.target.value});
+                  setFieldErrors(prev => ({ ...prev, city_name: '' }));
+                }} 
                 placeholder="e.g. London" 
                 required 
-                className="h-12 rounded-xl" 
+                className={`h-12 rounded-xl ${fieldErrors.city_name ? 'border-red-500 focus-visible:ring-red-500' : ''}`} 
               />
+              {fieldErrors.city_name && <p className="text-xs font-bold text-red-500">{fieldErrors.city_name}</p>}
             </div>
             
-            <div className="space-y-2">
+            <div ref={countryRef} className="space-y-2">
               <Label className="font-bold flex items-center gap-2">
                 <Globe className="w-4 h-4" /> Country
               </Label>
               <Input 
                 value={formData.country} 
-                onChange={e => setFormData({...formData, country: e.target.value})} 
+                onChange={e => {
+                  setFormData({...formData, country: e.target.value});
+                  setFieldErrors(prev => ({ ...prev, country: '' }));
+                }} 
                 placeholder="e.g. United Kingdom" 
                 required 
-                className="h-12 rounded-xl" 
+                className={`h-12 rounded-xl ${fieldErrors.country ? 'border-red-500 focus-visible:ring-red-500' : ''}`} 
               />
+              {fieldErrors.country && <p className="text-xs font-bold text-red-500">{fieldErrors.country}</p>}
             </div>
 
             <div className="space-y-2">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -30,6 +30,13 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [redirectUrlError, setRedirectUrlError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const nameRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  const supplierRef = useRef<HTMLDivElement>(null);
+  const categoryRef = useRef<HTMLDivElement>(null);
+  const redirectUrlRef = useRef<HTMLDivElement>(null);
+  const locationsRef = useRef<HTMLDivElement>(null);
+  const priceRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -126,15 +133,32 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
     }
   };
 
+  const scrollToFirstError = (fields: string[]) => {
+    const refs: Record<string, React.RefObject<HTMLDivElement | null>> = {
+      name: nameRef,
+      description: descriptionRef,
+      supplierId: supplierRef,
+      categoryId: categoryRef,
+      redirectUrl: redirectUrlRef,
+      locationIds: locationsRef,
+      price: priceRef,
+    };
+    const target = fields.map(field => refs[field]?.current).find(Boolean);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedRedirectUrl = formData.redirectUrl.trim();
     const nextFieldErrors: { [key: string]: string } = {};
 
+    if (!formData.name.trim()) nextFieldErrors.name = 'Equipment name is required';
+    if (!formData.description.trim()) nextFieldErrors.description = 'Description is required';
     if (!formData.supplierId) nextFieldErrors.supplierId = 'Please select a supplier';
     if (!formData.categoryId) nextFieldErrors.categoryId = 'Please select a category';
     if (formData.locationIds.length === 0) nextFieldErrors.locationIds = 'Please select at least one service location';
     if (!trimmedRedirectUrl) nextFieldErrors.redirectUrl = 'Please enter a redirect URL';
+    if (!formData.prices[0].price) nextFieldErrors.price = 'Weekly price is required';
 
     if (!isValidRedirectUrl(trimmedRedirectUrl)) {
       setRedirectUrlError('Enter a valid URL starting with http:// or https://');
@@ -143,6 +167,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
 
     if (Object.keys(nextFieldErrors).length > 0) {
       setFieldErrors(nextFieldErrors);
+      scrollToFirstError(Object.keys(nextFieldErrors));
       return;
     }
 
@@ -216,7 +241,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
               <p className="text-xs font-black text-gray-500 animate-pulse uppercase tracking-widest">Loading...</p>
             </div>
           )}
-          <form id="equipment-form" onSubmit={handleSubmit} className="space-y-8 lg:space-y-10">
+          <form id="equipment-form" onSubmit={handleSubmit} noValidate className="space-y-8 lg:space-y-10">
             {/* General Section */}
             <section className="space-y-6">
               <div className="flex items-center gap-2 text-brand-primary">
@@ -224,16 +249,36 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                 <h3 className="font-bold uppercase tracking-widest text-xs">General Information</h3>
               </div>
               <div className="space-y-4">
-                <div className="space-y-2">
+                <div ref={nameRef} className="space-y-2">
                   <Label className="font-bold">Equipment Name</Label>
-                  <Input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Equipment name" required className="h-12 rounded-xl" />
+                  <Input
+                    value={formData.name}
+                    onChange={e => {
+                      setFormData({...formData, name: e.target.value});
+                      setFieldErrors(prev => ({ ...prev, name: '' }));
+                    }}
+                    placeholder="Equipment name"
+                    required
+                    className={`h-12 rounded-xl ${fieldErrors.name ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                  />
+                  {fieldErrors.name && <p className="text-xs font-bold text-red-500">{fieldErrors.name}</p>}
                 </div>
-                <div className="space-y-2">
+                <div ref={descriptionRef} className="space-y-2">
                   <Label className="font-bold">Description</Label>
-                  <Textarea value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} placeholder="Description..." className="min-h-[100px] rounded-xl" required />
+                  <Textarea
+                    value={formData.description}
+                    onChange={e => {
+                      setFormData({...formData, description: e.target.value});
+                      setFieldErrors(prev => ({ ...prev, description: '' }));
+                    }}
+                    placeholder="Description..."
+                    className={`min-h-[100px] rounded-xl ${fieldErrors.description ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                    required
+                  />
+                  {fieldErrors.description && <p className="text-xs font-bold text-red-500">{fieldErrors.description}</p>}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                  <div ref={supplierRef} className="space-y-2">
                     <Label className="font-bold">Supplier</Label>
                     {fixedSupplierId ? (
                       <div className="h-12 flex items-center px-1 font-bold text-gray-900">
@@ -258,7 +303,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                     )}
                     {fieldErrors.supplierId && <p className="text-xs font-bold text-red-500">{fieldErrors.supplierId}</p>}
                   </div>
-                  <div className="space-y-2">
+                  <div ref={categoryRef} className="space-y-2">
                     <Label className="font-bold">Category</Label>
                     <SearchableSelect
                       value={formData.categoryId}
@@ -278,7 +323,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                     {fieldErrors.categoryId && <p className="text-xs font-bold text-red-500">{fieldErrors.categoryId}</p>}
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div ref={redirectUrlRef} className="space-y-2">
                   <Label className="font-bold">Availability Status</Label>
                   <Select value={formData.isActive.toString()} onValueChange={v => setFormData({...formData, isActive: v === 'true'})}>
                     <SelectTrigger className="h-12 rounded-xl">
@@ -316,7 +361,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                 <MapPin className="w-5 h-5" />
                 <h3 className="font-bold uppercase tracking-widest text-xs">Service Locations</h3>
               </div>
-              <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 space-y-4">
+              <div ref={locationsRef} className={`bg-gray-50 p-6 rounded-2xl border space-y-4 ${fieldErrors.locationIds ? 'border-red-500' : 'border-gray-100'}`}>
                 <div className="flex flex-wrap gap-2 min-h-[48px] p-3 rounded-xl border bg-white">
                   {formData.locationIds.length === 0 && (
                     <span className="text-sm text-gray-400">No locations selected</span>
@@ -368,7 +413,7 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-5 sm:p-6 rounded-2xl border border-gray-100">
-                <div className="space-y-2">
+                <div ref={priceRef} className="space-y-2">
                   <Label className="font-bold">Currency</Label>
                   <Select value={formData.prices[0].currency} onValueChange={v => handlePriceChange(0, 'currency', v)}>
                     <SelectTrigger className="h-12 rounded-xl bg-white">
@@ -390,12 +435,16 @@ export function EquipmentForm({ isOpen, onClose, onSubmit, equipment, isLoading,
                       type="number" 
                       step="0.01" 
                       value={formData.prices[0].price} 
-                      onChange={e => handlePriceChange(0, 'price', e.target.value)} 
-                      className="w-full h-12 rounded-xl bg-white border border-input pl-8 font-bold focus:outline-hidden focus:ring-2 focus:ring-brand-primary" 
+                      onChange={e => {
+                        handlePriceChange(0, 'price', e.target.value);
+                        setFieldErrors(prev => ({ ...prev, price: '' }));
+                      }} 
+                      className={`w-full h-12 rounded-xl bg-white border pl-8 font-bold focus:outline-hidden focus:ring-2 focus:ring-brand-primary ${fieldErrors.price ? 'border-red-500 focus:ring-red-500' : 'border-input'}`} 
                       placeholder="0.00" 
                       required
                     />
                   </div>
+                  {fieldErrors.price && <p className="text-xs font-bold text-red-500">{fieldErrors.price}</p>}
                 </div>
               </div>
             </section>
