@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardContent } from '../components/ui/card';
-import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock } from 'lucide-react';
+import { Eye, EyeOff, Calendar, Tag, Clock, ShieldCheck, Lock, UploadCloud } from 'lucide-react';
 import { authApi } from '../../context/auth.api';
 import { equipmentApi, Location } from '../../context/equipment.api';
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
@@ -20,6 +20,11 @@ export function SignupPage() {
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const [currentStep, setCurrentStep] = useState(1);
   const [locations, setLocations] = useState<Location[]>([]);
+  const passwordRef = useRef<HTMLDivElement>(null);
+  const confirmPasswordRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const domainRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -33,6 +38,8 @@ export function SignupPage() {
     city: '',
     avatarUrl: '',
     avatarFile: null as File | null,
+    logoUrl: '',
+    logoFile: null as File | null,
   });
 
   useEffect(() => {
@@ -62,15 +69,27 @@ export function SignupPage() {
     } else if (id === 'confirmPassword' || id === 'password') {
       const pass = id === 'password' ? value : formData.password;
       const confirm = id === 'confirmPassword' ? value : formData.confirmPassword;
-      if (pass && confirm && pass !== confirm) {
-        setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
-        return;
-      } else {
-        setFieldErrors(prev => ({ ...prev, confirmPassword: '' }));
-        return;
-      }
+      const passwordError = pass && pass.length < 8 ? 'Password must be at least 8 characters' : '';
+      const confirmError = pass && confirm && pass !== confirm ? "Passwords don't match" : '';
+      setFieldErrors(prev => ({
+        ...prev,
+        password: passwordError,
+        confirmPassword: confirmError,
+      }));
+      return;
     }
     setFieldErrors(prev => ({ ...prev, [id]: err }));
+  };
+
+  const scrollToField = (field: 'password' | 'confirmPassword' | 'logo' | 'domain' | 'locationId') => {
+    const refs = {
+      password: passwordRef,
+      confirmPassword: confirmPasswordRef,
+      logo: logoRef,
+      domain: domainRef,
+      locationId: locationRef,
+    };
+    refs[field].current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -81,8 +100,14 @@ export function SignupPage() {
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.password.length < 8) {
+      setFieldErrors(prev => ({ ...prev, password: 'Password must be at least 8 characters' }));
+      scrollToField('password');
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
       setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
+      scrollToField('confirmPassword');
       return;
     }
     setError(null);
@@ -105,7 +130,16 @@ export function SignupPage() {
       hasError = true;
     }
 
-    if (hasError) return;
+    if (!formData.logoFile) {
+      setFieldErrors(prev => ({ ...prev, logo: 'Logo is required' }));
+      hasError = true;
+    }
+
+    if (hasError) {
+      const firstError = !formData.logoFile ? 'logo' : !domainRegex.test(formData.domain) ? 'domain' : 'locationId';
+      scrollToField(firstError);
+      return;
+    }
 
     setError(null);
     setIsLoading(true);
@@ -125,6 +159,7 @@ export function SignupPage() {
       };
       
       if (formData.avatarFile) signupData.avatarFile = formData.avatarFile;
+      if (formData.logoFile) signupData.logoFile = formData.logoFile;
 
       await authApi.signup(signupData);
       navigate('/login', { state: { message: 'Account created and sent for approval to superadmin' } });
@@ -229,17 +264,17 @@ export function SignupPage() {
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
+                          <div ref={passwordRef} className="space-y-2">
                             <Label htmlFor="password" className="text-sm font-bold text-gray-900">Password <span className="text-orange-500">*</span></Label>
                             <div className="relative">
-                              <Input id="password" type={showPassword ? "text" : "password"} placeholder="Create a password" value={formData.password} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 pr-12 focus-visible:ring-brand-primary" required />
+                              <Input id="password" type={showPassword ? "text" : "password"} placeholder="Create a password" value={formData.password} onChange={handleChange} className={`h-14 bg-white border-gray-100 rounded-xl px-6 pr-12 focus-visible:ring-brand-primary ${fieldErrors.password ? 'border-red-500' : ''}`} required />
                               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                               </button>
                             </div>
                             {fieldErrors.password && <p className="text-xs text-red-500">{fieldErrors.password}</p>}
                           </div>
-                          <div className="space-y-2">
+                          <div ref={confirmPasswordRef} className="space-y-2">
                             <Label htmlFor="confirmPassword" className="text-sm font-bold text-gray-900">Confirm Password <span className="text-orange-500">*</span></Label>
                             <div className="relative">
                               <Input id="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} className={`h-14 bg-white border-gray-100 rounded-xl px-6 pr-12 focus-visible:ring-brand-primary ${fieldErrors.confirmPassword ? 'border-red-500' : ''}`} required />
@@ -273,13 +308,49 @@ export function SignupPage() {
                       </div>
 
                       <div className="space-y-6">
+                        <div ref={logoRef} className="space-y-2">
+                          <Label className="text-sm font-bold text-gray-900">Company Logo <span className="text-orange-500">*</span></Label>
+                          <div
+                            className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'} rounded-xl p-8 hover:bg-gray-50 transition-colors cursor-pointer group`}
+                            onClick={() => document.getElementById('signup-logo-upload')?.click()}
+                          >
+                            <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm group-hover:scale-105 transition-transform">
+                              {formData.logoUrl ? (
+                                <img src={formData.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain p-2" />
+                              ) : (
+                                <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-brand-primary transition-colors" />
+                              )}
+                            </div>
+                            <div className="text-center">
+                              <p className="text-sm font-bold text-brand-primary">Click to upload required company logo</p>
+                              <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
+                            </div>
+                            <input
+                              type="file"
+                              id="signup-logo-upload"
+                              className="hidden"
+                              accept="image/*"
+                              aria-required="true"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = URL.createObjectURL(file);
+                                  setFormData({...formData, logoUrl: url, logoFile: file});
+                                  setFieldErrors(prev => ({...prev, logo: ''}));
+                                }
+                              }}
+                            />
+                          </div>
+                          {fieldErrors.logo && <p className="text-xs text-red-500">{fieldErrors.logo}</p>}
+                        </div>
+
                         <div className="grid md:grid-cols-2 gap-6">
                           <div className="space-y-2">
                             <Label htmlFor="companyName" className="text-sm font-bold text-gray-900">Company Name <span className="text-orange-500">*</span></Label>
                             <Input id="companyName" placeholder="Enter company name" value={formData.companyName} onChange={handleChange} className="h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary" required />
                             {fieldErrors.companyName && <p className="text-xs text-red-500">{fieldErrors.companyName}</p>}
                           </div>
-                          <div className="space-y-2">
+                          <div ref={domainRef} className="space-y-2">
                             <Label htmlFor="domain" className="text-sm font-bold text-gray-900">Domain <span className="text-orange-500">*</span></Label>
                             <Input id="domain" placeholder="example.com" value={formData.domain} onChange={handleChange} className={`h-14 bg-white border-gray-100 rounded-xl px-6 focus-visible:ring-brand-primary ${fieldErrors.domain ? 'border-red-500' : ''}`} required />
                             {fieldErrors.domain && <p className="text-xs text-red-500">{fieldErrors.domain}</p>}
@@ -287,7 +358,7 @@ export function SignupPage() {
                         </div>
 
                         <div className="grid md:grid-cols-1 gap-8">
-                          <div className="space-y-2">
+                          <div ref={locationRef} className="space-y-2">
                             <Label htmlFor="locationId" className="text-sm font-bold text-gray-900">Primary Service Area <span className="text-orange-500">*</span></Label>
                             <SearchableSelect
                               value={formData.locationId}

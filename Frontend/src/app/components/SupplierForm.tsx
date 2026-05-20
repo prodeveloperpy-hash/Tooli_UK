@@ -28,6 +28,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const scrollRef = useRef<HTMLDivElement>(null);
+  const passwordRef = useRef<HTMLDivElement>(null);
+  const confirmPasswordRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const locationRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -129,15 +133,47 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     } else if (id === 'confirmPassword' || id === 'password') {
       const pass = id === 'password' ? value : formData.password;
       const confirm = id === 'confirmPassword' ? value : formData.confirmPassword;
-      if (pass && confirm && pass !== confirm) {
-        setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
-        return;
-      } else {
-        setFieldErrors(prev => ({ ...prev, confirmPassword: '' }));
-        return;
-      }
+      const passwordError = pass && pass.length < 8 ? 'Password must be at least 8 characters' : '';
+      const confirmError = pass && confirm && pass !== confirm ? "Passwords don't match" : '';
+      setFieldErrors(prev => ({
+        ...prev,
+        password: passwordError,
+        confirmPassword: confirmError,
+      }));
+      return;
     }
     setFieldErrors(prev => ({ ...prev, [id]: err }));
+  };
+
+  const scrollToFirstError = (fields: string[]) => {
+    const fieldRefs: Record<string, React.RefObject<HTMLDivElement>> = {
+      password: passwordRef,
+      confirmPassword: confirmPasswordRef,
+      logo: logoRef,
+      locationId: locationRef,
+    };
+    const target = fields.map(field => fieldRefs[field]?.current).find(Boolean);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const validatePassword = () => {
+    if (!isChangingPassword) return '';
+    if (!formData.password || formData.password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    return '';
+  };
+
+  const validateConfirmPassword = () => {
+    if (!isChangingPassword) return '';
+    if (formData.password !== formData.confirmPassword) {
+      return "Passwords don't match";
+    }
+    return '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -152,12 +188,19 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     }
 
     if (!formData.logoFile && !formData.logoUrl) {
-      setFieldErrors(prev => ({ ...prev, logo: 'Please upload a company logo' }));
+      setFieldErrors(prev => ({ ...prev, logo: 'Logo is required' }));
       hasError = true;
     }
 
-    if (isChangingPassword && formData.password !== formData.confirmPassword) {
-      setFieldErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
+    const passwordError = validatePassword();
+    if (passwordError) {
+      setFieldErrors(prev => ({ ...prev, password: passwordError }));
+      hasError = true;
+    }
+
+    const confirmPasswordError = validateConfirmPassword();
+    if (confirmPasswordError) {
+      setFieldErrors(prev => ({ ...prev, confirmPassword: confirmPasswordError }));
       hasError = true;
     }
 
@@ -167,7 +210,13 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
     }
 
     if (hasError) {
-      if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      const errorFields = [
+        passwordError ? 'password' : '',
+        confirmPasswordError ? 'confirmPassword' : '',
+        !formData.logoFile && !formData.logoUrl ? 'logo' : '',
+        !formData.locationId ? 'locationId' : '',
+      ].filter(Boolean);
+      scrollToFirstError(errorFields);
       return;
     }
 
@@ -322,7 +371,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
 
               {isChangingPassword && (
                 <div className="space-y-4">
-                  <div className="space-y-2">
+                  <div ref={passwordRef} className="space-y-2">
                     <Label htmlFor="supplierNewPassword" className="font-bold">Password</Label>
                     <div className="relative">
                       <Input
@@ -348,7 +397,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                     {fieldErrors.password && <p className="text-xs text-red-500">{fieldErrors.password}</p>}
                   </div>
 
-                  <div className="space-y-2">
+                  <div ref={confirmPasswordRef} className="space-y-2">
                     <Label htmlFor="supplierConfirmPassword" className="font-bold">Confirm Password</Label>
                     <div className="relative">
                       <Input
@@ -393,10 +442,10 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
                 <h3 className="font-bold uppercase tracking-wider text-xs">Organization Details</h3>
               </div>
 
-              <div className="space-y-2">
+              <div ref={logoRef} className="space-y-2">
                 <Label className="font-bold">Company Logo <span className="text-orange-500">*</span></Label>
                 <div 
-                  className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500' : 'border-gray-200'} rounded-xl p-8 bg-white hover:bg-gray-50 transition-colors cursor-pointer group`}
+                  className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'} rounded-xl p-8 hover:bg-gray-50 transition-colors cursor-pointer group`}
                   onClick={() => document.getElementById('logo-upload')?.click()}
                 >
                   <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm group-hover:scale-105 transition-transform">
@@ -446,7 +495,7 @@ export function SupplierForm({ isOpen, onClose, onSubmit, supplier, isLoading }:
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
+                <div ref={locationRef} className="space-y-2">
                   <Label htmlFor="domain" className="font-bold">Domain</Label>
                   <Input 
                     id="domain" 

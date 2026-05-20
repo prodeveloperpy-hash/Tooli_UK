@@ -24,6 +24,8 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [avatarVersion, setAvatarVersion] = useState(Date.now());
   const [isAvatarImageLoading, setIsAvatarImageLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -77,7 +79,17 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
     setIsChangingPassword(false);
     setShowPassword(false);
     setShowConfirmPassword(false);
+    setPasswordError('');
+    setConfirmPasswordError('');
   }, [user, isOpen]);
+
+  const validatePasswordFields = (password: string, confirmPassword: string) => {
+    const nextPasswordError = password && password.length < 8 ? 'Password must be at least 8 characters' : '';
+    const nextConfirmPasswordError = password && confirmPassword && password !== confirmPassword ? "Passwords don't match" : '';
+    setPasswordError(nextPasswordError);
+    setConfirmPasswordError(nextConfirmPasswordError);
+    return { nextPasswordError, nextConfirmPasswordError };
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -110,9 +122,15 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isChangingPassword && formData.password !== formData.confirmPassword) {
-      toast.error("Passwords don't match");
-      return;
+    if (isChangingPassword) {
+      const nextPasswordError = formData.password.length < 8 ? 'Password must be at least 8 characters' : '';
+      const nextConfirmPasswordError = formData.password !== formData.confirmPassword ? "Passwords don't match" : '';
+      setPasswordError(nextPasswordError);
+      setConfirmPasswordError(nextConfirmPasswordError);
+      if (nextPasswordError || nextConfirmPasswordError) {
+        toast.error(nextPasswordError || nextConfirmPasswordError);
+        return;
+      }
     }
     setIsSubmitting(true);
 
@@ -259,6 +277,8 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
                   setIsChangingPassword(!!checked);
                   setShowPassword(false);
                   setShowConfirmPassword(false);
+                  setPasswordError('');
+                  setConfirmPasswordError('');
                   setFormData(prev => ({
                     ...prev,
                     password: '',
@@ -286,9 +306,13 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
                       type={showPassword ? "text" : "password"}
                       autoComplete="new-password"
                       value={formData.password}
-                      onChange={e => setFormData({...formData, password: e.target.value})}
+                      onChange={e => {
+                        const password = e.target.value;
+                        setFormData({...formData, password});
+                        validatePasswordFields(password, formData.confirmPassword);
+                      }}
                       className={`h-11 pr-10 border-gray-200 focus:border-brand-primary transition-colors ${
-                        formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                        passwordError || confirmPasswordError ? 'border-red-500' : ''
                       }`}
                       required={isChangingPassword}
                     />
@@ -300,6 +324,7 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
+                  {passwordError && <p className="text-xs font-bold text-red-500 mt-1">{passwordError}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="profileConfirmPassword" className="font-bold text-xs uppercase tracking-wider text-gray-500">Confirm Password</Label>
@@ -310,9 +335,13 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
                       type={showConfirmPassword ? "text" : "password"}
                       autoComplete="new-password"
                       value={formData.confirmPassword}
-                      onChange={e => setFormData({...formData, confirmPassword: e.target.value})}
+                      onChange={e => {
+                        const confirmPassword = e.target.value;
+                        setFormData({...formData, confirmPassword});
+                        validatePasswordFields(formData.password, confirmPassword);
+                      }}
                       className={`h-11 pr-10 border-gray-200 focus:border-brand-primary transition-colors ${
-                        formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword ? 'border-red-500' : ''
+                        confirmPasswordError ? 'border-red-500' : ''
                       }`}
                       required={isChangingPassword}
                     />
@@ -324,10 +353,10 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
                       {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
-                  {formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                    <p className="text-xs font-bold text-red-500 mt-1">Passwords do not match</p>
+                  {confirmPasswordError && (
+                    <p className="text-xs font-bold text-red-500 mt-1">{confirmPasswordError}</p>
                   )}
-                  {formData.password && formData.confirmPassword && formData.password === formData.confirmPassword && (
+                  {formData.password && formData.confirmPassword && !passwordError && !confirmPasswordError && (
                     <p className="text-xs font-bold text-green-600 mt-1 flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" /> Passwords match
                     </p>
@@ -341,7 +370,7 @@ export function ProfileModal({ isOpen, onClose, user, onUpdate }: ProfileModalPr
             <Button type="button" variant="outline" onClick={onClose} disabled={isSubmitting} className="font-bold">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting || (isChangingPassword && formData.password !== formData.confirmPassword)} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold min-w-[120px] shadow-lg shadow-brand-primary/20">
+            <Button type="submit" disabled={isSubmitting || (isChangingPassword && (!formData.password || !!passwordError || !!confirmPasswordError || formData.password !== formData.confirmPassword))} className="bg-brand-primary hover:bg-brand-primary-hover text-white font-bold min-w-[120px] shadow-lg shadow-brand-primary/20">
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
