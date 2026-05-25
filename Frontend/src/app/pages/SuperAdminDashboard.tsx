@@ -5,7 +5,6 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
 import {
@@ -39,7 +38,6 @@ import {
   TrendingUp,
   Eye,
   Settings,
-  Search,
   Plus,
   Edit,
   Trash2,
@@ -104,6 +102,7 @@ export function SuperAdminDashboard() {
   const [totalEquipCount, setTotalEquipCount] = useState(0);
   const [statsData, setStatsData] = useState<Stats | null>(null);
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState('all');
+  const [equipCategoryFilter, setEquipCategoryFilter] = useState('all');
 
   const [adminPage, setAdminPage] = useState(1);
   const [totalAdminCount, setTotalAdminCount] = useState(0);
@@ -187,7 +186,7 @@ export function SuperAdminDashboard() {
     if (activeTab === 'products') {
       fetchEquipment();
     }
-  }, [activeTab, equipPage, supplierFilter, equipAvailabilityFilter]);
+  }, [activeTab, equipPage, supplierFilter, equipAvailabilityFilter, equipCategoryFilter]);
 
   useEffect(() => {
     if (activeTab === 'categories') {
@@ -233,6 +232,7 @@ export function SuperAdminDashboard() {
   // Initial data needed for forms
   useEffect(() => {
     fetchFormStaticData();
+    fetchCategories();
     fetchStats();
     fetchAllSuppliers();
     fetchPendingEquipment();
@@ -305,9 +305,20 @@ export function SuperAdminDashboard() {
   const fetchEquipment = async () => {
     setIsEquipmentLoading(true);
     try {
+      const categoryId = equipCategoryFilter === 'all' ? undefined : equipCategoryFilter;
       const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId, isActive, true);
+      const response = await equipmentApi.getEquipment(
+        categoryId,
+        undefined,
+        undefined,
+        undefined,
+        equipPage,
+        10,
+        orgId,
+        isActive,
+        true
+      );
       setEquipment(response.results);
       setTotalEquipCount(response.count);
       setTotalEquipPages(Math.ceil(response.count / 10));
@@ -784,8 +795,6 @@ export function SuperAdminDashboard() {
     }
   };
 
-
-
   const stats = [
     { title: 'Total Admins', value: statsData?.total_admins || 0, icon: ShieldCheck, gradient: 'from-slate-700 to-slate-900' },
     { title: 'Total Suppliers', value: statsData?.total_suppliers || 0, icon: Users, gradient: 'from-cyan-500 to-blue-600' },
@@ -805,7 +814,6 @@ export function SuperAdminDashboard() {
                 <h1 className="text-3xl font-bold mb-2">Master Admin Dashboard</h1>
                 <p className="text-muted-foreground">Manage suppliers and product listings</p>
               </div>
-             
             </div>
           </div>
         </div>
@@ -828,42 +836,43 @@ export function SuperAdminDashboard() {
                     </div>
                     <div className="text-3xl font-bold mb-1 tracking-tight">{stat.value}</div>
                     <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">{stat.title}</p>
-                  </CardContent>                </Card>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
 
           <Tabs defaultValue="admins" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <div className="flex overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-            <TabsList className="bg-white p-1 rounded-xl shadow-sm border inline-flex min-w-max sm:w-auto">
-              <TabsTrigger value="admins" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
-                <ShieldCheck className="w-4 h-4 mr-2" />
-                Admins
-              </TabsTrigger>
-              <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6 relative">
-                <Users className="w-4 h-4 mr-2" />
-                Suppliers
-                {pendingSuppliers.length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse" />
-                )}
-              </TabsTrigger>
-              <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6 relative">
-                <Package className="w-4 h-4 mr-2" />
-                Equipments
-                {pendingEquipment.length > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse" />
-                )}
-              </TabsTrigger>
-              <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
-                <Tag className="w-4 h-4 mr-2" />
-                Categories
-              </TabsTrigger>
-              <TabsTrigger value="locations" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
-                <MapPin className="w-4 h-4 mr-2" />
-                Locations
-              </TabsTrigger>
-            </TabsList>
-          </div>
+            <div className="flex overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+              <TabsList className="bg-white p-1 rounded-xl shadow-sm border inline-flex min-w-max sm:w-auto">
+                <TabsTrigger value="admins" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
+                  <ShieldCheck className="w-4 h-4 mr-2" />
+                  Admins
+                </TabsTrigger>
+                <TabsTrigger value="suppliers" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6 relative">
+                  <Users className="w-4 h-4 mr-2" />
+                  Suppliers
+                  {pendingSuppliers.length > 0 && (
+                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse" />
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="products" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6 relative">
+                  <Package className="w-4 h-4 mr-2" />
+                  Equipments
+                  {pendingEquipment.length > 0 && (
+                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white animate-pulse" />
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="categories" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
+                  <Tag className="w-4 h-4 mr-2" />
+                  Categories
+                </TabsTrigger>
+                <TabsTrigger value="locations" className="rounded-lg data-[state=active]:bg-[#030213] data-[state=active]:text-white font-bold px-6">
+                  <MapPin className="w-4 h-4 mr-2" />
+                  Locations
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="admins" className="space-y-6">
               <Card className="border-none shadow-sm overflow-hidden">
@@ -881,7 +890,6 @@ export function SuperAdminDashboard() {
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="overflow-x-auto">
-                    {/* ... table content ... */}
                     <Table>
                       <TableHeader className="bg-gray-50/50">
                         <TableRow className="hover:bg-transparent border-none">
@@ -948,7 +956,6 @@ export function SuperAdminDashboard() {
                     </Table>
                   </div>
 
-                  {/* Pagination Controls */}
                   <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50/30">
                     <div className="text-xs sm:text-sm text-muted-foreground font-medium text-center sm:text-left">
                       Showing <span className="text-gray-900 font-bold">{admins.length}</span> of <span className="text-gray-900 font-bold">{totalAdminCount}</span> admins
@@ -1117,7 +1124,6 @@ export function SuperAdminDashboard() {
                     </Table>
                   </div>
 
-                  {/* Pagination Controls */}
                   <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50/30">
                     <div className="text-xs sm:text-sm text-muted-foreground font-medium text-center sm:text-left">
                       Showing <span className="text-gray-900 font-bold">{suppliers.length}</span> of <span className="text-gray-900 font-bold">{totalSupplierCount}</span> suppliers
@@ -1166,6 +1172,23 @@ export function SuperAdminDashboard() {
                   <div className="p-6 border-b bg-gray-50/50">
                     <div className="flex flex-wrap items-center gap-4">
                       <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Filter:</div>
+                      
+                      <select
+                        value={equipCategoryFilter}
+                        onChange={(e) => {
+                          setEquipCategoryFilter(e.target.value);
+                          setEquipPage(1);
+                        }}
+                        className="h-10 rounded-xl border border-gray-200 bg-white px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[220px] shadow-sm"
+                      >
+                        <option value="all">All Categories</option>
+                        {categories.map(category => (
+                          <option key={category.category_id} value={category.category_id}>
+                            {category.category_display_name}
+                          </option>
+                        ))}
+                      </select>
+
                       <select
                         value={supplierFilter}
                         onChange={(e) => {
@@ -1243,33 +1266,33 @@ export function SuperAdminDashboard() {
                           <TableRow key={item.equipment_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4">
                               <div className="min-w-0">
-                                 <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
-                                 <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-                                   <MapPin className="w-3 h-3" />
-                                   <span>{item.locations?.[0]?.city_name || 'Global'}</span>
-                                   {item.locations && item.locations.length > 1 && (
-                                     <Popover>
-                                       <PopoverTrigger asChild>
-                                         <span className="text-[9px] font-bold text-brand-primary cursor-pointer hover:underline">
-                                           +{item.locations.length - 1} more
-                                         </span>
-                                       </PopoverTrigger>
-                                       <PopoverContent className="w-auto p-2" onClick={(e) => e.stopPropagation()}>
-                                         <div className="space-y-1">
-                                           <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Locations</p>
-                                           {item.locations.map((loc, i) => (
-                                             <div key={i} className="text-[10px] font-bold text-gray-700 whitespace-nowrap flex items-center gap-1.5">
-                                               <div className="w-1 h-1 rounded-full bg-brand-primary" />
-                                               {loc.city_name}, {loc.country}
-                                             </div>
-                                           ))}
-                                         </div>
-                                       </PopoverContent>
-                                     </Popover>
-                                   )}
-                                 </div>
-                               </div>
-                             </TableCell>
+                                <div className="font-bold text-gray-900 leading-none mb-1 truncate" title={item.name}>{item.name}</div>
+                                <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+                                  <MapPin className="w-3 h-3" />
+                                  <span>{item.locations?.[0]?.city_name || 'Global'}</span>
+                                  {item.locations && item.locations.length > 1 && (
+                                    <Popover>
+                                      <PopoverTrigger asChild>
+                                        <span className="text-[9px] font-bold text-brand-primary cursor-pointer hover:underline">
+                                          +{item.locations.length - 1} more
+                                        </span>
+                                      </PopoverTrigger>
+                                      <PopoverContent className="w-auto p-2" onClick={(e) => e.stopPropagation()}>
+                                        <div className="space-y-1">
+                                          <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-1">Locations</p>
+                                          {item.locations.map((loc, i) => (
+                                            <div key={i} className="text-[10px] font-bold text-gray-700 whitespace-nowrap flex items-center gap-1.5">
+                                              <div className="w-1 h-1 rounded-full bg-brand-primary" />
+                                              {loc.city_name}, {loc.country}
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </PopoverContent>
+                                    </Popover>
+                                  )}
+                                </div>
+                              </div>
+                            </TableCell>
                             <TableCell>
                               <Badge variant="secondary" className="bg-indigo-50 text-indigo-700 border-none font-bold text-[10px] uppercase tracking-wider">
                                 {item.category_display_name}
@@ -1313,7 +1336,6 @@ export function SuperAdminDashboard() {
                     </Table>
                   </div>
 
-                  {/* Pagination Controls */}
                   <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50/30">
                     <div className="text-xs sm:text-sm text-muted-foreground font-medium text-center sm:text-left">
                       Showing <span className="text-gray-900 font-bold">{equipment.length}</span> of <span className="text-gray-900 font-bold">{totalEquipCount}</span> equipment
@@ -1423,7 +1445,6 @@ export function SuperAdminDashboard() {
                     </Table>
                   </div>
 
-                  {/* Pagination Controls */}
                   <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50/30">
                     <div className="text-xs sm:text-sm text-muted-foreground font-medium text-center sm:text-left">
                       Showing <span className="text-gray-900 font-bold">{categories.length}</span> of <span className="text-gray-900 font-bold">{totalCategoryCount}</span> categories
@@ -1486,8 +1507,8 @@ export function SuperAdminDashboard() {
                           <TableRow key={loc.location_id} className="hover:bg-gray-50/50 transition-colors">
                             <TableCell className="py-4 font-black text-gray-900">{loc.order_by ?? '-'}</TableCell>
                             <TableCell className="py-4 font-bold text-gray-900">{loc.city_name}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{loc.country}</TableCell>
-                            <TableCell className="text-sm text-muted-foreground">{loc.state || '-'}</TableCell>
+                            <TableCell className="font-bold text-gray-700">{loc.country}</TableCell>
+                            <TableCell className="text-sm font-semibold text-muted-foreground">{loc.state ?? '-'}</TableCell>
                             <TableCell>
                               <Badge variant={loc.is_active ? "default" : "secondary"} className={loc.is_active ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-700"}>
                                 {loc.is_active ? 'Active' : 'Inactive'}
@@ -1507,7 +1528,6 @@ export function SuperAdminDashboard() {
                     </Table>
                   </div>
 
-                  {/* Pagination Controls */}
                   <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3 bg-gray-50/30">
                     <div className="text-xs sm:text-sm text-muted-foreground font-medium text-center sm:text-left">
                       Showing <span className="text-gray-900 font-bold">{locations.length}</span> of <span className="text-gray-900 font-bold">{totalLocationCount}</span> locations
@@ -1541,14 +1561,13 @@ export function SuperAdminDashboard() {
         </div>
       </div>
 
-      <Footer />
-
-      {/* Modals */}
+      {/* Forms and Deletion Modals */}
       <SupplierForm
         isOpen={isAddEditOpen}
         onClose={() => setIsAddEditOpen(false)}
         onSubmit={handleAddEditSubmit}
         supplier={selectedSupplier}
+        locations={locations}
         isLoading={isFetchingDetail}
       />
 
@@ -1557,22 +1576,25 @@ export function SuperAdminDashboard() {
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteConfirm}
         title="Delete Supplier"
-        description={`Are you sure you want to delete ${selectedSupplier?.user_details.first_name} ${selectedSupplier?.user_details.last_name}? This action cannot be undone.`}
+        message={`Are you sure you want to delete ${selectedSupplier?.organization_details?.name}? All associated equipment listings and data will be permanently removed.`}
       />
 
       <DeleteConfirmation
         isOpen={isRejectConfirmOpen}
         onClose={() => setIsRejectConfirmOpen(false)}
         onConfirm={handleRejectConfirm}
-        title="Reject Supplier"
-        description={`Are you sure you want to reject and delete the registration for ${supplierToReject?.user_details?.first_name} ${supplierToReject?.user_details?.last_name}?`}
+        title="Reject & Delete Registration"
+        message={`Are you sure you want to reject the supplier registration request from ${supplierToReject?.user_details?.first_name} ${supplierToReject?.user_details?.last_name} (${supplierToReject?.organization_details?.name})? This will permanently delete their account request.`}
       />
 
       <EquipmentForm
-        key={selectedEquipment?.equipment_id || 'new'}
         isOpen={isEquipFormOpen}
         onClose={() => setIsEquipFormOpen(false)}
         onSubmit={handleEquipSubmit}
+        intervals={intervals}
+        categories={categories}
+        locations={locations}
+        suppliers={allSuppliers}
         equipment={selectedEquipment}
         isLoading={isFetchingDetail}
       />

@@ -5,7 +5,6 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '../components/ui/avatar';
 import {
@@ -39,7 +38,6 @@ import {
   TrendingUp,
   Eye,
   Settings,
-  Search,
   Plus,
   Edit,
   Trash2,
@@ -97,6 +95,7 @@ export function AdminDashboard() {
   const [totalEquipPages, setTotalEquipPages] = useState(1);
   const [totalEquipCount, setTotalEquipCount] = useState(0);
   const [equipAvailabilityFilter, setEquipAvailabilityFilter] = useState<string>('all');
+  const [equipCategoryFilter, setEquipCategoryFilter] = useState<string>('all');
   const [statsData, setStatsData] = useState<Stats | null>(null);
 
   const [supplierPage, setSupplierPage] = useState(1);
@@ -142,7 +141,7 @@ export function AdminDashboard() {
     if (activeTab === 'products') {
       fetchEquipment();
     }
-  }, [activeTab, equipPage, supplierFilter, equipAvailabilityFilter]);
+  }, [activeTab, equipPage, supplierFilter, equipAvailabilityFilter, equipCategoryFilter]);
 
   const fetchAllSuppliers = async () => {
     try {
@@ -208,9 +207,10 @@ export function AdminDashboard() {
   const fetchEquipment = async () => {
     setIsEquipmentLoading(true);
     try {
+      const categoryId = equipCategoryFilter === 'all' ? undefined : equipCategoryFilter;
       const orgId = supplierFilter === 'all' ? undefined : supplierFilter;
       const isActive = equipAvailabilityFilter === 'all' ? undefined : equipAvailabilityFilter === 'available';
-      const response = await equipmentApi.getEquipment(undefined, undefined, undefined, undefined, equipPage, 10, orgId, isActive, true);
+      const response = await equipmentApi.getEquipment(categoryId, undefined, undefined, undefined, equipPage, 10, orgId, isActive, true);
       setEquipment(response.results);
       setTotalEquipCount(response.count);
       setTotalEquipPages(Math.ceil(response.count / 10));
@@ -763,6 +763,21 @@ export function AdminDashboard() {
                   <div className="p-6 border-b bg-gray-50/50">
                     <div className="flex items-center gap-4">
                       <div className="text-sm font-medium text-gray-500">Filter:</div>
+                      <select
+                        value={equipCategoryFilter}
+                        onChange={(e) => {
+                          setEquipCategoryFilter(e.target.value);
+                          setEquipPage(1);
+                        }}
+                        className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 min-w-[220px]"
+                      >
+                        <option value="all">All Categories</option>
+                        {categories.map(category => (
+                          <option key={category.category_id} value={category.category_id}>
+                            {category.category_display_name}
+                          </option>
+                        ))}
+                      </select>
                       <select
                         value={supplierFilter}
                         onChange={(e) => {
