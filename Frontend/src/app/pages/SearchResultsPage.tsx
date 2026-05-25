@@ -4,7 +4,7 @@ import { SearchBar } from '../components/SearchBar';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Info } from 'lucide-react';
 import { equipmentApi, Equipment } from '../../context/equipment.api';
 import { EquipmentCard } from '../components/EquipmentCard';
 
@@ -123,6 +123,12 @@ export function SearchResultsPage() {
       <div className="bg-white border-b shadow-sm sticky top-10 z-40">
         <div className="container mx-auto px-4 py-3">
           <SearchBar className="shadow-none border-none bg-transparent p-0" onSearch={() => setPage(1)} />
+          <div className="mt-2.5 flex items-start gap-2 text-[11px] text-gray-500 font-medium leading-relaxed max-w-5xl">
+            <Info className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
+            <span>
+              Prices and availability are subject to supplier confirmation, additional fees, VAT and delivery charges may apply. Tooli acts as a comparison platform connecting customers with third party equipment hire suppliers. Final hire terms and pricing are confirmed directly.
+            </span>
+          </div>
         </div>
       </div>
 
