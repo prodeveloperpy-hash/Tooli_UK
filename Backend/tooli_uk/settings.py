@@ -192,8 +192,8 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "https://frontend-service-961815749151.us-central1.run.app",
         "http://localhost:5173",
-        "https://www.tooli.uk/",|
-        "https://tooli.uk/"
+        "https://www.tooli.uk",|
+        "https://tooli.uk"
     ]
 
 _csrf = os.environ.get("CSRF_TRUSTED_ORIGINS", "").strip()
