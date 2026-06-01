@@ -79,7 +79,7 @@ export function SearchBar({ className = '', onSearch }: SearchBarProps) {
 
   return (
     <div className={`bg-white rounded-2xl shadow-xl p-4 ${className}`}>
-      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1.5fr_1fr_auto] gap-3 items-end">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.5fr_1.5fr_1fr_auto] gap-3 items-end">
         <div className="space-y-2">
           <label className="text-[10px] font-extrabold uppercase tracking-widest text-gray-400 ml-1">
             Equipment
