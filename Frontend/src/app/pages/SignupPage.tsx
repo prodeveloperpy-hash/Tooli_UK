@@ -22,7 +22,6 @@ export function SignupPage() {
   const [locations, setLocations] = useState<Location[]>([]);
   const passwordRef = useRef<HTMLDivElement>(null);
   const confirmPasswordRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
   const domainRef = useRef<HTMLDivElement>(null);
   const locationRef = useRef<HTMLDivElement>(null);
 
@@ -38,8 +37,6 @@ export function SignupPage() {
     city: '',
     avatarUrl: '',
     avatarFile: null as File | null,
-    logoUrl: '',
-    logoFile: null as File | null,
   });
 
   useEffect(() => {
@@ -81,11 +78,10 @@ export function SignupPage() {
     setFieldErrors(prev => ({ ...prev, [id]: err }));
   };
 
-  const scrollToField = (field: 'password' | 'confirmPassword' | 'logo' | 'domain' | 'locationId') => {
+  const scrollToField = (field: 'password' | 'confirmPassword' | 'domain' | 'locationId') => {
     const refs = {
       password: passwordRef,
       confirmPassword: confirmPasswordRef,
-      logo: logoRef,
       domain: domainRef,
       locationId: locationRef,
     };
@@ -130,13 +126,8 @@ export function SignupPage() {
       hasError = true;
     }
 
-    if (!formData.logoFile) {
-      setFieldErrors(prev => ({ ...prev, logo: 'Logo is required' }));
-      hasError = true;
-    }
-
     if (hasError) {
-      const firstError = !formData.logoFile ? 'logo' : !domainRegex.test(formData.domain) ? 'domain' : 'locationId';
+      const firstError = !domainRegex.test(formData.domain) ? 'domain' : 'locationId';
       scrollToField(firstError);
       return;
     }
@@ -159,7 +150,6 @@ export function SignupPage() {
       };
       
       if (formData.avatarFile) signupData.avatarFile = formData.avatarFile;
-      if (formData.logoFile) signupData.logoFile = formData.logoFile;
 
       await authApi.signup(signupData);
       navigate('/login', { state: { message: 'Account created and sent for approval to superadmin' } });
@@ -308,41 +298,6 @@ export function SignupPage() {
                       </div>
 
                       <div className="space-y-6">
-                        <div ref={logoRef} className="space-y-2">
-                          <Label className="text-sm font-bold text-gray-900">Company Logo <span className="text-orange-500">*</span></Label>
-                          <div
-                            className={`flex flex-col items-center justify-center border-2 border-dashed ${fieldErrors.logo ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'} rounded-xl p-8 hover:bg-gray-50 transition-colors cursor-pointer group`}
-                            onClick={() => document.getElementById('signup-logo-upload')?.click()}
-                          >
-                            <div className="h-20 w-20 rounded-xl border border-gray-100 bg-gray-50 flex items-center justify-center overflow-hidden mb-4 shadow-sm group-hover:scale-105 transition-transform">
-                              {formData.logoUrl ? (
-                                <img src={formData.logoUrl} alt="Logo" className="max-h-full max-w-full object-contain p-2" />
-                              ) : (
-                                <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-brand-primary transition-colors" />
-                              )}
-                            </div>
-                            <div className="text-center">
-                              <p className="text-sm font-bold text-brand-primary">Click to upload required company logo</p>
-                              <p className="text-xs text-gray-500 mt-1">SVG, PNG, or JPG (max. 2MB)</p>
-                            </div>
-                            <input
-                              type="file"
-                              id="signup-logo-upload"
-                              className="hidden"
-                              accept="image/*"
-                              aria-required="true"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  const url = URL.createObjectURL(file);
-                                  setFormData({...formData, logoUrl: url, logoFile: file});
-                                  setFieldErrors(prev => ({...prev, logo: ''}));
-                                }
-                              }}
-                            />
-                          </div>
-                          {fieldErrors.logo && <p className="text-xs text-red-500">{fieldErrors.logo}</p>}
-                        </div>
 
                         <div className="grid md:grid-cols-2 gap-6">
                           <div className="space-y-2">
