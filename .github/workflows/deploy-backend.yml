@@ -7,7 +7,6 @@ on:
     paths:
       - "Backend/**"
       - ".github/workflows/deploy-backend.yml"
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
