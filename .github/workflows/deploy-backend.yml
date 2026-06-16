@@ -7,13 +7,15 @@ on:
     paths:
       - "Backend/**"
       - ".github/workflows/deploy-backend.yml"
-      
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       id-token: write
+
     env:
       PROJECT_ID: project-ad3f785e-ea3f-4bb9-927
       REGION: us-central1
@@ -26,6 +28,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Debug GitHub Context
+        run: |
+          echo "Repository=${{ github.repository }}"
+          echo "Owner=${{ github.repository_owner }}"
+          echo "Ref=${{ github.ref }}"
 
       - name: Authenticate to GCP (Workload Identity)
         uses: google-github-actions/auth@v2
@@ -56,16 +64,19 @@ jobs:
       - name: Build and push image
         run: |
           IMAGE_BASE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME"
+
           docker build \
             -t "$IMAGE_BASE:$GITHUB_SHA" \
             -t "$IMAGE_BASE:latest" \
             Backend
+
           docker push "$IMAGE_BASE:$GITHUB_SHA"
           docker push "$IMAGE_BASE:latest"
 
       - name: Deploy to Cloud Run
         run: |
           IMAGE="$REGION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE_NAME:$GITHUB_SHA"
+
           gcloud run deploy "$SERVICE_NAME" \
             --image "$IMAGE" \
             --region "$REGION" \
