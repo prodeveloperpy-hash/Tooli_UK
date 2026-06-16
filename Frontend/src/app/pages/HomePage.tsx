@@ -10,6 +10,15 @@ import { DateRange } from 'react-day-picker';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { equipmentApi, Category, Location } from '../../context/equipment.api';
+import { PageMeta } from '../components/PageMeta';
+
+const faqs = [
+  ['How do I compare tool hire prices in the UK?', 'Search on Tooli.uk by equipment type, postcode, and hire period. We return supplier options from multiple local and national hire companies side by side.'],
+  ['What is the cheapest way to hire tools in the UK?', 'Compare before you book, choose the right hire period for your project, and check collection or delivery options before committing.'],
+  ['Why are tool hire prices higher in London?', 'Depot operating costs, delivery logistics, and congestion charges push London rates above the national average, but the dense supplier market creates strong competition.'],
+  ['Can I compare plant hire on Tooli as well as tool hire?', 'Yes. Tooli covers both tool hire and plant hire, including mini diggers, dumpers, scissor lifts, telehandlers, boom lifts, and compressors.'],
+  ['Is Tooli free to use?', 'Yes. Comparing tool hire prices on Tooli.uk is completely free, and no account is required to search or view supplier rates.'],
+];
 
 export function HomePage() {
   const navigate = useNavigate();
@@ -55,6 +64,10 @@ export function HomePage() {
 
   return (
     <div className="w-full bg-white">
+      <PageMeta
+        title="Compare Tool Hire Prices UK | Free Comparison | Tooli"
+        description="Compare tool hire prices UK wide with Tooli. Find the cheapest tool hire rates from local and national suppliers near you. Free, fast, no account needed."
+      />
       {/* Hero Section */}
       <section className="relative min-h-[760px] sm:min-h-[720px] md:h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -74,10 +87,10 @@ export function HomePage() {
             className="max-w-4xl"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-5 md:mb-6 text-white leading-[1.15] md:leading-[1.2]">
-              Find <span className="text-brand-primary">Available</span> Construction Equipment Near Your Site
+              Compare Tool Hire Prices UK - Find the Cheapest Rates Near You
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-white/90 mb-8 md:mb-10 max-w-2xl font-medium leading-relaxed">
-              Compare local plant hire suppliers, check availability, and get equipment delivered fast.
+              Compare local depots, national chains, and independent suppliers side by side. Search by equipment type and location to find hire options before you book.
             </p>
 
             {/* Search Bar Component */}
@@ -185,7 +198,7 @@ export function HomePage() {
                     onClick={handleSearch}
                     className="h-12 lg:h-14 px-8 lg:px-10 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl lg:rounded-[18px] text-base lg:text-lg transition-all shadow-lg shadow-orange-500/20 w-full"
                   >
-                    Search
+                    Compare Prices
                   </Button>
                 </div>
               </div>
@@ -202,19 +215,19 @@ export function HomePage() {
                 <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
                   <CheckCircle className="w-3.5 h-3.5 text-white" />
                 </div>
-                Available today
+                Free to search
               </div>
               <div className="flex items-center gap-2.5 text-white font-bold text-sm">
                 <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
                   <CheckCircle className="w-3.5 h-3.5 text-white" />
                 </div>
-                Local suppliers
+                Local and national suppliers
               </div>
               <div className="flex items-center gap-2.5 text-white font-bold text-sm">
                 <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
                   <CheckCircle className="w-3.5 h-3.5 text-white" />
                 </div>
-                Fast delivery
+                No account needed
               </div>
             </div>
           </motion.div>
@@ -225,7 +238,10 @@ export function HomePage() {
       <section className="bg-white py-16 md:py-32">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12 md:mb-24">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#030213] mb-4">How It Works</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#030213] mb-4">What Is Tooli and How Does Tool Hire Price Comparison Work?</h2>
+            <p className="text-base sm:text-lg text-gray-500 font-medium max-w-3xl mx-auto leading-relaxed">
+              Tooli is a UK tool hire comparison platform. Tell us what you need, where you are, and how long you need it for. We show you who has it, what they charge, and whether they deliver to your postcode.
+            </p>
             <div className="w-12 h-1 bg-brand-primary rounded-full mx-auto" />
           </div>
 
@@ -237,7 +253,7 @@ export function HomePage() {
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-[#030213] mb-3 md:mb-4">1. Search</h3>
               <p className="text-gray-500 font-medium leading-relaxed max-w-xs">
-                Enter your equipment, location and dates to see what's available.
+                Type what you need and choose your location and dates.
               </p>
             </div>
 
@@ -250,7 +266,7 @@ export function HomePage() {
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-[#030213] mb-3 md:mb-4">2. Compare</h3>
               <p className="text-gray-500 font-medium leading-relaxed max-w-xs">
-                Compare prices and delivery options from trusted local suppliers.
+                See supplier options, availability, delivery charges, and minimum hire periods side by side.
               </p>
             </div>
 
@@ -263,7 +279,7 @@ export function HomePage() {
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-[#030213] mb-3 md:mb-4">3. Book</h3>
               <p className="text-gray-500 font-medium leading-relaxed max-w-xs">
-                Choose the best deal and book directly with the supplier.
+                Pick the best price and book with the supplier. No Tooli markup is added to your hire.
               </p>
             </div>
           </div>
@@ -275,8 +291,8 @@ export function HomePage() {
                 <CheckCircle className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" />
               </div>
               <div>
-                <h4 className="font-bold text-gray-900 mb-1">Verified Suppliers</h4>
-                <p className="text-sm text-gray-500 font-medium">All suppliers are checked and reviewed</p>
+                <h4 className="font-bold text-gray-900 mb-1">Transparent Costs</h4>
+                <p className="text-sm text-gray-500 font-medium">Delivery, fuel policies and minimum hire terms are shown upfront</p>
               </div>
             </div>
 
@@ -285,8 +301,8 @@ export function HomePage() {
                 <BarChart3 className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" />
               </div>
               <div>
-                <h4 className="font-bold text-gray-900 mb-1">Best Prices</h4>
-                <p className="text-sm text-gray-500 font-medium">Compare and save on plant hire</p>
+                <h4 className="font-bold text-gray-900 mb-1">UK Coverage</h4>
+                <p className="text-sm text-gray-500 font-medium">Compare suppliers across London, Manchester, Birmingham, Leeds and beyond</p>
               </div>
             </div>
 
@@ -295,10 +311,40 @@ export function HomePage() {
                 <CalendarIcon className="w-6 h-6 md:w-8 md:h-8 text-brand-primary" />
               </div>
               <div>
-                <h4 className="font-bold text-gray-900 mb-1">Save Time</h4>
-                <p className="text-sm text-gray-500 font-medium">Quick quotes from local suppliers</p>
+                <h4 className="font-bold text-gray-900 mb-1">Fast Decisions</h4>
+                <p className="text-sm text-gray-500 font-medium">One search returns multiple quotes in seconds</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24 bg-[#F8F9FC]">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#030213] mb-5">Best Tool Hire Company UK - National Chains vs Local Depots</h2>
+              <p className="text-gray-500 font-medium leading-relaxed mb-4">
+                There is no single best tool hire company for every job, location, and budget. National chains offer broad coverage and standard processes. Independent depots often undercut national chains by 10 to 20% on standard equipment.
+              </p>
+              <p className="text-gray-500 font-medium leading-relaxed">
+                Tooli compares both, filtered to your location and equipment type, so you can make the call with real prices in front of you.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-[#030213] mb-10 text-center">FAQs - Compare Tool Hire Prices UK</h2>
+          <div className="max-w-4xl mx-auto grid gap-4">
+            {faqs.map(([question, answer]) => (
+              <div key={question} className="rounded-2xl bg-[#F8F9FC] border border-gray-100 p-5 md:p-6">
+                <h3 className="font-extrabold text-gray-900 mb-2">{question}</h3>
+                <p className="text-gray-500 font-medium leading-relaxed">{answer}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
