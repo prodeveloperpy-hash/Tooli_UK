@@ -1,111 +1,159 @@
-import { Link } from 'react-router-dom';
+import type { ReactNode } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { CheckCircle, ChevronRight, MapPin, ShieldCheck } from 'lucide-react';
 import { PageMeta } from '../components/PageMeta';
 
-const pageSchema = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': 'https://www.tooli.uk/#organization',
-      name: 'Tooli',
-      alternateName: 'Tooli.uk',
-      url: 'https://www.tooli.uk',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://www.tooli.uk/images/logo.png',
-      },
-      description:
-        'Tooli is a free online comparison platform for tool hire and plant hire across the UK. Search by equipment type, postcode, and hire period to compare prices from multiple local and national hire suppliers side by side.',
-      email: 'info@tooli.uk',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'London',
-        addressCountry: 'GB',
-      },
-      areaServed: {
-        '@type': 'Country',
-        name: 'United Kingdom',
-      },
+/* ------------------------------------------------------------------ */
+/* Shared schema nodes                                                 */
+/* ------------------------------------------------------------------ */
+
+const ORGANIZATION_NODE = {
+  '@type': 'Organization',
+  '@id': 'https://www.tooli.uk/#organization',
+  name: 'Tooli',
+  alternateName: 'Tooli.uk',
+  url: 'https://www.tooli.uk',
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://www.tooli.uk/images/logo.png',
+  },
+  description:
+    'Tooli is a free online comparison platform for tool hire and plant hire across the UK. Search by equipment type, postcode, and hire period to compare prices from multiple local and national hire suppliers side by side.',
+  email: 'info@tooli.uk',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'London',
+    addressCountry: 'GB',
+  },
+  areaServed: {
+    '@type': 'Country',
+    name: 'United Kingdom',
+  },
+};
+
+const WEBSITE_NODE = {
+  '@type': 'WebSite',
+  '@id': 'https://www.tooli.uk/#website',
+  name: 'Tooli',
+  url: 'https://www.tooli.uk',
+  description: 'Compare tool hire and plant hire prices across the UK. Free to use, no account required.',
+  publisher: {
+    '@id': 'https://www.tooli.uk/#organization',
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://www.tooli.uk/search?q={search_term_string}',
     },
-    {
-      '@type': 'WebSite',
-      '@id': 'https://www.tooli.uk/#website',
-      name: 'Tooli',
-      url: 'https://www.tooli.uk',
-      description: 'Compare tool hire and plant hire prices across the UK. Free to use, no account required.',
-      publisher: {
-        '@id': 'https://www.tooli.uk/#organization',
-      },
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: {
-          '@type': 'EntryPoint',
-          urlTemplate: 'https://www.tooli.uk/search?q={search_term_string}',
-        },
-        'query-input': 'required name=search_term_string',
-      },
-    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+type Faq = [question: string, answer: string];
+
+function buildPostSchema(post: {
+  slug: string;
+  title: string;
+  metaDescription: string;
+  image: string;
+  datePublished: string;
+  faqs: Faq[];
+}): Record<string, unknown> {
+  const url = `https://www.tooli.uk/blog/${post.slug}`;
+  const graph: Record<string, unknown>[] = [
+    ORGANIZATION_NODE,
+    WEBSITE_NODE,
     {
       '@type': 'BreadcrumbList',
-      '@id': 'https://www.tooli.uk/#breadcrumb',
+      '@id': `${url}#breadcrumb`,
       itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: 'https://www.tooli.uk/',
-        },
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.tooli.uk/blog' },
+        { '@type': 'ListItem', position: 3, name: post.title, item: url },
       ],
     },
     {
-      '@type': 'FAQPage',
-      '@id': 'https://www.tooli.uk/#faq',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How do I compare tool hire prices in the UK?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Search on Tooli.uk by equipment type, postcode, and hire period. We return supplier options from multiple local and national hire companies side by side.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the cheapest way to hire tools in the UK?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Compare before you book, choose the right hire period for your project, and check collection or delivery options before committing.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Why are tool hire prices higher in London?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Depot operating costs, delivery logistics, and congestion charges push London rates above the national average, but the dense supplier market creates strong competition.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I compare plant hire on Tooli as well as tool hire?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Tooli covers both tool hire and plant hire, including mini diggers, dumpers, scissor lifts, telehandlers, boom lifts, and compressors.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is Tooli free to use?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Comparing tool hire prices on Tooli.uk is completely free, and no account is required to search or view supplier rates.',
-          },
-        },
-      ],
+      '@type': 'Article',
+      '@id': `${url}#article`,
+      headline: post.title,
+      description: post.metaDescription,
+      image: `https://www.tooli.uk${post.image}`,
+      datePublished: post.datePublished,
+      dateModified: post.datePublished,
+      author: {
+        '@type': 'Organization',
+        name: 'Tooli UK Editorial Team',
+        url: 'https://www.tooli.uk',
+      },
+      publisher: { '@id': 'https://www.tooli.uk/#organization' },
+      mainEntityOfPage: url,
     },
-  ],
-};
+  ];
+
+  if (post.faqs.length) {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${url}#faq`,
+      mainEntity: post.faqs.map(([question, answer]) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: { '@type': 'Answer', text: answer },
+      })),
+    });
+  }
+
+  return { '@context': 'https://schema.org', '@graph': graph };
+}
+
+/* ------------------------------------------------------------------ */
+/* Small presentational helpers                                        */
+/* ------------------------------------------------------------------ */
+
+function H2({ children }: { children: ReactNode }) {
+  return <h2 className="mb-5 text-3xl font-extrabold text-[#030213]">{children}</h2>;
+}
+
+function H3({ children }: { children: ReactNode }) {
+  return <h3 className="mb-2 text-xl font-extrabold text-gray-900">{children}</h3>;
+}
+
+function Prose({ children }: { children: ReactNode }) {
+  return <div className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">{children}</div>;
+}
+
+function CheckList({ items }: { items: string[] }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {items.map((item) => (
+        <div key={item} className="flex items-center gap-3 rounded-xl bg-[#F8F9FC] p-3 text-sm font-bold text-gray-900">
+          <CheckCircle className="h-5 w-5 shrink-0 text-brand-primary" />
+          {item}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FaqSection({ faqs }: { faqs: Faq[] }) {
+  return (
+    <section>
+      <H2>Frequently Asked Questions</H2>
+      <div className="grid gap-4">
+        {faqs.map(([question, answer]) => (
+          <div key={question} className="rounded-2xl border border-gray-100 p-5">
+            <h3 className="mb-2 text-lg font-extrabold text-gray-900">{question}</h3>
+            <p className="font-medium leading-relaxed text-gray-500">{answer}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Article 1 — Tool Hire Comparison UK                                 */
+/* ------------------------------------------------------------------ */
 
 const locations = [
   'London',
@@ -125,7 +173,7 @@ const locations = [
   'Belfast',
 ];
 
-const equipmentCategories = [
+const equipmentCategories: Faq[] = [
   ['Excavators and Mini Diggers', 'Used for foundations, drainage, site preparation and landscaping projects.'],
   ['Dumpers', 'Ideal for moving materials efficiently around site.'],
   ['Telehandlers', 'Used for lifting and moving materials on construction projects.'],
@@ -135,7 +183,7 @@ const equipmentCategories = [
   ['Site Equipment', 'Including fencing, compressors, lighting towers and welfare equipment.'],
 ];
 
-const comparisonPoints = [
+const comparisonPoints: Faq[] = [
   ['Weekly Hire Options', 'Many contractors hire equipment for several days or weeks. Comparing weekly hire options helps identify suppliers suited to project duration.'],
   ['Availability', 'Availability remains one of the most important factors when selecting a supplier.'],
   ['Delivery and Collection', 'Review service areas, delivery arrangements and collection procedures.'],
@@ -143,7 +191,7 @@ const comparisonPoints = [
   ['Support and Replacement Procedures', 'Understand supplier support arrangements in case equipment becomes unavailable or develops a fault.'],
 ];
 
-const commonMistakes = [
+const commonMistakes: Faq[] = [
   ['Only Contacting One Supplier', 'Comparing suppliers provides better visibility of available options.'],
   ['Leaving Equipment Hire Too Late', 'Popular equipment categories can become difficult to source during busy periods.'],
   ['Ignoring Local Alternatives', 'Regional suppliers may provide excellent availability and support.'],
@@ -151,20 +199,740 @@ const commonMistakes = [
   ['Assuming Equipment Is Identical', 'Always verify machine specifications before booking.'],
 ];
 
-const faqs = [
+const comparisonFaqs: Faq[] = [
   ['What equipment can be compared?', 'Categories include excavators, mini diggers, dumpers, telehandlers, generators, access equipment, compactors, rollers and site equipment.'],
   ['Can I book through Tooli UK?', 'Users compare suppliers and then visit the supplier website directly to complete the booking.'],
   ['Who uses Tooli UK?', 'Builders, contractors, landscapers, groundworkers, utilities contractors and civil engineering teams.'],
   ['Why compare suppliers?', 'Comparison provides better visibility into supplier availability, service coverage and equipment options.'],
 ];
 
+function ToolHireComparisonBody() {
+  return (
+    <>
+      <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+        <p>
+          Finding the right equipment for a construction project is often more difficult than it should be. Contractors regularly spend valuable time contacting multiple suppliers, checking availability, reviewing delivery arrangements and trying to determine which supplier is best suited to a particular project.
+        </p>
+        <p>
+          The construction industry moves quickly. Delays in sourcing equipment can impact labour schedules, subcontractors, project timelines and client expectations. Whether you are managing a residential development, commercial construction project, civil engineering contract or landscaping job, access to suitable equipment is critical.
+        </p>
+        <p>
+          Tooli UK was created to simplify this process. Rather than contacting suppliers individually, users can compare suppliers in one place and then visit the supplier’s website directly to complete their booking.
+        </p>
+      </section>
+
+      <section>
+        <H2>Why Tool Hire Comparison Matters</H2>
+        <Prose>
+          <p>
+            Many contractors have preferred suppliers they use regularly. While those relationships remain valuable, relying exclusively on a single supplier can sometimes reduce visibility into other available options.
+          </p>
+          <p>
+            Equipment availability changes constantly. Demand fluctuates throughout the year and availability can vary significantly between locations. A supplier with limited availability in Manchester may have excellent availability in Birmingham. A supplier unable to support a project in London may have strong coverage in Leeds or Glasgow.
+          </p>
+          <p>Comparison helps contractors make decisions based on current availability, project requirements and supplier coverage.</p>
+        </Prose>
+      </section>
+
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <H2>Why Contractors Use Tooli UK</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          The biggest advantage is efficiency. Instead of spending hours researching suppliers, contractors can review supplier options more quickly and focus on managing projects.
+        </p>
+        <CheckList items={['Builders', 'Groundworkers', 'Landscapers', 'Civil engineering contractors', 'Utilities contractors', 'Facilities management companies', 'Site managers']} />
+      </section>
+
+      <section>
+        <H2>Construction Equipment Categories</H2>
+        <div className="grid gap-4">
+          {equipmentCategories.map(([title, description]) => (
+            <div key={title} className="rounded-2xl border border-gray-100 p-5">
+              <H3>{title}</H3>
+              <p className="font-medium leading-relaxed text-gray-500">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>What To Compare</H2>
+        <div className="space-y-4">
+          {comparisonPoints.map(([title, description]) => (
+            <div key={title} className="flex gap-4">
+              <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
+              <div>
+                <h3 className="text-lg font-extrabold text-gray-900">{title}</h3>
+                <p className="font-medium leading-relaxed text-gray-500">{description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>National Suppliers vs Independent Depots</H2>
+        <Prose>
+          <p>National suppliers often provide wider coverage and larger fleets.</p>
+          <p>Independent depots frequently provide strong local knowledge and flexible service.</p>
+          <p>Both options can be valuable depending on project requirements.</p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Location-Based Comparison</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Location is a major factor in plant hire. Tooli UK currently supports:
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+          {locations.map((location) => (
+            <div key={location} className="flex items-center gap-2 rounded-xl bg-[#F8F9FC] px-4 py-3 text-sm font-bold text-gray-900">
+              <MapPin className="h-4 w-4 text-brand-primary" />
+              {location}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Safety And Compliance</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Equipment selection should never be based solely on convenience. Depending on the equipment being used, CPCS, IPAF or PASMA training requirements may apply.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {['Inspection records', 'Maintenance procedures', 'Operator competency requirements', 'Site-specific safety requirements', 'Equipment suitability'].map((item) => (
+            <div key={item} className="rounded-xl border border-gray-100 p-4 text-sm font-bold text-gray-900">{item}</div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Common Mistakes</H2>
+        <div className="grid gap-4">
+          {commonMistakes.map(([title, description]) => (
+            <div key={title} className="rounded-2xl bg-[#F8F9FC] p-5">
+              <h3 className="mb-2 text-lg font-extrabold text-gray-900">{title}</h3>
+              <p className="font-medium leading-relaxed text-gray-500">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <FaqSection faqs={comparisonFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Conclusion</h2>
+        <p className="mb-5 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Construction equipment comparison is about more than finding equipment. It is about improving efficiency, reviewing supplier options and helping contractors make informed decisions.
+        </p>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Tooli UK simplifies supplier comparison by bringing supplier options together in one place. Search your location, compare suppliers and visit the supplier website that best suits your project requirements.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Start Comparing
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Article 2 — Mini Digger Hire Cost UK                                */
+/* ------------------------------------------------------------------ */
+
+const priceVariationFactors = [
+  'Location',
+  'Fleet availability',
+  'Delivery distance',
+  'Insurance arrangements',
+  'Weekend demand',
+  'Attachments included',
+  'Seasonal demand',
+  'Minimum hire periods',
+];
+
+const overpayMistakes: Faq[] = [
+  ['1. Hiring the Wrong Size Machine', 'Many first-time hirers focus on the lowest advertised rate rather than the most suitable machine. The result is often slower progress and a longer hire period.'],
+  ['2. Booking at the Last Minute', 'Limited availability can reduce your options and increase costs.'],
+  ['3. Ignoring Delivery Charges', 'Always compare total project costs rather than the headline rate.'],
+  ['4. Forgetting About Access', 'A machine that can’t reach the work area creates delays and additional expense.'],
+  ['5. Extending the Hire Repeatedly', 'Booking realistic hire periods from the beginning often provides better value.'],
+];
+
+const miniDiggerFaqs: Faq[] = [
+  ['What size mini digger do I need?', 'The answer depends on access, digging depth and project size. Most domestic projects are completed using either a micro digger or a 1.5-tonne mini digger.'],
+  ['Is weekly hire cheaper than daily hire?', 'In many cases, yes. Longer hire periods often provide better value than multiple short-term bookings.'],
+  ['Does mini digger hire include delivery?', 'Delivery arrangements vary by supplier. Always confirm what is included before booking.'],
+  ['Can I hire a mini digger with an operator?', 'Many suppliers offer operated hire services for customers who require a qualified operator.'],
+  ['Can a mini digger fit through a garden gate?', 'Many micro diggers are designed specifically for narrow access work and can fit through standard garden gates.'],
+];
+
+function MiniDiggerBody() {
+  return (
+    <>
+      <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+        <p>If you’ve searched for mini digger hire online, you’ve probably noticed something frustrating.</p>
+        <p>
+          One supplier advertises a machine for one price, another quotes something completely different, and by the time delivery, fuel, insurance and extras are added, the final cost can look nothing like the original advert.
+        </p>
+        <p>That’s because there is no single UK-wide price for mini digger hire.</p>
+        <p>
+          The cost depends on the machine size, your location, supplier availability, hire duration, delivery distance, attachments and several other factors. The good news is that understanding how pricing works makes it much easier to avoid overpaying.
+        </p>
+        <p>
+          In this guide, we’ll explain what influences mini digger hire costs, how to choose the right machine for your project, common mistakes to avoid, and why comparing suppliers before booking can save both time and money.
+        </p>
+      </section>
+
+      <section>
+        <H2>Why Mini Digger Prices Vary Between Suppliers</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Many people assume mini diggers are like retail products where every supplier charges roughly the same amount. Plant hire doesn’t work that way. Two suppliers may offer similar machines, but the final price can differ because of:
+        </p>
+        <CheckList items={priceVariationFactors} />
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          This is why comparing multiple suppliers is often more important than focusing on a single advertised rate.
+        </p>
+      </section>
+
+      <section>
+        <H2>Choosing the Right Mini Digger</H2>
+        <Prose>
+          <p>The most expensive mistake isn’t paying slightly more for a machine. It’s hiring the wrong machine altogether.</p>
+          <p>A machine that’s too small can turn a one-day job into a three-day project. A machine that’s too large may not fit through your access point at all.</p>
+        </Prose>
+        <div className="mt-6 grid gap-4">
+          <div className="rounded-2xl border border-gray-100 p-5">
+            <H3>Micro Diggers</H3>
+            <p className="mb-3 font-medium leading-relaxed text-gray-500">
+              Micro diggers are designed for restricted access projects. Typical uses include garden landscaping, pond excavation, fence installation and small drainage projects. Many models can fit through standard garden gates, making them ideal for residential work.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-gray-100 p-5">
+            <H3>Mini Diggers</H3>
+            <p className="mb-3 font-medium leading-relaxed text-gray-500">
+              Mini diggers are the most commonly hired excavators in the UK. They’re suitable for driveways, foundations, landscaping, drainage and general groundwork. For many homeowners and builders, this size offers the best balance between power and manoeuvrability.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-gray-100 p-5">
+            <H3>Midi Excavators</H3>
+            <p className="mb-3 font-medium leading-relaxed text-gray-500">
+              Midi excavators are often chosen for larger trenching projects, utility installation, commercial groundwork and heavy excavation. Where access allows, they can significantly increase productivity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <H2>What Actually Affects Hire Costs?</H2>
+        <div className="space-y-4">
+          <div className="flex gap-4">
+            <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
+            <div>
+              <h3 className="text-lg font-extrabold text-gray-900">Location</h3>
+              <p className="font-medium leading-relaxed text-gray-500">
+                Location is one of the biggest influences on plant hire pricing. Machines hired in major cities often cost more because suppliers face higher operating costs and stronger demand. Transport costs can also vary significantly depending on where the machine is being delivered.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
+            <div>
+              <h3 className="text-lg font-extrabold text-gray-900">Hire Duration</h3>
+              <p className="font-medium leading-relaxed text-gray-500">
+                Longer hire periods frequently offer better value. Many suppliers provide discounted rates for multi-day bookings, weekly hires and long-term projects. If your project might take longer than expected, comparing longer hire periods can often reduce the overall cost.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
+            <div>
+              <h3 className="text-lg font-extrabold text-gray-900">Delivery and Collection</h3>
+              <p className="font-medium leading-relaxed text-gray-500">
+                One of the most commonly overlooked costs is transport. Ask whether delivery and collection are included, whether there is a mileage charge, and whether timed deliveries cost extra. The cheapest advertised machine isn’t always the cheapest overall option.
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-4">
+            <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
+            <div>
+              <h3 className="text-lg font-extrabold text-gray-900">Attachments</h3>
+              <p className="font-medium leading-relaxed text-gray-500">
+                The right attachment can dramatically improve productivity. Common options include hydraulic breakers, augers, trenching buckets and grading buckets. Choosing the correct attachment can reduce labour time and help complete the project faster.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <H2>Five Ways People Accidentally Overpay</H2>
+        <div className="grid gap-4">
+          {overpayMistakes.map(([title, description]) => (
+            <div key={title} className="rounded-2xl bg-[#F8F9FC] p-5">
+              <h3 className="mb-2 text-lg font-extrabold text-gray-900">{title}</h3>
+              <p className="font-medium leading-relaxed text-gray-500">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Do You Need a Licence to Hire a Mini Digger?</H2>
+        <Prose>
+          <p>For private projects on your own property, there is generally no specific licence required to hire or operate a mini digger. However, safe operation remains your responsibility.</p>
+          <p>If you’re working on a commercial construction site, operator qualifications may be required depending on site rules and contractor requirements. Always verify site-specific requirements before operating machinery.</p>
+        </Prose>
+      </section>
+
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <H2>Mini Digger vs Micro Digger: Which Should You Choose?</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          This is one of the most common questions among first-time hirers.
+        </p>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <div className="rounded-2xl bg-white p-5">
+            <H3>Choose a micro digger if</H3>
+            <ul className="space-y-2 text-sm font-medium text-gray-500">
+              <li>Access is restricted</li>
+              <li>You need to pass through a garden gate</li>
+              <li>The project is relatively small</li>
+            </ul>
+          </div>
+          <div className="rounded-2xl bg-white p-5">
+            <H3>Choose a mini digger if</H3>
+            <ul className="space-y-2 text-sm font-medium text-gray-500">
+              <li>Access isn’t a problem</li>
+              <li>You need more digging power</li>
+              <li>Productivity matters</li>
+              <li>You’re working on foundations or drainage</li>
+            </ul>
+          </div>
+        </div>
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          For many domestic projects, a mini digger offers the best overall balance.
+        </p>
+      </section>
+
+      <section>
+        <H2>Why Comparing Suppliers Matters</H2>
+        <Prose>
+          <p>Many customers spend hours contacting suppliers individually. The problem is that availability, specifications and pricing can vary considerably.</p>
+        </Prose>
+        <div className="mt-6">
+          <CheckList items={['Review multiple options quickly', 'Compare machine sizes', 'Check availability', 'Compare supplier terms', 'Make more informed decisions']} />
+        </div>
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          This is often the fastest way to identify suitable equipment without spending hours gathering quotes manually.
+        </p>
+      </section>
+
+      <FaqSection faqs={miniDiggerFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Final Thoughts</h2>
+        <p className="mb-5 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          The cheapest advertised rate isn’t always the best value. The right machine, suitable hire period, realistic transport costs and the ability to compare suppliers all play a role in the final cost of your project.
+        </p>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Before booking, compare multiple suppliers, check what’s included, and make sure the machine matches your requirements. Taking a few extra minutes to compare options can save money, avoid delays and help your project run more smoothly.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Mini Digger Hire Prices
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Article 3 — Tool Hire Liverpool                                     */
+/* ------------------------------------------------------------------ */
+
+const liverpoolPrices: Faq[] = [
+  ['Mini Digger (0.8–1.5t)', '£150–£220'],
+  ['Mini Digger (3t)', '£220–£310'],
+  ['Scaffold Tower', '£55–£90'],
+  ['Electric Breaker', '£45–£65'],
+  ['Wacker Plate', '£45–£70'],
+  ['Concrete Mixer', '£45–£65'],
+  ['Pressure Washer', '£50–£75'],
+  ['Cherry Picker (12m)', '£190–£280'],
+  ['Telehandler', '£270–£380'],
+  ['Generator', '£65–£95'],
+];
+
+const liverpoolPriceFactors = [
+  'Supplier location',
+  'Equipment availability',
+  'Delivery requirements',
+  'Length of hire',
+  'Seasonal demand',
+  'Fleet utilisation levels',
+];
+
+const liverpoolAreas = [
+  'Liverpool City Centre',
+  'Bootle',
+  'Kirkby',
+  'Huyton',
+  'Speke',
+  'Wavertree',
+  'Allerton',
+  'Garston',
+  'Woolton',
+  'Norris Green',
+  'West Derby',
+  'Birkenhead',
+  'Wallasey',
+  'St Helens',
+  'Widnes',
+  'Southport',
+  'Knowsley',
+];
+
+const liverpoolEquipment: Faq[] = [
+  ['Mini Digger Hire', 'Mini excavators remain one of the most requested items throughout Liverpool. They are commonly used for foundations, drainage work, landscaping projects, driveway installations and garden renovations.'],
+  ['Scaffold Tower Hire', 'Popular with builders, decorators, roofers and homeowners. Aluminium towers provide a cost-effective solution for working safely at height.'],
+  ['Breaker Hire', 'Both electric and petrol breakers are regularly hired for concrete removal, driveway replacement, internal renovation work and demolition projects.'],
+  ['Cherry Picker Hire', 'MEWPs and cherry pickers are widely used for building maintenance, roofing work, sign installation and commercial property projects.'],
+  ['Generator Hire', 'Generators remain essential for construction sites, temporary power, outdoor events and emergency backup power.'],
+];
+
+const liverpoolTrades: [title: string, items: string[]][] = [
+  ['Builders and Contractors', ['Excavators', 'Dumpers', 'Telehandlers', 'Generators', 'Site equipment']],
+  ['Landscapers', ['Mini diggers', 'Turf cutters', 'Rotavators', 'Wacker plates', 'Trench rammers']],
+  ['Roofers', ['Scaffold towers', 'Cherry pickers', 'Access platforms', 'Safety equipment']],
+  ['Homeowners', ['Pressure washers', 'Breakers', 'Floor sanders', 'Concrete mixers', 'Wallpaper strippers']],
+];
+
+const liverpoolFaqs: Faq[] = [
+  ['How much does mini digger hire cost in Liverpool?', 'Typical rates range from approximately £150–£310 per day depending on machine size, supplier and availability.'],
+  ['Can I hire tools without a trade account?', 'Yes. Most suppliers accept bookings from both businesses and private individuals.'],
+  ['Do Liverpool suppliers offer weekend hire?', 'Yes. Many suppliers provide Friday-to-Monday weekend hire rates which can offer better value than separate daily hires.'],
+  ['Is delivery available across Merseyside?', 'Most suppliers offer delivery throughout Liverpool, Bootle, Kirkby, Huyton, Speke, Birkenhead and surrounding areas.'],
+  ['Do I need a licence to hire a mini digger?', 'A licence is not normally required for private land, but operators must be competent and commercial sites may require recognised plant certification.'],
+  ['Can I get same-day tool hire in Liverpool?', 'Same-day hire is often available for smaller equipment, subject to stock and supplier location.'],
+];
+
+function LiverpoolBody() {
+  return (
+    <>
+      <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+        <p>
+          Looking for tool hire in Liverpool? Tooli.uk helps you compare prices from local independent hire companies and national suppliers across Liverpool, Bootle, Kirkby, Huyton, Speke, Wavertree, Birkenhead and the wider Merseyside area.
+        </p>
+        <p>
+          Instead of calling multiple depots for quotes, compare hire prices in one place and find the best deal for your project. Whether you need a mini digger, scaffold tower, breaker, generator or cherry picker, Tooli.uk helps you see what’s available and what local suppliers are charging before you book.
+        </p>
+      </section>
+
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <H2>Compare Liverpool Tool Hire Prices in Under 60 Seconds</H2>
+        <CheckList
+          items={[
+            'Compare local and national suppliers',
+            'View equipment options for your postcode',
+            'Check delivery availability',
+            'Compare daily and weekly hire rates',
+            'Save time calling around Liverpool depots',
+          ]}
+        />
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Start your comparison today and see how much you could save.
+        </p>
+      </section>
+
+      <section>
+        <H2>Average Tool Hire Prices in Liverpool</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Hire rates vary depending on supplier, equipment availability, delivery distance and seasonality. The figures below provide a useful guide to typical Liverpool market rates.
+        </p>
+        <div className="overflow-hidden rounded-2xl border border-gray-100">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-[#F8F9FC] text-gray-900">
+              <tr>
+                <th className="px-5 py-3 font-extrabold">Equipment</th>
+                <th className="px-5 py-3 font-extrabold">Typical Daily Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {liverpoolPrices.map(([equipment, rate]) => (
+                <tr key={equipment} className="border-t border-gray-100">
+                  <td className="px-5 py-3 font-bold text-gray-900">{equipment}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{rate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium leading-relaxed text-gray-500">
+          Actual prices vary by supplier and postcode. Compare live quotes through Tooli.uk for the latest rates.
+        </p>
+      </section>
+
+      <section>
+        <H2>Why Tool Hire Prices Differ Across Liverpool</H2>
+        <Prose>
+          <p>Many customers are surprised by how much prices can vary for identical equipment.</p>
+          <p>A mini digger available from one supplier may cost significantly more than the same machine from another depot just a few miles away. Price differences are usually influenced by:</p>
+        </Prose>
+        <div className="mt-6">
+          <CheckList items={liverpoolPriceFactors} />
+        </div>
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Independent Merseyside suppliers can often offer more competitive rates than larger national chains, particularly for longer hires and plant equipment. This is why comparing quotes before booking can lead to substantial savings.
+        </p>
+      </section>
+
+      <section>
+        <H2>Most Popular Equipment Hired in Liverpool</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Liverpool has a strong mix of construction, renovation, commercial and residential projects, creating demand across a wide range of equipment.
+        </p>
+        <div className="grid gap-4">
+          {liverpoolEquipment.map(([title, description]) => (
+            <div key={title} className="rounded-2xl border border-gray-100 p-5">
+              <H3>{title}</H3>
+              <p className="font-medium leading-relaxed text-gray-500">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Areas Covered Across Liverpool and Merseyside</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Tooli.uk compares suppliers serving:
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+          {liverpoolAreas.map((area) => (
+            <div key={area} className="flex items-center gap-2 rounded-xl bg-[#F8F9FC] px-4 py-3 text-sm font-bold text-gray-900">
+              <MapPin className="h-4 w-4 text-brand-primary" />
+              {area}
+            </div>
+          ))}
+        </div>
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Many suppliers also cover surrounding Merseyside and Cheshire postcodes.
+        </p>
+      </section>
+
+      <section>
+        <H2>Tool Hire for Trades and Homeowners</H2>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {liverpoolTrades.map(([title, items]) => (
+            <div key={title} className="rounded-2xl border border-gray-100 p-5">
+              <H3>{title}</H3>
+              <ul className="space-y-2 text-sm font-medium text-gray-500">
+                {items.map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 shrink-0 text-brand-primary" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Delivery and Collection Options</H2>
+        <Prose>
+          <p>Most Liverpool suppliers offer both collection and delivery.</p>
+        </Prose>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <div className="rounded-2xl border border-gray-100 p-5">
+            <H3>Depot Collection</H3>
+            <p className="font-medium leading-relaxed text-gray-500">
+              Collecting equipment directly from a depot is often the cheapest option and can avoid delivery charges.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-gray-100 p-5">
+            <H3>Site Delivery</H3>
+            <p className="font-medium leading-relaxed text-gray-500">
+              Many suppliers offer next-day delivery across Liverpool and Merseyside. Availability depends on equipment type, supplier location, current demand and site access requirements.
+            </p>
+          </div>
+        </div>
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Always check delivery costs when comparing quotes, as these can vary significantly between suppliers.
+        </p>
+      </section>
+
+      <section>
+        <H2>Why Compare Tool Hire Prices?</H2>
+        <Prose>
+          <p>Many businesses automatically use the same supplier every time. While this is convenient, it doesn’t always provide the best value.</p>
+        </Prose>
+        <div className="mt-6">
+          <CheckList items={['Reduce hire costs', 'Check availability faster', 'Compare delivery charges', 'Find specialist equipment', 'Access local independent suppliers']} />
+        </div>
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          For larger plant hires, even a small percentage difference in price can save hundreds of pounds over the duration of a project.
+        </p>
+      </section>
+
+      <section>
+        <H2>Safety and Compliance</H2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Before hiring equipment, ensure operators are appropriately trained and competent. Depending on the equipment and site requirements, regulations may apply including:
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {['PUWER', 'LOLER', 'Working at Height Regulations', 'CDM Regulations'].map((item) => (
+            <div key={item} className="rounded-xl border border-gray-100 p-4 text-sm font-bold text-gray-900">{item}</div>
+          ))}
+        </div>
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          Always request relevant certification and inspection records where required.
+        </p>
+      </section>
+
+      <FaqSection faqs={liverpoolFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Liverpool Tool Hire Prices Today</h2>
+        <p className="mb-5 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Tooli.uk makes it easy to compare equipment hire prices from suppliers across Liverpool and Merseyside. Whether you’re a contractor managing multiple projects or a homeowner tackling a weekend renovation, comparing quotes can help you find the right equipment at the right price.
+        </p>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode, select your equipment and compare Liverpool tool hire prices in minutes.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Liverpool Tool Hire
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Blog post registry                                                  */
+/* ------------------------------------------------------------------ */
+
+type BlogPost = {
+  slug: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  intro: string;
+  image: string;
+  imageAlt: string;
+  datePublished: string;
+  metaTitle: string;
+  metaDescription: string;
+  primaryCta: string;
+  faqs: Faq[];
+  Body: () => ReactNode;
+};
+
+export const blogPosts: BlogPost[] = [
+  {
+    slug: 'tool-hire-comparison-uk',
+    category: 'Tool Hire Comparison',
+    title: 'Tool Hire Comparison UK: Compare Construction Equipment & Plant Hire Suppliers',
+    excerpt:
+      'How comparing tool hire and plant hire suppliers across the UK helps contractors review availability, weekly hire options and supplier coverage faster.',
+    intro:
+      'Tooli UK helps contractors compare construction equipment and plant hire suppliers across major UK cities, making it faster to review availability, weekly hire options and supplier coverage.',
+    image: '/images/blog/tool-hire-comparison-uk.png',
+    imageAlt: 'Tooli UK construction equipment hire comparison platform',
+    datePublished: '2026-06-23',
+    metaTitle: 'Tool Hire Comparison UK: Compare Construction Equipment & Plant Hire Suppliers | Tooli UK',
+    metaDescription:
+      'Compare construction equipment and plant hire suppliers across major UK cities. Compare suppliers, review weekly hire options, and find the right equipment faster with Tooli UK.',
+    primaryCta: 'Compare Suppliers',
+    faqs: comparisonFaqs,
+    Body: ToolHireComparisonBody,
+  },
+  {
+    slug: 'mini-digger-hire-cost-uk',
+    category: 'Plant Hire Guide',
+    title: 'Mini Digger Hire Cost UK: How to Compare Prices and Avoid Overpaying in 2026',
+    excerpt:
+      'What affects mini digger hire costs in the UK, how to choose the right machine, avoid hidden charges, and compare suppliers to find the best value for your project.',
+    intro:
+      'There is no single UK-wide price for mini digger hire. Learn what really drives the cost, how to choose the right machine, and how comparing suppliers helps you avoid overpaying.',
+    image: '/minidigger.png',
+    imageAlt: 'Mini digger hire cost comparison UK',
+    datePublished: '2026-06-23',
+    metaTitle: 'Mini Digger Hire Cost UK: Compare Prices & Avoid Overpaying in 2026 | Tooli UK',
+    metaDescription:
+      'Learn what affects mini digger hire costs in the UK, how to choose the right machine, avoid hidden charges, and compare suppliers to find the best value for your project.',
+    primaryCta: 'Compare Mini Digger Hire',
+    faqs: miniDiggerFaqs,
+    Body: MiniDiggerBody,
+  },
+  {
+    slug: 'tool-hire-liverpool',
+    category: 'Local Tool Hire',
+    title: 'Tool Hire Liverpool: Compare Prices From Local Suppliers',
+    excerpt:
+      'Compare tool hire prices from local independent and national suppliers across Liverpool, Bootle, Kirkby, Huyton, Speke, Birkenhead and the wider Merseyside area.',
+    intro:
+      'Looking for tool hire in Liverpool? Compare prices from local independent hire companies and national suppliers across Liverpool and the wider Merseyside area in one place.',
+    image: '/images/blog/tool-hire-liverpool.png',
+    imageAlt: 'Tool hire price comparison across Liverpool and Merseyside',
+    datePublished: '2026-06-23',
+    metaTitle: 'Tool Hire Liverpool: Compare Prices From Local Suppliers | Tooli UK',
+    metaDescription:
+      'Compare tool hire prices from local and national suppliers across Liverpool and Merseyside. Compare daily and weekly rates for diggers, breakers, towers and more.',
+    primaryCta: 'Compare Liverpool Tool Hire',
+    faqs: liverpoolFaqs,
+    Body: LiverpoolBody,
+  },
+];
+
+/* ------------------------------------------------------------------ */
+/* Blog index page (/blog)                                             */
+/* ------------------------------------------------------------------ */
+
+const indexSchema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    ORGANIZATION_NODE,
+    WEBSITE_NODE,
+    {
+      '@type': 'BreadcrumbList',
+      '@id': 'https://www.tooli.uk/blog#breadcrumb',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.tooli.uk/blog' },
+      ],
+    },
+    {
+      '@type': 'Blog',
+      '@id': 'https://www.tooli.uk/blog#blog',
+      name: 'Tooli UK Blog',
+      url: 'https://www.tooli.uk/blog',
+      publisher: { '@id': 'https://www.tooli.uk/#organization' },
+      blogPost: blogPosts.map((post) => ({
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.metaDescription,
+        url: `https://www.tooli.uk/blog/${post.slug}`,
+        datePublished: post.datePublished,
+      })),
+    },
+  ],
+};
+
 export function BlogPage() {
   return (
     <div className="w-full bg-white">
       <PageMeta
-        title="Tool Hire Comparison UK: Compare Construction Equipment & Plant Hire Suppliers | Tooli UK"
-        description="Compare construction equipment and plant hire suppliers across major UK cities. Compare suppliers, review weekly hire options, and find the right equipment faster with Tooli UK."
-        jsonLd={pageSchema}
+        title="Tooli UK Blog: Tool Hire & Plant Hire Guides | Tooli UK"
+        description="Guides, pricing breakdowns and local hire comparisons from Tooli UK. Compare construction equipment and plant hire suppliers across the UK."
+        jsonLd={indexSchema}
       />
 
       <section className="bg-[#F8F9FC] py-10 md:py-16">
@@ -175,21 +943,102 @@ export function BlogPage() {
             <span className="text-gray-900">Blog</span>
           </div>
 
+          <p className="mb-4 text-sm font-extrabold uppercase tracking-[0.15em] text-brand-primary">Tooli UK Blog</p>
+          <h1 className="max-w-4xl text-4xl font-extrabold leading-tight text-[#030213] sm:text-5xl lg:text-6xl">
+            Tool Hire & Plant Hire Guides
+          </h1>
+          <p className="mt-6 max-w-3xl text-lg font-medium leading-relaxed text-gray-500">
+            Pricing breakdowns, comparison advice and local hire guides to help you find the right equipment faster across the UK.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {blogPosts.map((post) => (
+              <Link
+                key={post.slug}
+                to={`/blog/${post.slug}`}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-lg"
+              >
+                <img
+                  src={post.image}
+                  alt={post.imageAlt}
+                  className="aspect-[16/10] w-full bg-[#F8F9FC] object-contain"
+                />
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.15em] text-brand-primary">{post.category}</p>
+                  <h2 className="mb-3 text-xl font-extrabold leading-snug text-[#030213] group-hover:text-brand-primary">
+                    {post.title}
+                  </h2>
+                  <p className="mb-6 flex-1 text-sm font-medium leading-relaxed text-gray-500">{post.excerpt}</p>
+                  <span className="inline-flex items-center gap-1 text-sm font-bold text-brand-primary">
+                    Read article
+                    <ChevronRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Individual blog post page (/blog/:slug)                             */
+/* ------------------------------------------------------------------ */
+
+export function BlogPostPage() {
+  const { slug } = useParams<{ slug: string }>();
+  const post = blogPosts.find((item) => item.slug === slug);
+
+  if (!post) {
+    return (
+      <div className="container mx-auto px-4 py-24 text-center">
+        <h1 className="mb-4 text-3xl font-extrabold text-[#030213]">Article not found</h1>
+        <p className="mb-8 text-gray-500">The article you’re looking for doesn’t exist or has been moved.</p>
+        <Link
+          to="/blog"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Back to Blog
+        </Link>
+      </div>
+    );
+  }
+
+  const relatedPosts = blogPosts.filter((item) => item.slug !== post.slug);
+
+  return (
+    <div className="w-full bg-white">
+      <PageMeta title={post.metaTitle} description={post.metaDescription} jsonLd={buildPostSchema(post)} />
+
+      <section className="bg-[#F8F9FC] py-10 md:py-16">
+        <div className="container mx-auto px-4">
+          <div className="mb-8 flex flex-wrap items-center gap-2 text-sm font-bold text-gray-500">
+            <Link to="/" className="hover:text-brand-primary">Home</Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link to="/blog" className="hover:text-brand-primary">Blog</Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-gray-900">{post.category}</span>
+          </div>
+
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center">
             <div>
-              <p className="mb-4 text-sm font-extrabold uppercase tracking-[0.15em] text-brand-primary">Tooli UK Blog</p>
+              <p className="mb-4 text-sm font-extrabold uppercase tracking-[0.15em] text-brand-primary">{post.category}</p>
               <h1 className="max-w-4xl text-4xl font-extrabold leading-tight text-[#030213] sm:text-5xl lg:text-6xl">
-                Tool Hire Comparison UK: Compare Construction Equipment & Plant Hire Suppliers
+                {post.title}
               </h1>
-              <p className="mt-6 max-w-3xl text-lg font-medium leading-relaxed text-gray-500">
-                Tooli UK helps contractors compare construction equipment and plant hire suppliers across major UK cities, making it faster to review availability, weekly hire options and supplier coverage.
-              </p>
+              <p className="mt-6 max-w-3xl text-lg font-medium leading-relaxed text-gray-500">{post.intro}</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   to="/search"
                   className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
                 >
-                  Compare Suppliers
+                  {post.primaryCta}
                 </Link>
                 <Link
                   to="/how-it-works"
@@ -201,9 +1050,9 @@ export function BlogPage() {
             </div>
 
             <img
-              src="/images/blog/tool-hire-comparison-uk.png"
-              alt="Tooli UK construction equipment hire comparison platform"
-              className="aspect-square w-full rounded-2xl border border-gray-100 bg-white object-cover shadow-sm"
+              src={post.image}
+              alt={post.imageAlt}
+              className="aspect-square w-full rounded-2xl border border-gray-100 bg-white object-contain shadow-sm"
             />
           </div>
         </div>
@@ -212,162 +1061,37 @@ export function BlogPage() {
       <article className="py-16 md:py-24">
         <div className="container mx-auto grid gap-12 px-4 lg:grid-cols-[minmax(0,760px)_minmax(260px,1fr)]">
           <div className="space-y-12">
-            <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
-              <p>
-                Finding the right equipment for a construction project is often more difficult than it should be. Contractors regularly spend valuable time contacting multiple suppliers, checking availability, reviewing delivery arrangements and trying to determine which supplier is best suited to a particular project.
-              </p>
-              <p>
-                The construction industry moves quickly. Delays in sourcing equipment can impact labour schedules, subcontractors, project timelines and client expectations. Whether you are managing a residential development, commercial construction project, civil engineering contract or landscaping job, access to suitable equipment is critical.
-              </p>
-              <p>
-                Tooli UK was created to simplify this process. Rather than contacting suppliers individually, users can compare suppliers in one place and then visit the supplier&apos;s website directly to complete their booking.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="mb-5 text-3xl font-extrabold text-[#030213]">Why Tool Hire Comparison Matters</h2>
-              <div className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
-                <p>
-                  Many contractors have preferred suppliers they use regularly. While those relationships remain valuable, relying exclusively on a single supplier can sometimes reduce visibility into other available options.
-                </p>
-                <p>
-                  Equipment availability changes constantly. Demand fluctuates throughout the year and availability can vary significantly between locations. A supplier with limited availability in Manchester may have excellent availability in Birmingham. A supplier unable to support a project in London may have strong coverage in Leeds or Glasgow.
-                </p>
-                <p>Comparison helps contractors make decisions based on current availability, project requirements and supplier coverage.</p>
-              </div>
-            </section>
-
-            <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
-              <h2 className="mb-5 text-3xl font-extrabold text-[#030213]">Why Contractors Use Tooli UK</h2>
-              <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
-                The biggest advantage is efficiency. Instead of spending hours researching suppliers, contractors can review supplier options more quickly and focus on managing projects.
-              </p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {['Builders', 'Groundworkers', 'Landscapers', 'Civil engineering contractors', 'Utilities contractors', 'Facilities management companies', 'Site managers'].map((item) => (
-                  <div key={item} className="flex items-center gap-3 rounded-xl bg-white p-3 text-sm font-bold text-gray-900">
-                    <CheckCircle className="h-5 w-5 shrink-0 text-brand-primary" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-6 text-3xl font-extrabold text-[#030213]">Construction Equipment Categories</h2>
-              <div className="grid gap-4">
-                {equipmentCategories.map(([title, description]) => (
-                  <div key={title} className="rounded-2xl border border-gray-100 p-5">
-                    <h3 className="mb-2 text-xl font-extrabold text-gray-900">{title}</h3>
-                    <p className="font-medium leading-relaxed text-gray-500">{description}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-6 text-3xl font-extrabold text-[#030213]">What To Compare</h2>
-              <div className="space-y-4">
-                {comparisonPoints.map(([title, description]) => (
-                  <div key={title} className="flex gap-4">
-                    <ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-brand-primary" />
-                    <div>
-                      <h3 className="text-lg font-extrabold text-gray-900">{title}</h3>
-                      <p className="font-medium leading-relaxed text-gray-500">{description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-5 text-3xl font-extrabold text-[#030213]">National Suppliers vs Independent Depots</h2>
-              <div className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
-                <p>National suppliers often provide wider coverage and larger fleets.</p>
-                <p>Independent depots frequently provide strong local knowledge and flexible service.</p>
-                <p>Both options can be valuable depending on project requirements.</p>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-6 text-3xl font-extrabold text-[#030213]">Location-Based Comparison</h2>
-              <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
-                Location is a major factor in plant hire. Tooli UK currently supports:
-              </p>
-              <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-                {locations.map((location) => (
-                  <div key={location} className="flex items-center gap-2 rounded-xl bg-[#F8F9FC] px-4 py-3 text-sm font-bold text-gray-900">
-                    <MapPin className="h-4 w-4 text-brand-primary" />
-                    {location}
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-5 text-3xl font-extrabold text-[#030213]">Safety And Compliance</h2>
-              <p className="mb-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
-                Equipment selection should never be based solely on convenience. Depending on the equipment being used, CPCS, IPAF or PASMA training requirements may apply.
-              </p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {['Inspection records', 'Maintenance procedures', 'Operator competency requirements', 'Site-specific safety requirements', 'Equipment suitability'].map((item) => (
-                  <div key={item} className="rounded-xl border border-gray-100 p-4 text-sm font-bold text-gray-900">{item}</div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-6 text-3xl font-extrabold text-[#030213]">Common Mistakes</h2>
-              <div className="grid gap-4">
-                {commonMistakes.map(([title, description]) => (
-                  <div key={title} className="rounded-2xl bg-[#F8F9FC] p-5">
-                    <h3 className="mb-2 text-lg font-extrabold text-gray-900">{title}</h3>
-                    <p className="font-medium leading-relaxed text-gray-500">{description}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-6 text-3xl font-extrabold text-[#030213]">Frequently Asked Questions</h2>
-              <div className="grid gap-4">
-                {faqs.map(([question, answer]) => (
-                  <div key={question} className="rounded-2xl border border-gray-100 p-5">
-                    <h3 className="mb-2 text-lg font-extrabold text-gray-900">{question}</h3>
-                    <p className="font-medium leading-relaxed text-gray-500">{answer}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
-              <h2 className="mb-4 text-3xl font-extrabold">Conclusion</h2>
-              <p className="mb-5 text-base font-medium leading-relaxed text-white/75 md:text-lg">
-                Construction equipment comparison is about more than finding equipment. It is about improving efficiency, reviewing supplier options and helping contractors make informed decisions.
-              </p>
-              <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
-                Tooli UK simplifies supplier comparison by bringing supplier options together in one place. Search your location, compare suppliers and visit the supplier website that best suits your project requirements.
-              </p>
-              <Link
-                to="/search"
-                className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
-              >
-                Start Comparing
-              </Link>
-            </section>
+            <post.Body />
           </div>
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Compare Faster With Tooli</h2>
-              <p className="mb-6 text-sm font-medium leading-relaxed text-gray-500">
-                Search by equipment type and location to review supplier options for your next construction project.
-              </p>
-              <Link
-                to="/search"
-                className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-brand-primary px-5 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
-              >
-                Compare Equipment
-              </Link>
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Compare Faster With Tooli</h2>
+                <p className="mb-6 text-sm font-medium leading-relaxed text-gray-500">
+                  Search by equipment type and location to review supplier options for your next project.
+                </p>
+                <Link
+                  to="/search"
+                  className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-brand-primary px-5 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+                >
+                  Compare Equipment
+                </Link>
+              </div>
+
+              {relatedPosts.length > 0 && (
+                <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <h2 className="mb-4 text-xl font-extrabold text-[#030213]">More From The Blog</h2>
+                  <div className="space-y-4">
+                    {relatedPosts.map((item) => (
+                      <Link key={item.slug} to={`/blog/${item.slug}`} className="group block">
+                        <p className="mb-1 text-xs font-extrabold uppercase tracking-[0.15em] text-brand-primary">{item.category}</p>
+                        <p className="text-sm font-bold leading-snug text-gray-900 group-hover:text-brand-primary">{item.title}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </aside>
         </div>
