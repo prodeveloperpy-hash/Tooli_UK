@@ -466,7 +466,6 @@ function MiniDiggerBody() {
           </div>
         </div>
       </section>
-
       <section>
         <H2>Five Ways People Accidentally Overpay</H2>
         <div className="grid gap-4">
