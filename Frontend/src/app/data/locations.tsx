@@ -1459,6 +1459,273 @@ const glasgowContent = (
   </>
 );
 
+const bristolFaqs = [
+  {
+    question: 'How much does mini digger hire cost in Bristol?',
+    answer:
+      'Mini digger hire in Bristol typically costs £160–£225 per day for a 0.8–1.5 tonne machine, or £220–£315 per day for a 3 tonne machine (all prices VAT inclusive). A Friday-to-Monday weekend rate undercuts two separate day rates in most cases. A full week hire reduces the effective daily rate significantly — usually £485–£910 depending on machine size. Delivery charges apply on top unless included by the supplier. Use Tooli.uk to compare current rates across Bristol suppliers before booking.',
+  },
+  {
+    question: 'Can I hire tools and plant in Bristol without a trade account?',
+    answer:
+      "Yes, all suppliers compared on Tooli.uk accept bookings from homeowners and private individuals, no trade account required. You'll typically need a valid photo ID and a payment card at the point of hire. A trade account can unlock credit terms and a discount, but it is never a requirement to hire.",
+  },
+  {
+    question: 'Do Bristol tool hire suppliers offer weekend hire?',
+    answer:
+      'Yes, widely. Most Bristol-area suppliers offer Friday-to-Monday weekend rates. This period usually works out cheaper per day than hiring Saturday and Sunday separately. Some suppliers accept early Monday-morning returns (before 08:30) if agreed at booking, saving the cost of a full Monday hire.',
+  },
+  {
+    question: "What's the cheapest tool hire in Bristol for a one-day job?",
+    answer:
+      'Small tools — electric breakers, mixers, pressure washers, floor sanders — start from around £44–£55 per day (VAT inclusive) across Bristol-area suppliers. Self-collection from a local depot avoids the delivery surcharge (typically £30–£65 depending on equipment size and distance). Compare current single-day rates across suppliers for your postcode and equipment on Tooli.uk.',
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Bristol?',
+    answer:
+      'No licence is legally required to operate a mini digger on private land in England. However, CPCS (Construction Plant Competence Scheme) certification is required when operating on regulated construction sites, public roads, or any site where the Principal Contractor specifies it. PUWER requires all plant operators to be demonstrably competent regardless of card status.',
+  },
+  {
+    question: 'Are scaffold towers available for hire in Bristol?',
+    answer:
+      'Yes. Scaffold tower hire is widely available across Bristol. A 4-metre aluminium tower costs approximately £76–£112 for a Friday-to-Monday weekend, VAT inclusive. Anyone erecting a mobile scaffold tower on a construction site must hold PASMA certification. Most suppliers will confirm whether the tower is PASMA-certified at the point of hire — if yours doesn\'t, ask.',
+  },
+  {
+    question: 'How far in advance do I need to book plant hire in Bristol?',
+    answer:
+      "For common small tools, 24 hours is usually sufficient. For plant (diggers, dumpers, access platforms, telehandlers), 48–72 hours is realistic during normal trading. In spring and summer — particularly April through June — Bristol's construction market tightens sharply and 72+ hours' notice on tracked plant is strongly recommended.",
+  },
+  {
+    question: 'Does Tooli.uk cover Bath and surrounding areas from Bristol suppliers?',
+    answer:
+      'Yes. Many Bristol-area suppliers deliver to Bath (BA1–BA2), Keynsham (BS31), Yate (BS37), Portishead (BS20), Clevedon (BS21), and other surrounding towns. Delivery surcharges apply beyond a supplier\'s standard radius. Tooli.uk shows the total cost including delivery for your specific postcode — enter your address at comparison stage to see the full picture.',
+  },
+];
+
+const bristolContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Bristol: Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Tool hire prices in Bristol vary considerably across suppliers — often by 25–30% for identical equipment on the same day. Tooli.uk compares rates from local independents and national chains covering BS1 through to BS16, Avonmouth, Bedminster, Filton, Kingswood, and the wider Bristol area. Bristol is mid-cycle in one of the UK's biggest urban regeneration programmes: Temple Quarter alone spans 135 hectares around Temple Meads, with billions committed and active construction underway. Whether you're pricing a groundwork contract on a live scheme or cracking on with a garden project in Bishopston — compare before you book.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Why Tool Hire Prices Vary So Much Across Bristol</H2>
+      <Paragraph>
+        Bristol is a geographically complex city. A national chain depot in the city centre or on Avonmouth's industrial estate charges full rack rate. A regional independent in Kingswood, Yate, or Nailsea may be 20–28% cheaper for the same kit — particularly if you're self-collecting.
+      </Paragraph>
+      <Paragraph>
+        Timing matters too. Bristol's construction market is exceptionally active in 2026. The Temple Quarter regeneration scheme alone aims to deliver 10,000 homes, thousands of new jobs, and an estimated £1.6 billion annual boost to the regional economy across 135 hectares of land around Temple Meads. That volume of active site work keeps plant and specialist equipment in tight supply, particularly during spring and summer. Book ahead on anything with tracks or a boom arm.
+      </Paragraph>
+      <Paragraph>
+        Tooli.uk pulls live-updated rates from suppliers across the Bristol area so you see the actual market rate — not a printed brochure figure from one depot.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Bristol's Construction Boom — What's Driving Hire Demand Right Now</H2>
+      <Paragraph>Bristol is one of the most active construction markets in England outside London in 2026, and the pipeline stretches well beyond the Temple Quarter headline.</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Temple Quarter — the big one</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">A £23 million eastern entrance to Bristol Temple Meads station is currently under construction, funded from a £95 million government grant, due to open September 2026 alongside the University of Bristol's £500 million Enterprise Campus. Bristol City Council has also approved Legal & General's £350 million Temple Island scheme — a Zaha Hadid Architects-designed masterplan bringing up to 520 homes, two office buildings, retail space, and a 164-room hotel beside Temple Meads.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">City centre transport works</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Temple Way works began in December 2025 and are expected to run for up to 12 months. Redcliffe Way and Bedminster Bridges works are both expected to start in spring 2026. Highway and streetscape schemes generate consistent demand for compaction equipment, concrete saws, ducting tools, and temporary works plant.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Student accommodation pipeline</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">A 500-bed student accommodation scheme is under construction in Bristol Temple Quarter by Unite Students as part of a £73 million development, expected to finish in 2027. Structural, fit-out, and M&E trades are all active simultaneously on schemes of this scale — keeping access platforms and specialist equipment in strong demand.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Bedminster and South Bristol regeneration</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Five sites are being redeveloped across South Bristol to create 1,303 new student bedrooms, 826 new homes, commercial space, and a multi-storey car park, with completion targeted for 2027. This cluster of sites across BS3 and BS4 keeps groundwork and lifting plant booked solid during peak months.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Homeowner and renovation market</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Bristol has a large stock of Edwardian and Victorian terraced housing across Clifton, Redland, Bishopston, Totterdown, and Southville. Loft conversions, kitchen extensions, bathroom refits, and garden remodelling drive year-round demand for breakers, mixers, floor sanders, and scaffold towers — from both tradespeople and homeowners.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Most-Hired Equipment in Bristol — By Trade and Area</H2>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civil contractors (BS2, BS5 — Lawrence Hill, St Philip's Marsh)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Mini diggers, dumpers, wacker plates, trench rammers, and pumps. The Temple Quarter corridor and South Bristol regeneration sites drive consistent civils plant demand. Expect tight availability on 3-tonne+ machines during peak project phases.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and extension contractors (BS6, BS7, BS8 — Redland, Cotham, Clifton)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, concrete mixers, breakers, and skip loaders. Clifton and Redland have an extremely high volume of Georgian and Victorian property renovation running year-round.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers and groundworks contractors (BS9, BS10 — Westbury-on-Trym, Henleaze)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Mini diggers (1.5 t tracked), rotary cultivators, turf cutters, wood chippers, and wacker plates. Spring demand surges from March through June — book plant at least 72 hours ahead during this window.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers and cladding contractors (BS14, BS15 — Hengrove, Kingswood)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, safety harness kits, roof ladders, and access platforms. PASMA-compliant towers required; confirm supplier certification before booking.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Plasterers and drylining trades (BS1–BS3 — city centre, Bedminster)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Paddle mixers, stilts, dehumidifiers, and drywall lifters. City-centre jobs often need same-day or next-morning delivery — check depot opening times and minimum hire periods before booking.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and homeowners (BS3, BS13 — Totterdown, Hartcliffe)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Steam wallpaper strippers, floor sanders, carpet lifters, and pressure washers. Weekend availability is the priority — Saturday pickup and Monday morning return is the most common pattern.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">M&E and utilities contractors (BS11 — Avonmouth industrial zone)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Generators, welfare units, lighting towers, and pumping equipment. Avonmouth's logistics and industrial cluster generates steady demand for welfare and temporary power hire, particularly on longer contracts.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery and Collection Across Greater Bristol</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Self-collection from depot</p>
+          <Paragraph>Most Bristol-area depots open from 07:00–07:30 Monday to Friday and 07:30–08:00 Saturday. Inner-city postcodes (BS1–BS5) have the best depot density. Self-collection saves the delivery charge and sometimes brings a small rate discount.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Delivery to site</p>
+          <Paragraph>Next-morning delivery is standard for inner Bristol postcodes. Outer areas — Yate, Thornbury, Keynsham, Clevedon — typically need 24–48 hours' notice. For large plant on active construction sites, 48–72 hours is realistic during busy periods.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend hire</p>
+          <Paragraph>Widely available. A Friday-to-Monday weekend rate undercuts two separate day rates in most cases. Monday-morning returns before 08:30 are accepted by most suppliers if agreed at booking.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Long-term and on-site hire</p>
+          <Paragraph>Weekly and monthly rates available on most equipment. For plant staying on-site through a groundwork or structural phase, ask suppliers about swap-out options and extended hire discounts.</Paragraph>
+        </div>
+      </div>
+      <Paragraph>Delivery charges and inclusion radii vary by supplier. Tooli.uk displays the total cost including delivery — no surprises at checkout.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Bristol-Specific Considerations for Tradespeople</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Clifton and the Suspension Bridge corridor</p>
+          <Paragraph>Width and height restrictions apply on several routes through Clifton, Clifton Village, and around the Avon Gorge. Confirm delivery vehicle dimensions with your supplier if the site is on a narrow terrace or has restricted access.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Harbourside and waterfront sites</p>
+          <Paragraph>Construction activity on and around the floating harbour requires specialist lifting and access solutions. Confirm LOLER-certified thorough examination records on any lifting equipment hired for waterside work.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Steep terrain in North Bristol</p>
+          <Paragraph>Sites across Redland, Clifton Down, Westbury Park, and Sneyd Park can present gradient challenges for plant movement. Check tracked vs. wheeled options with your supplier — a tracked mini digger gives better stability on uneven ground.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">BS11 Avonmouth — industrial and logistics zone</p>
+          <Paragraph>Sites here often require welfare units and generator hire for longer contracts away from mains connections. Account for delivery time to Avonmouth — not all Bristol-centre depots will deliver to the docks without surcharge.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compliance and Safety — What Bristol Hirers Must Know</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">PUWER (Provision and Use of Work Equipment Regulations 1998)</p>
+          <Paragraph>All hired equipment must be suitable for its intended purpose, maintained in safe condition, and operated only by competent persons. Responsibility passes to the hirer from the point of collection or delivery.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">LOLER (Lifting Operations and Lifting Equipment Regulations 1998)</p>
+          <Paragraph>Covers cherry pickers, telehandlers, hoists, and any equipment used to lift loads or people. Pre-use inspections and thorough examination certificates are required. Your supplier should provide current records — ask for them if not offered.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Working at Height Regulations 2005</p>
+          <Paragraph>Scaffold towers must be erected by a competent person. PASMA certification is the industry standard for mobile access towers. For powered access platforms (MEWPs), a valid IPAF PAL card for the relevant platform category is required on any commercial or construction site.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">CDM 2015</p>
+          <Paragraph>Notifiable projects — exceeding 500 person-days or 30 working days with 20+ simultaneous workers — require a Principal Designer and Principal Contractor. Plant hire on notifiable sites must be managed through the construction phase plan. Many Temple Quarter and South Bristol regeneration sites will be notifiable.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">HSE Noise Regulations (CONAW 2005)</p>
+          <Paragraph>Petrol breakers, cut-off saws, and compaction equipment regularly exceed 80 dB(A). Bristol city-centre and residential-area sites are subject to local authority noise restrictions — check permitted hours with Bristol City Council before operating in early morning or evening periods.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Bristol Weather and Seasonal Hire Patterns</H2>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Spring (March–May)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Groundwork, landscaping, and drainage projects surge sharply from mid-March. Mini diggers, dumpers, and plate compactors book out fast. 72-hour advance booking recommended on plant during April and May.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Summer (June–August)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold tower and access platform demand peaks. External rendering, roofing, and decorating are all weather-dependent — dry spells compress demand and tighten availability across Bristol and the surrounding West Country.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Autumn (September–October)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">A second busy window for Bristol groundworkers, typically completing projects before ground conditions worsen. Diggers, compactors, and dumpers stay in steady demand.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Winter (November–February)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Dehumidifiers, site heaters, lighting towers, and welfare units lead the list. Bristol's mild maritime climate means ground freezing is rare — but waterlogged sites across low-lying areas near the Avon and Malago are common. Pumping equipment is frequently needed from November onwards.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in Bristol</H2>
+      <Paragraph>Tooli.uk compares tool and plant hire for every trade operating across Bristol and the surrounding area:</Paragraph>
+      <BulletList
+        items={[
+          'Groundworkers and civil engineering contractors',
+          'Builders, developers, and general contractors',
+          'Landscapers and garden design contractors',
+          'Plasterers and rendering specialists',
+          'Roofers and cladding contractors',
+          'Electricians and M&E contractors',
+          'Decorators and interior fit-out trades',
+          'Scaffolding contractors',
+          'Homeowners, self-builders, and renovation project managers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Neighbouring Areas Covered From the Bristol Supplier Network</H2>
+      <BulletList
+        items={[
+          'Bath (BA1–BA2)',
+          'Keynsham (BS31)',
+          'Yate (BS37)',
+          'Thornbury (BS35)',
+          'Clevedon (BS21)',
+          'Portishead (BS20)',
+          'Nailsea (BS48)',
+          'Chipping Sodbury (BS37)',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Bristol</H2>
+      <div className="grid gap-4">
+        {bristolFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -1534,6 +1801,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/glasgow-hero.webp',
     faqs: glasgowFaqs,
     content: glasgowContent,
+  },
+  {
+    slug: 'bristol',
+    name: 'Bristol',
+    path: '/locations/bristol',
+    metaTitle: 'Tool Hire Bristol | Compare Prices From Local Suppliers | Tooli.uk',
+    metaDescription:
+      'Compare tool hire prices from local independents and national chains across Bristol. Find the best rates on mini diggers, scaffold towers, breakers, and more. No booking fees.',
+    canonicalUrl: 'https://www.tooli.uk/locations/bristol',
+    title: 'Tool Hire in Bristol: Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire rates from local independents and national chains covering BS1 through to BS16, Avonmouth, Bedminster, Filton, Kingswood, and the wider Bristol area.',
+    image: '/images/bristol-hero.webp',
+    faqs: bristolFaqs,
+    content: bristolContent,
   },
 ];
 
