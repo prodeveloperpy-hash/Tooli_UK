@@ -1726,6 +1726,304 @@ const bristolContent = (
   </>
 );
 
+const liverpoolFaqs = [
+  {
+    question: 'How much does a mini digger hire cost in Liverpool?',
+    answer:
+      'A Friday-to-Monday weekend rate undercuts two separate day rates in most cases. Full-week hire reduces the effective daily cost further, depending on machine size. Delivery charges apply on top unless included by the supplier. Use Tooli.uk to compare current rates across Liverpool and Merseyside suppliers before booking.',
+  },
+  {
+    question: 'Can I hire tools in Liverpool without a trade account?',
+    answer:
+      "Yes. All suppliers compared on Tooli.uk accept bookings from private individuals and homeowners without a trade account. You'll need a valid photo ID and a payment card at the point of hire. A trade account can provide credit terms and a discount, but it is never a requirement. Compare rates on Tooli.uk first regardless of whether you hold an account.",
+  },
+  {
+    question: 'Do Liverpool tool hire suppliers deliver to the Wirral?',
+    answer:
+      'Many do, yes — though surcharges apply for Wirral deliveries (CH41–CH49) and lead times may extend to 48 hours due to Mersey tunnel or ferry routing. Wirral-based suppliers often offer better value for CH postcode work. Tooli.uk shows both Liverpool and Wirral operators at the comparison stage for your postcode, so you can see the full picture.',
+  },
+  {
+    question: 'What should I check before hiring a tool or piece of plant in Liverpool?',
+    answer:
+      "Confirm the equipment is suitable for your job and site access, check the supplier's delivery and collection times, and ask whether the price quoted includes VAT and delivery. For plant and access equipment, ask for current LOLER or PUWER documentation where relevant. Comparing a few suppliers on Tooli.uk before booking takes a couple of minutes and avoids overpaying or hiring the wrong machine for the job.",
+  },
+  {
+    question: 'Do I need a licence or certification to hire a digger in Liverpool?',
+    answer:
+      'No licence is legally required to operate a mini digger on private land in England. On regulated construction sites, public roads, or anywhere the Principal Contractor requires it, CPCS (Construction Plant Competence Scheme) certification is needed. Under PUWER, all plant operators must be demonstrably competent regardless of card status. Untrained operation on a commercial site is a legal and insurance risk.',
+  },
+  {
+    question: 'Are scaffold towers available for weekend hire in Liverpool?',
+    answer:
+      'Yes, widely. Most Liverpool-area suppliers offer Friday-to-Monday weekend rates. A 4-metre aluminium scaffold tower typically costs £75–£110 for a weekend period (VAT inclusive). Anyone erecting a mobile access tower on a construction or commercial site must hold PASMA certification. Confirm this with your supplier at the point of booking.',
+  },
+  {
+    question: 'How far in advance should I book plant hire in Liverpool?',
+    answer:
+      "For common small tools, 24 hours is usually sufficient. For tracked plant — mini diggers, dumpers, telehandlers — 48–72 hours is realistic under normal market conditions. During spring and summer (April–July), Liverpool's construction market tightens significantly: 72+ hours is strongly recommended on anything with tracks or a boom. Last-minute plant hire is possible but availability and pricing are less favourable.",
+  },
+  {
+    question: 'Does Tooli.uk cover St Helens, Widnes, and Knowsley from Liverpool suppliers?',
+    answer:
+      "Yes. Many Liverpool-area suppliers deliver to St Helens (WA9–WA11), Widnes (WA8), Knowsley (L34), and Huyton (L36). Delivery surcharges apply beyond a supplier's standard radius. Tooli.uk displays the full cost including delivery for your specific postcode — enter your address at comparison stage to see what's available and at what total price.",
+  },
+];
+
+const liverpoolContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Liverpool: Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Tool hire prices in Liverpool vary by supplier — sometimes by 25–35% for the same piece of kit on the same day. Tooli.uk compares rates from local independents and national chains covering L1 through to L36, Bootle, Kirkby, Speke, Wavertree, and across Greater Merseyside. Liverpool is in the middle of one of the most active construction periods in its modern history: the £1 billion King Edward Triangle, the £5.5 billion Liverpool Waters project, and the £100 million Baltic station are all generating active site demand right now. Compare before you call — it takes 60 seconds.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Why Tool Hire Prices Vary Across Liverpool</H2>
+      <Paragraph>
+        Liverpool's hire market is served by a mix of national chains, North West regional independents, and smaller Merseyside operators — and the spread in day rates between them is significant. A national chain depot in the city centre (L1–L3) will charge rack rate. A regional independent out of Knowsley Industrial Park or Speke may be 20–30% cheaper for the same tracked plant, especially on weekly hires.
+      </Paragraph>
+      <Paragraph>
+        Timing adds another layer. Liverpool's construction market is exceptionally active in 2026, with multiple large-scale residential and infrastructure projects running simultaneously across the waterfront, North Liverpool, and the city's inner ring. Plant availability tightens sharply in spring and during peak project phases. Book tracked plant and access equipment at least 48–72 hours ahead during April through July.
+      </Paragraph>
+      <Paragraph>
+        Tooli.uk pulls live-updated pricing from suppliers across Greater Liverpool and Merseyside so you see the actual going rate — not a printed brochure figure from the first depot that picks up.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Liverpool's Construction Boom — What's Driving Hire Demand in 2026</H2>
+      <Paragraph>
+        Liverpool's construction market is running at a pace not seen in decades. The pipeline of active and imminent schemes across the waterfront, North Liverpool, the Baltic Triangle, and South Liverpool is keeping plant, access equipment, and specialist tools in high demand throughout the year.
+      </Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">King Edward Triangle — the biggest private residential scheme in the city</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">On Liverpool's northern waterfront, the £1 billion King Edward Triangle development will deliver close to 3,000 homes in a cluster of high-rise buildings alongside hotels and a potential events arena. A planning application for the first 28-storey building was submitted in 2025, with Liverpool City Council already approving associated land sales at Great Howard Street. Construction enabling works began in late 2025, including infrastructure for a five-acre Central Park, backed by £55 million in government funding. This scheme runs groundwork and civils plant in quantity throughout its phased delivery programme.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Liverpool Waters — £5.5 billion waterfront transformation</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The Liverpool Waters project is transforming the historic northern docks into a residential, commercial, and leisure district. Everton FC's 52,000-capacity Hill Dickinson Stadium at Bramley-Moore Dock opened for the 2025/26 season — itself a £760 million project — and the surrounding Ten Streets regeneration zone is now actively driving further residential and commercial development. Groundwork, drainage, and structural trades are consistently active across this corridor.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Liverpool Baltic station — £100 million rail infrastructure</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The £100 million Baltic station on Merseyrail's Northern Line has received planning permission and early site preparation and highway works are underway in 2026, ahead of the main construction phase. The station serves the Baltic Triangle, one of the city's fastest-growing mixed-use districts. Highway, earthworks, and temporary works plant will be required throughout the delivery programme.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Pumpfields and Limekilns — 7,000 homes on brownfield land</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Liverpool City Council has approved a supplementary planning document guiding the residential-led regeneration of a major brownfield swathe covering Pumpfields and Limekilns. The approved first phase — a 28-storey block — is the opening move in the wider King Edward Triangle masterplan. Groundwork and infrastructure plant will be needed at scale as this district begins its transformation.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Littlewoods Film Studio — £70 million production campus</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The former Littlewoods building on Edge Lane is the subject of a £70 million proposal to create two 20,000 sq ft film and television studios. Demolition, structural, and fit-out trades are active across this site in 2026.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Homeowner and renovation market</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Liverpool has a large stock of pre-1919 terraced housing across Wavertree, Anfield, Everton, Old Swan, and Toxteth. Renovation, extension, and remodelling work drives consistent year-round demand for smaller tool hire — breakers, mixers, floor sanders, scaffold towers, and pressure washers — from both trades and homeowners.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Most-Hired Equipment in Liverpool — By Trade and Area</H2>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civil contractors (L3, L4, L5 — North Liverpool, Vauxhall, Everton)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Mini diggers, dumpers, trench rammers, wacker plates, and pumping equipment. The Liverpool Waters corridor, King Edward Triangle enabling works, and Pumpfields regeneration zone all require continuous civils plant throughout 2026. Expect tight plant availability during peak phases.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and residential contractors (L15, L16, L17 — Wavertree, Allerton, Garston)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, concrete mixers, breakers, and skip loaders. South Liverpool has a high volume of Victorian and Edwardian terrace and semi-detached renovation running year-round.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers and groundworks contractors (L18, L25 — Mossley Hill, Woolton)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Mini diggers (1.5 t tracked), rotary cultivators, turf cutters, and wacker plates. Outer South Liverpool generates steady landscaping demand from late March through September — book plant at least 72 hours ahead during spring.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers and cladding contractors (L11, L12 — Norris Green, West Derby)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, safety harness kits, and access platforms. PASMA certification required for mobile tower use on construction sites. Confirm supplier tower compliance at booking.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Plasterers and drylining trades (L1–L3 — city centre, Georgian Quarter)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Paddle mixers, stilts, dehumidifiers, and drywall lifters. City-centre sites near the Knowledge Quarter and Georgian Quarter often need short-notice daily hires — check depot hours before booking.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and homeowners (L6, L7 — Kensington, Edge Hill)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Steam wallpaper strippers, floor sanders, carpet lifters, and pressure washers. Weekend hire is the dominant pattern for this group — Saturday pickup, Monday return.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Industrial and logistics sector (L24 — Speke, Liverpool Airport zone; L33 — Knowsley)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Generators, welfare units, lighting towers, and telehandlers. Speke's industrial and logistics cluster alongside Liverpool John Lennon Airport, and Knowsley Industrial Park, generate consistent demand for welfare, power, and material handling hire on longer contracts.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">M&E and utilities contractors (L20 — Bootle; L21 — Seaforth)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Generators, cable avoidance tools, duct rodding equipment, and access platforms. Bootle's ongoing regeneration of Strand shopping centre and surrounding civic areas adds to steady commercial sector demand in North Sefton.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery and Collection Across Greater Liverpool and Merseyside</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Self-collection from depot</p>
+          <Paragraph>Most Liverpool-area depots open from 07:00–07:30 Monday to Friday and 07:30–08:00 Saturday. Inner-city postcodes (L1–L5) have the highest depot density. Self-collecting saves the delivery charge — typically £30–£70 for smaller tools, more for plant — and often gets a same-day start.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Delivery to site</p>
+          <Paragraph>Next-morning delivery is standard across inner Liverpool postcodes. Outer areas — Kirkby (L32–L33), Huyton (L36), Speke (L24), Widnes (WA8) — typically require 24–48 hours' notice. Active waterfront sites (L3, Liverpool Waters zone) may have restricted access windows — confirm with your supplier before booking.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Wirral deliveries</p>
+          <Paragraph>Many Liverpool-based suppliers cover the Wirral peninsula (CH41–CH49) but surcharges apply and lead times may extend to 48 hours. Wirral-based operators are often more competitive for CH postcode work — Tooli.uk shows both at comparison stage.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend hire</p>
+          <Paragraph>Widely available. A Friday-to-Monday period undercuts two separate day rates in most cases. Some suppliers accept returns before 08:30 Monday if agreed at booking, avoiding an extra day's charge.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Long-term and on-site hire</p>
+          <Paragraph>Weekly and monthly rates are available across most equipment categories. For plant remaining on-site throughout a groundwork, structural, or fit-out phase, ask suppliers about swap-out agreements and extended hire discounts.</Paragraph>
+        </div>
+      </div>
+      <Paragraph>Tooli.uk displays total cost including delivery for your postcode — no surprises at checkout.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Liverpool-Specific Considerations for Tradespeople</H2>
+      <Paragraph>Liverpool's geography and development pipeline throw up practical factors worth knowing before you hire.</Paragraph>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Waterfront and dockland access</p>
+          <Paragraph>Sites across Liverpool Waters, Bramley-Moore Dock, and the northern docks are subject to port authority access restrictions. Confirm vehicle dimensions and site access procedures with your supplier before delivery is arranged — oversized loads need advance notice.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">City centre restricted zones</p>
+          <Paragraph>Several routes through Liverpool city centre (L1–L2) carry weight, width, or time-of-day restrictions. This affects delivery of heavy plant — particularly 3-tonne-plus excavators and telehandlers on low-loaders. Your supplier should advise on route; if they don't ask, you should.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Georgian Quarter and tight-access terraces</p>
+          <Paragraph>Much of Liverpool's renovation market is concentrated in narrow Victorian streets — particularly across L7, L8, and L15. Tracked mini diggers are preferable to wheeled plant on these access-restricted sites. Check swing radius and transport dimensions at the point of hire.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise restrictions near residential development</p>
+          <Paragraph>Liverpool City Council enforces noise controls on construction sites in residential areas under the Control of Noise at Work Regulations 2005. Petrol breakers, concrete saws, and compaction equipment regularly exceed the 80 dB(A) action level. Check permitted operating hours with the council for sites adjacent to housing.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compliance and Safety — What Liverpool Hirers Need to Know</H2>
+      <Paragraph>UK legislation governs how hired equipment must be used on site. Here's the short version every Liverpool hirer needs to understand.</Paragraph>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">PUWER (Provision and Use of Work Equipment Regulations 1998)</p>
+          <Paragraph>All hired equipment must be suitable for purpose, properly maintained, and operated only by competent persons. Responsibility transfers to the hirer from the point of collection or delivery. If something goes wrong and the operator lacked training, the hirer bears liability.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">LOLER (Lifting Operations and Lifting Equipment Regulations 1998)</p>
+          <Paragraph>Covers all lifting equipment including cherry pickers, telehandlers, MEWPs, and hoists. Thorough examination certificates are required and must be current. Ask your supplier for these records — reputable depots will provide them without prompting.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Working at Height Regulations 2005</p>
+          <Paragraph>Scaffold towers must be erected by a competent person. PASMA certification is the industry standard for mobile access towers. For powered access platforms (MEWPs), a valid IPAF PAL card covering the relevant platform category is required on any commercial or regulated construction site.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">CDM 2015 (Construction Design and Management Regulations)</p>
+          <Paragraph>Notifiable projects — more than 500 person-days or 30 working days with 20+ simultaneous workers — require a Principal Designer and Principal Contractor appointment. Hired plant on notifiable sites must be tracked through the construction phase plan. Many Liverpool Waters and North Liverpool regeneration schemes will be notifiable.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">CPCS and operator competence</p>
+          <Paragraph>CPCS (Construction Plant Competence Scheme) certification is required when operating excavators, telehandlers, and other large plant on regulated construction sites and public roads. On private land, no card is legally required — but PUWER still demands demonstrable competence regardless.</Paragraph>
+        </div>
+      </div>
+      <Paragraph>Full guidance: HSE, IPAF, PASMA, Construction Plant-hire Association (CPA).</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Trade Accounts in Liverpool — Worth the Paperwork?</H2>
+      <Paragraph>
+        Trade accounts with Liverpool-area depots typically deliver 10–15% off rack rate, 30-day credit terms, and VAT receipts for every booking. National chains and most established North West independents offer them — requiring a credit check and registered business details.
+      </Paragraph>
+      <Paragraph>
+        The trade-off is that an account ties you to one supplier's pricing. Before assuming your account rate is the best available, benchmark it against the wider Liverpool and Merseyside market on Tooli.uk. A Knowsley or Speke independent may be running significantly below your account rate on tracked plant — and the saving on a week's hire easily covers the 10-minute comparison.
+      </Paragraph>
+      <Paragraph>Many Liverpool tradespeople with long-standing accounts use Tooli.uk to check they're not leaving money on site.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Liverpool Weather and Seasonal Hire Patterns</H2>
+      <Paragraph>Liverpool's maritime climate produces mild, wet winters and variable summers — with real consequences for hire planning.</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Spring (March–May)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The sharpest demand surge of the year. Groundwork, drainage, landscaping, and external building projects restart simultaneously from mid-March. Mini diggers, dumpers, and wacker plates book out fast — 72-hour advance booking is the minimum on tracked plant during April.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Summer (June–August)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold tower and access platform demand peaks alongside roofing, rendering, and external decorating. Dry spells compress demand into short windows and push availability tighter.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Autumn (September–October)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">A sustained second peak for groundworkers and civils contractors completing schemes before ground conditions worsen. Plant hire demand stays strong through October.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Winter (November–February)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Dehumidifiers, site heaters, lighting towers, generators, and welfare units lead hire demand. Liverpool's winter is typically wet rather than frozen — waterlogged sites across lower-lying L postcodes and the Mersey floodplain zone are common from November. Pumping equipment is regularly needed at short notice.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve Across Liverpool and Merseyside</H2>
+      <Paragraph>Tooli.uk compares tool and plant hire for every trade operating across Liverpool, Bootle, Kirkby, Huyton, Speke, the Wirral, and surrounding Merseyside:</Paragraph>
+      <BulletList
+        items={[
+          'Groundworkers and civil engineering contractors',
+          'Builders, developers, and general contractors',
+          'Landscapers and garden contractors',
+          'Plasterers and rendering specialists',
+          'Roofers and cladding contractors',
+          'Electricians and M&E contractors',
+          'Decorators and interior fit-out trades',
+          'Scaffolding contractors',
+          'Industrial and logistics operators',
+          'Homeowners, self-builders, and renovation project managers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Neighbouring Areas Covered From the Liverpool Supplier Network</H2>
+      <Paragraph>Tooli.uk covers surrounding towns served by the same Liverpool and Merseyside supplier network:</Paragraph>
+      <BulletList
+        items={[
+          'Birkenhead and Wirral (CH41–CH49)',
+          'Bootle (L20)',
+          'Kirkby (L32–L33)',
+          'Knowsley and Huyton (L34–L36)',
+          'Widnes (WA8)',
+          'St Helens (WA9–WA11)',
+          'Southport (PR8–PR9)',
+          'Skelmersdale (WN8)',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Liverpool</H2>
+      <div className="grid gap-4">
+        {liverpoolFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -1816,6 +2114,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/bristol-hero.webp',
     faqs: bristolFaqs,
     content: bristolContent,
+  },
+  {
+    slug: 'liverpool',
+    name: 'Liverpool',
+    path: '/locations/liverpool',
+    metaTitle: 'Tool Hire Liverpool | Compare Prices From Local Suppliers | Tooli.uk',
+    metaDescription:
+      'Compare tool hire prices from local independents and national chains across Liverpool and Merseyside. Find the best rates on mini diggers, scaffold towers, breakers, and more. No booking fees.',
+    canonicalUrl: 'https://www.tooli.uk/locations/liverpool',
+    title: 'Tool Hire in Liverpool: Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire rates from local independents and national chains covering L1 through to L36, Bootle, Kirkby, Speke, Wavertree, and across Greater Merseyside.',
+    image: '/images/liverpool-hero.png',
+    faqs: liverpoolFaqs,
+    content: liverpoolContent,
   },
 ];
 
