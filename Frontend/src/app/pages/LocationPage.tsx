@@ -139,7 +139,7 @@ export function LocationPage() {
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Compare London Hire Prices</h2>
+              <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Compare {page.name} Hire Prices</h2>
               <p className="mb-6 text-sm font-medium leading-relaxed text-gray-500">
                 Search by equipment type and location to compare local and national hire suppliers.
               </p>

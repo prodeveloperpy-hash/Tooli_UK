@@ -70,6 +70,21 @@ function Section({ children }: { children: ReactNode }) {
   return <section className="space-y-6">{children}</section>;
 }
 
+function StepList({ steps }: { steps: string[] }) {
+  return (
+    <ol className="space-y-3">
+      {steps.map((step, i) => (
+        <li key={i} className="flex items-start gap-3">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-primary text-sm font-black text-white">
+            {i + 1}
+          </span>
+          <span className="pt-0.5 text-base font-medium leading-relaxed text-gray-600">{step}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 const londonFaqs = [
   {
     question: 'How much does plant hire cost in London?',
@@ -581,6 +596,191 @@ const londonContent = (
   </>
 );
 
+const manchesterFaqs = [
+  {
+    question: 'How much does it cost to hire a mini digger in Manchester?',
+    answer:
+      'Based on Tooli.uk network data, a 1.5-tonne tracked mini digger in Manchester typically costs between £[DATA] and £[DATA] per day including VAT. Weekly rates work out cheaper per day — expect to pay around £[DATA]–£[DATA] for a full week. Price varies by supplier, delivery distance, and whether attachments are included.',
+  },
+  {
+    question: 'Which tool hire companies operate in Manchester?',
+    answer:
+      "Manchester is served by several national chains including HSS Hire, Speedy Services, and Brandon Hire Station, plus regional and independent hire yards across Trafford Park, Salford, Stockport, and Oldham. Tooli.uk compares prices across the available network so you don't have to contact them all individually.",
+  },
+  {
+    question: 'Can I hire tools in Manchester without a trade account?',
+    answer:
+      "Yes. Most suppliers accept private hire with a valid form of ID and a credit or debit card for the deposit. You don't need a trade account or CSCS card to hire most general tools. For certain plant (telehandlers, MEWPs, larger excavators), some suppliers require proof of operator competency — CPCS or IPAF certification where relevant.",
+  },
+  {
+    question: 'Do I need an IPAF licence to hire a cherry picker in Manchester?',
+    answer:
+      "You don't need an IPAF card to hire a Mobile Elevated Work Platform (MEWP) in Manchester — but you do need one to operate it legally on site under the Work at Height Regulations 2005. Most professional suppliers will ask to see your IPAF PAL card before handing over keys.",
+  },
+  {
+    question: 'Is weekend tool hire available in Manchester?',
+    answer:
+      'Yes, most Manchester suppliers offer Saturday collection or delivery and Sunday returns. Some depots are open Saturday only — check individual supplier hours when comparing. Weekend hire packages (Friday–Monday return) can work out better value than two separate day rates. Tooli.uk shows weekend rates alongside day rates so you can compare.',
+  },
+  {
+    question: 'Do Manchester tool hire companies deliver to site?',
+    answer:
+      'Yes, most do. Delivery charges vary by distance from the depot and the size of the equipment. Heavy plant (mini diggers, dumpers, rollers) typically attracts a delivery and collection charge on top of the hire rate. Always confirm this when comparing — Tooli.uk flags where delivery costs apply.',
+  },
+  {
+    question: 'Can I hire tools in Manchester for just a few hours?',
+    answer:
+      'Some suppliers offer half-day rates, but most book by the day. If you only need a piece of kit for three or four hours, a full day rate still usually applies. For very short-term needs on power tools, consider whether purchasing outright or borrowing is more practical.',
+  },
+  {
+    question: 'What happens if a hired tool breaks down on site in Manchester?',
+    answer:
+      "This depends on the supplier's terms. Most reputable hire companies will replace a faulty machine or offer a credit for downtime. Check the supplier's breakdown policy before you commit. Always inspect the kit on delivery and note any existing damage in writing — photograph it before use.",
+  },
+];
+
+const manchesterContent = (
+  <>
+    <Section>
+      <H2>Compare Tool & Plant Hire Prices in Manchester</H2>
+      <Paragraph>
+        Hiring a tool in Manchester without comparing prices first is like buying timber from the first merchant you pass on the A57 — you'll almost certainly overpay. Tooli.uk lets you compare tool hire prices from suppliers across Greater Manchester in one place: no phone calls, no holding music, no haggling. Whether you're pricing up a mini digger for a groundworks job in Salford or need a site dumper for a weekend extension in Didsbury, you'll find real rates here.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Why Compare Tool Hire in Manchester?</H2>
+      <Paragraph>
+        Manchester's construction market is one of the busiest outside London. With the city centre seeing sustained commercial development around Deansgate, NOMA, and the Northern Quarter, plus a rolling programme of residential builds across Ancoats, Hulme, and Salford Quays, demand for hired kit stays high year-round.
+      </Paragraph>
+      <Paragraph>
+        That demand pressure means prices vary more than most hirers realise. The same 1.5-tonne tracked mini digger can cost significantly differently per day depending on which supplier you contact first. The depot on the Trafford Park industrial estate prices differently to the independent yard in Rochdale. Both might be available for your job dates. Only one is cheapest.
+      </Paragraph>
+      <Paragraph>That's the gap Tooli.uk closes.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Manchester's Tool Hire Suppliers — What's Out There</H2>
+      <Paragraph>
+        Greater Manchester has a strong mix of national chains with local depots and independent hire yards. Here's the honest lay of the land.
+      </Paragraph>
+      <H3>National Chains With Manchester Depots</H3>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">HSS Hire</p>
+          <Paragraph>Has depots serving central Manchester and the surrounding areas. Good for online booking and a wide catalogue though their trade counter hours aren't always the most flexible for early starts.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Speedy Services</p>
+          <Paragraph>Operates across Greater Manchester with strong coverage for larger plant. Suited to main contractors and site managers who need account facilities and fleet-scale hire.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Brandon Hire Station</p>
+          <Paragraph>Has a presence across the North West. Generally competitive on power tools and access equipment. Less strong on heavy plant compared to specialists.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Hewden</p>
+          <Paragraph>Operating regionally — worth checking for larger civil engineering plant if you're working on bigger groundworks contracts around Salford or Trafford.</Paragraph>
+        </div>
+      </div>
+      <H3>What Tooli UK Does Differently</H3>
+      <Paragraph>
+        None of those sites show you all the others side by side. You'd have to visit four websites, call two depots, and wait for callbacks before you had a complete picture. Tooli.uk compares them in one search so you can see who's cheapest, who delivers to your postcode, and who has availability on your dates.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Manchester Postcodes We Cover</H2>
+      <Paragraph>Tooli UK's supplier network covers all Greater Manchester postcodes, including:</Paragraph>
+      <BulletList
+        items={[
+          'City centre & inner areas: M1, M2, M3, M4, M5, M6, M8, M9, M11, M12, M13, M14, M15, M16',
+          'North & east Manchester: M24 (Middleton), M25 (Prestwich), M26 (Radcliffe), M27 (Pendlebury), M28 (Worsley), M29 (Tyldesley)',
+          'Salford: M6, M7, M27, M30, M50',
+          'Stockport: SK1–SK7 (Stockport, Edgeley, Cheadle, Hazel Grove, Bramhall)',
+          'Bolton: BL1–BL7',
+          'Oldham: OL1–OL9',
+          'Rochdale: OL11–OL16',
+          'Bury: BL8–BL9',
+          'Wigan: WN1–WN8',
+          'Ashton-under-Lyne / Tameside: OL6–OL7, SK14–SK16',
+        ]}
+      />
+      <Paragraph>
+        If your site postcode isn't listed, run a comparison search on Tooli.uk — our network extends into Lancashire and Cheshire borders too.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in Manchester</H2>
+      <Paragraph>Manchester's trades are busy. Here's who Tooli.uk is built for in this city:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civil contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Working on the ongoing residential expansion across Ancoats, Collyhurst, and Middlewood Locks. Mini diggers, dumpers, and vibrating rollers are the bread and butter.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Garden projects in Didsbury, Chorlton, Hale, and Altrincham run heavy in spring and summer. Rotavators, mini diggers, skid steers, and plate compactors.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Plasterers and drylining contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The tower build boom across Manchester city centre keeps this trade busy. Scaffold towers, mixing equipment, and dehumidifiers for new-build first-fix.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Covering terraced and semi-detached stock across Salford, Eccles, and Gorton. Access towers, materials hoists, and safety kit.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and refurb contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Airbnb refurbs and HMO conversions across student areas (Fallowfield, Withington, Victoria Park). Scaffold towers, floor sanders, wallpaper steamers.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Electricians and plumbers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">First and second fix on new residential. Core drills, cable pullers, press tools.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and small-to-medium contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The bread and butter of Greater Manchester's trade economy. Every type of kit.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Homeowners and serious DIYers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Extension projects in Worsley, Sale, and Stretford. Weekend hire is always available.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>How to Compare Tool Hire in Manchester on Tooli.uk</H2>
+      <Paragraph>Straightforward. No account needed.</Paragraph>
+      <StepList
+        steps={[
+          'Enter the equipment you need (e.g. "mini digger" or "scaffold tower")',
+          'Enter your postcode or area (e.g. M14 or Didsbury)',
+          'Select your hire dates',
+          'Compare prices from available suppliers side by side',
+          'Click through to book directly with the supplier you choose',
+        ]}
+      />
+      <Paragraph>
+        Tooli.uk doesn't take a booking fee. We don't mark up prices. We're a comparison platform — our job is to show you the options clearly so you can make the right call.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Manchester</H2>
+      <div className="grid gap-4">
+        {manchesterFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -595,6 +795,20 @@ export const locationPages: LocationPageData[] = [
       'Compare tool hire and plant hire prices from local independent depots alongside national hire companies serving Greater London.',
     faqs: londonFaqs,
     content: londonContent,
+  },
+  {
+    slug: 'manchester',
+    name: 'Manchester',
+    path: '/locations/manchester',
+    metaTitle: 'Tool & Plant Hire Manchester | Compare Prices from Local Suppliers',
+    metaDescription:
+      'Compare tool hire and plant hire prices across Greater Manchester from trusted local suppliers and national hire companies. Find the cheapest rates on mini diggers, scaffold towers, dumpers, generators, and more. No booking fees.',
+    canonicalUrl: 'https://www.tooli.uk/locations/manchester',
+    title: 'Tool & Plant Hire Comparison in Manchester — Find the Best Price Before You Book',
+    description:
+      'Compare tool hire prices from suppliers across Greater Manchester in one place. No phone calls, no haggling — real rates from trusted local and national suppliers.',
+    faqs: manchesterFaqs,
+    content: manchesterContent,
   },
 ];
 

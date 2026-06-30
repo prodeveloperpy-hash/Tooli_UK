@@ -11,6 +11,7 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { SuppliersPage } from './pages/SuppliersPage';
 import { HelpPage } from './pages/HelpPage';
+import { CitiesPage } from './pages/CitiesPage';
 import { BlogPage, BlogPostPage } from './pages/BlogPage';
 import { LocationPage } from './pages/LocationPage';
 

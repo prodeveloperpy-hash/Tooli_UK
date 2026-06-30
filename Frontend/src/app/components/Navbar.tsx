@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Menu, Search, User, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
+import { locationNavItems } from '../data/locations';
 import { useState, useEffect } from 'react';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { authApi } from '../../context/auth.api';
@@ -14,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { ProfileModal } from './ProfileModal';
-import { locationNavItems } from '../data/locations';
 
 type NavbarUser = { name: string; avatar: string; role: string; email?: string };
 
