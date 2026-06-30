@@ -137,7 +137,7 @@ export function LocationPage() {
         <div className="container mx-auto grid gap-12 px-4 lg:grid-cols-[minmax(0,840px)_minmax(260px,1fr)]">
           <div className="space-y-14">{page.content}</div>
 
-          <aside className="lg:sticky lg:top-28 lg:self-start">
+          <aside className="lg:sticky lg:top-28 lg:self-start space-y-4">
             <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
               <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Compare {page.name} Hire Prices</h2>
               <p className="mb-6 text-sm font-medium leading-relaxed text-gray-500">
@@ -148,6 +148,25 @@ export function LocationPage() {
                   Start Comparing
                 </Button>
               </Link>
+            </div>
+
+            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Other Locations</h2>
+              <ul className="space-y-2">
+                {locationPages
+                  .filter((loc) => loc.slug !== page.slug)
+                  .map((loc) => (
+                    <li key={loc.slug}>
+                      <Link
+                        to={loc.path}
+                        className="flex items-center gap-2 text-sm font-bold text-brand-primary hover:underline"
+                      >
+                        <MapPin className="h-3.5 w-3.5 shrink-0" />
+                        Tool Hire in {loc.name}
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
             </div>
           </aside>
         </div>

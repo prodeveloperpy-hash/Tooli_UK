@@ -90,12 +90,12 @@ const londonFaqs = [
   {
     question: 'How much does plant hire cost in London?',
     answer:
-      'Plant hire costs vary depending on the machine, hire duration, supplier and delivery location. As a guide, mini diggers start from around £145 per day, excavators from £175–£325 per day, telehandlers from approximately £220 per day, generators from £40 per day and wacker plates from £30 per day. Weekly hire generally offers considerably better value than paying daily rates.',
+      'Plant hire costs vary depending on the machine type, hire duration, supplier and delivery location. The best way to find a competitive rate is to compare multiple suppliers for your specific equipment and postcode — prices can differ significantly across Greater London.',
   },
   {
     question: 'Is weekly hire cheaper than daily hire?',
     answer:
-      'Yes. For projects lasting more than three days, weekly hire is usually between 25% and 40% cheaper than booking daily. Always request both daily and weekly quotations before booking.',
+      'Generally yes. For projects lasting more than a few days, weekly hire usually works out cheaper overall than booking day by day. Always ask suppliers for both daily and weekly rates before committing.',
   },
   {
     question: 'Can homeowners hire plant equipment?',
@@ -180,7 +180,7 @@ const londonContent = (
     <Section>
       <H2>Why Compare Plant Hire Prices in London?</H2>
       <Paragraph>Construction equipment hire prices vary considerably across Greater London.</Paragraph>
-      <Paragraph>The same 1.5-tonne mini excavator may cost over £100 more per day depending on:</Paragraph>
+      <Paragraph>The same 1.5-tonne mini excavator can vary considerably in price depending on:</Paragraph>
       <BulletList items={['Your location', 'Delivery distance', 'Demand', 'Hire duration', 'Supplier', 'Equipment age', 'Availability', 'Whether delivery is included']} />
       <Paragraph>Comparing suppliers allows contractors, builders and homeowners to benefit from:</Paragraph>
       <BulletList items={['Lower hire costs', 'Better machine availability', 'Faster delivery', 'Newer equipment', 'Flexible hire periods', 'Weekend collection', 'Trade account discounts', 'Local depot support']} />
@@ -232,39 +232,21 @@ const londonContent = (
     </Section>
 
     <Section>
-      <H2>London Tool & Plant Hire Prices</H2>
-      <Paragraph>The table below provides realistic guide prices based on equipment commonly hired throughout Greater London.</Paragraph>
-      <DataTable
-        headers={['Equipment', 'Daily From', 'Weekly From']}
-        rows={[
-          ['Mini Digger (1T)', '£145', '£495'],
-          ['Mini Digger (1.5T)', '£175', '£595'],
-          ['3T Excavator', '£240', '£790'],
-          ['5T Excavator', '£325', '£1,050'],
-          ['Site Dumper', '£90', '£295'],
-          ['Roller', '£75', '£245'],
-          ['Telehandler', '£220', '£725'],
-          ['Scissor Lift', '£95', '£335'],
-          ['Boom Lift', '£145', '£495'],
-          ['Generator', '£40', '£140'],
-          ['Wacker Plate', '£30', '£95'],
-          ['Concrete Breaker', '£35', '£120'],
-        ]}
-      />
-      <Paragraph>Prices vary depending on supplier, delivery location, season and availability.</Paragraph>
-      <H3>Daily vs Weekly Hire</H3>
-      <Paragraph>One of the biggest mistakes made by homeowners and contractors is booking equipment on daily rates when weekly hire would cost significantly less.</Paragraph>
-      <Paragraph>Example:</Paragraph>
-      <DataTable
-        headers={['Equipment', '5 Days Daily', 'Weekly Hire', 'Saving']}
-        rows={[
-          ['Mini Digger', '£875', '£595', '£280'],
-          ['Scissor Lift', '£475', '£335', '£140'],
-          ['Telehandler', '£1,100', '£725', '£375'],
-        ]}
-      />
-      <Paragraph>For projects lasting more than three days, weekly hire almost always represents the best value.</Paragraph>
-      <Paragraph>Many London suppliers also offer discounted monthly rates for long-term commercial projects.</Paragraph>
+      <H2>Comparing Plant Hire in London</H2>
+      <div className="grid gap-4">
+        <div className="rounded-2xl border border-gray-100 bg-white p-5">
+          <h4 className="mb-2 text-lg font-extrabold text-gray-900">How much does plant hire cost in London?</h4>
+          <p className="font-medium leading-relaxed text-gray-500">
+            Plant hire costs vary depending on the machine, hire duration, supplier and delivery location. Weekly hire generally offers considerably better value than paying daily rates, so it's worth requesting both quotations before booking.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-gray-100 bg-white p-5">
+          <h4 className="mb-2 text-lg font-extrabold text-gray-900">Is weekly hire cheaper than daily hire?</h4>
+          <p className="font-medium leading-relaxed text-gray-500">
+            Yes. For projects lasting more than three days, weekly hire is usually significantly cheaper than booking daily. Always compare both daily and weekly rates across suppliers before booking.
+          </p>
+        </div>
+      </div>
     </Section>
 
     <Section>
@@ -287,13 +269,11 @@ const londonContent = (
       <Paragraph>Perfect where access is restricted.</Paragraph>
       <Paragraph>Ideal for:</Paragraph>
       <BulletList items={['Garden gates', 'Narrow alleyways', 'Indoor demolition', 'Basement excavations']} />
-      <Paragraph>Typical hire from:</Paragraph>
-      <Paragraph>£145 per day</Paragraph>
       <H3>1.5T Mini Diggers</H3>
       <Paragraph>The most commonly hired machine in London.</Paragraph>
       <Paragraph>Suitable for:</Paragraph>
       <BulletList items={['Residential construction', 'Landscaping', 'Footings', 'Groundworks', 'Drainage', 'Patios']} />
-      <Paragraph>Weekly hire generally offers savings of over 30%.</Paragraph>
+      <Paragraph>Weekly hire generally offers better value than booking daily.</Paragraph>
       <H3>3T Excavators</H3>
       <Paragraph>Ideal for:</Paragraph>
       <BulletList items={['Larger foundations', 'Commercial projects', 'Car parks', 'Bulk excavation', 'Utility work']} />
@@ -319,7 +299,7 @@ const londonContent = (
       <Paragraph>Popular sizes include:</Paragraph>
       <BulletList items={['0.5T', '1T', '3T', '6T', 'Swivel dumpers', 'Hi-tip dumpers']} />
       <Paragraph>Matching dumper capacity to excavator size helps maximise productivity and reduce fuel consumption.</Paragraph>
-      <Paragraph>Typical hire starts from approximately £90 per day, with significant discounts available on weekly bookings.</Paragraph>
+      <Paragraph>Hire rates vary by machine size and supplier — compare current rates on Tooli.uk before booking.</Paragraph>
     </Section>
 
     <Section>
@@ -347,8 +327,6 @@ const londonContent = (
           ['7T+', 'Large infrastructure projects'],
         ]}
       />
-      <Paragraph>Typical hire prices in London:</Paragraph>
-      <DataTable headers={['Duration', 'Price From']} rows={[['Daily', '£220'], ['Weekly', '£725'], ['Monthly', '£2,350']]} />
       <Paragraph>Most suppliers offer:</Paragraph>
       <BulletList items={['Self-drive hire', 'Operated hire', 'Long-term contracts', 'Nationwide delivery', 'CPA compliant machines']} />
       <Paragraph>For commercial sites, operators should normally hold the appropriate CPCS or NPORS certification.</Paragraph>
@@ -365,14 +343,10 @@ const londonContent = (
       <BulletList items={['Warehouse maintenance', 'Ceiling installations', 'Electrical work', 'Commercial fit-outs', 'Interior decorating']} />
       <Paragraph>Working heights typically range from:</Paragraph>
       <BulletList items={['6 metres', '8 metres', '10 metres', '12 metres', '16 metres']} />
-      <Paragraph>Prices start from around:</Paragraph>
-      <Paragraph>£95 per day</Paragraph>
       <H3>Boom Lift Hire</H3>
       <Paragraph>Boom lifts offer excellent horizontal outreach where obstacles prevent direct access.</Paragraph>
       <Paragraph>Suitable for:</Paragraph>
       <BulletList items={['Roofing', 'Steel erection', 'External maintenance', 'Building inspections', 'Tree surgery', 'Cladding installation']} />
-      <Paragraph>Daily hire from approximately:</Paragraph>
-      <Paragraph>£145</Paragraph>
       <H3>Spider Lift Hire</H3>
       <Paragraph>Spider lifts are perfect where access is restricted.</Paragraph>
       <Paragraph>Popular for:</Paragraph>
@@ -388,8 +362,6 @@ const londonContent = (
       <Paragraph>Generator sizes include:</Paragraph>
       <BulletList items={['2kVA', '3kVA', '5kVA', '10kVA', '20kVA', '50kVA', '100kVA+']} />
       <Paragraph>Silent generators remain particularly popular throughout London because they minimise disruption in residential areas.</Paragraph>
-      <Paragraph>Daily hire starts from approximately:</Paragraph>
-      <Paragraph>£40</Paragraph>
     </Section>
 
     <Section>
@@ -399,8 +371,6 @@ const londonContent = (
       <BulletList items={['Driveways', 'Patios', 'Extensions', 'Foundations', 'Block paving', 'Landscaping']} />
       <Paragraph>Popular machines include:</Paragraph>
       <BulletList items={['Forward Plates', 'Reversible Plates', 'Trench Compactors', 'Pedestrian Rollers']} />
-      <Paragraph>Prices typically begin from:</Paragraph>
-      <Paragraph>£30 per day</Paragraph>
     </Section>
 
     <Section>
@@ -410,8 +380,6 @@ const londonContent = (
       <BulletList items={['Concrete removal', 'Driveways', 'Internal demolition', 'Brickwork', 'Foundations', 'Floors']} />
       <Paragraph>Available options include:</Paragraph>
       <BulletList items={['SDS Max Breakers', '110V Breakers', 'Hydraulic Breakers', 'Petrol Breakers']} />
-      <Paragraph>Daily hire usually starts around:</Paragraph>
-      <Paragraph>£35</Paragraph>
     </Section>
 
     <Section>
@@ -530,7 +498,6 @@ const londonContent = (
     </Section>
 
     <Section>
-      <H2>Frequently Asked Questions, Expert Advice, EEAT & Conclusion</H2>
       <H3>Frequently Asked Questions</H3>
       <div className="grid gap-4">
         {londonFaqs.map((faq) => (
@@ -599,9 +566,9 @@ const londonContent = (
 
 const manchesterFaqs = [
   {
-    question: 'How much does it cost to hire a mini digger in Manchester?',
+    question: 'How do I find the best mini digger hire deal in Manchester?',
     answer:
-      'Based on Tooli.uk network data, a 1.5-tonne tracked mini digger in Manchester typically costs between £[DATA] and £[DATA] per day including VAT. Weekly rates work out cheaper per day — expect to pay around £[DATA]–£[DATA] for a full week. Price varies by supplier, delivery distance, and whether attachments are included.',
+      'The most reliable way to find a competitive rate is to compare multiple suppliers covering your postcode. Rates vary depending on machine size, supplier, delivery distance, and whether attachments are included. Tooli.uk lets you compare available options side by side before committing to a booking.',
   },
   {
     question: 'Which tool hire companies operate in Manchester?',
@@ -784,9 +751,9 @@ const manchesterContent = (
 
 const birminghamFaqs = [
   {
-    question: 'How much does it cost to hire a mini digger in Birmingham?',
+    question: 'How do I find the best mini digger hire deal in Birmingham?',
     answer:
-      'Based on Tooli.uk network data, a 1.5-tonne tracked mini digger in Birmingham costs [DATA] per day including VAT. Prices vary by supplier, delivery distance, and attachment. Compare current rates across Birmingham-area suppliers on Tooli.uk.',
+      'Rates vary depending on machine size, supplier, delivery distance, and whether attachments are included. The most reliable way to secure a competitive deal is to compare multiple suppliers covering your postcode before booking. Tooli.uk shows available options side by side so you can choose with confidence.',
   },
   {
     question: 'Which tool hire companies cover Birmingham?',
@@ -992,9 +959,9 @@ const birminghamContent = (
 
 const leedsFaqs = [
   {
-    question: 'How much does it cost to hire a mini digger in Leeds?',
+    question: 'How do I find the best mini digger hire deal in Leeds?',
     answer:
-      'Mini digger hire in Leeds costs between £160 and £310 per day (VAT inclusive), depending on machine size. A 0.8–1.5 tonne micro digger typically runs £160–£220/day; a 3 tonne machine is £220–£310/day. Weekly rates drop the effective daily cost considerably — usually £480–£900 for a full week depending on size. Delivery charges apply on top unless included in the supplier\'s rate.',
+      'Rates vary by machine size, supplier, delivery distance, and whether attachments are included. Comparing multiple suppliers covering your postcode is the most reliable way to find a competitive rate. Tooli.uk shows available options across Leeds and the wider West Yorkshire area so you can compare before you book.',
   },
   {
     question: 'Can I hire tools in Leeds without a trade account?',
@@ -1205,9 +1172,9 @@ const leedsContent = (
 
 const glasgowFaqs = [
   {
-    question: 'How much does it cost to hire a mini digger in Glasgow?',
+    question: 'How do I find the best mini digger hire deal in Glasgow?',
     answer:
-      'Mini digger hire in Glasgow typically costs £165–£230 per day for a 0.8–1.5 tonne machine and £225–£320 per day for a 3 tonne machine (VAT inclusive). Weekend rates (Friday–Monday) work out cheaper per day than separate daily bookings. Weekly rates reduce the effective daily cost further — usually £490–£920 depending on size. Delivery charges apply on top unless included. Compare current rates across Glasgow suppliers on Tooli.uk before booking.',
+      'Rates vary by machine size, supplier, delivery distance, and whether attachments are included. Comparing suppliers covering your postcode before booking is the most reliable way to secure a competitive rate. Tooli.uk shows available options across Greater Glasgow and the surrounding area so you can compare and book with confidence.',
   },
   {
     question: 'Do I need a licence to operate a digger or excavator in Glasgow?',
@@ -1227,12 +1194,12 @@ const glasgowFaqs = [
   {
     question: 'Are scaffold towers available for weekend hire in Glasgow?',
     answer:
-      'Yes, widely. Most Glasgow-area suppliers offer Friday-to-Monday weekend hire on scaffold towers. A 4-metre aluminium tower typically costs £78–£115 for a weekend period (VAT inclusive). If the tower is being used on a construction site, the person erecting it must hold PASMA certification for mobile access towers. Confirm this at booking.',
+      'Yes, widely. Most Glasgow-area suppliers offer Friday-to-Monday weekend hire on scaffold towers. If the tower is being used on a construction site, the person erecting it must hold PASMA certification for mobile access towers. Confirm this at booking.',
   },
   {
-    question: "What's the cheapest tool hire in Glasgow for a single day?",
+    question: 'What is the best way to find affordable tool hire in Glasgow for a short job?',
     answer:
-      'Small tools — electric breakers, mixers, pressure washers, floor sanders — start from around £45–£52 per day (VAT inclusive) from Glasgow-area suppliers. Self-collection from a local depot saves the delivery charge, which is often £30–£60 on top for smaller bookings. Compare current one-day rates across suppliers on Tooli.uk for your exact equipment and postcode.',
+      'Self-collection from a local depot is often the most cost-effective option for short hires, as it avoids delivery charges. Comparing multiple suppliers for your specific equipment and postcode on Tooli.uk takes a couple of minutes and gives you a clear picture of what is available and at what total cost before you commit.',
   },
   {
     question: 'Does Glasgow have same-day tool hire available?',
@@ -1463,7 +1430,7 @@ const bristolFaqs = [
   {
     question: 'How much does mini digger hire cost in Bristol?',
     answer:
-      'Mini digger hire in Bristol typically costs £160–£225 per day for a 0.8–1.5 tonne machine, or £220–£315 per day for a 3 tonne machine (all prices VAT inclusive). A Friday-to-Monday weekend rate undercuts two separate day rates in most cases. A full week hire reduces the effective daily rate significantly — usually £485–£910 depending on machine size. Delivery charges apply on top unless included by the supplier. Use Tooli.uk to compare current rates across Bristol suppliers before booking.',
+      'Mini digger hire costs vary by machine size, supplier, and delivery distance. A Friday-to-Monday weekend rate typically undercuts two separate day rates, and full week hire reduces the effective cost further. Delivery charges may apply on top depending on the supplier. Use Tooli.uk to compare current rates across Bristol suppliers before booking.',
   },
   {
     question: 'Can I hire tools and plant in Bristol without a trade account?',
@@ -1478,7 +1445,7 @@ const bristolFaqs = [
   {
     question: "What's the cheapest tool hire in Bristol for a one-day job?",
     answer:
-      'Small tools — electric breakers, mixers, pressure washers, floor sanders — start from around £44–£55 per day (VAT inclusive) across Bristol-area suppliers. Self-collection from a local depot avoids the delivery surcharge (typically £30–£65 depending on equipment size and distance). Compare current single-day rates across suppliers for your postcode and equipment on Tooli.uk.',
+      'Self-collection from a local depot is often the most cost-effective option for a one-day job, as it avoids delivery charges. Comparing suppliers for your specific equipment and postcode on Tooli.uk takes only a couple of minutes and shows you the full range of available rates before you commit.',
   },
   {
     question: 'Do I need a licence to operate a mini digger in Bristol?',
@@ -1488,7 +1455,7 @@ const bristolFaqs = [
   {
     question: 'Are scaffold towers available for hire in Bristol?',
     answer:
-      'Yes. Scaffold tower hire is widely available across Bristol. A 4-metre aluminium tower costs approximately £76–£112 for a Friday-to-Monday weekend, VAT inclusive. Anyone erecting a mobile scaffold tower on a construction site must hold PASMA certification. Most suppliers will confirm whether the tower is PASMA-certified at the point of hire — if yours doesn\'t, ask.',
+      'Yes. Scaffold tower hire is widely available across Bristol. Anyone erecting a mobile scaffold tower on a construction site must hold PASMA certification. Most suppliers will confirm whether the tower is PASMA-certified at the point of hire — if yours doesn\'t, ask.',
   },
   {
     question: 'How far in advance do I need to book plant hire in Bristol?',
@@ -2051,7 +2018,7 @@ export const locationPages: LocationPageData[] = [
     title: 'Tool & Plant Hire Comparison in Manchester — Find the Best Price Before You Book',
     description:
       'Compare tool hire prices from suppliers across Greater Manchester in one place. No phone calls, no haggling — real rates from trusted local and national suppliers.',
-    image: '/images/hero.jpg',
+    image: '/images/manchester-hero.png',
     faqs: manchesterFaqs,
     content: manchesterContent,
   },
