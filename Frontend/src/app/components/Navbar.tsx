@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { ProfileModal } from './ProfileModal';
+import { locationNavItems } from '../data/locations';
 
 type NavbarUser = { name: string; avatar: string; role: string; email?: string };
 
@@ -129,6 +130,24 @@ export function Navbar() {
               <Link to="/help" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
                 Help
               </Link>
+              <Link to="/blog" className="text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors">
+                Blog
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-1 text-[15px] font-bold text-gray-900 hover:text-brand-primary transition-colors focus:outline-none">
+                    Locations
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="mt-2 w-48 rounded-xl border-gray-100">
+                  {locationNavItems.map((location) => (
+                    <DropdownMenuItem key={location.path} asChild className="cursor-pointer rounded-lg font-bold">
+                      <Link to={location.path}>{location.name}</Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
@@ -232,6 +251,22 @@ export function Navbar() {
               <Link to="/help" className="text-sm font-bold px-3 py-1.5 hover:bg-gray-50 rounded-lg flex items-center" onClick={() => setMobileMenuOpen(false)}>
                 Help
               </Link>
+              <Link to="/blog" className="text-sm font-bold px-3 py-1.5 hover:bg-gray-50 rounded-lg flex items-center" onClick={() => setMobileMenuOpen(false)}>
+                Blog
+              </Link>
+              <div className="px-3 pt-2 pb-1 text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">
+                Locations
+              </div>
+              {locationNavItems.map((location) => (
+                <Link
+                  key={location.path}
+                  to={location.path}
+                  className="text-sm font-bold px-3 py-1.5 hover:bg-gray-50 rounded-lg flex items-center"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {location.name}
+                </Link>
+              ))}
               
               <div className="h-px bg-gray-100 my-1 mx-3" />
               

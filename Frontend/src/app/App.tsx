@@ -12,6 +12,7 @@ import { SignupPage } from './pages/SignupPage';
 import { SuppliersPage } from './pages/SuppliersPage';
 import { HelpPage } from './pages/HelpPage';
 import { BlogPage, BlogPostPage } from './pages/BlogPage';
+import { LocationPage } from './pages/LocationPage';
 
 function DashboardSelector() {
   const role = localStorage.getItem('role_key');
@@ -41,6 +42,7 @@ export default function App() {
           <Route path="/help" element={<HelpPage />} />
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/locations/:slug" element={<LocationPage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

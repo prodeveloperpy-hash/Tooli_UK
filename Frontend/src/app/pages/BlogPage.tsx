@@ -931,6 +931,9 @@ export function BlogPage() {
       <PageMeta
         title="Tooli UK Blog: Tool Hire & Plant Hire Guides | Tooli UK"
         description="Guides, pricing breakdowns and local hire comparisons from Tooli UK. Compare construction equipment and plant hire suppliers across the UK."
+        canonicalUrl="https://www.tooli.uk/blog"
+        image="https://www.tooli.uk/images/blog/tool-hire-comparison-uk.png"
+        type="blog"
         jsonLd={indexSchema}
       />
 
@@ -1013,7 +1016,15 @@ export function BlogPostPage() {
 
   return (
     <div className="w-full bg-white">
-      <PageMeta title={post.metaTitle} description={post.metaDescription} jsonLd={buildPostSchema(post)} />
+      <PageMeta
+        title={post.metaTitle}
+        description={post.metaDescription}
+        canonicalUrl={`https://www.tooli.uk/blog/${post.slug}`}
+        image={`https://www.tooli.uk${post.image}`}
+        type="article"
+        publishedTime={post.datePublished}
+        jsonLd={buildPostSchema(post)}
+      />
 
       <section className="bg-[#F8F9FC] py-10 md:py-16">
         <div className="container mx-auto px-4">
