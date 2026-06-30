@@ -1203,6 +1203,262 @@ const leedsContent = (
   </>
 );
 
+const glasgowFaqs = [
+  {
+    question: 'How much does it cost to hire a mini digger in Glasgow?',
+    answer:
+      'Mini digger hire in Glasgow typically costs £165–£230 per day for a 0.8–1.5 tonne machine and £225–£320 per day for a 3 tonne machine (VAT inclusive). Weekend rates (Friday–Monday) work out cheaper per day than separate daily bookings. Weekly rates reduce the effective daily cost further — usually £490–£920 depending on size. Delivery charges apply on top unless included. Compare current rates across Glasgow suppliers on Tooli.uk before booking.',
+  },
+  {
+    question: 'Do I need a licence to operate a digger or excavator in Glasgow?',
+    answer:
+      'No licence is required to operate a mini digger on private land in Scotland. However, CPCS (Construction Plant Competence Scheme) certification is required when operating on public roads, regulated construction sites, or any site where the Principal Contractor specifies it. Under PUWER, all operators must be demonstrably competent regardless of CPCS card status.',
+  },
+  {
+    question: 'What postcodes in Glasgow do tool hire suppliers cover?',
+    answer:
+      'Most suppliers compared on Tooli.uk cover the full G postcode range (G1–G78) plus adjacent areas including Paisley (PA1–PA3), East Kilbride (G74–G75), Rutherglen (G73), and Hamilton (ML3). Delivery availability and surcharges vary by supplier and distance. Tooli.uk shows delivery cost and coverage for your specific postcode at comparison stage.',
+  },
+  {
+    question: 'Can I hire tools in Glasgow without a trade account?',
+    answer:
+      "Yes. All suppliers on the Tooli.uk platform accept bookings from private individuals and homeowners, no trade account required. You'll need valid ID and a payment card. A trade account may offer credit terms and a discount, but it is never a prerequisite for hiring.",
+  },
+  {
+    question: 'Are scaffold towers available for weekend hire in Glasgow?',
+    answer:
+      'Yes, widely. Most Glasgow-area suppliers offer Friday-to-Monday weekend hire on scaffold towers. A 4-metre aluminium tower typically costs £78–£115 for a weekend period (VAT inclusive). If the tower is being used on a construction site, the person erecting it must hold PASMA certification for mobile access towers. Confirm this at booking.',
+  },
+  {
+    question: "What's the cheapest tool hire in Glasgow for a single day?",
+    answer:
+      'Small tools — electric breakers, mixers, pressure washers, floor sanders — start from around £45–£52 per day (VAT inclusive) from Glasgow-area suppliers. Self-collection from a local depot saves the delivery charge, which is often £30–£60 on top for smaller bookings. Compare current one-day rates across suppliers on Tooli.uk for your exact equipment and postcode.',
+  },
+  {
+    question: 'Does Glasgow have same-day tool hire available?',
+    answer:
+      'Same-day collection is available from several Glasgow depots, subject to stock. This works best for common small tools (breakers, mixers, pressure washers). For plant hire (diggers, dumpers, access platforms), same-day is less reliable — 24–48 hours\' notice is the realistic minimum, and longer during busy spring and summer periods.',
+  },
+  {
+    question: 'Do I need an IPAF card to hire a cherry picker in Glasgow?',
+    answer:
+      "Yes. If you're operating a powered access platform (MEWP) on a construction site or commercial project, a valid IPAF PAL card for the relevant platform category is the industry-standard requirement. Reputable Glasgow suppliers will ask to see this at the point of hire. For domestic homeowner use on private land, legal requirements differ — but safe operation training is strongly recommended regardless.",
+  },
+];
+
+const glasgowContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Glasgow: Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Tool hire prices in Glasgow vary by supplier — sometimes by 25–35% for identical kit on the same day. Tooli.uk compares rates across local independents and national chains covering G1 through to G78, Govan, Partick, Shettleston, Rutherglen, and the wider Greater Glasgow area. Glasgow's construction market is one of the busiest in Scotland right now, with over £1.2 billion in building warrant activity recorded in 2024–25 alone. Whether you're a groundworker on a Clyde Gateway scheme or a homeowner tackling a garage conversion in Bearsden — find the best price here before you book.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Why Tool Hire Costs Vary Across Glasgow</H2>
+      <Paragraph>
+        Glasgow is a geographically spread city. A national chain depot in the city centre (G1–G5) charges full rack rate. A regional independent in Blantyre, Rutherglen, or Paisley is often 20–30% cheaper for the same day hire — especially if you're prepared to self-collect.
+      </Paragraph>
+      <Paragraph>
+        Rate variation also depends on timing. Glasgow's construction calendar peaks in spring and late summer. Building warrant activity across Glasgow doubled in a single year, hitting £1.2 billion in 2024–25 — and that volume of live site work keeps plant and tool hire in tight supply during peak months. Book ahead on anything with wheels or tracks.
+      </Paragraph>
+      <Paragraph>
+        Tooli.uk pulls rates from suppliers across the Greater Glasgow area so you're seeing the actual market rate — not a brochure figure from one depot.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Glasgow's Construction Boom — What's Driving Hire Demand</H2>
+      <Paragraph>Glasgow is mid-cycle in one of its biggest urban transformation programmes in decades — and that keeps demand for plant, access equipment, and site tools consistently high.</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">City centre regeneration</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The £21.3 million Avenues Plus programme is fully underway across the eastern, northern, and southern fringes of the city centre, covering Duke Street, Cowcaddens Road, and Stockwell Street. The wider £123 million Avenues programme has four fully completed streets and a further seven under construction. Highway and streetscape schemes generate steady demand for compaction equipment, concrete saws, and temporary works gear.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Residential development</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The Shawlands Regeneration Phase 1 (329 apartments, £150m) and Lancefield Quay Phase 1 (409 apartments, £100m) are among the highest-value active projects in the city. These large-volume residential schemes keep mini diggers, dumpers, and access platforms in high demand throughout the project lifecycle.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Student accommodation</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The 172–184 Sauchiehall Street conversion to 620-bed student accommodation (£72m) and Unite Students' Central Quay development alongside Kingston Bridge represent a significant pipeline. Demolition, groundworks, and fit-out trades are all active across these sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">East End and Clyde Gateway</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Clyde Gateway has begun construction on the £11 million XWORKS development in Dalmarnock, part of an ongoing long-term regeneration programme across the east end. Groundwork and civils kit — diggers, compactors, pumps — is in regular demand across this corridor.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Homeowner market</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Glasgow has a large stock of pre-1919 red sandstone tenements, particularly in Partick, Govan, Shettleston, and Dennistoun. Renovation, window replacement, and internal remodelling work runs year-round and drives strong demand for breakers, mixers, floor sanders, dehumidifiers, and access equipment.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Most-Hired Equipment in Glasgow — By Trade and Area</H2>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civil contractors (G32, G40, G45 — East End and South Side)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Mini diggers, dumpers, trench rammers, wacker plates, and pumps. East End regeneration schemes and the Clyde Gateway corridor generate consistent plant hire demand year-round.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and extension contractors (G11, G12, G13 — West End and Partick)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, concrete mixers, electric breakers, and skip loaders. The West End has a high volume of Victorian and Edwardian property renovation — basement conversions, kitchen extensions, loft works.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers and groundworks contractors (G61, G62 — Bearsden, Milngavie)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Mini diggers (1.5 t tracked), rotary cultivators, turf cutters, wood chippers, and wacker plates. Spring and early summer are peak seasons — demand spikes from March through June.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers and cladding contractors (G21, G33 — Springburn, Carntyne)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, safety harness kits, roof ladders, and access platforms. PASMA-compliant towers required; confirm supplier certification before booking.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Plasterers and drylining trades (G1–G5 — city centre, Tradeston)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Paddle mixers, stilts, dehumidifiers, and drywall lifters. City-centre jobs often need fast-access short-notice daily hires — check depot opening times before booking.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and homeowners (G20, G23 — Maryhill, Bishopbriggs)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Steam wallpaper strippers, floor sanders, carpet lifters, and pressure washers. Weekend availability is the priority for this group — Saturday pickup, Monday return.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">MEWPs and access platforms (across all commercial zones)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Glasgow's ongoing commercial and mixed-use development keeps cherry picker and scissor lift hire in steady demand. Valid IPAF PAL card required — confirm category before booking.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery and Collection Across Greater Glasgow</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Self-collection from depot</p>
+          <Paragraph>Most city-area depots open from 07:00–07:30 Monday to Friday and 07:30–08:00 Saturday. Inner-city postcodes (G1–G5, G11–G14) have the best depot density. Self-collection typically saves the delivery charge and sometimes a small discount on the day rate.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Delivery to site</p>
+          <Paragraph>Next-morning delivery is standard for inner Glasgow postcodes. Outer areas — Bearsden, Milngavie, East Kilbride, Hamilton, Paisley — usually require 24–48 hours' notice, especially for large plant.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend hire</p>
+          <Paragraph>Widely available. A Friday-to-Monday weekend rate almost always undercuts two separate day rates. Some suppliers will negotiate a Monday-morning return to 08:30 to save you returning on Sunday.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Long-term and on-site hire</p>
+          <Paragraph>Weekly and monthly rates are available from most suppliers and suit plant that's staying on-site throughout a groundwork or renovation project. Ask about swap-out arrangements on longer hires.</Paragraph>
+        </div>
+      </div>
+      <Paragraph>Delivery charges and included distances vary by supplier. Tooli.uk shows the total cost including delivery so there are no surprises at checkout.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Scottish Regulations — What Glasgow Hirers Need to Know</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">PUWER (Provision and Use of Work Equipment Regulations 1998)</p>
+          <Paragraph>Applies across Scotland. All hired equipment must be suitable for purpose, properly maintained, and operated only by competent persons. This responsibility sits with the hirer from the moment the equipment leaves the depot.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">LOLER (Lifting Operations and Lifting Equipment Regulations 1998)</p>
+          <Paragraph>Covers all lifting equipment including cherry pickers, telehandlers, and hoists. Pre-use inspections and thorough examination certificates are required. Suppliers should provide examination records — if they don't, ask.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Working at Height Regulations 2005</p>
+          <Paragraph>Applies in Scotland identically to the rest of the UK. Scaffold towers must be erected by competent persons. PASMA certification covers mobile access towers. For powered access (MEWPs), a valid IPAF PAL card is required for the category of machine being used.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">CDM 2015 (Construction Design and Management Regulations)</p>
+          <Paragraph>Any Glasgow project that is notifiable (more than 30 working days with more than 20 simultaneous workers, or exceeding 500 person-days) requires a Principal Designer and Principal Contractor. Hired plant on notifiable sites must be tracked under the construction phase plan.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">HSE Noise Regulations (CONAW 2005)</p>
+          <Paragraph>Petrol breakers, disc cutters, and compaction equipment regularly exceed the lower action value of 80 dB(A). Glasgow city-centre sites are subject to local authority noise restrictions. Check before operating during early morning or evening hours.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trade Accounts — Worth It for Glasgow Tradespeople?</H2>
+      <Paragraph>
+        If you're hiring three or more times a month, a trade account with a Glasgow depot usually delivers 10–15% off rack rate, 30-day invoiced terms, and priority booking during peak periods. Most national chains (HSS, Speedy, Brandon Hire Station) and several Glasgow independents offer trade accounts — typically requiring a credit check and trade-registered business details.
+      </Paragraph>
+      <Paragraph>
+        The catch: a trade account locks you into one supplier's rate. Before assuming your account rate is competitive, compare it against the wider Glasgow market on Tooli.uk. You may find an independent 15 minutes away running 20% under your account rate for the same kit.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Glasgow Weather and Seasonal Hire Patterns</H2>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Spring (March–May)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Groundwork, landscaping, and drainage projects surge. Mini diggers, dumpers, and wacker plates book out fast from mid-March. Book at least 48–72 hours ahead on plant during this period.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Summer (June–August)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold tower and access platform demand peaks alongside roofing, rendering, and external decorating. Dry weather extends working days but also concentrates demand.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Autumn (September–October)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">A second busy period for Glasgow groundworkers, often completing projects before ground conditions deteriorate. Diggers, compactors, and dumpers stay in demand.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Winter (November–February)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Dehumidifiers, site heaters, lighting towers, and welfare units are the priority hires. Glasgow winters are wet and mild rather than frozen — ground conditions vary week to week. Pumping equipment is regularly needed on waterlogged sites.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in Glasgow</H2>
+      <Paragraph>Tooli.uk compares tool and plant hire for all trades operating across Glasgow and Greater Glasgow:</Paragraph>
+      <BulletList
+        items={[
+          'Groundworkers and civil engineering contractors',
+          'Builders, developers, and general contractors',
+          'Landscapers and garden design contractors',
+          'Plasterers and rendering specialists',
+          'Roofers, slaters, and cladding contractors',
+          'Electricians and M&E contractors',
+          'Decorators and interior fit-out trades',
+          'Scaffolding contractors',
+          'Homeowners, self-builders, and renovation project managers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Glasgow Tool Hire: Neighbouring Areas Covered</H2>
+      <Paragraph>Tooli.uk covers surrounding towns and areas from the same Glasgow supplier network:</Paragraph>
+      <BulletList
+        items={[
+          'Paisley (PA1–PA3)',
+          'East Kilbride (G74–G75)',
+          'Rutherglen (G73)',
+          'Hamilton (ML3)',
+          'Motherwell (ML1)',
+          'Bearsden (G61)',
+          'Clydebank (G81)',
+          'Dumbarton (G82)',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Glasgow</H2>
+      <div className="grid gap-4">
+        {glasgowFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -1263,6 +1519,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/leeds-hero.webp',
     faqs: leedsFaqs,
     content: leedsContent,
+  },
+  {
+    slug: 'glasgow',
+    name: 'Glasgow',
+    path: '/locations/glasgow',
+    metaTitle: 'Tool Hire Glasgow | Compare Prices From Local Suppliers | Tooli.uk',
+    metaDescription:
+      'Compare tool hire prices from local independents and national chains across Greater Glasgow. Find the best rates on mini diggers, scaffold towers, breakers, and more. No booking fees. VAT inclusive.',
+    canonicalUrl: 'https://www.tooli.uk/locations/glasgow',
+    title: 'Tool Hire in Glasgow: Compare Prices From Local Suppliers',
+    description:
+      "Compare tool hire rates across local independents and national chains covering G1 through to G78, Govan, Partick, Shettleston, Rutherglen, and the wider Greater Glasgow area.",
+    image: '/images/glasgow-hero.webp',
+    faqs: glasgowFaqs,
+    content: glasgowContent,
   },
 ];
 
