@@ -9,6 +9,7 @@ type LocationPageData = {
   canonicalUrl: string;
   title: string;
   description: string;
+  image: string;
   faqs: Array<{ question: string; answer: string }>;
   content: ReactNode;
 };
@@ -781,6 +782,214 @@ const manchesterContent = (
   </>
 );
 
+const birminghamFaqs = [
+  {
+    question: 'How much does it cost to hire a mini digger in Birmingham?',
+    answer:
+      'Based on Tooli.uk network data, a 1.5-tonne tracked mini digger in Birmingham costs [DATA] per day including VAT. Prices vary by supplier, delivery distance, and attachment. Compare current rates across Birmingham-area suppliers on Tooli.uk.',
+  },
+  {
+    question: 'Which tool hire companies cover Birmingham?',
+    answer:
+      "Birmingham is served by national chains including HSS Hire, Speedy Services, Brandon Hire Station, and Sunbelt Rentals, alongside West Midlands independent hire yards. Tooli.uk compares prices across the network so you see all available options for your postcode and dates in a single search.",
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Birmingham?',
+    answer:
+      "No licence is legally required to operate a mini digger on private land. On commercial sites, operators should hold a CPCS (Construction Plant Competence Scheme) or equivalent card. Operators on public contracts or council works are almost always required to hold CPCS. The Health and Safety Executive's PUWER regulations require that anyone operating plant must be competent to do so safely, regardless of site type.",
+  },
+  {
+    question: 'Does Birmingham have a Clean Air Zone affecting hired plant?',
+    answer:
+      "Yes. Birmingham's Clean Air Zone covers the area within the A4540 Middleway. Commercial vehicles that don't meet Euro 6 (diesel) or Euro 3 (petrol) standards face a daily charge. When hiring plant delivered by vehicle into this zone, confirm with your supplier that their delivery fleet is CAZ-compliant. Most national depots operate compliant vehicles; check with independents.",
+  },
+  {
+    question: 'Can I hire tools in Birmingham at the weekend?',
+    answer:
+      'Yes. Most Birmingham-area suppliers offer Saturday delivery and collection, with some offering Sunday returns. Weekend hire packages (Friday to Monday) often represent better value than separate day rates. Weekend availability is limited during peak spring and summer months — book at least five working days ahead for Saturday delivery to avoid disappointment.',
+  },
+  {
+    question: 'Do Birmingham tool hire companies deliver to Solihull and the Black Country?',
+    answer:
+      "Most do, though delivery charges and lead times vary by distance from the depot. Tooli.uk shows delivery charges alongside hire rates so you can compare total costs, not just day rates. Solihull (B90–B94), Wolverhampton (WV1–WV14), and Dudley (DY1–DY9) are all within our supplier network's standard coverage area.",
+  },
+  {
+    question: 'Can a homeowner hire tools in Birmingham, or is it trade only?',
+    answer:
+      "Any adult can hire tools and equipment in Birmingham — no trade account or CSCS card required for general tools and most plant. You'll typically need a valid photo ID and a credit or debit card to cover the damage deposit. For larger plant (telehandlers, larger excavators, MEWPs), some suppliers require proof of operator competency.",
+  },
+  {
+    question: 'What should I check when a hired machine is delivered?',
+    answer:
+      'Inspect the machine before the delivery driver leaves. Check for pre-existing damage, fuel or oil levels, and confirm that all safety features (seatbelt, ROPS bar on diggers, alarm on MEWPs) are functional. Note any existing damage in writing and photograph it. This protects you from being charged for damage you did not cause on return.',
+  },
+];
+
+const birminghamContent = (
+  <>
+    <Section>
+      <H2>Compare Tool & Plant Hire Prices in Birmingham</H2>
+      <Paragraph>
+        Birmingham is one of the busiest construction cities in the UK outside London, and tool hire prices here vary more than most tradespeople expect. Tooli.uk compares rates from suppliers across the West Midlands in one place — no ringing round depots, no waiting for callbacks, no surprise extras on the invoice. Whether you're groundworking in Erdington, landscaping in Sutton Coldfield, or running a refurb in Digbeth, find the right kit at the right price and get on with the job.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Why Compare Tool Hire in Birmingham?</H2>
+      <Paragraph>
+        Birmingham is the UK's second-largest city by population and one of its most active construction markets. The Big City Plan — the largest city-centre regeneration project in UK history — has driven sustained demand for plant and equipment hire across the inner ring and beyond. Add in HS2 groundworks, the Midlands Metro expansion, and thousands of residential extensions and new builds across Solihull, Sutton Coldfield, and the Black Country, and you've got a hire market where kit is in constant demand and prices shift regularly.
+      </Paragraph>
+      <Paragraph>
+        That competition between suppliers should work in your favour. But only if you know what everyone's charging. Same machine. Same job. Different invoice. Tooli.uk puts those numbers side by side so you can make an informed decision, not just a quick one.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Birmingham's Tool Hire Suppliers — The Honest Picture</H2>
+      <Paragraph>
+        Greater Birmingham is well served by national chains and a solid network of West Midlands independents. Here's what's out there.
+      </Paragraph>
+      <H3>National Chains With Birmingham Depots</H3>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">HSS Hire</p>
+          <Paragraph>Has multiple points of service across Birmingham and the West Midlands. Online booking works well for standard power tools and access equipment. Trade counter stock and availability can vary across branches — worth confirming before you travel.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Speedy Services</p>
+          <Paragraph>Has good West Midlands coverage and is a reasonable choice for account customers on larger projects. Particularly strong on plant and welfare units for commercial sites.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Brandon Hire Station</p>
+          <Paragraph>Operates across the region and tends to be competitive on access equipment and power tools. Worth including in any comparison for smaller kit.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">A-Plant (now Sunbelt Rentals)</p>
+          <Paragraph>Has a significant presence in the Midlands, particularly for larger plant and specialist equipment. Worth checking for telescopic handlers, road rollers, and excavators above 3 tonnes.</Paragraph>
+        </div>
+      </div>
+      <H3>What Tooli.uk Does Differently</H3>
+      <Paragraph>
+        None of those companies shows you what the others charge. You'd need four browser tabs, two phone calls, and a fair amount of patience to get a complete picture. Tooli.uk does it in one search. You compare what's available for your postcode and your dates, then click straight through to book with the supplier you choose. We don't mark up prices. We don't take a booking fee. We're a comparison platform — our job ends when you've found the best deal.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Birmingham Postcodes We Cover</H2>
+      <Paragraph>Tooli.uk's supplier network covers all Birmingham and West Midlands postcodes, including:</Paragraph>
+      <BulletList
+        items={[
+          'Birmingham city & inner areas: B1–B20 (City Centre, Digbeth, Erdington, Handsworth, Aston, Newtown, Perry Barr, Witton, Lozells)',
+          'South Birmingham: B14, B28, B30, B31 (Kings Heath, Hall Green, Stirchley, Northfield, Longbridge)',
+          'East Birmingham: B8, B9, B10, B11, B25, B26, B33 (Bordesley, Small Heath, Sparkhill, Stechford, Sheldon, Kitts Green)',
+          'West Birmingham / Black Country borders: B65, B66, B68, B69 (Rowley Regis, Smethwick, Oldbury, Tipton)',
+          'Sutton Coldfield & north: B72, B73, B74, B75, B76 (Four Oaks, Mere Green, Walmley, Minworth)',
+          'Solihull: B90, B91, B92, B93, B94 (Shirley, Solihull, Olton, Knowle, Balsall Common)',
+          'Wolverhampton: WV1–WV14',
+          'Coventry: CV1–CV8',
+          'Walsall: WS1–WS12',
+          'Dudley: DY1–DY9',
+        ]}
+      />
+      <Paragraph>
+        If your postcode isn't listed, run a search on Tooli.uk — our network extends into Staffordshire, Worcestershire, and Warwickshire borders.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in Birmingham</H2>
+      <Paragraph>Birmingham's trades market is as diverse as the city. Tooli.uk is built for all of them.</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civil contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">HS2 enabling works, Midlands Metro infrastructure, and dense residential development across Sutton Coldfield and Solihull keep groundworkers stretched. Mini diggers, dumpers, vibrating rollers, and compaction equipment are the core hire items.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The large private gardens of Sutton Coldfield, Edgbaston, and Solihull generate steady commercial landscaping work. Mini diggers, skid steers, rotavators, and grab lorries.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and main contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">From terraced house extensions in Handsworth to new-build residential across the Worcestershire border. Every category of kit.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Plasterers and drylining contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Birmingham's ongoing apartment conversion market (particularly around Jewellery Quarter, Digbeth, and Brindleyplace) keeps this trade in work. Scaffold towers, mixing equipment, dehumidifiers, and industrial fans.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Serving Birmingham's dense Victorian terrace stock across Moseley, Kings Heath, Erdington, and Bournville. Access towers, materials hoists, and safety equipment.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and refurb contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Short-term residential refurbs, HMO conversions, and commercial fit-outs across the city. Scaffold towers, floor sanders, pressure washers, and steam strippers.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Electricians and plumbers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">First and second fix across new residential and commercial. Core drills, pipe freezing kits, and cable pull systems.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Homeowners and serious DIYers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Sutton Coldfield, Moseley, Harborne, and Edgbaston have a high concentration of owner-occupiers running significant self-managed projects. Weekend hire is consistently in demand.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>How to Compare Tool Hire in Birmingham on Tooli.uk</H2>
+      <Paragraph>No sign-up required. Here's how it works:</Paragraph>
+      <StepList
+        steps={[
+          'Enter the equipment you need (e.g. "mini digger" or "scaffold tower")',
+          'Enter your postcode or area (e.g. B15 or Edgbaston)',
+          'Select your hire dates',
+          'Compare available suppliers and prices side by side',
+          'Click through to book directly with your chosen supplier',
+        ]}
+      />
+      <Paragraph>No booking fees. No price mark-up. No third-party calls. Tooli.uk is a free comparison service.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Birmingham-Specific Notes for Hirers</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">City centre access and delivery</p>
+          <Paragraph>Birmingham city centre has restricted loading zones, one-way systems, and active tram infrastructure around the Midland Metro route on Corporation Street and Grand Central. If you're delivering plant to a B1–B5 postcode, confirm vehicle access routes and delivery windows with the supplier before booking. Early morning deliveries (before 7:30 a.m.) often avoid the worst of it.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">HS2 and major infrastructure impact</p>
+          <Paragraph>HS2 demolition and enabling works across Digbeth, Bordesley, and the eastern ring have closed or restricted several routes into the city. This can affect delivery lead times from depots on the south and east sides. Build in an extra half-day lead time for city-centre and inner-ring deliveries when HS2 work is active on your route.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">West Midlands Clean Air Zone</p>
+          <Paragraph>Birmingham's CAZ is one of the UK's most established, covering the city centre within the A4540 Middleway ring road. Commercial vehicles rated below Euro 6 (diesel) or Euro 3 (petrol) face a daily charge. When hiring diesel plant vehicles for delivery into the CAZ, confirm your supplier's fleet compliance. Most national chains operate compliant vehicles; verify with independents.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Spring and summer peak demand</p>
+          <Paragraph>The combination of Birmingham's large owner-occupier suburbs and high landscaping demand means mini diggers and access equipment book out fast between April and September, particularly for weekends. For Saturday delivery, book at least five working days ahead. Bank holiday weekends: two weeks minimum.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Red soil and clay ground conditions</p>
+          <Paragraph>Large parts of Birmingham and Solihull sit on Mercia Mudstone and Keuper Marl — heavy, sticky clay that becomes waterlogged quickly. On landscaping and groundworks jobs from October to March, specify tracked plant rather than wheeled wherever possible. Factor in extra time for spoil removal — clay is heavy and compresses differently to sandy soil.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Birmingham</H2>
+      <div className="grid gap-4">
+        {birminghamFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -793,6 +1002,7 @@ export const locationPages: LocationPageData[] = [
     title: 'Compare Tool & Plant Hire Prices in London – Find the Cheapest Rates Fast',
     description:
       'Compare tool hire and plant hire prices from local independent depots alongside national hire companies serving Greater London.',
+    image: '/images/london-hero.webp',
     faqs: londonFaqs,
     content: londonContent,
   },
@@ -807,8 +1017,24 @@ export const locationPages: LocationPageData[] = [
     title: 'Tool & Plant Hire Comparison in Manchester — Find the Best Price Before You Book',
     description:
       'Compare tool hire prices from suppliers across Greater Manchester in one place. No phone calls, no haggling — real rates from trusted local and national suppliers.',
+    image: '/images/hero.jpg',
     faqs: manchesterFaqs,
     content: manchesterContent,
+  },
+  {
+    slug: 'birmingham',
+    name: 'Birmingham',
+    path: '/locations/birmingham',
+    metaTitle: 'Tool & Plant Hire Birmingham | Compare Prices from Local Suppliers',
+    metaDescription:
+      'Compare tool hire and plant hire prices across Birmingham and the West Midlands from trusted local suppliers and national hire companies. Find the cheapest rates on mini diggers, scaffold towers, dumpers, generators, and more. No booking fees.',
+    canonicalUrl: 'https://www.tooli.uk/locations/birmingham',
+    title: 'Tool & Plant Hire Comparison in Birmingham — Compare Prices Before You Book',
+    description:
+      'Compare tool hire rates from suppliers across the West Midlands in one place. No ringing round depots, no callbacks, no surprise extras — just real prices side by side.',
+    image: '/images/birmingham-hero.webp',
+    faqs: birminghamFaqs,
+    content: birminghamContent,
   },
 ];
 

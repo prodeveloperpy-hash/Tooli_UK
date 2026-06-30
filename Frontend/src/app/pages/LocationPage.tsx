@@ -83,7 +83,7 @@ export function LocationPage() {
         title={page.metaTitle}
         description={page.metaDescription}
         canonicalUrl={page.canonicalUrl}
-        image="https://www.tooli.uk/images/hero.jpg"
+        image={`https://www.tooli.uk${page.image}`}
         type="website"
         jsonLd={buildLocationSchema(page)}
       />
@@ -125,8 +125,8 @@ export function LocationPage() {
             </div>
 
             <img
-              src="/images/hero.jpg"
-              alt="Construction equipment available for hire in London"
+              src={page.image}
+              alt={`Construction equipment available for hire in ${page.name}`}
               className="aspect-[4/3] w-full rounded-2xl border border-gray-100 bg-white object-cover shadow-sm"
             />
           </div>
