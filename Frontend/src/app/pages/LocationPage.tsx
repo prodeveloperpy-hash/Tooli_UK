@@ -127,7 +127,7 @@ export function LocationPage() {
             <img
               src={page.image}
               alt={`Construction equipment available for hire in ${page.name}`}
-              className="aspect-[4/3] w-full rounded-2xl border border-gray-100 bg-white object-cover shadow-sm"
+              className="w-full rounded-2xl border border-gray-100 bg-gray-900 object-contain shadow-sm"
             />
           </div>
         </div>

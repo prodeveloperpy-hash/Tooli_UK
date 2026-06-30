@@ -990,6 +990,219 @@ const birminghamContent = (
   </>
 );
 
+const leedsFaqs = [
+  {
+    question: 'How much does it cost to hire a mini digger in Leeds?',
+    answer:
+      'Mini digger hire in Leeds costs between £160 and £310 per day (VAT inclusive), depending on machine size. A 0.8–1.5 tonne micro digger typically runs £160–£220/day; a 3 tonne machine is £220–£310/day. Weekly rates drop the effective daily cost considerably — usually £480–£900 for a full week depending on size. Delivery charges apply on top unless included in the supplier\'s rate.',
+  },
+  {
+    question: 'Can I hire tools in Leeds without a trade account?',
+    answer:
+      "Yes. All suppliers compared on Tooli.uk accept bookings from private individuals, homeowners, and tradespeople without a pre-existing account. You'll typically need a valid ID and a payment card. Trade accounts offer benefits (credit terms, discounts) but are not required to hire.",
+  },
+  {
+    question: 'Do Leeds tool hire suppliers deliver on weekends?',
+    answer:
+      'Most do, yes. Saturday delivery is widely available across Leeds postcodes. Some suppliers offer a Friday-to-Monday weekend rate that works out cheaper than paying separate day rates for Saturday and Sunday. Sunday delivery is less common — confirm at booking.',
+  },
+  {
+    question: 'What tool hire suppliers operate in Leeds?',
+    answer:
+      'Leeds is served by national chains (HSS Hire, Speedy Services, Brandon Hire Station, Jewson Tool Hire) and regional independents. Coverage spans city-centre depots (LS1–LS4) through to outer-ring locations serving Morley, Pudsey, Wetherby, and Garforth. Tooli.uk compares rates across suppliers currently active in the Leeds area.',
+  },
+  {
+    question: 'Do I need a licence or certification to hire a digger in Leeds?',
+    answer:
+      'No licence is legally required to operate a mini digger on private land in the UK. However, CPCS (Construction Plant Competence Scheme) certification is required if operating on public roads or regulated construction sites. For any hired plant, PUWER requires that the operator is competent — meaning you have the knowledge and practical ability to use the machine safely. Untrained operation is both a legal risk and a safety issue.',
+  },
+  {
+    question: "What's the cheapest tool hire option in Leeds for a one-day job?",
+    answer:
+      'For small tools (breakers, mixers, pressure washers), day rates typically start around £45–£75 (VAT inclusive). If your job is within range of a depot, self-collection saves the delivery charge and sometimes gets you a slightly better rate. Compare on Tooli.uk to see who\'s cheapest for your specific postcode and equipment.',
+  },
+  {
+    question: 'Can I hire a scaffold tower in Leeds for a weekend?',
+    answer:
+      'Yes. Scaffold towers are widely available on weekend hire across Leeds. A 4-metre aluminium tower typically runs £75–£110 for a Friday-to-Monday period. Make sure the tower you hire is PASMA-compliant and that the person erecting it has completed PASMA training if it\'s going to be used on a construction site.',
+  },
+  {
+    question: 'How far in advance do I need to book plant hire in Leeds?',
+    answer:
+      'For small tools and standard equipment, 24–48 hours is usually sufficient. For large plant (3+ tonne diggers, larger access platforms, telehandlers), 48–72 hours is recommended — especially in spring and summer when availability tightens. Last-minute hires are possible but selection and pricing are less favourable.',
+  },
+];
+
+const leedsContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Leeds: Compare Local Prices Before You Book</H2>
+      <Paragraph>
+        Tool hire prices in Leeds vary significantly depending on which supplier you call first — sometimes by 30% or more for the same piece of kit. Tooli.uk compares rates from local and national suppliers covering LS1 through to LS28, Morley, Horsforth, Rothwell, and beyond. Whether you're a groundworker pricing up a job in Beeston, a builder on a new-build in Garforth, or a homeowner cracking on with a driveway in Headingley — you'll find the best available price here without ringing round.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Why Tool Hire Prices Vary So Much Across Leeds</H2>
+      <Paragraph>
+        Leeds is a big city — and hire costs reflect that. A national chain depot in the city centre (LS1–LS3 corridor) might charge full rack rate. A regional independent in Morley or Seacroft might be 20–25% cheaper for the same day rate, with free delivery thrown in for jobs over two days.
+      </Paragraph>
+      <Paragraph>
+        The rate also shifts depending on what's on hire. Demand spikes in spring (April–June) and September, when groundwork, landscaping, and roofing projects surge across South Leeds and the outer suburbs. Book ahead or prices and availability tighten fast.
+      </Paragraph>
+      <Paragraph>
+        Tooli.uk pulls live-updated pricing from suppliers across the Leeds area so you compare the actual rate — not a brochure figure.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Most-Hired Equipment in Leeds — By Trade</H2>
+      <Paragraph>Different trades dominate different postcodes across Leeds. Here's what gets hired most by each.</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and landscapers (LS10, LS11, South Leeds)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Mini diggers, dumpers, wacker plates, plate compactors, and trench rammers lead the list. Spring through summer is the peak season. Delivery to sites off the M62 and M621 corridors is typically next-morning.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and extension contractors (LS16, LS17, North Leeds)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, electric breakers, concrete mixers, and skip loaders. North Leeds has a high volume of Victorian semi and terrace extension work running most of the year.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Plasterers and drylining contractors (LS6, LS7, inner Leeds)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Paddle mixers, stilts, drywall lifters, and dehumidifiers for drying out after rendering. Fast-access city-centre depots suit these short-notice daily hires.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and homeowners (LS8, LS9, Harehills, Roundhay)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Steam wallpaper strippers, floor sanders, carpet lifters, skip bags, and pressure washers. Weekend availability is key for this group — most want Saturday pickup, Sunday return.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers (LS12, LS13, Armley, Bramley)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Scaffold towers, safety harness kits, roof ladders, and lead working tools. PASMA-compliant towers are required for safe working-at-height — check supplier certification at booking.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery and Collection Across Leeds</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Collection from depot</p>
+          <Paragraph>Same-day in most cases. City-centre depots (LS1–LS4) typically have drop-in counters open from 07:00.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Delivery to site</p>
+          <Paragraph>Next-morning delivery is standard across inner Leeds postcodes. Outer areas (Wetherby, Otley, Guiseley) may require 24–48 hours' notice.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend hires</p>
+          <Paragraph>Widely available. Friday-to-Monday weekend rates are offered by most suppliers — often better value than two separate day rates.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Long-term hire</p>
+          <Paragraph>Weekly and monthly rates available for equipment staying on-site. Ask suppliers about swap-out options for extended groundwork or renovation projects.</Paragraph>
+        </div>
+      </div>
+      <Paragraph>Delivery charges vary. Some suppliers include free delivery on hires over £150/day or within a set radius of their depot. Tooli.uk shows total cost including delivery so there are no surprises.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Tool Hire for Leeds Tradespeople — Trade Accounts</H2>
+      <Paragraph>If you're hiring regularly, a trade account with a local supplier cuts admin time and often unlocks 10–15% off rack rate. Most Leeds-area depots — national chains included — offer:</Paragraph>
+      <BulletList items={['30-day invoiced payment terms', 'VAT receipts for every hire (HMRC-compliant)', 'Named-account pricing (slightly below walk-in rates)', 'Priority booking during busy periods']} />
+      <Paragraph>Even with a trade account, it's worth checking Tooli.uk first. Supplier-specific accounts lock you into one depot's rate. Comparing across the Leeds network first means you know whether your account rate is actually competitive.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Leeds Building Activity: What's Driving Hire Demand</H2>
+      <Paragraph>Leeds is one of the fastest-growing construction markets in the north of England. Several large-scale factors push tool and plant hire demand across the city year-round:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Residential development</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Major housing schemes across East Leeds (Killingbeck, Cross Gates), South Leeds (Belle Isle, Middleton), and the outer ring (Seacroft, Kippax) keep groundwork and plant in constant demand.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Commercial and mixed-use</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The South Bank regeneration, Kirkstall Forge, and ongoing development around Thorpe Park and Junction 45 of the M1 generate significant plant and equipment hire activity.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Highway and utilities works</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Yorkshire Water and National Highways schemes across the A1(M), M62, and Ring Road corridors produce steady demand for compaction equipment, trench digging, and temporary works gear.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Homeowner renovation</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Leeds has a large stock of pre-1919 terraced and semi-detached housing, particularly across LS6, LS7, LS8, LS10, and LS12. Renovations, kitchen extensions, and loft conversions drive steady demand for breakers, mixers, floor saws, and access equipment.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>How to Get the Best Tool Hire Price in Leeds</H2>
+      <Paragraph>Follow these four steps and you'll almost always pay less than the first quote you're given.</Paragraph>
+      <StepList
+        steps={[
+          'Compare before you call. Use Tooli.uk to see what multiple Leeds suppliers are charging before picking up the phone. Prices differ by supplier and by day — a Tuesday booking sometimes beats a Monday for rate.',
+          'Book the right duration. A weekend rate (Friday–Monday) often undercuts two separate day rates. A weekly rate almost always beats five daily rates. Work out your realistic timeframe and book accordingly.',
+          'Check what\'s included. Fuel, delivery, consumables (chisels, blades), and damage waiver are the four hidden costs that inflate a seemingly cheap quote. Tooli.uk surfaces these at the comparison stage.',
+          'Ask about attachments. A mini digger hired with a breaker or auger attachment from the same supplier is usually cheaper than sourcing them separately. Bundled hire saves logistics headaches too.',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Safety and Compliance — What Leeds Hirers Need to Know</H2>
+      <Paragraph>UK law requires that hired equipment is used safely and, in some cases, by certified operators. Here's the short version.</Paragraph>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">PUWER (Provision and Use of Work Equipment Regulations 1998)</p>
+          <Paragraph>All hired work equipment must be suitable for purpose, maintained in safe condition, and used only by people who are competent to do so. You're responsible for this the moment the equipment leaves the depot.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">LOLER (Lifting Operations and Lifting Equipment Regulations 1998)</p>
+          <Paragraph>Applies to any equipment used for lifting — including MEWP access platforms, telehandlers, and hoists. Pre-use checks are required; thorough examination certificates must be available.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Working at Height Regulations 2005</p>
+          <Paragraph>Scaffold towers must be erected by competent persons. PASMA certification is the accepted standard for mobile access towers. Check whether your supplier's delivery team erects and certifies the tower or whether that's your responsibility.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">IPAF</p>
+          <Paragraph>Powered access platforms (cherry pickers, scissor lifts) require a valid IPAF PAL card for the platform category being used. Suppliers are required to check; if yours doesn't, that's a red flag.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in Leeds</H2>
+      <Paragraph>Tooli.uk covers tool and plant hire comparison for all trades operating across Leeds:</Paragraph>
+      <BulletList
+        items={[
+          'Groundworkers and civil contractors',
+          'Builders and general contractors',
+          'Landscapers and garden design contractors',
+          'Plasterers and rendering specialists',
+          'Roofers and cladding contractors',
+          'Electricians and M&E contractors',
+          'Decorators and interior fit-out trades',
+          'Scaffolding contractors',
+          'Homeowners and self-build project managers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Leeds</H2>
+      <div className="grid gap-4">
+        {leedsFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -1035,6 +1248,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/birmingham-hero.webp',
     faqs: birminghamFaqs,
     content: birminghamContent,
+  },
+  {
+    slug: 'leeds',
+    name: 'Leeds',
+    path: '/locations/leeds',
+    metaTitle: 'Tool Hire Leeds | Compare Local Prices Before You Book | Tooli.uk',
+    metaDescription:
+      'Compare tool hire prices from local and national suppliers across Leeds. Find the best rates on mini diggers, scaffold towers, breakers, floor saws, and more. No booking fees. VAT inclusive prices.',
+    canonicalUrl: 'https://www.tooli.uk/locations/leeds',
+    title: 'Tool Hire in Leeds: Compare Local Prices Before You Book',
+    description:
+      'Compare tool hire rates from local and national suppliers covering LS1 through to LS28, Morley, Horsforth, Rothwell, and beyond — no ringing round, no callbacks.',
+    image: '/images/leeds-hero.webp',
+    faqs: leedsFaqs,
+    content: leedsContent,
   },
 ];
 
