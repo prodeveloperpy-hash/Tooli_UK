@@ -62,6 +62,7 @@ export function PageMeta({
 
     setMeta('meta[name="description"]', 'name', 'description', description);
     setMeta('meta[name="robots"]', 'name', 'robots', robots);
+    setMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'Tooli UK');
     setMeta('meta[property="og:title"]', 'property', 'og:title', title);
     setMeta('meta[property="og:description"]', 'property', 'og:description', description);
     setMeta('meta[property="og:type"]', 'property', 'og:type', type);
