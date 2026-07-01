@@ -65,8 +65,8 @@ export function HomePage() {
   return (
     <div className="w-full bg-white">
       <PageMeta
-        title="Compare Tool Hire Prices UK | Free Comparison | Tooli"
-        description="Compare tool hire prices UK wide with Tooli. Find the cheapest tool hire rates from local and national suppliers near you. Free, fast, no account needed."
+        title="Compare Tool & Plant Hire Prices UK | Free Comparison | Tooli"
+        description="Compare tool and plant hire prices across the UK. Get competitive quotes from trusted local suppliers and find the best hire rates in minutes."
       />
       {/* Hero Section */}
       <section className="relative min-h-[760px] sm:min-h-[720px] md:h-[600px] flex items-center overflow-hidden">
