@@ -10,11 +10,11 @@ function buildLocationSchema(page: (typeof locationPages)[number]): Record<strin
     '@graph': [
       {
         '@type': 'Organization',
-        '@id': 'https://www.tooli.uk/#organization',
+        '@id': 'https://tooli.uk/#organization',
         name: 'Tooli',
         alternateName: 'Tooli.uk',
-        url: 'https://www.tooli.uk',
-        logo: 'https://www.tooli.uk/images/logo.png',
+        url: 'https://tooli.uk',
+        logo: 'https://tooli.uk/images/logo.png',
         email: 'info@tooli.uk',
         areaServed: {
           '@type': 'Country',
@@ -25,8 +25,8 @@ function buildLocationSchema(page: (typeof locationPages)[number]): Record<strin
         '@type': 'BreadcrumbList',
         '@id': `${page.canonicalUrl}#breadcrumb`,
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
-          { '@type': 'ListItem', position: 2, name: 'Locations', item: 'https://www.tooli.uk/locations' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://tooli.uk/' },
+          { '@type': 'ListItem', position: 2, name: 'Locations', item: 'https://tooli.uk/locations' },
           { '@type': 'ListItem', position: 3, name: page.name, item: page.canonicalUrl },
         ],
       },
@@ -36,7 +36,7 @@ function buildLocationSchema(page: (typeof locationPages)[number]): Record<strin
         name: page.metaTitle,
         description: page.metaDescription,
         url: page.canonicalUrl,
-        isPartOf: { '@id': 'https://www.tooli.uk/#website' },
+        isPartOf: { '@id': 'https://tooli.uk/#website' },
         about: {
           '@type': 'Service',
           name: `Tool and plant hire comparison in ${page.name}`,
@@ -83,7 +83,7 @@ export function LocationPage() {
         title={page.metaTitle}
         description={page.metaDescription}
         canonicalUrl={page.canonicalUrl}
-        image={`https://www.tooli.uk${page.image}`}
+        image={`https://tooli.uk${page.image}`}
         type="website"
         jsonLd={buildLocationSchema(page)}
       />
