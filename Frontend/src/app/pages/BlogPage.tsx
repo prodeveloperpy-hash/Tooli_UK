@@ -1072,6 +1072,311 @@ function ToolHireComparisonSaveMoneyBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 5 — Tool Hire in London: Compare Prices From Local Suppliers*/
+/* ------------------------------------------------------------------ */
+
+const londonPriceFactors: [string, string][] = [
+  ['Zone 1–2 vs outer London', 'High — central depots carry higher overheads'],
+  ['ULEZ/congestion charge passed to delivery fee', 'Low to medium — varies by supplier, often unbundled'],
+  ['Weekend demand (DIY-heavy boroughs)', 'Medium — spikes in spring/summer'],
+  ['Trade account vs casual hire', 'Medium — same as the rest of the UK'],
+  ['Site access (parking, loading restrictions)', 'Indirect — can extend delivery windows in dense areas'],
+];
+
+const londonEquipmentTable: [string, string, string][] = [
+  ['Wacker plate', 'Patio prep, driveway sub-base, garden paths', '£35–£55'],
+  ['Mini digger (0.8t–1.5t)', 'Loft conversions, extensions, narrow side-passage access jobs', '£85–£180'],
+  ['Access tower', 'Render repair, guttering, period property maintenance', '£45–£90'],
+  ['Cement mixer', 'Garden walls, small extensions, repointing', '£25–£40'],
+  ['Floor sander', 'Period flat and terrace house floor restoration', '£40–£65'],
+  ['Dehumidifier', 'Damp basements and ground-floor flats, common in older London housing stock', '£20–£35'],
+  ['Breaker/kango', 'Concrete removal in tight courtyards and basements', '£30–£55'],
+];
+
+const londonTrades = [
+  { role: 'Builders and groundworkers', desc: 'Extensions, loft conversions, and basement digs in space-constrained boroughs' },
+  { role: 'Plasterers and decorators', desc: 'Access towers and floor sanders for period property refurbishment' },
+  { role: 'Electricians and plumbers', desc: 'Short-hire access equipment for first and second fix work' },
+  { role: 'Landscapers', desc: "Turf cutters, wacker plates, and mini diggers for London's smaller garden footprints" },
+  { role: 'Scaffolding contractors', desc: 'Tower hire and PASMA-certified equipment for terrace and townhouse work' },
+];
+
+const londonFaqs: Faq[] = [
+  [
+    'Is tool hire more expensive in central London than outer London?',
+    'Generally yes. Zone 1–2 depots typically run 15–25% higher day rates than outer boroughs, mainly due to commercial rent and depot overheads rather than the equipment itself.',
+  ],
+  [
+    'Does tool hire delivery in London include the ULEZ charge?',
+    "Most established suppliers run ULEZ-compliant delivery fleets, so this usually doesn't appear as a separate line item. Non-compliant vehicles face a £12.50 daily charge to enter the zone, so it's worth confirming with smaller or out-of-London suppliers delivering into central boroughs.",
+  ],
+  [
+    'Can I hire tools on a Sunday in London?',
+    'Sunday availability varies by depot and supplier rather than being standard across the city. Some independent depots and national chains offer Sunday hours, particularly in higher-demand DIY boroughs, but it\'s not universal, so check before assuming.',
+  ],
+  [
+    'Is HSS still a separate company from Speedy Hire in London?',
+    "It's more layered than it used to be. HSS ProService's digital platform now has a commercial supply agreement with Speedy Hire, while the old HSS physical branch network operates separately as The Hire Service Company under new ownership. Speedy continues to run its own branded depots independently as well.",
+  ],
+  [
+    "What's the most commonly hired tool in London?",
+    'Wacker plates, mini diggers, and access towers top demand in most boroughs, reflecting London\'s mix of garden landscaping jobs and period property maintenance where compact equipment is essential for narrow access.',
+  ],
+  [
+    'Do I need a trade account to hire tools in London?',
+    'Not always. Several suppliers now offer online booking without a trade account for casual or one-off hires, though larger plant or repeat commercial use still typically benefits from a trade account for better rates.',
+  ],
+  [
+    'How far in advance should I book mini digger hire in London?',
+    'For weekday hire, a few days\' notice is usually enough outside peak season. For weekend hire between March and September, book at least a week ahead, since popular sizes get booked out fast in space-constrained boroughs with strong DIY demand.',
+  ],
+  [
+    'Which London boroughs have the most plant hire depots?',
+    'Outer boroughs with industrial estate access, including Croydon, Hillingdon, and Havering, tend to have a higher concentration of independent plant hire depots alongside the national chains, partly explaining their generally lower day rates.',
+  ],
+];
+
+function LondonToolHireBody() {
+  return (
+    <>
+      <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+        <p>
+          Tool hire in London means comparing prices across a fragmented network of national depots,
+          builders' merchant hire points, and independent suppliers spread across all 33 boroughs,
+          since no single company covers the whole city at one flat rate. Day rates for the same
+          tool can vary by £10–£25 between Zone 1 and outer London, driven by depot overheads,
+          demand, and delivery distance. This page covers what's typically available, what it costs,
+          and what London-specific costs (ULEZ, congestion charge, parking) actually add to your hire.
+        </p>
+      </section>
+
+      <section>
+        <H2>Why London Tool Hire Prices Vary So Much by Borough</H2>
+        <Prose>
+          <p>
+            London isn't one market, it's roughly 33 of them stitched together. A wacker plate
+            hired in Hackney can cost noticeably more than the same machine hired from a depot in
+            Croydon or Bexley, purely down to where the depot sits and what it costs them to
+            operate there.
+          </p>
+          <p>
+            Zone 1 and 2 boroughs (Westminster, Camden, Islington, Hackney, Tower Hamlets)
+            generally carry the highest day rates, driven by commercial rent and limited depot
+            space. Outer London boroughs (Bexley, Havering, Hillingdon, Croydon, Bromley) tend
+            to be cheaper, partly because depots there serve a wider catchment and partly because
+            there's more competition from independent plant hire firms operating out of industrial
+            estates.
+          </p>
+        </Prose>
+
+        <div className="mt-8">
+          <H3>What Actually Moves the Price Across London</H3>
+          <div className="overflow-x-auto rounded-2xl border border-gray-100">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                  <th className="px-5 py-3 text-left font-extrabold text-gray-900">Factor</th>
+                  <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical impact</th>
+                </tr>
+              </thead>
+              <tbody>
+                {londonPriceFactors.map(([factor, impact], i) => (
+                  <tr
+                    key={factor}
+                    className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}
+                  >
+                    <td className="px-5 py-3 font-bold text-gray-700">{factor}</td>
+                    <td className="px-5 py-3 font-medium text-gray-500">{impact}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <H3>What's Changed in the London Hire Market Recently</H3>
+          <Prose>
+            <p>
+              Worth knowing before you assume a familiar name means a familiar service. The UK tool
+              hire sector went through a significant restructuring in late 2025 and early 2026. HSS
+              ProService formed a new commercial agreement with Speedy Hire, while the old HSS
+              physical branch network welcomes new private equity investment from Endless as it
+              starts life as a standalone hire company, now trading as The Hire Service Company
+              (THSC). THSC has confirmed that while a number of branches have closed, it still
+              operates five large distribution depots and over 60 branches through builders'
+              merchant partnerships, offering a strong local service across southern, eastern, and
+              central areas — covering a good chunk of Greater London.
+            </p>
+            <p>
+              Meanwhile, Speedy Hire continues to run its own branded depots across London
+              independently, including sites at Kings Cross and West London, and now also supplies
+              equipment behind the scenes to HSS ProService's online platform.
+            </p>
+            <p>
+              What this means practically: if you're comparing "HSS" against "Speedy" as two
+              separate options, that comparison looks a bit different than it did a year ago. Worth
+              confirming exactly who's fulfilling your order before you book, which is precisely
+              the kind of thing a proper comparison catches and a single-supplier booking might not.
+            </p>
+          </Prose>
+        </div>
+
+        <div className="mt-10">
+          <H3>Most-Hired Equipment in London</H3>
+          <Prose>
+            <p>
+              Demand patterns in London skew toward smaller domestic and light commercial jobs,
+              reflecting the city's housing stock and tight site access.
+            </p>
+          </Prose>
+          <div className="mt-4 overflow-x-auto rounded-2xl border border-gray-100">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                  <th className="px-5 py-3 text-left font-extrabold text-gray-900">Equipment</th>
+                  <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical use in London</th>
+                  <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical day rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {londonEquipmentTable.map(([equip, use, rate], i) => (
+                  <tr
+                    key={equip}
+                    className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}
+                  >
+                    <td className="px-5 py-3 font-bold text-gray-700">{equip}</td>
+                    <td className="px-5 py-3 font-medium text-gray-500">{use}</td>
+                    <td className="px-5 py-3 font-bold text-gray-700">{rate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-4 text-sm font-medium text-gray-500">
+            Period properties and narrow Victorian terrace access make micro diggers and compact
+            access towers especially popular in inner boroughs like Hackney, Lambeth, and
+            Wandsworth, where a standard 1.5-tonne digger simply won't fit through a typical side
+            gate.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <H2>Delivery, ULEZ, and the Congestion Charge</H2>
+        <Prose>
+          <p>
+            This is the part most hire guides skip entirely, and it genuinely changes the total
+            cost of a London job.
+          </p>
+          <p>
+            Most of Greater London sits inside the Ultra Low Emission Zone. If a delivery vehicle
+            doesn't meet ULEZ emission standards and isn't exempt, it needs to pay a £12.50 daily
+            charge to drive within the zone, which operates 24 hours a day, seven days a week. On
+            top of that, the standard congestion charge for entering central London is rising from
+            £15 to £18 a day from 2 January 2026, with the discount structure changing
+            significantly and electric vans no longer fully exempt.
+          </p>
+          <p>
+            Most established hire suppliers run ULEZ-compliant delivery fleets, so this rarely
+            lands on your invoice directly. But if you're booking from a smaller independent depot
+            outside London and asking for delivery into Zone 1 or 2, it's worth asking outright
+            whether their delivery charge already accounts for this — particularly for one-off
+            large item deliveries like diggers or generators where a dedicated van trip is involved.
+          </p>
+        </Prose>
+
+        <div className="mt-6 rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+          <p className="mb-4 font-extrabold text-gray-900">Typical delivery windows by area</p>
+          <div className="space-y-4">
+            {[
+              {
+                area: 'Inner London (Zones 1–2)',
+                detail:
+                  'Same-day delivery available from most suppliers if booked before late morning, subject to ULEZ-compliant fleet availability',
+              },
+              {
+                area: 'Outer London (Zones 3–6)',
+                detail: 'Next-day delivery standard, same-day often possible with advance notice',
+              },
+              {
+                area: 'Weekend delivery',
+                detail:
+                  'Available from most national chains and a growing number of independents, though slots fill fastest March to September',
+              },
+            ].map(({ area, detail }) => (
+              <div key={area} className="flex items-start gap-3">
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+                <div>
+                  <span className="font-extrabold text-gray-900">{area}: </span>
+                  <span className="text-sm font-medium text-gray-500">{detail}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <H2>Trades We Serve in London</H2>
+        <Prose>
+          <p>
+            London's hire demand splits roughly between domestic renovation work and small
+            commercial fit-out, reflecting the density of period housing stock alongside ongoing
+            office and retail refurbishment across the city.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          {londonTrades.map(({ role, desc }) => (
+            <div key={role} className="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-4">
+              <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+              <div>
+                <p className="font-extrabold text-gray-900">{role}</p>
+                <p className="mt-0.5 text-sm font-medium text-gray-500">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Why Hire Locally in London Rather Than Going to One National Chain</H2>
+        <Prose>
+          <p>
+            A genuine comparison across London's hire market usually beats sticking with whichever
+            depot you used last time, mostly because the city has more comparison points than
+            people assume. Beyond the well-known national names, most boroughs have at least one
+            builders' merchant hire counter and a handful of independent plant hire firms, often
+            based on industrial estates in outer boroughs where overheads are lower.
+          </p>
+          <p>
+            That spread means price and availability genuinely differ street to street, not just
+            chain to chain. A wacker plate that's booked out at a Zone 2 depot on a Friday
+            afternoon might be sitting idle 20 minutes away in the next borough over.
+          </p>
+        </Prose>
+      </section>
+
+      <FaqSection faqs={londonFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare London Tool Hire Now</h2>
+        <p className="mb-5 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Search by postcode, check availability across all 33 London boroughs, and compare total
+          costs — not just day rates — in one place.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Tool Hire in London
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -1163,6 +1468,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Start Comparing Tool Hire',
     faqs: saveMoneyFaqs,
     Body: ToolHireComparisonSaveMoneyBody,
+  },
+  {
+    slug: 'tool-hire-london',
+    category: 'Local Tool Hire',
+    title: 'Tool Hire in London: Compare Prices From Local Suppliers',
+    excerpt:
+      'Day rates for the same kit can vary by £10–£25 between Zone 1 and outer London. Here\'s what drives the difference, what ULEZ costs actually mean for your hire, and how to compare properly across all 33 boroughs.',
+    intro:
+      'Tool hire in London means comparing prices across a fragmented network of national depots, builders\' merchant hire points, and independent suppliers spread across all 33 boroughs, since no single company covers the whole city at one flat rate.',
+    image: '/images/blog/tool-hire-london.png',
+    imageAlt: 'Tool hire price comparison across London boroughs',
+    datePublished: '2026-07-02',
+    metaTitle: 'Tool Hire in London | Compare Prices From Local Suppliers',
+    metaDescription:
+      'Compare tool hire prices across London depots, from Brent to Bexley. See typical rates, delivery times, and ULEZ-friendly suppliers near you.',
+    primaryCta: 'Compare London Tool Hire',
+    faqs: londonFaqs,
+    Body: LondonToolHireBody,
   },
 ];
 
