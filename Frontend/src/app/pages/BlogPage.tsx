@@ -1477,7 +1477,7 @@ export const blogPosts: BlogPost[] = [
       'Day rates for the same kit can vary by £10–£25 between Zone 1 and outer London. Here\'s what drives the difference, what ULEZ costs actually mean for your hire, and how to compare properly across all 33 boroughs.',
     intro:
       'Tool hire in London means comparing prices across a fragmented network of national depots, builders\' merchant hire points, and independent suppliers spread across all 33 boroughs, since no single company covers the whole city at one flat rate.',
-    image: '/images/blog/tool-hire-london.png',
+    image: '/images/blog/tool-hire-london.webp',
     imageAlt: 'Tool hire price comparison across London boroughs',
     datePublished: '2026-07-02',
     metaTitle: 'Tool Hire in London | Compare Prices From Local Suppliers',
