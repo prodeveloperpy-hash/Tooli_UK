@@ -1,8 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
-import { ChevronRight, Wrench } from 'lucide-react';
+import { ChevronRight, MapPin, Wrench } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { PageMeta } from '../components/PageMeta';
 import { equipmentPages } from '../data/equipment';
+import { locationPages } from '../data/locations';
 
 function buildEquipmentSchema(page: (typeof equipmentPages)[number]): Record<string, unknown> {
   return {
@@ -165,6 +166,24 @@ export function EquipmentPage() {
                 </ul>
               </div>
             )}
+
+            {/* Locations We Serve */}
+            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Locations We Serve</h2>
+              <ul className="space-y-2">
+                {locationPages.map((loc) => (
+                  <li key={loc.slug}>
+                    <Link
+                      to={loc.path}
+                      className="flex items-center gap-2 text-sm font-bold text-brand-primary hover:underline"
+                    >
+                      <MapPin className="h-3.5 w-3.5 shrink-0" />
+                      Tool Hire in {loc.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </aside>
         </div>
       </article>
