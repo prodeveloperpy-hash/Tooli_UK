@@ -2886,6 +2886,292 @@ function PlantHireBirminghamBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 12 — Tool Hire B1: Birmingham Postcode Area Guide           */
+/* ------------------------------------------------------------------ */
+
+const toolHireB1EquipmentTable: [string, string][] = [
+  ['Scissor lift (IPAF)', 'Ceiling grids, M&E and lighting in office fit-outs'],
+  ['Cherry picker', 'Facade, signage and gutter work on commercial frontages'],
+  ['Concrete breaker', 'Slab and screed removal during strip-outs'],
+  ['Dust extraction and air scrubbers', 'Containing dust on occupied-building refurbs'],
+  ['Dehumidifier and heater', 'Drying screed and plaster on apartment programmes'],
+  ['Carpet cleaner and floor sander', 'End-of-tenancy and communal-area refresh work'],
+];
+
+const toolHireB1AtAGlance = [
+  'Compare tool hire quotes from all suppliers delivering to B1 in one Tooli.uk search',
+  'Covers Broad Street, Brindleyplace, Centenary Square and canalside B1 developments',
+  'Most-hired kit locally: scissor lifts, cherry pickers, breakers, dust extraction and drying equipment',
+  'B1 sits fully inside the Clean Air Zone, so delivery terms vary by supplier and are worth comparing',
+  'Fit-out, refurbishment and apartment work drive local demand more than garden projects',
+];
+
+const toolHireB1Faqs: Faq[] = [
+  [
+    'Which suppliers deliver tool hire to B1?',
+    'B1 sits in the delivery zones of depots across Birmingham and the Black Country, including national chains and local independents. Tooli.uk compares quotes from all suppliers covering the postcode in one search.',
+  ],
+  [
+    'Does the Clean Air Zone affect tool hire delivery to B1?',
+    'Yes, potentially. All of B1 sits inside the A4540 ring road, so non-compliant delivery vehicles incur CAZ charges that some suppliers pass on. Compare delivery terms alongside hire rates.',
+  ],
+  [
+    'What tools do people hire most in B1?',
+    'Scissor lifts, cherry pickers, breakers, dust extraction and drying equipment lead demand across the Tooli.uk network locally, driven by fit-out, refurbishment and apartment work rather than garden projects.',
+  ],
+  [
+    'Do I need an IPAF licence to hire a scissor lift in B1?',
+    'On commercial sites, yes — operators are expected to hold a valid IPAF licence, and principal contractors will check it. Suppliers can confirm requirements per machine when you book.',
+  ],
+  [
+    'How quickly can tools be delivered to Birmingham city centre?',
+    "Next-day delivery is standard when booked by early afternoon. Allow extra planning for loading restrictions, tram-route stopping rules on Broad Street and event-night congestion near the arena.",
+  ],
+  [
+    'Can I hire tools in B1 without a trade account?',
+    'Yes. Homeowners, apartment owners and small traders can hire directly. Suppliers typically ask for ID and a deposit or damage waiver, with terms varying by company.',
+  ],
+  [
+    'Are there noise restrictions for hired tools in B1?',
+    "Usually, via building management rather than just the council. Occupied offices and apartment blocks commonly restrict breakers and coring to set hours, so confirm the building's rules before booking.",
+  ],
+  [
+    'Does tool hire cost more in central Birmingham?',
+    'Rates are set by each supplier and move with depot distance, kit and delivery terms rather than the postcode itself. Because many depots compete for B1 work, comparing quotes regularly finds a sharper total than a single call.',
+  ],
+];
+
+function ToolHireB1Body() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={toolHireB1AtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/tool-hire-birmingham.webp"
+        alt="Plant hire equipment on a Birmingham city centre construction site near B1"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>How Tool Hire Works in B1</H2>
+        <Prose>
+          <p>
+            B1 has no hire depot on its doorstep, and it doesn't need one. The postcode sits within
+            the delivery radius of depots across Birmingham and the Black Country, from national chains
+            to independent yards in Aston, Digbeth-side and further out towards West Bromwich. All of
+            them compete for city-centre work, which makes comparison genuinely worthwhile here.
+          </p>
+          <p>
+            Each supplier on the Tooli.uk network sets its own rates and delivery charges, and B1 adds
+            a variable most postcodes don't have: the{' '}
+            <a
+              href="https://www.gov.uk/clean-air-zones"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Clean Air Zone
+            </a>
+            . The whole postcode sits inside the A4540 ring road, so non-compliant delivery vehicles
+            incur charges that some suppliers absorb and others pass on. Compare full totals for your
+            address, not headline rates.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-birmingham"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire in Birmingham: Compare Prices From Local Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>What Gets Hired Most in B1</H2>
+        <Prose>
+          <p>
+            B1's building stock shapes its hire demand. This is commercial and high-density residential
+            territory: offices around Brindleyplace, hotels and venues on Broad Street, and waves of
+            canalside apartments. The work is fit-out, refurbishment, maintenance and end-of-tenancy
+            turnaround rather than garden landscaping.
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Equipment</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical B1 job</th>
+              </tr>
+            </thead>
+            <tbody>
+              {toolHireB1EquipmentTable.map(([equip, use], i) => (
+                <tr key={equip} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{equip}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{use}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          Powered access dominates. With so much of the local work happening at height indoors and on
+          frontages, scissor lifts and push-around verticals are the B1 workhorses, and{' '}
+          <a
+            href="https://www.ipaf.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-brand-primary hover:underline"
+          >
+            IPAF licences
+          </a>{' '}
+          are expected on virtually every commercial job here.
+        </p>
+        <Link
+          to="/blog/tool-hire-comparison-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      {/* Equipment grid image */}
+      <img
+        src="/images/blog/birmingham-equipment-grid.webp"
+        alt="Full range of construction and tool hire equipment available for hire across Birmingham B1 — excavators, scissor lifts, breakers, generators and more"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Delivery to B1: What to Expect</H2>
+        <Prose>
+          <p>
+            Next-day delivery is standard from most suppliers when booked by early afternoon. The
+            complications are all at street level. Loading in B1 often means bays, time-restricted
+            kerbside slots or building service yards rather than free kerb space, so tell the supplier
+            exactly where the lorry can stop and when the building accepts deliveries.
+          </p>
+          <p>
+            Broad Street brings its own wrinkle: the tram runs along it, and stopping restrictions
+            around the route are tightly enforced. For deliveries to venues and frontages on the street
+            itself, agree the drop point with the supplier in advance. Event nights around the arena
+            and Centenary Square can also slow access, so avoid Friday-evening deliveries where you
+            can.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Working in Occupied Buildings</H2>
+        <Prose>
+          <p>
+            Most B1 jobs happen in buildings that stay open around the work. That changes the kit list:
+            dust extraction, floor protection and quieter electric tools earn their hire fee in occupied
+            offices and apartment blocks. Building managers commonly restrict noisy works to set hours,
+            and some require out-of-hours slots for breakers and coring, so confirm the building's
+            rules before the tools arrive.
+          </p>
+          <p>
+            Compliance is standard commercial fare. IPAF for powered access, PASMA for any mobile
+            towers, and PUWER duties for employers providing hired kit.{' '}
+            <a
+              href="https://www.hse.gov.uk/work-at-height/index.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE working-at-height guidance
+            </a>{' '}
+            applies throughout, and principal contractors on fit-out schemes will check cards at the
+            door.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/plant-hire-birmingham-compared-local-plant-hire-companies"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Plant Hire Birmingham: Compare Local Plant Hire Companies →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Trades We Serve in B1</H2>
+        <Prose>
+          <p>
+            Tooli.uk compares hire for the trades doing the bulk of B1's work: electricians and M&amp;E
+            contractors, shopfitters, decorators, flooring contractors, maintenance teams and facilities
+            firms, plus builders on apartment refurbishments. If you run repeat jobs across the city
+            core, one comparison search per hire replaces the phone-round and keeps a record of every
+            quote.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Neighbouring Postcode Areas</H2>
+        <Prose>
+          <p>
+            Working beyond B1? The same comparison covers the surrounding city-centre and inner
+            postcodes: B2 and B3 (core and Colmore Row side), B4 (Aston University quarter), B5
+            (Digbeth and the markets), B15 (Edgbaston) and B16 (Ladywood). Suppliers serving B1 cover
+            all of them, and totals shift with depot distance, so run the comparison per job rather
+            than assuming one supplier always wins.
+          </p>
+        </Prose>
+      </section>
+
+      <FaqSection faqs={toolHireB1Faqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Tool Hire in B1 Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your B1 postcode on Tooli.uk, pick your kit and get quotes from suppliers covering
+          Birmingham city centre in minutes.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -3085,6 +3371,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Birmingham Plant Hire',
     faqs: plantHireBirminghamFaqs,
     Body: PlantHireBirminghamBody,
+  },
+  {
+    slug: 'tool-hire-b1-birmingham-postcode-area-guide',
+    category: 'Tool Hire',
+    title: 'Tool Hire B1: Birmingham Postcode Area Guide',
+    excerpt:
+      'Compare tool hire in B1 from suppliers delivering to Broad Street, Brindleyplace and Centenary Square. Scissor lifts, breakers, dust extraction and more.',
+    intro:
+      "Need tool hire in B1? The postcode covers the western side of Birmingham city centre, taking in Broad Street, Brindleyplace, Centenary Square and the canalside developments towards Ladywood. It's a commercial-heavy patch served by depots ringing the city rather than sitting inside it, and it falls entirely within the Clean Air Zone. Tooli.uk compares quotes from every supplier delivering into B1 in one search, so you get the best total for the job, delivery included.",
+    image: '/images/blog/tool-hire-birmingham.webp',
+    imageAlt: 'Tool hire comparison for B1 Birmingham city centre — compare local suppliers on Tooli.uk',
+    datePublished: '2026-07-08',
+    metaTitle: 'Tool Hire B1 | Birmingham City Centre Guide | Tooli.uk',
+    metaDescription:
+      'Compare tool hire in B1 from suppliers serving Birmingham city centre, Broad Street and Brindleyplace. Access kit, breakers and more. Quotes on Tooli.uk.',
+    primaryCta: 'Compare B1 Tool Hire',
+    faqs: toolHireB1Faqs,
+    Body: ToolHireB1Body,
   },
 ];
 

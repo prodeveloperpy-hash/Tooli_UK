@@ -121,6 +121,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://tooli.uk/blog/tool-hire-b1-birmingham-postcode-area-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Equipment pages -->
   <url>
