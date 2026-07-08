@@ -1716,6 +1716,306 @@ function SW19ToolHireBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 8 — Mini Digger Hire London: Prices & Local Availability    */
+/* ------------------------------------------------------------------ */
+
+const miniDiggerLondonSizeTable: [string, string, string][] = [
+  ['0.8–1 t micro digger', 'Fits through ~750 mm doorway or side return', 'Rear garden landscaping in Victorian terraces, small drainage runs'],
+  ['1.5 t mini digger', 'Standard garden gate or driveway access', 'Extension footings, patios, pond digs, most domestic groundworks'],
+  ['2.5–3 t digger', 'Driveway or open site access', 'Larger footings, muck shifts, site strips, basement enabling work'],
+];
+
+const miniDiggerLondonAtAGlance = [
+  'Compare mini digger hire quotes from multiple London suppliers in one search on Tooli.uk',
+  'Sizes from 0.8 t micro diggers (fit through a 750 mm gap) up to 3 t machines',
+  'Suppliers set their own rates, which vary by borough, season and duration, so compare before you book',
+  'No licence needed on private land; CPCS or NPORS cards usually expected on commercial sites',
+  'Next-day delivery is standard across Greater London; book earlier for central zones with access restrictions',
+];
+
+const miniDiggerLondonFaqs: Faq[] = [
+  [
+    'How much does mini digger hire cost in London?',
+    'Rates vary by supplier, machine size, duration and season, and every depot on the Tooli.uk network sets its own prices. Weekly hires typically cost less per day than day rates. Comparing quotes for your postcode is the fastest way to find the current best price.',
+  ],
+  [
+    'Can I hire a mini digger without a licence in London?',
+    'Yes, for use on private land. No licence is legally required for domestic projects. On commercial sites, contractors normally expect a CPCS or NPORS card and employers must comply with PUWER.',
+  ],
+  [
+    'Will a mini digger fit through my garden gate?',
+    "A 0.8–1 t micro digger fits through gaps as narrow as roughly 750 mm, which suits most London terrace side returns. Measure your narrowest access point and confirm the machine's tracked width with the supplier.",
+  ],
+  [
+    'Do London suppliers deliver mini diggers the same day?',
+    'Next-day delivery is standard when booked by early afternoon. Same-day is sometimes possible from local depots for smaller machines, but central London deliveries need parking and access checked first.',
+  ],
+  [
+    'Do I need my own insurance to hire a digger?',
+    "Most suppliers offer a damage waiver at the point of hire; some accept your own plant insurance instead. Check what's included when you compare quotes, as terms differ between depots.",
+  ],
+  [
+    'What attachments can I hire with a mini digger?',
+    'Breakers, augers, grading buckets and grabs are the common ones. Bundling attachments with the machine from one supplier usually beats hiring them separately.',
+  ],
+  [
+    'Can I use a mini digger on a London street or pavement?',
+    'Not without permits. Works on the public highway need council licences and often a s.171 permit. Keep the machine on private land unless the job is properly permitted.',
+  ],
+  [
+    'When is mini digger demand highest in London?',
+    'Spring through early autumn. Groundworks and landscaping season tightens availability from March, so book weekend hires several days ahead.',
+  ],
+];
+
+function MiniDiggerLondonBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={miniDiggerLondonAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/tool-hire-sw19-london-postcode-area-guide"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          Tool Hire SW19: London Postcode Area Guide →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/mini-digger-hire-london.webp"
+        alt="Tooli.uk mini digger and tool hire price comparison for London, showing suppliers, rates and best-price highlight"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Mini Digger Prices in London: Why They Vary</H2>
+        <Prose>
+          <p>
+            There's no single London price for a mini digger. Rates are set independently by each
+            depot and move with machine size, hire duration, attachments, delivery distance and
+            demand. A weekly hire almost always works out cheaper per day than stringing day
+            rates together, and spring groundworks season tightens both availability and pricing
+            across the network.
+          </p>
+          <p>
+            That's exactly why comparison matters here more than anywhere else in the UK. London
+            has a dense mix of national chains and independent depots, and based on our experience
+            comparing quotes across the Tooli.uk network, the spread between the cheapest and
+            dearest offer for identical kit can be significant. Enter your postcode, pick your
+            dates and let the suppliers compete.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Mini Digger Sizes: Which One for a London Job?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Size class</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Access needed</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical London job</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerLondonSizeTable.map(([size, access, job], i) => (
+                <tr key={size} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{size}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{access}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{job}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          The micro digger is London's signature hire. Millions of terraced homes have no side
+          access wider than a doorway, so a machine that tracks through the house or a narrow
+          side return is often the only option short of hand digging. If access is tight, measure
+          the narrowest point before you book and give the supplier the figure.
+        </p>
+        <Link
+          to="/blog/tool-hire-birmingham"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire in Birmingham: Compare Prices From Local Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>What Can You Do With a Mini Digger in London?</H2>
+        <Prose>
+          <p>
+            The usual suspects: garden clearance and landscaping, footings for rear and
+            side-return extensions, drainage and soakaways, tree stump removal, driveway
+            excavation and pool or pond digs. Add a breaker attachment and the same machine
+            handles concrete slabs and old patios, which saves hiring a separate tool.
+          </p>
+          <p>
+            Pair it with a micro dumper or skip loader for muck-away on tight sites. One
+            delivery, one supplier, one collection usually beats piecemeal hiring on both cost
+            and hassle.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-london"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire in London: Compare Prices From Local Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      {/* Compare-prices image */}
+      <img
+        src="/images/blog/mini-digger-hire-london-compare.webp"
+        alt="Tool hire in London comparison graphic showing daily rates from multiple suppliers and local equipment"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Availability and Delivery Across London</H2>
+        <Prose>
+          <p>
+            Most suppliers on the Tooli.uk network offer next-day delivery across Greater London
+            when booked by early afternoon. Central boroughs need more planning. Check for
+            parking suspensions,{' '}
+            <a
+              href="https://tfl.gov.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              red routes and roadworks permits
+            </a>{' '}
+            before a delivery lorry arrives, and note that ULEZ compliance is standard for modern
+            delivery fleets but worth confirming on older wagons.
+          </p>
+          <p>
+            Noise matters too. Many boroughs restrict noisy works to roughly 8 a.m. to 6 p.m.
+            weekdays and Saturday mornings, so plan breaker work inside those windows. For
+            weekend hires, book by Wednesday; Friday collection slots go first, especially March
+            through September.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Do You Need a Licence for a Mini Digger?</H2>
+        <Prose>
+          <p>
+            Not on private land. Any competent adult can hire and operate a mini digger for a
+            domestic project, though suppliers will run through controls on handover and{' '}
+            <a
+              href="https://www.hse.gov.uk/construction/safetytopics/excavations.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE guidance on safe excavation
+            </a>{' '}
+            is worth reading first. On commercial London sites, principal contractors will
+            normally expect a{' '}
+            <a
+              href="https://www.nocnjobcards.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              CPCS or NPORS
+            </a>{' '}
+            ticket, and employers must meet PUWER duties when providing hired plant to workers.
+            Always get utility drawings or a CAT scan before breaking ground; London subsoil is
+            crowded with services.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>How to Choose the Right Machine</H2>
+        <Prose>
+          <p>
+            Four decision factors settle it for most jobs. Access width first, since the
+            narrowest gate or doorway dictates your maximum machine size. Then dig depth and
+            reach: a 1.5 t machine digs comfortably to around 2 m, which covers most domestic
+            footings. Third, ground conditions, because London clay in summer is hard going for
+            the smallest machines. Finally spoil handling, as every bucket of muck needs
+            somewhere to go, so price the grab lorry or skip alongside the digger.
+          </p>
+          <p>
+            If you're between sizes, go bigger where access allows. An undersized digger costs
+            more in extra hire days than the step up in rate.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Hire a Mini Digger Near You</H2>
+        <Prose>
+          <p>
+            Tooli.uk compares mini digger hire across every London postcode area and borough,
+            including popular searches for tool hire SW19, plant hire in East London and digger
+            hire in Croydon, Bromley, Barnet, Ealing and Enfield. Wherever the job is, one
+            comparison search covers the local depots.
+          </p>
+          <p>
+            Compare mini digger hire prices in London now on Tooli.uk. Enter your postcode, pick
+            your dates, and get quotes in minutes.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      <FaqSection faqs={miniDiggerLondonFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Mini Digger Hire in London Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, pick your dates and get local mini digger quotes in
+          minutes. No account needed. No phone calls. Just the best deal for your job.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -1843,6 +2143,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare SW19 Tool Hire',
     faqs: sw19FaqData,
     Body: SW19ToolHireBody,
+  },
+  {
+    slug: 'mini-digger-hire-london-prices-local-availability',
+    category: 'Plant Hire Guide',
+    title: 'Mini Digger Hire London: Prices & Local Availability',
+    excerpt:
+      'From 0.8 t micro diggers that fit through a garden doorway to 3 t machines for serious groundworks, here\'s how mini digger hire pricing and availability work across all 32 London boroughs.',
+    intro:
+      'Looking for a mini digger hire in London? Tooli.uk compares quotes from hire depots across all 32 boroughs, from 0.8 tonne micro diggers that fit through a garden doorway to 3 tonne machines for serious groundworks. Every supplier sets its own rates, so the same machine can be quoted very differently a few miles apart, and comparing is the only reliable way to pin down the best price.',
+    image: '/images/blog/mini-digger-hire-london.webp',
+    imageAlt: 'Mini digger hire London — compare prices from local suppliers on Tooli.uk',
+    datePublished: '2026-07-08',
+    metaTitle: 'Mini Digger Hire London | Compare Local Rates | Tooli.uk',
+    metaDescription:
+      'Compare mini digger hire in London from local suppliers. 0.8 t micro to 3 t machines, fast delivery across all zones. Get quotes free on Tooli.uk.',
+    primaryCta: 'Compare Mini Digger Hire',
+    faqs: miniDiggerLondonFaqs,
+    Body: MiniDiggerLondonBody,
   },
 ];
 
