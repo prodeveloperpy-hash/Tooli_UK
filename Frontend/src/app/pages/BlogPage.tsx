@@ -2302,6 +2302,291 @@ function PlantHireLondonBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 10 — Mini Digger Hire Birmingham                            */
+/* ------------------------------------------------------------------ */
+
+const miniDiggerBirminghamSizeTable: [string, string, string][] = [
+  ['0.8–1 t micro digger', 'Fits through ~750 mm entry or gateway', 'Rear garden digs in terraces across Selly Oak, Kings Heath and Erdington'],
+  ['1.5 t mini digger', 'Standard garden gate or drive', 'Extension footings, patios, drainage on semis in Hall Green and Northfield'],
+  ['2.5–3 t digger', 'Driveway or open site access', 'Larger footings, muck shifts, plot strips in Sutton Coldfield and beyond'],
+];
+
+const miniDiggerBirminghamAtAGlance = [
+  'Compare mini digger hire quotes from multiple Birmingham and Black Country suppliers in one Tooli.uk search',
+  'Sizes from 0.8 t micro diggers (through gaps of roughly 750 mm) up to 3 t machines',
+  'Suppliers set their own rates; duration, season and delivery distance move the price, so compare totals',
+  'No licence needed on private land; CPCS or NPORS cards usually expected on commercial sites',
+  'Next-day delivery is standard across B postcodes; plan ahead for the Clean Air Zone and spring demand',
+];
+
+const miniDiggerBirminghamFaqs: Faq[] = [
+  [
+    'How much does mini digger hire cost in Birmingham?',
+    'Rates are set by each supplier and vary with machine size, duration, season and delivery distance. Weekly hires usually cost less per day than day rates. Comparing quotes for your B postcode on Tooli.uk is the quickest way to find the current best price.',
+  ],
+  [
+    'Do I need a licence to hire a mini digger in Birmingham?',
+    'No, not for use on private land. Domestic hirers just need to be competent and take the supplier\'s handover. Commercial sites typically require CPCS or NPORS cards, and PUWER applies to employers.',
+  ],
+  [
+    'Will a mini digger fit through a Birmingham terrace entry?',
+    'A 0.8–1 tonne micro digger fits through gaps of roughly 750 mm, which covers most shared entries and side passages on the city\'s older housing stock. Measure first and confirm the tracked width with the supplier.',
+  ],
+  [
+    'How quickly can a digger be delivered in Birmingham?',
+    'Next-day delivery is standard when booked by early afternoon. Central deliveries inside the Clean Air Zone may need extra planning, and spring demand can stretch lead times on popular sizes.',
+  ],
+  [
+    'Does the Birmingham Clean Air Zone affect digger delivery?',
+    'It can. Non-compliant delivery vehicles entering the zone inside the A4540 ring road incur charges that some suppliers pass on. Confirm delivery terms when you compare quotes for central postcodes.',
+  ],
+  [
+    'What attachments can I hire with a mini digger?',
+    'Breakers, augers, grading buckets and grabs are widely available. Hiring attachments with the machine from one depot usually beats separate hires on cost and delivery.',
+  ],
+  [
+    'Is Birmingham clay a problem for small diggers?',
+    'It can be in dry summers, when baked clay slows the smallest machines. If access allows, choose a 1.5 t machine over a micro for anything beyond light garden work.',
+  ],
+  [
+    'When is mini digger demand highest in Birmingham?',
+    'March through early autumn, driven by landscaping and extension season. Book weekend hires by midweek and allow extra lead time around bank holidays.',
+  ],
+];
+
+function MiniDiggerBirminghamBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={miniDiggerBirminghamAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/tool-hire-birmingham"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          Tool Hire in Birmingham: Compare Prices From Local Suppliers →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/tool-hire-birmingham.webp"
+        alt="Mini digger and tool hire comparison in Birmingham — compare prices from local suppliers on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Mini Digger Prices in Birmingham: Why They Vary</H2>
+        <Prose>
+          <p>
+            There's no fixed Birmingham rate for a mini digger. Each depot on the Tooli.uk network
+            prices independently, and quotes move with machine size, hire length, attachments,
+            delivery distance and demand. Weekly hires nearly always beat a string of day rates,
+            and spring groundworks season tightens both availability and pricing across the region.
+          </p>
+          <p>
+            Birmingham has an unusually deep supplier pool, with city depots competing against
+            Black Country yards in Dudley, Walsall and West Bromwich that all deliver into the B
+            postcodes. In our experience comparing quotes across the network, that competition
+            creates a real spread between the cheapest and dearest offer for identical kit. Run
+            the comparison per job rather than defaulting to the nearest name.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Mini Digger Sizes: Which One for a Birmingham Job?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Size class</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Access needed</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical Birmingham job</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerBirminghamSizeTable.map(([size, access, job], i) => (
+                <tr key={size} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{size}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{access}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{job}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          The micro digger earns its keep in Birmingham. Huge swathes of the city's Victorian and
+          Edwardian stock have shared entries or side passages no wider than a doorway, so a machine
+          that tracks through a 750 mm gap is often the difference between a machine dig and a week
+          on the shovel. Measure the narrowest point and give the supplier the figure when you book.
+        </p>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      {/* Equipment grid */}
+      <img
+        src="/images/blog/birmingham-equipment-grid.webp"
+        alt="Wide range of mini diggers and plant hire equipment available for hire across Birmingham and the West Midlands"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>What Can You Do With a Mini Digger in Birmingham?</H2>
+        <Prose>
+          <p>
+            The staples: garden landscaping and clearance, footings for rear extensions, drainage
+            runs and soakaways, stump removal, driveway excavation and levelling for garden rooms.
+            Add a hired breaker attachment and the same machine takes out old concrete drives and
+            patios, saving a separate breaker hire.
+          </p>
+          <p>
+            One local note on ground conditions. Much of Birmingham sits on heavy clay that bakes
+            hard in summer and holds water through winter. Undersized machines struggle in baked
+            clay, so if access allows, step up a size rather than fighting the ground with a micro.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Availability and Delivery Across the B Postcodes</H2>
+        <Prose>
+          <p>
+            Most suppliers offer next-day delivery across Birmingham when booked by early afternoon,
+            with same-day depot collection sometimes possible for the smallest machines. Central
+            deliveries need one extra check: the{' '}
+            <a
+              href="https://www.gov.uk/clean-air-zones"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Clean Air Zone inside the A4540 ring road
+            </a>{' '}
+            can add charges for non-compliant delivery vehicles, and some suppliers pass those on,
+            so confirm terms when comparing quotes.
+          </p>
+          <p>
+            Demand peaks locally in spring. Landscapers, groundworkers and extension jobs all
+            compete for the same 1.5 t fleet from March onwards, and weekend slots go first. Book
+            Friday-to-Monday hires by midweek, and earlier still around bank holidays.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Do You Need a Licence for a Mini Digger?</H2>
+        <Prose>
+          <p>
+            Not on private land. Any competent adult can hire and operate a mini digger for a
+            domestic project, and suppliers will walk through the controls on handover. Read{' '}
+            <a
+              href="https://www.hse.gov.uk/construction/safetytopics/excavations.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE guidance on safe excavation
+            </a>{' '}
+            before you start, and get utility plans or a CAT scan before breaking ground; services
+            run shallow across older Birmingham streets.
+          </p>
+          <p>
+            On commercial sites, principal contractors will normally expect a{' '}
+            <a
+              href="https://www.nocnjobcards.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              CPCS or NPORS ticket
+            </a>
+            , and employers providing hired plant to workers must meet PUWER duties. Confirm site
+            requirements before booking so the right operator turns up with the right card.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>How to Choose the Right Machine</H2>
+        <Prose>
+          <p>
+            Access width decides most Birmingham hires: the narrowest entry, gate or passage sets
+            your maximum machine size. Then dig depth, since a 1.5 t machine reaches roughly 2 m,
+            enough for standard domestic footings. Factor in ground conditions (that clay again),
+            and finally spoil: every bucket needs a skip or grab lorry, so price muck-away
+            alongside the digger.
+          </p>
+          <p>
+            Bundle where you can. A digger, breaker attachment and micro dumper from one supplier
+            means one delivery charge and one collection, which usually beats three separate hires.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Hire a Mini Digger Near You</H2>
+        <Prose>
+          <p>
+            Tooli.uk compares mini digger hire across every Birmingham postcode and the surrounding
+            towns, including Solihull, Sutton Coldfield, West Bromwich, Dudley and Walsall. One
+            search covers the city depots and the Black Country yards competing for your job.
+          </p>
+        </Prose>
+      </section>
+
+      <FaqSection faqs={miniDiggerBirminghamFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Mini Digger Hire in Birmingham Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your B postcode on Tooli.uk, pick your dates, and get local quotes in minutes from
+          Birmingham and Black Country suppliers.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -2465,6 +2750,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare London Plant Hire',
     faqs: plantHireLondonFaqs,
     Body: PlantHireLondonBody,
+  },
+  {
+    slug: 'mini-digger-hire-birmingham-prices-and-local-availability',
+    category: 'Plant Hire',
+    title: 'Mini Digger Hire Birmingham: Prices & Local Availability',
+    excerpt:
+      'Compare mini digger hire across Birmingham B postcodes. Micro to 3 t machines, delivery to Selly Oak, Erdington, Sutton Coldfield and beyond.',
+    intro:
+      'Mini digger hire in Birmingham spans the full range — from 0.8 t micro machines that thread through Victorian terrace entries to 3 t diggers for open-site muck-shifts. This guide covers what moves the price, which size fits your job, and how to compare Birmingham suppliers quickly on Tooli.uk.',
+    image: '/images/blog/tool-hire-birmingham.webp',
+    imageAlt: 'Mini digger hire in Birmingham — compare local suppliers and prices on Tooli.uk',
+    datePublished: '2026-07-08',
+    metaTitle: 'Mini Digger Hire Birmingham | Compare Suppliers | Tooli.uk',
+    metaDescription:
+      'Compare mini digger hire in Birmingham from local suppliers. 0.8 t micro to 3 t machines, delivery across all B postcodes. Free quotes on Tooli.uk.',
+    primaryCta: 'Compare Birmingham Digger Hire',
+    faqs: miniDiggerBirminghamFaqs,
+    Body: MiniDiggerBirminghamBody,
   },
 ];
 
