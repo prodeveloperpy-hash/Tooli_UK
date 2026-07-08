@@ -2587,6 +2587,305 @@ function MiniDiggerBirminghamBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 11 — Plant Hire Birmingham                                  */
+/* ------------------------------------------------------------------ */
+
+const plantHireBirminghamCategories: [string, string, string][] = [
+  ['Excavators', 'Micro, mini (1.5–3 t), midi (5–8 t)', 'Footings, drainage, site strips, demolition enabling'],
+  ['Dumpers', '1 t high-tip, tracked micro dumpers', 'Muck-away on tight terrace and infill plots'],
+  ['Compaction', 'Wacker plates, trench rammers, 1.2 t rollers', 'Sub-base, driveways, reinstatement'],
+  ['Telehandlers', 'Compact to 17 m reach', 'Loading out scaffolds on housing sites across the suburbs'],
+  ['Powered access', 'Cherry pickers, scissor lifts (IPAF)', 'Commercial fit-out and maintenance around the city core'],
+  ['Site support', 'Generators, lighting towers, welfare units', 'Infrastructure work and off-grid sites'],
+];
+
+const plantHireBirminghamAtAGlance = [
+  'Compare quotes from local and national plant hire companies across Birmingham and the Black Country on Tooli.uk',
+  'Full plant range: excavators, dumpers, rollers, telehandlers, powered access and site support kit',
+  'Every company sets its own rates and delivery terms, so comparing totals beats ringing round',
+  'Local logistics covered: Clean Air Zone deliveries, site restrictions, operated vs self-drive',
+  'Demand is strong year-round, driven by city-centre schemes and constant suburban building work',
+];
+
+const plantHireBirminghamFaqs: Faq[] = [
+  [
+    'How do I compare plant hire companies in Birmingham?',
+    'Enter your postcode on Tooli.uk, select the machine and dates, and compare quotes from local and national companies side by side. Each company sets its own rates and delivery terms, so comparing full totals is the reliable way to find the best deal.',
+  ],
+  [
+    'Are local Birmingham plant hire companies cheaper than national chains?',
+    'Sometimes. Pricing is set independently and varies by machine, duration and depot distance. Black Country independents often quote sharper on longer hires, while nationals offer fleet backup. Compare both every time.',
+  ],
+  [
+    'Does the Clean Air Zone affect plant hire delivery in Birmingham?',
+    'It can. Deliveries inside the A4540 ring road may incur charges for non-compliant vehicles, which some companies pass on. Confirm delivery terms when comparing quotes for central sites.',
+  ],
+  [
+    'Do I need a licence to hire plant in Birmingham?',
+    'Not for self-drive plant on private land. Commercial sites normally require CPCS or NPORS cards, and larger machines are often supplied with an operator included.',
+  ],
+  [
+    "What's the difference between operated and self-drive plant hire?",
+    'Self-drive means you operate the machine yourself. Operated hire includes a qualified driver, costs more per day, and is standard for larger excavators on commercial sites.',
+  ],
+  [
+    'Can I hire plant for a weekend in Birmingham?',
+    'Yes, most companies offer weekend bands on smaller plant. Book by midweek from March onwards, when landscaping and groundworks demand fills Friday slots first.',
+  ],
+  [
+    'What plant do Birmingham builders hire most?',
+    'Mini diggers, micro dumpers, wacker plates, telehandlers and powered access lead demand across the Tooli.uk network locally, driven by extensions, infill plots and commercial fit-out.',
+  ],
+  [
+    'Is delivery included in Birmingham plant hire quotes?',
+    'Usually charged separately, varying with depot distance. Compare the full total including delivery, collection, fuel policy and damage waiver rather than the daily rate alone.',
+  ],
+];
+
+function PlantHireBirminghamBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={plantHireBirminghamAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/tool-hire-birmingham"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          Tool Hire in Birmingham: Compare Prices From Local Suppliers →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/tool-hire-birmingham.webp"
+        alt="Plant hire comparison in Birmingham — compare local and national suppliers on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Local Companies vs National Chains in Birmingham</H2>
+        <Prose>
+          <p>
+            Both sides hire the same machines; the difference is how they serve them. National chains
+            bring fleet depth and backup, so a breakdown usually means a fast swap from another depot.
+            The West Midlands independents — many of them long-established family yards across
+            Birmingham, Dudley, Walsall and West Bromwich — tend to compete on flexibility, service
+            and keener quotes for longer hires.
+          </p>
+          <p>
+            Neither is cheapest by default. Every company on the Tooli.uk network prices independently,
+            and in our experience comparing West Midlands quotes, a Black Country yard can undercut a
+            national on one machine while the national wins the next hire a mile away. Compare both on
+            every job and let the totals settle it.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>What Plant Can You Hire in Birmingham?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Category</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Common machines</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical Birmingham use</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plantHireBirminghamCategories.map(([cat, machines, use], i) => (
+                <tr key={cat} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{cat}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{machines}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{use}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          Attachments stretch every hire further. Breakers, augers and grading buckets bundled with an
+          excavator arrive on the same lorry and save separate hire and delivery charges.
+        </p>
+      </section>
+
+      {/* Plant equipment grid image */}
+      <img
+        src="/images/blog/plant-hire-london.webp"
+        alt="Midi excavator, mini digger and high-tip dumper on a Birmingham plant hire site — compare suppliers on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Why Birmingham Plant Demand Runs Hot</H2>
+        <Prose>
+          <p>
+            The city has an unusually steady pipeline. Major schemes like HS2's Curzon Street station
+            and the Smithfield regeneration anchor demand in the centre, while the suburbs generate
+            constant extension, landscaping and infill work. When big projects draw down local fleets,
+            availability on popular machines like 1.5 t diggers and micro dumpers tightens for
+            everyone else.
+          </p>
+          <p>
+            That's a practical argument for comparing rather than relying on one depot. When your
+            usual yard is out of stock in April, a competing supplier two postcodes away often isn't,
+            and Tooli.uk surfaces them all in one search.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Delivery Logistics on Birmingham Sites</H2>
+        <Prose>
+          <p>
+            Three checks before your delivery date. First, the{' '}
+            <a
+              href="https://www.gov.uk/clean-air-zones"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Clean Air Zone
+            </a>
+            : deliveries inside the A4540 ring road can incur charges for non-compliant vehicles, and
+            some companies pass those on, so confirm terms for central sites. Second, access: tight
+            terrace streets and shared entries across much of the city need the street layout flagged
+            to the supplier so the right lorry turns up. Third, hours: noisy works and deliveries are
+            generally expected within standard weekday daytimes and Saturday mornings.
+          </p>
+          <p>
+            On{' '}
+            <a
+              href="https://www.hse.gov.uk/construction/cdm/2015/index.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              CDM 2015
+            </a>{' '}
+            projects, hired plant comes under the principal contractor's site rules, so share machine
+            specs and delivery plans early. Companies used to city-centre work will handle much of
+            this routinely, which is worth weighing alongside price.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Operated or Self-Drive?</H2>
+        <Prose>
+          <p>
+            Smaller plant (mini diggers, dumpers, compaction kit) is normally self-drive, with{' '}
+            <a
+              href="https://www.cpa.uk.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              CPCS or NPORS cards
+            </a>{' '}
+            expected on commercial sites and PUWER duties applying to employers who provide hired
+            plant. Larger excavators and specialist machines are commonly supplied operated, with a
+            qualified driver included.
+          </p>
+          <p>
+            Operated costs more per day but removes the ticketing question and typically shifts more
+            muck per hour. For domestic groundworks, self-drive on a 1.5 t machine is the standard
+            route; for bigger machines on commercial Birmingham sites, expect operated as the norm.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>How to Compare Plant Hire Companies Properly</H2>
+        <Prose>
+          <p>
+            Compare the whole quote, never the headline rate. Delivery and collection charges vary with
+            depot distance, which matters in a market where Black Country yards and city depots both
+            serve the same postcodes. Damage waiver terms, fuel policy and whether the machine comes
+            from the company's own fleet (cross-hire affects swap-out speed) all change the true cost.
+          </p>
+          <p>
+            Duration is the other lever. Weekly and monthly bands beat day rates, and companies quote
+            keenest on plant that stays out. If the job might overrun, get the longer band priced
+            upfront.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Plant Hire Across Birmingham and Beyond</H2>
+        <Prose>
+          <p>
+            Tooli.uk compares plant hire quotes across every B postcode and the surrounding towns:
+            Solihull, Sutton Coldfield, West Bromwich, Dudley, Walsall and Wolverhampton. One search
+            covers the whole West Midlands supplier pool competing for your job.
+          </p>
+          <p>Compare Birmingham plant hire companies on Tooli.uk — one search, multiple quotes, no phone-round.</p>
+        </Prose>
+        <Link
+          to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Plant Hire London: Compare Local Plant Hire Companies →
+          </span>
+        </Link>
+      </section>
+
+      <FaqSection faqs={plantHireBirminghamFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Birmingham Plant Hire Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your B postcode on Tooli.uk, choose your machine and dates, and get quotes from local
+          and national plant hire companies side by side.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -2768,6 +3067,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Birmingham Digger Hire',
     faqs: miniDiggerBirminghamFaqs,
     Body: MiniDiggerBirminghamBody,
+  },
+  {
+    slug: 'plant-hire-birmingham-compared-local-plant-hire-companies',
+    category: 'Plant Hire',
+    title: 'Plant Hire Birmingham: Compare Local Plant Hire Companies',
+    excerpt:
+      'Compare plant hire companies across Birmingham — local independents and national chains. Diggers, dumpers, telehandlers and access kit for every B postcode.',
+    intro:
+      'Plant hire in Birmingham is a competitive market: national chains, established city depots and Black Country independents all deliver into the same postcodes. Tooli.uk compares them in one search. Enter your postcode, choose the machine and dates, and get quotes from multiple Birmingham plant hire companies side by side.',
+    image: '/images/blog/tool-hire-birmingham.webp',
+    imageAlt: 'Plant hire comparison in Birmingham — compare local and national suppliers on Tooli.uk',
+    datePublished: '2026-07-08',
+    metaTitle: 'Plant Hire Birmingham | Compare Local Companies | Tooli.uk',
+    metaDescription:
+      'Compare plant hire in Birmingham across local and national companies. Diggers, dumpers, telehandlers and access kit. Get free quotes fast on Tooli.uk.',
+    primaryCta: 'Compare Birmingham Plant Hire',
+    faqs: plantHireBirminghamFaqs,
+    Body: PlantHireBirminghamBody,
   },
 ];
 

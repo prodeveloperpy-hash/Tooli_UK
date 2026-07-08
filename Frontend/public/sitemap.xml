@@ -116,6 +116,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://tooli.uk/blog/plant-hire-birmingham-compared-local-plant-hire-companies</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Equipment pages -->
   <url>
