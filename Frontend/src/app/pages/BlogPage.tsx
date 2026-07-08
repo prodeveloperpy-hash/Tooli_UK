@@ -2016,6 +2016,292 @@ function MiniDiggerLondonBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 9 — Plant Hire London: Compare Local Plant Hire Companies   */
+/* ------------------------------------------------------------------ */
+
+const plantHireLondonTable: [string, string, string][] = [
+  ['Excavators', 'Micro, mini (1.5–3 t), midi (5–8 t)', 'Footings, basements, drainage, site strips'],
+  ['Dumpers', '1 t high-tip, tracked micro dumpers', 'Muck-away on tight residential sites'],
+  ['Compaction', 'Wacker plates, trench rammers, 120 rollers', 'Sub-base, reinstatement, driveways'],
+  ['Telehandlers', 'Compact to 17 m reach', 'Loading out scaffolds, moving pallets on housing sites'],
+  ['Powered access', 'Cherry pickers, scissor lifts (IPAF)', 'Facade, M&E and signage work across the city'],
+  ['Site support', 'Generators, lighting towers, welfare units', 'Infrastructure jobs and anything off-grid'],
+];
+
+const plantHireLondonAtAGlance = [
+  'Compare quotes from local and national plant hire companies across all London boroughs on Tooli.uk',
+  'Full plant range: diggers, dumpers, rollers, telehandlers, excavator attachments and powered access',
+  "Each company sets its own rates and delivery terms, so comparing beats ringing round",
+  'London-specific logistics covered: ULEZ, FORS fleets, red routes, restricted delivery windows',
+  'Operated and self-drive options available depending on machine and supplier',
+];
+
+const plantHireLondonFaqs: Faq[] = [
+  [
+    'How do I compare plant hire companies in London?',
+    'Enter your postcode on Tooli.uk, select the machine and dates, and compare quotes from local and national companies side by side. Each company sets its own rates and delivery terms, so comparing totals is the reliable way to find the best deal.',
+  ],
+  [
+    'Are local plant hire companies cheaper than national chains in London?',
+    "Sometimes, but not by rule. Pricing is set independently and varies by machine, borough and season. Independents often quote sharper on longer hires; nationals offer fleet backup. Compare both every time.",
+  ],
+  [
+    'Do London plant hire companies deliver inside the ULEZ?',
+    "Yes. ULEZ covers all of Greater London and modern hire fleets are compliant, but confirm this and any FORS requirements with the supplier, especially for central sites with contractor logistics rules.",
+  ],
+  [
+    'Do I need a licence to hire plant in London?',
+    'Not for self-drive plant on private land. Commercial sites normally require CPCS or NPORS operator cards, and larger machines are often supplied with an operator included.',
+  ],
+  [
+    "What's the difference between operated and self-drive plant hire?",
+    "Self-drive means you operate the machine yourself. Operated hire includes a qualified driver, costs more per day, and is standard for larger excavators and specialist plant on London sites.",
+  ],
+  [
+    'Can I hire plant for a weekend in London?',
+    'Yes, most companies offer weekend hire on smaller plant. Book by midweek, as Friday delivery slots fill first during the March-to-September groundworks season.',
+  ],
+  [
+    'What plant do London builders hire most?',
+    'Mini diggers, micro dumpers, wacker plates, telehandlers and powered access top demand across the Tooli.uk network in London, driven by extensions, basements and refurbishment work.',
+  ],
+  [
+    'Is delivery included in London plant hire quotes?',
+    'Usually charged separately and varying with distance. Always compare the full total including delivery, collection, fuel policy and damage waiver rather than the daily rate alone.',
+  ],
+];
+
+function PlantHireLondonBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={plantHireLondonAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/plant-hire-london.webp"
+        alt="Plant hire London — compare local plant hire companies across all boroughs on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Local Companies vs National Chains: What's the Difference?</H2>
+        <Prose>
+          <p>
+            Both hire the same kit; they differ in how they serve it. The nationals bring depth of
+            fleet and backup: if a machine goes down, a replacement usually arrives from another
+            depot quickly. Independent London yards tend to win on flexibility, local knowledge and
+            service, and they'll often quote sharper on longer hires to keep a machine working.
+          </p>
+          <p>
+            The honest answer is that neither side is cheapest by default. Every company on the
+            Tooli.uk network prices independently, and in our experience comparing London quotes,
+            an independent in Barking can undercut a national for one machine while the reverse
+            holds a borough away. Compare both on every hire and let the totals decide.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>What Plant Can You Hire in London?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Category</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Common machines</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical London use</th>
+              </tr>
+            </thead>
+            <tbody>
+              {plantHireLondonTable.map(([cat, machines, use], i) => (
+                <tr key={cat} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{cat}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{machines}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{use}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          Attachments multiply what one machine can do. Breakers, augers and grading buckets
+          hired alongside an excavator save separate hires, and most companies will bundle them
+          on one delivery.
+        </p>
+      </section>
+
+      {/* Equipment grid */}
+      <img
+        src="/images/blog/plant-hire-london-grid.webp"
+        alt="Full range of plant hire equipment available across London, including excavators, dumpers, telehandlers and access platforms"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Hiring Plant Into a London Site: The Logistics</H2>
+        <Prose>
+          <p>
+            London punishes poor planning more than any other UK hire market. Before your delivery
+            date, check three things. First, vehicle compliance:{' '}
+            <a
+              href="https://tfl.gov.uk/modes/driving/ultra-low-emission-zone"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              ULEZ covers all of Greater London
+            </a>{' '}
+            and many principal contractors require FORS-accredited delivery fleets, so confirm
+            the company's wagons qualify for your site. Second, access: red routes, CPZ bays and
+            narrow streets may need parking suspensions arranged with the borough days in advance.
+            Third, timing: many sites and boroughs restrict deliveries and noisy works to standard
+            weekday hours.
+          </p>
+          <p>
+            On{' '}
+            <a
+              href="https://www.hse.gov.uk/construction/cdm/2015/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              CDM 2015
+            </a>{' '}
+            projects, hired plant falls under the principal contractor's site rules, so share the
+            machine spec and delivery plan early. Companies used to central London work will handle
+            much of this for you, which is one reason local experience is worth weighing alongside
+            price when you compare.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-london"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire in London: Compare Prices From Local Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Operated or Self-Drive?</H2>
+        <Prose>
+          <p>
+            Smaller plant (mini diggers, dumpers, compaction kit) is normally self-drive: you hire
+            the machine and operate it yourself, with CPCS or NPORS cards expected on commercial
+            sites and PUWER duties applying to employers. Larger excavators and specialist machines
+            are often supplied operated, meaning a qualified driver comes with the machine.
+          </p>
+          <p>
+            Operated hire costs more per day but removes the ticketing question and usually gets
+            more done per hour. For one-off domestic groundworks, self-drive on a 1.5 t machine
+            is the standard route; for anything over 8 tonnes in London, expect operated to be
+            the norm.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>How to Compare Plant Hire Companies Properly</H2>
+        <Prose>
+          <p>
+            Compare the whole quote, not the headline rate. Delivery and collection charges vary
+            widely across London distances. Damage waiver or insurance terms differ by company.
+            Fuel policy (returned full vs charged per litre) changes the true cost. And
+            cross-hire is common, so ask whether your machine comes from the company's own fleet,
+            which affects swap-out speed if something fails.
+          </p>
+          <p>
+            Duration is the other lever. Weekly and monthly bands beat day rates, and companies
+            quote keenest on plant that stays out longer. If a job might overrun, say so upfront
+            and get the longer band priced from the start.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-birmingham"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire in Birmingham: Compare Prices From Local Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Plant Hire Across the Boroughs</H2>
+        <Prose>
+          <p>
+            Tooli.uk compares plant hire quotes across all 32 London boroughs and every postcode
+            area, from central zones to Croydon, Bromley, Romford, Enfield, Ealing and Kingston.
+            Demand runs year-round in London, but groundworks season from March tightens
+            availability on diggers and dumpers, so book ahead for spring starts.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-sw19-london-postcode-area-guide"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire SW19: London Postcode Area Guide →
+          </span>
+        </Link>
+      </section>
+
+      <FaqSection faqs={plantHireLondonFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare London Plant Hire Companies Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          One search, multiple quotes, no phone-round. Enter your postcode on Tooli.uk and
+          compare plant hire companies across London in minutes.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -2161,6 +2447,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Digger Hire',
     faqs: miniDiggerLondonFaqs,
     Body: MiniDiggerLondonBody,
+  },
+  {
+    slug: 'plant-hire-london-compare-local-plant-hire-companies',
+    category: 'Local Tool Hire',
+    title: 'Plant Hire London: Compare Local Plant Hire Companies',
+    excerpt:
+      'London has dozens of plant hire companies — nationals with M25 depots and independent yards that have served the same boroughs for decades. Here\'s how to compare them properly and avoid paying over the odds.',
+    intro:
+      'Plant hire in London means choosing between dozens of companies, from national chains with depots ringing the M25 to independent yards that have served the same boroughs for decades. Tooli.uk compares them in one search.',
+    image: '/images/blog/plant-hire-london.webp',
+    imageAlt: 'Plant hire London — compare local plant hire companies across all boroughs on Tooli.uk',
+    datePublished: '2026-07-08',
+    metaTitle: 'Plant Hire London | Compare Local Companies | Tooli.uk',
+    metaDescription:
+      'Compare plant hire in London across local and national companies. Diggers, dumpers, rollers, telehandlers and access kit. Free quotes on Tooli.uk.',
+    primaryCta: 'Compare London Plant Hire',
+    faqs: plantHireLondonFaqs,
+    Body: PlantHireLondonBody,
   },
 ];
 
