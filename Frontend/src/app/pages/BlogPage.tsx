@@ -11,13 +11,13 @@ import { locationPages } from '../data/locations';
 
 const ORGANIZATION_NODE = {
   '@type': 'Organization',
-  '@id': 'https://tooli.uk/#organization',
+  '@id': 'https://www.tooli.uk/#organization',
   name: 'Tooli',
   alternateName: 'Tooli.uk',
-  url: 'https://tooli.uk',
+  url: 'https://www.tooli.uk',
   logo: {
     '@type': 'ImageObject',
-    url: 'https://tooli.uk/images/logo.png',
+    url: 'https://www.tooli.uk/images/logo.png',
   },
   description:
     'Tooli is a free online comparison platform for tool hire and plant hire across the UK. Search by equipment type, postcode, and hire period to compare prices from multiple local and national hire suppliers side by side.',
@@ -35,18 +35,18 @@ const ORGANIZATION_NODE = {
 
 const WEBSITE_NODE = {
   '@type': 'WebSite',
-  '@id': 'https://tooli.uk/#website',
+  '@id': 'https://www.tooli.uk/#website',
   name: 'Tooli',
-  url: 'https://tooli.uk',
+  url: 'https://www.tooli.uk',
   description: 'Compare tool hire and plant hire prices across the UK. Free to use, no account required.',
   publisher: {
-    '@id': 'https://tooli.uk/#organization',
+    '@id': 'https://www.tooli.uk/#organization',
   },
   potentialAction: {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://tooli.uk/search?q={search_term_string}',
+      urlTemplate: 'https://www.tooli.uk/search?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -62,7 +62,7 @@ function buildPostSchema(post: {
   datePublished: string;
   faqs: Faq[];
 }): Record<string, unknown> {
-  const url = `https://tooli.uk/blog/${post.slug}`;
+  const url = `https://www.tooli.uk/blog/${post.slug}`;
   const graph: Record<string, unknown>[] = [
     ORGANIZATION_NODE,
     WEBSITE_NODE,
@@ -70,8 +70,8 @@ function buildPostSchema(post: {
       '@type': 'BreadcrumbList',
       '@id': `${url}#breadcrumb`,
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://tooli.uk/' },
-        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://tooli.uk/blog' },
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.tooli.uk/blog' },
         { '@type': 'ListItem', position: 3, name: post.title, item: url },
       ],
     },
@@ -80,15 +80,15 @@ function buildPostSchema(post: {
       '@id': `${url}#article`,
       headline: post.title,
       description: post.metaDescription,
-      image: `https://tooli.uk${post.image}`,
+      image: `https://www.tooli.uk${post.image}`,
       datePublished: post.datePublished,
       dateModified: post.datePublished,
       author: {
         '@type': 'Organization',
         name: 'Tooli UK Editorial Team',
-        url: 'https://tooli.uk',
+        url: 'https://www.tooli.uk',
       },
-      publisher: { '@id': 'https://tooli.uk/#organization' },
+      publisher: { '@id': 'https://www.tooli.uk/#organization' },
       mainEntityOfPage: url,
     },
   ];
@@ -3403,23 +3403,23 @@ const indexSchema: Record<string, unknown> = {
     WEBSITE_NODE,
     {
       '@type': 'BreadcrumbList',
-      '@id': 'https://tooli.uk/blog#breadcrumb',
+      '@id': 'https://www.tooli.uk/blog#breadcrumb',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://tooli.uk/' },
-        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://tooli.uk/blog' },
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.tooli.uk/blog' },
       ],
     },
     {
       '@type': 'Blog',
-      '@id': 'https://tooli.uk/blog#blog',
+      '@id': 'https://www.tooli.uk/blog#blog',
       name: 'Tooli UK Blog',
-      url: 'https://tooli.uk/blog',
-      publisher: { '@id': 'https://tooli.uk/#organization' },
+      url: 'https://www.tooli.uk/blog',
+      publisher: { '@id': 'https://www.tooli.uk/#organization' },
       blogPost: blogPosts.map((post) => ({
         '@type': 'BlogPosting',
         headline: post.title,
         description: post.metaDescription,
-        url: `https://tooli.uk/blog/${post.slug}`,
+        url: `https://www.tooli.uk/blog/${post.slug}`,
         datePublished: post.datePublished,
       })),
     },
@@ -3432,8 +3432,8 @@ export function BlogPage() {
       <PageMeta
         title="Tooli UK Blog: Tool Hire & Plant Hire Guides | Tooli UK"
         description="Guides, pricing breakdowns and local hire comparisons from Tooli UK. Compare construction equipment and plant hire suppliers across the UK."
-        canonicalUrl="https://tooli.uk/blog"
-        image="https://tooli.uk/images/blog/tool-hire-comparison-uk.png"
+        canonicalUrl="https://www.tooli.uk/blog"
+        image="https://www.tooli.uk/images/blog/tool-hire-comparison-uk.png"
         type="blog"
         jsonLd={indexSchema}
       />
@@ -3520,8 +3520,8 @@ export function BlogPostPage() {
       <PageMeta
         title={post.metaTitle}
         description={post.metaDescription}
-        canonicalUrl={`https://tooli.uk/blog/${post.slug}`}
-        image={`https://tooli.uk${post.image}`}
+        canonicalUrl={`https://www.tooli.uk/blog/${post.slug}`}
+        image={`https://www.tooli.uk${post.image}`}
         type="article"
         publishedTime={post.datePublished}
         jsonLd={buildPostSchema(post)}

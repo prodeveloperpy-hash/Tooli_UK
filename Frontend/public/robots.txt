@@ -37,5 +37,5 @@ Disallow: /*?utm_
 Disallow: /*?ref=
 Crawl-delay: 10
 
-Sitemap: https://tooli.uk/sitemap.xml
+Sitemap: https://www.tooli.uk/sitemap.xml
 

@@ -11,10 +11,10 @@ function buildEquipmentSchema(page: (typeof equipmentPages)[number]): Record<str
     '@graph': [
       {
         '@type': 'Organization',
-        '@id': 'https://tooli.uk/#organization',
+        '@id': 'https://www.tooli.uk/#organization',
         name: 'Tooli UK',
-        url: 'https://tooli.uk',
-        logo: 'https://tooli.uk/images/logo.png',
+        url: 'https://www.tooli.uk',
+        logo: 'https://www.tooli.uk/images/logo.png',
         email: 'info@tooli.uk',
         areaServed: { '@type': 'Country', name: 'United Kingdom' },
       },
@@ -22,8 +22,8 @@ function buildEquipmentSchema(page: (typeof equipmentPages)[number]): Record<str
         '@type': 'BreadcrumbList',
         '@id': `${page.canonicalUrl}#breadcrumb`,
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://tooli.uk/' },
-          { '@type': 'ListItem', position: 2, name: 'Equipment', item: 'https://tooli.uk/equipment' },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
+          { '@type': 'ListItem', position: 2, name: 'Equipment', item: 'https://www.tooli.uk/equipment' },
           { '@type': 'ListItem', position: 3, name: page.name, item: page.canonicalUrl },
         ],
       },
@@ -33,7 +33,7 @@ function buildEquipmentSchema(page: (typeof equipmentPages)[number]): Record<str
         name: page.metaTitle,
         description: page.metaDescription,
         url: page.canonicalUrl,
-        isPartOf: { '@id': 'https://tooli.uk/#website' },
+        isPartOf: { '@id': 'https://www.tooli.uk/#website' },
         about: {
           '@type': 'Service',
           name: page.name,
@@ -77,7 +77,7 @@ export function EquipmentPage() {
         title={page.metaTitle}
         description={page.metaDescription}
         canonicalUrl={page.canonicalUrl}
-        image={`https://tooli.uk${page.image}`}
+        image={`https://www.tooli.uk${page.image}`}
         type="website"
         jsonLd={buildEquipmentSchema(page)}
       />

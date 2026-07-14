@@ -1999,7 +1999,7 @@ export const locationPages: LocationPageData[] = [
     metaTitle: 'Tool & Plant Hire London | Compare Prices from Local Suppliers',
     metaDescription:
       'Compare tool and plant hire prices across London from trusted local suppliers and national hire companies. Find the cheapest rates on mini diggers, excavators, dumpers, generators, telehandlers, access platforms and power tools. No booking fees. Compare prices in minutes.',
-    canonicalUrl: 'https://tooli.uk/locations/london',
+    canonicalUrl: 'https://www.tooli.uk/locations/london',
     title: 'Compare Tool & Plant Hire Prices in London – Find the Cheapest Rates Fast',
     description:
       'Compare tool hire and plant hire prices from local independent depots alongside national hire companies serving Greater London.',
@@ -2014,7 +2014,7 @@ export const locationPages: LocationPageData[] = [
     metaTitle: 'Tool & Plant Hire Manchester | Compare Prices from Local Suppliers',
     metaDescription:
       'Compare tool hire and plant hire prices across Greater Manchester from trusted local suppliers and national hire companies. Find the cheapest rates on mini diggers, scaffold towers, dumpers, generators, and more. No booking fees.',
-    canonicalUrl: 'https://tooli.uk/locations/manchester',
+    canonicalUrl: 'https://www.tooli.uk/locations/manchester',
     title: 'Tool & Plant Hire Comparison in Manchester — Find the Best Price Before You Book',
     description:
       'Compare tool hire prices from suppliers across Greater Manchester in one place. No phone calls, no haggling — real rates from trusted local and national suppliers.',
@@ -2029,7 +2029,7 @@ export const locationPages: LocationPageData[] = [
     metaTitle: 'Tool & Plant Hire Birmingham | Compare Prices from Local Suppliers',
     metaDescription:
       'Compare tool hire and plant hire prices across Birmingham and the West Midlands from trusted local suppliers and national hire companies. Find the cheapest rates on mini diggers, scaffold towers, dumpers, generators, and more. No booking fees.',
-    canonicalUrl: 'https://tooli.uk/locations/birmingham',
+    canonicalUrl: 'https://www.tooli.uk/locations/birmingham',
     title: 'Tool & Plant Hire Comparison in Birmingham — Compare Prices Before You Book',
     description:
       'Compare tool hire rates from suppliers across the West Midlands in one place. No ringing round depots, no callbacks, no surprise extras — just real prices side by side.',
@@ -2044,7 +2044,7 @@ export const locationPages: LocationPageData[] = [
     metaTitle: 'Tool Hire Leeds | Compare Local Prices Before You Book | Tooli.uk',
     metaDescription:
       'Compare tool hire prices from local and national suppliers across Leeds. Find the best rates on mini diggers, scaffold towers, breakers, floor saws, and more. No booking fees. VAT inclusive prices.',
-    canonicalUrl: 'https://tooli.uk/locations/leeds',
+    canonicalUrl: 'https://www.tooli.uk/locations/leeds',
     title: 'Tool Hire in Leeds: Compare Local Prices Before You Book',
     description:
       'Compare tool hire rates from local and national suppliers covering LS1 through to LS28, Morley, Horsforth, Rothwell, and beyond — no ringing round, no callbacks.',
@@ -2059,7 +2059,7 @@ export const locationPages: LocationPageData[] = [
     metaTitle: 'Tool Hire Glasgow | Compare Prices From Local Suppliers | Tooli.uk',
     metaDescription:
       'Compare tool hire prices from local independents and national chains across Greater Glasgow. Find the best rates on mini diggers, scaffold towers, breakers, and more. No booking fees. VAT inclusive.',
-    canonicalUrl: 'https://tooli.uk/locations/glasgow',
+    canonicalUrl: 'https://www.tooli.uk/locations/glasgow',
     title: 'Tool Hire in Glasgow: Compare Prices From Local Suppliers',
     description:
       "Compare tool hire rates across local independents and national chains covering G1 through to G78, Govan, Partick, Shettleston, Rutherglen, and the wider Greater Glasgow area.",
@@ -2074,7 +2074,7 @@ export const locationPages: LocationPageData[] = [
     metaTitle: 'Tool Hire Bristol | Compare Prices From Local Suppliers | Tooli.uk',
     metaDescription:
       'Compare tool hire prices from local independents and national chains across Bristol. Find the best rates on mini diggers, scaffold towers, breakers, and more. No booking fees.',
-    canonicalUrl: 'https://tooli.uk/locations/bristol',
+    canonicalUrl: 'https://www.tooli.uk/locations/bristol',
     title: 'Tool Hire in Bristol: Compare Prices From Local Suppliers',
     description:
       'Compare tool hire rates from local independents and national chains covering BS1 through to BS16, Avonmouth, Bedminster, Filton, Kingswood, and the wider Bristol area.',
@@ -2089,7 +2089,7 @@ export const locationPages: LocationPageData[] = [
     metaTitle: 'Tool Hire Liverpool | Compare Prices From Local Suppliers | Tooli.uk',
     metaDescription:
       'Compare tool hire prices from local independents and national chains across Liverpool and Merseyside. Find the best rates on mini diggers, scaffold towers, breakers, and more. No booking fees.',
-    canonicalUrl: 'https://tooli.uk/locations/liverpool',
+    canonicalUrl: 'https://www.tooli.uk/locations/liverpool',
     title: 'Tool Hire in Liverpool: Compare Prices From Local Suppliers',
     description:
       'Compare tool hire rates from local independents and national chains covering L1 through to L36, Bootle, Kirkby, Speke, Wavertree, and across Greater Merseyside.',
