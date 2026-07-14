@@ -34,6 +34,7 @@ export function SuppliersPage() {
       <PageMeta
         title="List Your Hire Depot on Tooli.uk | Reach More UK Customers"
         description="Get your tool hire or plant hire business in front of thousands of UK tradespeople and DIYers searching for equipment right now. Free to list. No long contracts."
+        canonicalUrl="https://www.tooli.uk/suppliers"
       />
       {/* Hero Section */}
       <section className="relative min-h-[560px] md:h-[500px] flex items-center overflow-hidden bg-[#F8F9FC] md:bg-white">

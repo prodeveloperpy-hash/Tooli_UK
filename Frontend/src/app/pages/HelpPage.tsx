@@ -1,9 +1,15 @@
 import { motion } from 'motion/react';
 import { Mail, MapPin, Clock } from 'lucide-react';
+import { PageMeta } from '../components/PageMeta';
 
 export function HelpPage() {
   return (
     <div className="min-h-screen bg-white">
+      <PageMeta
+        title="Help & Support | Tooli.uk"
+        description="Find answers to common questions or get in touch with the Tooli.uk team for help with tool and plant hire comparisons."
+        canonicalUrl="https://www.tooli.uk/help"
+      />
       {/* Hero Section */}
       <section className="pt-16 pb-12 md:pt-24 md:pb-16 bg-[#F8F9FC]">
         <div className="container mx-auto px-4 text-center">

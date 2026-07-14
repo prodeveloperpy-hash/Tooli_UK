@@ -1,9 +1,15 @@
 import { motion } from 'motion/react';
 import { Clock, Shield, MapPin } from 'lucide-react';
+import { PageMeta } from '../components/PageMeta';
 
 export function AboutPage() {
   return (
     <div className="w-full bg-white">
+      <PageMeta
+        title="About Tooli | Compare Tool & Plant Hire Prices UK"
+        description="Tooli makes hiring construction equipment faster and easier by connecting contractors with trusted local suppliers across the UK."
+        canonicalUrl="https://www.tooli.uk/about"
+      />
       {/* Hero Section */}
       <section className="relative min-h-[460px] md:h-[500px] flex items-center overflow-hidden bg-[#F8F9FC] md:bg-white">
         <div className="absolute inset-0 z-0">

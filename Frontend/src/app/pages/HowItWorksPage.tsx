@@ -38,6 +38,7 @@ export function HowItWorksPage() {
       <PageMeta
         title="Compare Tool & Plant Hire Prices UK | Tooli.uk"
         description="Compare tool hire and plant hire prices from hundreds of UK suppliers in seconds. Find the cheapest rate near you. Free to use - no account needed."
+        canonicalUrl="https://www.tooli.uk/how-it-works"
       />
       {/* Hero Section */}
       <section className="pt-16 pb-12 md:pt-24 md:pb-16 bg-[#F8F9FC] text-center">

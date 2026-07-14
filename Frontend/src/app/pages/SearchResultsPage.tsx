@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Loader2, Info } from 'lucide-react';
 import { equipmentApi, Equipment } from '../../context/equipment.api';
 import { EquipmentCard } from '../components/EquipmentCard';
+import { PageMeta } from '../components/PageMeta';
 
 type SortOption = 'price-asc' | 'price-desc' | 'rating-desc';
 
@@ -119,6 +120,12 @@ export function SearchResultsPage() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FC] overflow-x-hidden">
+      <PageMeta
+        title="Search Results | Tooli.uk"
+        description="Compare tool and plant hire prices from local suppliers across the UK."
+        canonicalUrl="https://www.tooli.uk/search"
+        robots="noindex, follow"
+      />
       {/* Sticky Sub-Header with SearchBar */}
       <div className="bg-white border-b shadow-sm sticky top-10 z-40">
         <div className="container mx-auto px-4 py-3">
