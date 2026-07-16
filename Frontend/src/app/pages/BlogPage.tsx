@@ -3172,6 +3172,404 @@ function ToolHireB1Body() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 13 — Mini Digger Hire UK: Prices & Sizes Compared          */
+/* ------------------------------------------------------------------ */
+
+const miniDiggerUKPrices: [string, string, string, string, string, string][] = [
+  ['0.8 tonne', 'Micro / Mini Digger', '£100–£175', '£170–£280', '£380–£550', '£1,000–£1,400'],
+  ['1.5 tonne', 'Mini Digger', '£160–£230', '£250–£380', '£500–£700', '£1,300–£1,800'],
+  ['3.0 tonne', 'Mini Digger', '£220–£320', '£340–£500', '£680–£950', '£1,700–£2,400'],
+  ['5.0 tonne', 'Mini Digger', '£300–£500', '£480–£750', '£900–£1,400', '£2,200–£3,400'],
+  ['8.0 tonne', 'Mini Digger', '£400–£650', '£600–£950', '£1,200–£1,800', '£2,900–£4,200'],
+];
+
+const miniDiggerUKDelivery: [string, string][] = [
+  ['Under 10 miles', '£60–£100'],
+  ['10–25 miles', '£100–£160'],
+  ['25–50 miles', '£150–£250'],
+  ['50+ miles', '£200–£350+'],
+];
+
+const miniDiggerUKSpecs: [string, string, string, string, string, string][] = [
+  ['0.8t', '800–1,000 kg', '1.8–2.2 m', '2.8–3.5 m', '300–450 mm', '750–850 mm'],
+  ['1.5t', '1,400–1,700 kg', '2.2–2.6 m', '3.8–4.5 m', '400–600 mm', '990–1,200 mm'],
+  ['3.0t', '2,800–3,200 kg', '3.0–3.8 m', '5.0–6.0 m', '450–600 mm', '1,300–1,550 mm'],
+  ['5.0t', '4,800–5,400 kg', '4.0–5.0 m', '6.5–7.5 m', '500–900 mm', '1,800–2,000 mm'],
+  ['8.0t', '7,800–8,800 kg', '4.8–5.5 m', '7.5–8.5 m', '600–1,000 mm', '2,200–2,500 mm'],
+];
+
+const miniDiggerUKJobs: [string, string, string][] = [
+  ['Fence post removal / replacement', '0.8t or 1.5t', '0.8t for tight gardens with no gate access'],
+  ['Garden clearance and topsoil removal', '1.5t', 'Most efficient all-rounder for residential gardens'],
+  ['Patio preparation and base digging', '1.5t or 3t', '3t if digging more than 300 mm deep'],
+  ['Trench digging (drainage, pipes, cables)', '1.5t or 3t', 'Depth and length of trench determines size'],
+  ['Foundation excavation for extension', '3t', 'Match dig depth to machine reach spec above'],
+  ['Pond excavation', '1.5t or 3t', '0.8t for very small ponds in tight spaces'],
+  ['Driveway excavation', '3t', 'Speed and depth matters — go bigger'],
+  ['Demolition breakout (with breaker)', '3t or 5t', 'Breaker attachment adds significant strain on smaller machines'],
+  ['Tree root removal', '1.5t or 3t', 'Pair with root-grubbing bucket attachment'],
+  ['Land drainage / French drain', '3t', 'Volume of spoil removal suits a larger machine'],
+];
+
+const miniDiggerUKAtAGlance = [
+  'Micro digger (0.8t): typically £100–£175/day — tight-access gardens and shallow trenches',
+  '1.5t digger: typically £160–£230/day — the UK\'s most hired excavator size',
+  '3t digger: typically £220–£320/day — foundations, drainage, serious landscaping',
+  '5t+ digger: typically £300–£500/day — groundworks, road excavation, commercial sites',
+  'Delivery is charged separately — typically £80–£200 return depending on distance',
+];
+
+const miniDiggerUKFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a mini digger for a day?',
+    'Mini digger hire in the UK typically runs from £100 to £320 per day depending on the size. A 0.8-tonne micro digger costs around £100–£175/day. A 1.5-tonne — the UK\'s most popular size — runs £160–£230/day. A 3-tonne machine costs £220–£320/day. All prices are VAT-inclusive guidance; confirm current rates on Tooli.uk.',
+  ],
+  [
+    'Can I drive a mini digger on the road?',
+    'No. Mini diggers are not road-legal and must be transported on a low-loader or trailer. Your hire depot will arrange delivery if you need it, or some customers with the correct trailer and a vehicle rated to tow the weight can self-collect.',
+  ],
+  [
+    'Do I need a licence to hire a mini digger?',
+    'No formal licence is required to hire a mini digger on private land for domestic projects. On commercial sites you will need a CPCS card. PUWER regulations require you to be competent to operate any work equipment, so if you\'ve never used one before, ask the depot for a brief induction.',
+  ],
+  [
+    'What is the difference between a mini digger and a micro digger?',
+    'Micro digger typically refers to a machine under 1 tonne — designed specifically for tight-access residential work. Mini digger is the broader category covering machines from around 0.8 to 6 tonnes. The terms are used interchangeably in the hire trade but micro usually means the smallest class.',
+  ],
+  [
+    'Can I hire a mini digger without a trade account?',
+    'Yes. Most UK hire depots will hire to private individuals without a trade account. You\'ll typically need a form of photo ID (driving licence or passport) and a credit or debit card for the deposit. Some depots require proof of address for one-off hires.',
+  ],
+  [
+    'How far in advance do I need to book a mini digger?',
+    'For rural areas or during busy spring and summer months, book at least 3–5 working days in advance. In most UK towns you can often get a machine within 24–48 hours. Same-day availability is rare — have a fallback date in mind.',
+  ],
+  [
+    'What happens if I return the digger late?',
+    "Hire companies charge for additional days at the standard daily rate. Some have a grace period of a few hours; most do not. If you need extra time, call the depot before your return date — they may be able to extend the hire if the machine isn't already reserved.",
+  ],
+  [
+    'What fuel does a mini digger use?',
+    'The vast majority of hire-fleet mini diggers run on diesel. You are usually expected to return the machine with the same fuel level it had when collected. Check the fuel gauge on collection and photograph it — it avoids disputes on return.',
+  ],
+];
+
+function MiniDiggerUKBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={miniDiggerUKAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/mini-digger-hire-uk.webp"
+        alt="Mini digger hire UK — prices and sizes compared: micro, mini and large mini diggers with UK hire rates"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Price table */}
+      <section>
+        <H2>Mini Digger Hire Prices UK 2026</H2>
+        <Prose>
+          <p>
+            Prices below are based on average UK market rates. Your actual quote may vary by location,
+            supplier, and whether you need delivery. All prices are VAT-inclusive guides. Confirm
+            current rates on Tooli.uk.
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Size class</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Machine type</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Day rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Weekend (2 days)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Week rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">4-week rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerUKPrices.map(([size, type, day, weekend, week, monthly], i) => (
+                <tr key={size} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{size}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{type}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{weekend}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{week}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{monthly}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs font-medium text-gray-400">
+          *All prices VAT-inclusive guidance only. Compare live quotes on Tooli.uk.
+        </p>
+      </section>
+
+      {/* Delivery table */}
+      <section>
+        <H2>Delivery &amp; Collection Costs</H2>
+        <Prose>
+          <p>
+            Most hire companies charge separately for delivery and collection. Budget for this before
+            you compare day rates — a cheap day rate with a £200 delivery charge can work out pricier
+            than a slightly higher rate with local collection.
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Distance from depot</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical delivery charge (return)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerUKDelivery.map(([dist, charge], i) => (
+                <tr key={dist} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{dist}</td>
+                  <td className="px-5 py-3 font-bold text-brand-primary">{charge}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Specs table */}
+      <section>
+        <H2>Mini Digger Sizes &amp; Specs Compared</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Size</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Op. weight</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Max dig depth</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Max reach</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Bucket width</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Transport width</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerUKSpecs.map(([size, weight, depth, reach, bucket, width], i) => (
+                <tr key={size} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{size}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{weight}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{depth}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{reach}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{bucket}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{width}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/mini-digger-hire-uk-action.webp"
+        alt="JCB mini digger excavating on a UK residential site — hire from local suppliers compared on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Jobs table */}
+      <section>
+        <H2>What Can You Do With a Mini Digger?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Job</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Recommended size</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerUKJobs.map(([job, size, notes], i) => (
+                <tr key={job} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{job}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{size}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <H2>How to Choose the Right Mini Digger</H2>
+        <div className="space-y-6">
+          {[
+            {
+              n: '1',
+              title: 'Access Width',
+              body: 'Measure your narrowest gate or access point before booking. A standard 1.5-tonne digger needs around 1,000–1,200 mm of clear width. A micro digger (0.8t) can squeeze through 750–850 mm. Many garden jobs need a micro digger not because of dig depth, but because nothing wider fits through the side gate.',
+            },
+            {
+              n: '2',
+              title: 'Dig Depth Required',
+              body: 'Foundation trenches for a single-storey extension typically need 800–1,000 mm depth. A 1.5-tonne machine handles that comfortably. Deep drainage or groundworks going below 1.5 metres needs a 3-tonne machine minimum.',
+            },
+            {
+              n: '3',
+              title: 'Amount of Material to Move',
+              body: 'Bigger machine, bigger bucket, faster work. A 0.8t digger shifts material slowly. If you\'re moving 20+ tonnes of spoil, hire the 3t — the day-rate difference is smaller than the extra day or two of hire time.',
+            },
+            {
+              n: '4',
+              title: 'Site Conditions',
+              body: 'Rubber-tracked machines protect soft lawns and paving. Steel tracks are more durable on rough ground but will cut up any surface they cross. Most hire companies offer rubber tracks on smaller machines — confirm before booking.',
+            },
+            {
+              n: '5',
+              title: 'Operator Experience',
+              body: 'You do not need a CPCS card to hire or operate a mini digger under 5 tonnes on private land. But competence is required under PUWER regulations. If you\'ve never operated one, request an induction from the hire depot or hire an experienced operator separately.',
+            },
+            {
+              n: '6',
+              title: 'Attachments Needed',
+              body: 'Standard machines come with a general-purpose bucket. Confirm whether breaker attachments, augers, grabs, or ditching buckets are available and what the additional daily rate is before you commit to a supplier.',
+            },
+          ].map(({ n, title, body }) => (
+            <div key={n} className="flex gap-4">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-sm font-extrabold text-white">
+                {n}
+              </div>
+              <div>
+                <H3>{title}</H3>
+                <p className="mt-1 text-base font-medium leading-relaxed text-gray-500">{body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Do You Need a Licence or Qualification?</H2>
+        <Prose>
+          <p>
+            For private land under a domestic project, there is no legal requirement to hold a CPCS
+            card, CSCS card, or any formal licence to operate a mini digger. However:
+          </p>
+          <ul>
+            <li>
+              <a
+                href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-brand-primary hover:underline"
+              >
+                PUWER 1998
+              </a>{' '}
+              (Provision and Use of Work Equipment Regulations) requires that anyone using work
+              equipment is competent to do so — which means training if you've not operated before.
+            </li>
+            <li>
+              On commercial construction sites, a valid{' '}
+              <a
+                href="https://www.cpcs.uk.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-brand-primary hover:underline"
+              >
+                CPCS
+              </a>{' '}
+              (Construction Plant Competence Scheme) card will be required by most principal
+              contractors.
+            </li>
+            <li>
+              Machines over 5 tonnes on public roads require a valid driving licence and appropriate
+              transport.
+            </li>
+          </ul>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/mini-digger-hire-london-prices-local-availability"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire London: Prices &amp; Local Availability →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Plant Hire London: Compare Local Hire Companies →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-birmingham-prices-and-local-availability"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Birmingham: Prices &amp; Local Availability →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={miniDiggerUKFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Mini Digger Hire Prices Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, pick your machine size and dates, and get quotes from
+          local UK suppliers side by side — delivery included.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -3389,6 +3787,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare B1 Tool Hire',
     faqs: toolHireB1Faqs,
     Body: ToolHireB1Body,
+  },
+  {
+    slug: 'mini-digger-hire-uk-prices-and-sizes-compared',
+    category: 'Mini Digger Hire',
+    title: 'Mini Digger Hire UK: Prices & Sizes Compared',
+    excerpt:
+      'Day, week and monthly hire rates for 0.8t micro diggers to 8t machines, with a size selector, jobs guide and delivery cost breakdown. Compare UK suppliers on Tooli.uk.',
+    intro:
+      'Mini digger hire in the UK runs from around £100 to £350 per day depending on the size of machine you need. Micro diggers (0.8 tonne) suit tight-access garden jobs. 1.5-tonne machines are the most popular all-rounder. Three-tonne diggers are the standard choice for foundation work and serious groundworks. This guide covers UK hire rates by size class, what each machine can do, how to choose the right one, and what to check before you book.',
+    image: '/images/blog/mini-digger-hire-uk.webp',
+    imageAlt: 'Mini digger hire UK — prices and sizes compared on Tooli.uk',
+    datePublished: '2026-07-16',
+    metaTitle: 'Mini Digger Hire UK: Prices & Sizes Compared | Tooli.uk',
+    metaDescription:
+      'Compare mini digger hire prices across the UK by size. Day, week & month rates for 0.8t to 5t excavators. Compare suppliers on Tooli.uk.',
+    primaryCta: 'Compare Mini Digger Hire',
+    faqs: miniDiggerUKFaqs,
+    Body: MiniDiggerUKBody,
   },
 ];
 
