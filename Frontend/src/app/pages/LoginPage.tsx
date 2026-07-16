@@ -109,7 +109,7 @@ export function LoginPage() {
 
       <div className="mb-12">
         <Link to="/">
-          <img src="/images/logo.png" alt="Tooli.uk" className="h-16 w-auto" />
+          <img src="/images/logo.webp" alt="Tooli.uk" className="h-16 w-auto" />
         </Link>
       </div>
 

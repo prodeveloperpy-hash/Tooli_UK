@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-4">
             <Link to="/" className="inline-block mb-6">
-              <img src="/images/logo.png" alt="Tooli.uk" className="h-10 w-auto" />
+              <img src="/images/logo.webp" alt="Tooli.uk" className="h-10 w-auto" />
             </Link>
             <p className="text-gray-500 text-sm leading-relaxed max-w-xs">
               Find, compare, and hire construction equipment from local suppliers.

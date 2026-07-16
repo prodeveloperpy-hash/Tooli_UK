@@ -15,7 +15,7 @@ function buildLocationSchema(page: (typeof locationPages)[number]): Record<strin
         name: 'Tooli',
         alternateName: 'Tooli.uk',
         url: 'https://www.tooli.uk',
-        logo: 'https://www.tooli.uk/images/logo.png',
+        logo: 'https://www.tooli.uk/images/logo.webp',
         email: 'info@tooli.uk',
         areaServed: {
           '@type': 'Country',

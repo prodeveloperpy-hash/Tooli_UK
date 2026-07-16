@@ -17,7 +17,7 @@ const ORGANIZATION_NODE = {
   url: 'https://www.tooli.uk',
   logo: {
     '@type': 'ImageObject',
-    url: 'https://www.tooli.uk/images/logo.png',
+    url: 'https://www.tooli.uk/images/logo.webp',
   },
   description:
     'Tooli is a free online comparison platform for tool hire and plant hire across the UK. Search by equipment type, postcode, and hire period to compare prices from multiple local and national hire suppliers side by side.',

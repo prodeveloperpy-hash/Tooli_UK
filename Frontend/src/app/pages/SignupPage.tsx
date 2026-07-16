@@ -166,7 +166,7 @@ export function SignupPage() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="mb-14 text-center lg:text-left">
           <Link to="/">
-            <img src="/images/logo.png" alt="Tooli.uk" className="h-16 w-auto inline-block" />
+            <img src="/images/logo.webp" alt="Tooli.uk" className="h-16 w-auto inline-block" />
           </Link>
         </div>
 

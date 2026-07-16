@@ -14,7 +14,7 @@ function buildEquipmentSchema(page: (typeof equipmentPages)[number]): Record<str
         '@id': 'https://www.tooli.uk/#organization',
         name: 'Tooli UK',
         url: 'https://www.tooli.uk',
-        logo: 'https://www.tooli.uk/images/logo.png',
+        logo: 'https://www.tooli.uk/images/logo.webp',
         email: 'info@tooli.uk',
         areaServed: { '@type': 'Country', name: 'United Kingdom' },
       },
