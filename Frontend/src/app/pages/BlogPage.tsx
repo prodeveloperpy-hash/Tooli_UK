@@ -3570,6 +3570,333 @@ function MiniDiggerUKBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 14 — Mini Digger Hire Cost UK: 2026 Price Guide            */
+/* ------------------------------------------------------------------ */
+
+const miniDiggerCostDuration: [string, string, string, string, string][] = [
+  ['Half day (4hrs)', '£65–£110', '£95–£140', '£130–£200', '£180–£280'],
+  ['1 day', '£100–£175', '£160–£230', '£220–£320', '£300–£500'],
+  ['Weekend (Fri–Mon)', '£170–£280', '£250–£380', '£340–£500', '£480–£750'],
+  ['5-day week', '£380–£550', '£500–£700', '£680–£950', '£900–£1,400'],
+  ['4-week month', '£1,000–£1,400', '£1,300–£1,800', '£1,700–£2,400', '£2,200–£3,400'],
+];
+
+const miniDiggerCostDelivery: [string, string][] = [
+  ['Self-collect', '£0 (you arrange transport)'],
+  ['Under 10 miles', '£60–£100'],
+  ['10–25 miles', '£100–£160'],
+  ['25–50 miles', '£150–£250'],
+  ['50+ miles', 'POA — expect £200+'],
+];
+
+const miniDiggerCostScenarios: [string, string, string, string, string, string, string][] = [
+  ['Garden fence line trenching', '0.8t', '1 day', '£130', '£80', '£15', '~£225'],
+  ['Patio prep (30 m²)', '1.5t', '1 day', '£190', '£90', '£20', '~£300'],
+  ['Extension foundation (semi-det)', '3t', '2 days', '£540', '£120', '£50', '~£710'],
+  ['Drainage run (40 metres)', '1.5t', '2 days', '£400', '£90', '£40', '~£530'],
+  ['Full garden clearance + pond', '1.5t', '3 days', '£570', '£90', '£55', '~£715'],
+  ['Driveway excavation (3 cars)', '3t', '1 day', '£270', '£120', '£30', '~£420'],
+];
+
+const miniDiggerCostAtAGlance = [
+  '0.8t micro digger: £100–£175/day | £380–£550/week',
+  '1.5t mini digger: £160–£230/day | £500–£700/week',
+  '3t mini digger: £220–£320/day | £680–£950/week',
+  '5t midi digger: £300–£500/day | £900–£1,400/week',
+  'Delivery: add £60–£200 return typically',
+  'Deposit: typically £250–£600 held on card',
+];
+
+const miniDiggerCostFaqs: Faq[] = [
+  [
+    'What is the cheapest way to hire a mini digger?',
+    'Self-collect, book a full week if your job runs 4+ days, and compare at least 3 local suppliers on Tooli.uk before committing. A 0.8-tonne micro digger with self-collection starts from around £100/day. Avoid peak spring/summer booking periods where possible.',
+  ],
+  [
+    'Is mini digger hire cheaper in the North of England than London?',
+    'Generally yes. London and South East rates run 10–20% higher than the national average. Day rates for a 1.5-tonne machine in Manchester, Leeds, or Sheffield typically start lower than equivalent machines in Central London. Compare current local rates on Tooli.uk.',
+  ],
+  [
+    'Do hire companies charge VAT on top of quoted rates?',
+    'If a hire company is VAT-registered (turnover over £90,000 — most commercial hire depots are), they must add 20% VAT to the hire charge. All prices in this guide are VAT-inclusive. Always confirm whether a quote is ex-VAT or inclusive before comparing.',
+  ],
+  [
+    'Can I get a half-day hire rate for a mini digger?',
+    'Some depots offer half-day (4-hour) rates, typically 60–70% of the full-day rate. It is worth asking — but many depots book by the day regardless. If your job is truly 4 hours or less, self-collection and same-day return is the most cost-effective route.',
+  ],
+  [
+    'Is operator hire available, and what does it cost?',
+    'Yes — many hire companies can supply a trained operator alongside the machine. Operator costs vary widely but budget £200–£400 per day for a competent plant operator on top of the machine hire rate.',
+  ],
+  [
+    'How much deposit do I need for mini digger hire?',
+    'Typically £250–£600, held on a credit or debit card at collection. It is released on return of the undamaged, fuelled machine. The deposit is separate from the hire charge and is not charged — just held as a security.',
+  ],
+];
+
+const miniDiggerCostTips = [
+  'Book the right size first time. An under-powered machine takes longer and costs more in extra hire days.',
+  'Self-collect if you have the equipment — saves £80–£200 per hire.',
+  'Book for a full week if the job runs 4+ days — the weekly rate is almost always cheaper than paying 4 or 5 individual day rates.',
+  'Compare at least 3 quotes before booking. Depot prices for the same machine vary by 15–20% in most UK towns.',
+  'Avoid hiring over bank holidays — some depots charge a premium for collection on public holidays.',
+  'Plan your work so the machine is productive every hour of the day — most depots charge a full day rate regardless of how long you actually use it.',
+];
+
+function MiniDiggerCostUKBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Cost Quick Reference</h2>
+        <CheckList items={miniDiggerCostAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/mini-digger-hire-cost-uk-infographic.webp"
+        alt="Mini digger hire cost UK 2026 — price guide covering day, week and month rates by machine size"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>What Affects the Cost of Mini Digger Hire?</H2>
+        <div className="space-y-6">
+          <div>
+            <H3>Machine Size</H3>
+            <p className="mt-1 text-base font-medium leading-relaxed text-gray-500">
+              Size is the single biggest pricing variable. Every step up in size (0.8t → 1.5t → 3t)
+              adds roughly £60–£90 to the daily rate. Hire the smallest machine that genuinely suits
+              the job — not the cheapest one that almost suits it.
+            </p>
+          </div>
+          <div>
+            <H3>Hire Duration</H3>
+            <p className="mt-1 text-base font-medium leading-relaxed text-gray-500">
+              Day rates are priced at a premium. Most hire companies offer a 5-day weekly rate
+              equivalent to around 3 to 4 day rates. A 4-week rate is typically 8–10 day rates total.
+              If your job runs 4+ days, weekly hire almost always saves money.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Duration price table */}
+      <section>
+        <H2>Mini Digger Hire Rates by Duration</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Duration</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">0.8t</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">1.5t</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">3.0t</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">5.0t</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerCostDuration.map(([dur, a, b, c, d], i) => (
+                <tr key={dur} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{dur}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{a}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{b}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{c}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{d}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs font-medium text-gray-400">
+          *All prices VAT-inclusive guidance only. Compare live quotes on Tooli.uk.
+        </p>
+        <Link
+          to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire UK: Prices &amp; Sizes Compared →
+          </span>
+        </Link>
+      </section>
+
+      {/* Delivery table */}
+      <section>
+        <H2>Delivery &amp; Collection Costs</H2>
+        <Prose>
+          <p>
+            Most hire companies do not include delivery in the quoted rate. Expect to add the
+            following on top — and remember delivery is usually charged return, not one-way.
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Distance from depot</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Typical delivery charge (return trip)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerCostDelivery.map(([dist, charge], i) => (
+                <tr key={dist} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{dist}</td>
+                  <td className="px-5 py-3 font-bold text-brand-primary">{charge}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-sm font-medium text-gray-500">
+          If you have access to a suitable trailer and a vehicle rated to tow the weight,
+          self-collection can save £100–£200 on a short hire.
+        </p>
+      </section>
+
+      {/* Fuel / waiver / deposit */}
+      <section>
+        <H2>Fuel, Insurance &amp; Deposit</H2>
+        <div className="space-y-6">
+          <div>
+            <H3>Fuel</H3>
+            <p className="mt-1 text-base font-medium leading-relaxed text-gray-500">
+              Mini diggers run on diesel. Most hire companies provide the machine with a full tank and
+              expect it returned full. Budget roughly £15–£40 in fuel per day depending on machine
+              size and work intensity. Check the tank level on collection and photograph it.
+            </p>
+          </div>
+          <div>
+            <H3>Damage Waiver / Insurance</H3>
+            <p className="mt-1 text-base font-medium leading-relaxed text-gray-500">
+              Most depots offer a damage waiver for £15–£35/day that caps your liability for
+              accidental damage (excluding misuse and consumables like tracks and teeth). If you have
+              plant equipment cover under a trade insurance policy, you may be able to decline the
+              waiver — check your policy before you go.
+            </p>
+          </div>
+          <div>
+            <H3>Deposit</H3>
+            <p className="mt-1 text-base font-medium leading-relaxed text-gray-500">
+              UK hire companies typically hold a deposit of £250–£600 on a credit or debit card at
+              the start of hire. This is released in full when the machine is returned undamaged,
+              clean, and fuelled. The deposit does not count as payment — it sits separately from the
+              hire charge.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/mini-digger-hire-cost-uk.webp"
+        alt="Mini digger at work on a UK residential site — compare hire costs from local suppliers on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Scenarios table */}
+      <section>
+        <H2>Total Cost Examples: Real Job Scenarios</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Job</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Machine</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Duration</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Hire cost</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Delivery</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Fuel est.</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900 text-brand-primary">Approx total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerCostScenarios.map(([job, machine, dur, hire, del, fuel, total], i) => (
+                <tr key={job} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{job}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{machine}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{dur}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{hire}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{del}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{fuel}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{total}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs font-medium text-gray-400">
+          Figures above are illustrative using mid-range market rates. Actual costs vary by location
+          and supplier. Compare live quotes on Tooli.uk.
+        </p>
+      </section>
+
+      <section>
+        <H2>How to Keep Mini Digger Hire Costs Down</H2>
+        <CheckList items={miniDiggerCostTips} />
+        <Link
+          to="/blog/tool-hire-comparison-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Regional Price Variation</H2>
+        <Prose>
+          <p>
+            Mini digger hire costs vary across the UK. London and the South East command the highest
+            day rates, typically 10–20% above the national average. Rates in the North of England,
+            Scotland, and Wales tend to run at or slightly below national averages, though delivery
+            distances can add significantly to total cost in rural areas.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/mini-digger-hire-london-prices-local-availability"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire London: Prices &amp; Local Availability →
+          </span>
+        </Link>
+      </section>
+
+      <FaqSection faqs={miniDiggerCostFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Mini Digger Hire Costs Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, pick your machine size and dates, and get quotes from
+          local UK suppliers — delivery included in every comparison.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -3805,6 +4132,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Digger Hire',
     faqs: miniDiggerUKFaqs,
     Body: MiniDiggerUKBody,
+  },
+  {
+    slug: 'mini-digger-hire-cost-uk-2026-price-guide',
+    category: 'Mini Digger Hire',
+    title: 'Mini Digger Hire Cost UK: What You\'ll Pay in 2026',
+    excerpt:
+      '2026 price guide covering day, weekend, week and month rates by size — plus delivery, fuel, deposit and damage waiver costs. Compare quotes on Tooli.uk.',
+    intro:
+      'Hiring a mini digger in the UK costs between £100 and £500 per day in 2026, depending on the size of the machine. A 1.5-tonne digger — the most commonly hired size for garden and residential work — typically runs £160–£230 per day. A 3-tonne machine for groundworks or foundations comes in at £220–£320 per day. This guide breaks down every cost you\'ll face: hire rates, delivery charges, fuel, insurance, and deposits — so you know the total bill before you book.',
+    image: '/images/blog/mini-digger-hire-cost-uk-infographic.webp',
+    imageAlt: 'Mini digger hire cost UK 2026 — price guide by size on Tooli.uk',
+    datePublished: '2026-07-16',
+    metaTitle: 'Mini Digger Hire Cost UK 2026: Day, Week & Month Rates | Tooli.uk',
+    metaDescription:
+      'How much does it cost to hire a mini digger in the UK? 2026 price guide covering day, weekend, week & month rates by size. Compare quotes on Tooli.uk.',
+    primaryCta: 'Compare Mini Digger Costs',
+    faqs: miniDiggerCostFaqs,
+    Body: MiniDiggerCostUKBody,
   },
 ];
 
