@@ -3897,6 +3897,338 @@ function MiniDiggerCostUKBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 15 — Do I Need a Licence to Operate a Mini Digger?         */
+/* ------------------------------------------------------------------ */
+
+const miniDiggerLicenceCpcsTable: [string, string, string][] = [
+  ['A59', '360° Excavator (up to 5t)', 'Standard mini digger'],
+  ['A57', '360° Excavator (over 5t)', 'Larger midi and full-size excavators'],
+  ['A60', 'Wheeled 360° Excavator', 'Wheeled variant where relevant'],
+];
+
+const miniDiggerLicenceCardTable: [string, string, string][] = [
+  ['CSCS', 'Site access — proves general health & safety knowledge (CITB test)', 'No — site access only, not operator competence'],
+  ['CPCS', 'Plant operator competence — task-tested for specific machine category', 'Yes — on commercial sites where enforced'],
+];
+
+const miniDiggerLicenceSummaryTable: [string, string, string][] = [
+  ['DIY homeowner, mini digger on private garden', 'No', 'Yes — depot handover at minimum'],
+  ["Self-employed tradesperson on a client's domestic property", 'No formal card — but PUWER applies', 'Yes — document your competence'],
+  ['Worker on a managed commercial construction site', 'CPCS card (A59 or A57)', 'Full CPCS training and test'],
+  ['Operating a machine on or near a public highway', 'CPCS card likely required by site manager', 'Yes — and check traffic management requirements'],
+  ['Towing a digger on public roads', 'Valid driving licence + vehicle rated for the trailer weight', 'Specific trailer/towing training advisable'],
+];
+
+const miniDiggerLicenceAtAGlance = [
+  'Private domestic land: No licence required — but competence is still a legal duty under PUWER',
+  'Commercial construction sites: CPCS card required in most cases',
+  'Machines under 5 tonnes: Lower requirement threshold — most mini diggers fall here',
+  'Machines over 5 tonnes: Formal competence card becomes more consistently enforced',
+  'Road haulage: A road-legal driving licence is needed to tow a digger on a low-loader trailer',
+];
+
+const miniDiggerLicenceFaqs: Faq[] = [
+  [
+    'Can I hire a mini digger without a CPCS card?',
+    'Yes. Hire depots do not require a CPCS card for private hirers. On private domestic land, you can legally operate a mini digger without any formal card. On commercial sites, your site manager will specify what is required.',
+  ],
+  [
+    'Do I need a licence if the mini digger is under 1 tonne?',
+    'No. The same rules apply regardless of machine size: no formal licence is required for private land use. PUWER still requires competence at any size. CPCS A59 covers machines up to 5 tonnes.',
+  ],
+  [
+    'What is the PUWER regulation and does it affect me?',
+    'PUWER 1998 (Provision and Use of Work Equipment Regulations) requires that anyone using work equipment is trained and competent to do so safely. It applies on private land as well as commercial sites. Non-compliance can create liability if an accident occurs.',
+  ],
+  [
+    'Can a hire company refuse to let me take a digger without a CPCS card?',
+    'Yes — and some do. While not a legal requirement for private hirers, individual hire depots can set their own conditions. Some depots ask for evidence of operator experience for larger machines. This varies by company and machine size.',
+  ],
+  [
+    'Is a CPCS card the same as a CSCS card?',
+    'No. A CSCS card proves site health and safety knowledge — it gets you through the gate. A CPCS card proves machine-specific operator competence. They are different schemes. You may need both on a managed commercial site.',
+  ],
+  [
+    'How long does it take to get a CPCS card?',
+    'From starting training to holding a card, typically 3–8 weeks. Training takes 2–5 days. The test must be booked separately. If you already have relevant experience, the experienced worker route (red card) may have a shorter path.',
+  ],
+  [
+    'Do I need insurance to hire and operate a mini digger?',
+    "Standard public liability insurance should cover domestic DIY use for most hirers, but check your policy. If you're operating commercially, you need specific plant machinery cover. The hire depot's damage waiver covers the machine itself — not third-party liability.",
+  ],
+];
+
+function MiniDiggerLicenceBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Licence Rules at a Glance</h2>
+        <CheckList items={miniDiggerLicenceAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          Mini Digger Hire UK: Prices &amp; Sizes Compared →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/mini-digger-licence.webp"
+        alt="Do you need a licence to operate a mini digger in the UK — CPCS and PUWER explained"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>The Legal Position: PUWER 1998</H2>
+        <Prose>
+          <p>
+            The{' '}
+            <a
+              href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Provision and Use of Work Equipment Regulations 1998 (PUWER)
+            </a>{' '}
+            govern how work equipment must be used safely in the UK. Under PUWER Regulation 9,
+            operators must have received adequate training in use of the equipment, including training
+            in any risks which the use may entail and precautions to take.
+          </p>
+          <p>
+            This applies on private domestic land as well as commercial sites. You don't need a formal
+            card — but you do need to be competent. In practice, for a DIY homeowner using a mini
+            digger once, asking the hire depot for a brief operational handover is both sensible and
+            legally appropriate.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>When a CPCS Card Is Required</H2>
+        <Prose>
+          <p>
+            The{' '}
+            <a
+              href="https://www.cpcs.uk.com/categories"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              CPCS (Construction Plant Competence Scheme)
+            </a>{' '}
+            card is the industry-standard competence card for plant operators in the UK construction
+            sector. You will need it in these situations:
+          </p>
+          <ul>
+            <li>Working on a commercial construction site where the principal contractor enforces CPCS as a site requirement</li>
+            <li>Working for a construction company where the employer requires it</li>
+            <li>
+              Operating plant machinery hired for work covered under{' '}
+              <a
+                href="https://www.hse.gov.uk/construction/cdm/2015/index.htm"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-brand-primary hover:underline"
+              >
+                CDM 2015
+              </a>
+              , where competency records may be audited
+            </li>
+            <li>Any site where HSE inspectors may review plant operator competence</li>
+          </ul>
+          <p>
+            CPCS has two levels: the blue trained operator card (entry level, task tested) and the
+            red experienced worker card (for those with documented experience). Renewal is every 5 years.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>What Is the CPCS Card for a Mini Digger?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">CPCS Category</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Machine type</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Applicable to</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerLicenceCpcsTable.map(([cat, type, applies], i) => (
+                <tr key={cat} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-brand-primary">{cat}</td>
+                  <td className="px-5 py-3 font-bold text-gray-700">{type}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{applies}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <H2>What About CSCS Cards?</H2>
+        <Prose>
+          <p>CSCS and CPCS are frequently confused. They are different things:</p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Card</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Purpose</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Required for mini digger operation?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerLicenceCardTable.map(([card, purpose, req], i) => (
+                <tr key={card} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-brand-primary">{card}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{purpose}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{req}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-sm font-medium text-gray-500">
+          A CSCS card gets you through the site gate. A CPCS card proves you can operate the machine.
+          You may need both on a managed commercial site.
+        </p>
+        <Link
+          to="/blog/tool-hire-comparison-uk"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Tool Hire Comparison UK: Compare Construction Equipment and Plant Hire Suppliers →
+          </span>
+        </Link>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/mini-digger-hire-cost-uk.webp"
+        alt="Mini digger operator on a UK construction site — CPCS card requirements and PUWER duties explained"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Summary: What Applies to You?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Your situation</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Licence / card required?</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Training recommended?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {miniDiggerLicenceSummaryTable.map(([situation, card, training], i) => (
+                <tr key={situation} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{situation}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{card}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{training}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <H2>How to Get a CPCS Card</H2>
+        <Prose>
+          <p>To get a CPCS trained operator card for a 360° excavator (mini digger):</p>
+          <ul>
+            <li>Complete an accredited CPCS training course covering the specific machine category (A59 for under 5t, A57 for over 5t)</li>
+            <li>Pass the CPCS technical test (machine operation, safety checks, controlled exercises)</li>
+            <li>Pass the CITB Health, Safety &amp; Environment test if you don't already hold a valid CSCS card</li>
+            <li>Apply for your CPCS card through an approved CPCS test centre</li>
+          </ul>
+          <p>
+            Courses typically take 2–5 days depending on prior experience. Costs vary but budget
+            £800–£1,500 for training and testing combined. Find approved training providers through{' '}
+            <a
+              href="https://www.cpcs.uk.com/categories"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              CPCS at cpcs.uk.com
+            </a>
+            .
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/mini-digger-hire-cost-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-cost-uk-2026-price-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-save-money"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-birmingham-prices-and-local-availability"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Birmingham: Prices &amp; Local Availability →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={miniDiggerLicenceFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Ready to Hire a Mini Digger?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Compare mini digger hire quotes from local UK suppliers on Tooli.uk. Enter your postcode,
+          pick your size and dates, and see every price — delivery included.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -4150,6 +4482,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Digger Costs',
     faqs: miniDiggerCostFaqs,
     Body: MiniDiggerCostUKBody,
+  },
+  {
+    slug: 'do-i-need-licence-to-operate-mini-digger',
+    category: 'Mini Digger Hire',
+    title: 'Do I Need a Licence to Operate a Mini Digger? The Honest Answer',
+    excerpt:
+      'No formal licence is needed on private land — but PUWER requires competence, and a CPCS card is mandatory on commercial sites. Here\'s exactly what applies to you.',
+    intro:
+      'No — there is no legal requirement for a formal licence to operate a mini digger on private land for a domestic project in the UK. However, on commercial construction sites, a valid CPCS card is required by most principal contractors. Under PUWER 1998, anyone using work equipment must be competent to do so — which means appropriate training even if you\'re working on your own property.',
+    image: '/images/blog/mini-digger-licence.webp',
+    imageAlt: 'Mini digger operator on a UK site — do you need a licence to operate a mini digger?',
+    datePublished: '2026-07-16',
+    metaTitle: 'Do You Need a Licence to Operate a Mini Digger? | Tooli.uk',
+    metaDescription:
+      'No formal licence is needed to operate a mini digger on private land in the UK — but there are rules. Find out what applies to you.',
+    primaryCta: 'Compare Mini Digger Hire',
+    faqs: miniDiggerLicenceFaqs,
+    Body: MiniDiggerLicenceBody,
   },
 ];
 
