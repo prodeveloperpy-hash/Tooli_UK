@@ -4537,6 +4537,384 @@ function MiniDiggerBuyOrHireBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 17 — Mini Digger Attachments Explained                     */
+/* ------------------------------------------------------------------ */
+
+const attachmentsAtAGlance = [
+  'General-purpose bucket: standard for most soil digging and loading',
+  'Hydraulic breaker: breaking up concrete, block paving, or hard ground',
+  'Ditching bucket: wide, shallow — perfect for drainage trenches and French drains',
+  'Auger: boring circular holes for fence posts, tree planting, foundations',
+  'Grubbing bucket: ripping out tree stumps and roots',
+  'Grab/clamshell: picking up loose material without digging',
+  'Tiltrotator/tilting hitch: rotates and tilts the attachment for precision work',
+];
+
+const gpBucketUses: [string, string][] = [
+  ['General soil excavation', 'Yes — primary use'],
+  ['Loading spoil into a skip or dumper', 'Yes'],
+  ['Digging narrow trenches', 'Possible — a narrower bucket is better'],
+  ['Grading and levelling', 'Possible — a grading bucket is better'],
+  ['Breaking concrete or rock', 'No — use a hydraulic breaker'],
+];
+
+const breakerUses: [string, string][] = [
+  ['Breaking up concrete slabs or paths', 'Yes — primary use'],
+  ['Breaking tarmac / asphalt', 'Yes'],
+  ['Breaking up hard clay or shale', 'Yes'],
+  ['Rock breaking (light to medium)', 'Yes — check with depot for rock class'],
+  ['Demolishing masonry', 'Yes — with care and appropriate machine weight'],
+];
+
+const ditchingBucketUses: [string, string][] = [
+  ['French drain / land drainage trenching', 'Yes — purpose-built for this'],
+  ['Ditch cleaning and maintenance', 'Yes'],
+  ['Slope grading and profiling', 'Yes'],
+  ['Clearing topsoil over a wide area', 'Yes — faster than GP bucket'],
+  ['Narrow trench digging', 'No — too wide'],
+];
+
+const augerUses: [string, string][] = [
+  ['Fence post holes (timber and metal)', 'Yes — primary use'],
+  ['Tree and shrub planting', 'Yes'],
+  ['Ground anchor installation', 'Yes'],
+  ['Pile holes (shallow foundations)', 'Yes — subject to ground conditions'],
+  ['Rocky or rubble ground', 'No — consult hire depot'],
+];
+
+const attachmentQuestions = [
+  'Is the attachment already fitted, or does it need to be pinned on and set up?',
+  'Does the machine have a quick hitch, or does swapping attachments require manual pins?',
+  "Is the breaker size matched to this specific machine's hydraulic flow rate?",
+  'Does the auger motor need separate setup, and is it included in the hire rate?',
+  'What is your liability if an attachment is damaged during hire?',
+];
+
+const attachmentsFaqs: Faq[] = [
+  [
+    'Do mini digger attachments come included in the hire rate?',
+    'No. Attachments are almost always charged separately as additional daily hire costs on top of the machine rate. The only exception is the standard general-purpose bucket, which comes fitted as standard on hire machines.',
+  ],
+  [
+    'Can I use any brand of attachment on a hire digger?',
+    "You cannot bring your own attachment and simply fit it — attachments must be matched to the machine's pin specification, hydraulic flow rate (for powered attachments), and operating weight. Using a mismatched attachment can damage the machine and creates liability. Use the depot's matched attachments.",
+  ],
+  [
+    'How loud is a hydraulic breaker on a mini digger?',
+    'Hydraulic breakers on mini diggers typically generate 95–110 dB at the operator. Under the Control of Noise at Work Regulations 2005, the upper action level is 87 dB LEP,d. Hearing protection is mandatory for prolonged use. Neighbours should be given notice before extended breaking work.',
+  ],
+  [
+    'What size auger do I need for fence posts?',
+    'For standard 100 mm square timber fence posts, a 150–200 mm diameter auger is typical. For larger posts (125–150 mm), a 200–250 mm auger gives adequate clearance for post setting. Confirm the post dimensions you\'re using before specifying an auger diameter.',
+  ],
+  [
+    'Can you use a hydraulic breaker on a 0.8-tonne micro digger?',
+    'Only with a breaker specifically sized for a micro machine. A standard breaker designed for a 1.5t+ machine would exceed the hydraulic output and structural capacity of a 0.8t digger. Always confirm with the depot which breaker models are approved for the specific machine you\'re hiring.',
+  ],
+];
+
+function AttachmentUseTable({ rows }: { rows: [string, string][] }) {
+  return (
+    <div className="overflow-x-auto rounded-xl border border-gray-100">
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+            <th className="px-5 py-2.5 text-left font-extrabold text-gray-900">Use</th>
+            <th className="px-5 py-2.5 text-left font-extrabold text-gray-900">Suitable?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([use, suitable], i) => (
+            <tr key={use} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+              <td className="px-5 py-2.5 font-medium text-gray-700">{use}</td>
+              <td className={`px-5 py-2.5 font-bold ${suitable.startsWith('Yes') ? 'text-brand-primary' : suitable.startsWith('No') ? 'text-red-500' : 'text-gray-500'}`}>
+                {suitable}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function MiniDiggerAttachmentsBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={attachmentsAtAGlance} />
+      </section>
+
+      <Link
+        to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          Mini Digger Hire UK: Prices &amp; Sizes Compared →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/mini-digger-attachments-explained.webp"
+        alt="Mini digger attachments explained — buckets, breakers, augers and grabs for UK hirers"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Attachment reference sections */}
+      <section>
+        <H2>1. General-Purpose Bucket (GP Bucket)</H2>
+        <Prose>
+          <p>
+            The standard bucket on virtually every hire machine. Curved, medium-width — good for
+            digging and loading loose material. Width ranges from 300 mm to 600 mm depending on
+            machine size.
+          </p>
+        </Prose>
+        <AttachmentUseTable rows={gpBucketUses} />
+      </section>
+
+      <section>
+        <H2>2. Hydraulic Breaker (Demolition Breaker)</H2>
+        <Prose>
+          <p>
+            Replaces the bucket to deliver rapid hammer blows for breaking concrete, block paving,
+            tarmac, hard clay, or rock. Runs off the machine's hydraulic circuit. The most commonly
+            hired attachment after the standard bucket.
+          </p>
+          <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+            <strong>Important:</strong> Check the digger's hydraulic flow spec before hiring a breaker
+            attachment. An underpowered machine with a too-large breaker will damage the hydraulic
+            system. The hire depot should match the breaker size to the machine for you.
+          </p>
+        </Prose>
+        <AttachmentUseTable rows={breakerUses} />
+        <p className="mt-3 text-sm font-medium text-gray-500">
+          <strong>Noise note:</strong> Breaker attachments are among the loudest site activities.{' '}
+          <a
+            href="https://www.hse.gov.uk/noise/regulations.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-brand-primary hover:underline"
+          >
+            HSE Control of Noise at Work Regulations 2005
+          </a>{' '}
+          set daily exposure limits (80 dB action level / 87 dB limit). Hearing protection is
+          mandatory for extended use.
+        </p>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk-2026-price-guide"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: What You'll Pay in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>3. Ditching Bucket (Grading / Cleanup Bucket)</H2>
+        <Prose>
+          <p>
+            Wider and shallower than a GP bucket, with a flat base. Designed for cutting drainage
+            channels, cleaning out ditches, grading slopes, and levelling ground. Widths typically
+            run 600 mm to 1,800 mm on mini digger spec.
+          </p>
+        </Prose>
+        <AttachmentUseTable rows={ditchingBucketUses} />
+      </section>
+
+      <section>
+        <H2>4. Auger</H2>
+        <Prose>
+          <p>
+            A spiral boring tool that drills clean round holes into the ground. Driven by the
+            machine's hydraulic motor. Common diameters range from 150 mm to 600 mm. Ideal for fence
+            posts, tree planting, piling, and ground anchor installation.
+          </p>
+          <p>
+            <strong>Ground conditions:</strong> Augers work well in loose to medium soil. Rocky,
+            clay-heavy, or rubble-filled ground will slow or stop an auger. Always check ground
+            conditions before specifying an auger over a bucket for excavation.
+          </p>
+        </Prose>
+        <AttachmentUseTable rows={augerUses} />
+      </section>
+
+      <section>
+        <H2>5. Grubbing / Tree Root Bucket</H2>
+        <Prose>
+          <p>
+            A specialist bucket with open tines or side cutters designed to rip through root systems
+            and break up compacted ground. Used for tree stump removal, root clearing, and breaking
+            into hard, compacted soil where a standard bucket would bounce off the surface.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>6. Grab / Clamshell Attachment</H2>
+        <Prose>
+          <p>
+            A clamping jaw attachment that grabs loose material without digging — useful for clearing
+            demolition rubble, picking up loose stone, or handling material in areas where digging
+            isn't needed. Works well alongside a standard bucket workflow.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>7. Ripper Tooth / Single Tine</H2>
+        <Prose>
+          <p>
+            A single heavy tine for piercing and breaking up compacted ground, tarmac edges, or
+            shallow rock before excavation. Faster than a breaker for light breaking work, quieter,
+            and lower maintenance.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>8. Quick Hitch</H2>
+        <Prose>
+          <p>
+            Not a working attachment itself — a quick-hitch coupler allows attachments to be swapped
+            over in seconds without manual pinning. If you plan to use more than one attachment on a
+            job, ask the depot whether the machine has a quick hitch fitted. It will save you
+            significant time on site.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/do-i-need-licence-to-operate-mini-digger"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Do I Need a Licence to Operate a Mini Digger? The Honest Answer →
+          </span>
+        </Link>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/mini-digger-hire-cost-uk.webp"
+        alt="Mini digger with hydraulic breaker attachment on a UK construction site"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Attachment Hire Costs</H2>
+        <Prose>
+          <p>
+            Attachment day rates are set independently by each hire depot and vary by machine size,
+            attachment type, and location. The table below shows common attachment categories —
+            compare current rates from suppliers delivering to your postcode on Tooli.uk.
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Attachment</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['Hydraulic Breaker', 'Size matched to machine — confirm with depot'],
+                ['Ditching Bucket', 'Width options available — specify job requirement'],
+                ['Auger + motor', 'Various diameters — specify hole size needed'],
+                ['Grubbing Bucket', 'May not be available at all depots'],
+                ['Grab / Clamshell', 'Less commonly stocked — book ahead'],
+              ].map(([att, notes], i) => (
+                <tr key={att} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{att}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-sm font-medium text-gray-500">
+          Rates vary by supplier. Compare attachment hire costs from local depots on Tooli.uk when
+          you search for your machine.
+        </p>
+      </section>
+
+      <section>
+        <H2>Questions to Ask Your Hire Depot About Attachments</H2>
+        <ul className="space-y-3">
+          {attachmentQuestions.map((q) => (
+            <li key={q} className="flex items-start gap-3">
+              <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+              <span className="text-base font-medium leading-relaxed text-gray-600">{q}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/mini-digger-buy-or-hire-full-uk-cost-comparison"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger: Buy or Hire? Full UK Cost Comparison →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-cost-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-london-prices-local-availability"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire London: Prices &amp; Local Availability →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-save-money"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              How Tool Hire Comparison Actually Saves Your Money →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={attachmentsFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Mini Digger Hire With Attachments</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, choose your machine size and dates, and compare quotes
+          from local suppliers — attachments, delivery and all.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -4826,6 +5204,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Digger Hire',
     faqs: buyOrHireFaqs,
     Body: MiniDiggerBuyOrHireBody,
+  },
+  {
+    slug: 'mini-digger-attachments-explained-which-one-do-you-need',
+    category: 'Mini Digger Hire',
+    title: 'Mini Digger Attachments Explained: Which One Do You Need?',
+    excerpt:
+      'GP buckets, hydraulic breakers, augers, ditching buckets, grabs and quick hitches — what each attachment does, when to use it, and what to ask your hire depot.',
+    intro:
+      "A mini digger comes with a standard general-purpose bucket as standard — but that's rarely the best tool for the job. Attachments like breakers, augers, grabs, and ditching buckets can halve your working time and get the result a standard bucket simply can't. Most UK hire depots stock a range of attachments at an additional daily rate.",
+    image: '/images/blog/mini-digger-attachments-explained.webp',
+    imageAlt: 'Mini digger attachments explained — buckets, breakers, augers and grabs for UK hirers',
+    datePublished: '2026-07-16',
+    metaTitle: 'Mini Digger Attachments: Buckets, Breakers & More Explained | Tooli.uk',
+    metaDescription:
+      'Not sure which mini digger attachment you need? Buckets, breakers, augers, grabs — explained for UK hirers. Find the right attachment on Tooli.uk.',
+    primaryCta: 'Compare Mini Digger Hire',
+    faqs: attachmentsFaqs,
+    Body: MiniDiggerAttachmentsBody,
   },
 ];
 
