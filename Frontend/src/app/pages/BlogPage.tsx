@@ -4229,6 +4229,314 @@ function MiniDiggerLicenceBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 16 — Mini Digger: Buy or Hire? Full UK Cost Comparison     */
+/* ------------------------------------------------------------------ */
+
+const buyOrHirePurchaseTable: [string, string, string, string][] = [
+  ['0.8t Micro Digger', '£15,000–£30,000', '£5,000–£12,000', 'Kubota, JCB 8008, Takeuchi TB108'],
+  ['1.5t Mini Digger', '£25,000–£45,000', '£12,000–£25,000', 'JCB 15C, Kubota KX016, Bobcat E17'],
+  ['3.0t Mini Digger', '£40,000–£70,000', '£18,000–£35,000', 'JCB 30, Kubota KX030, Takeuchi TB230'],
+  ['5.0t Midi Digger', '£60,000–£100,000', '£25,000–£55,000', 'JCB 50Z, Doosan DX55, Volvo EC55'],
+];
+
+const buyOrHireOwnershipCosts: [string, string, string][] = [
+  ['Insurance (plant all-risks)', '£800–£2,000/yr', 'Varies by use, claims history, value'],
+  ['Annual service', '£400–£800/yr', 'Dealer or independent engineer'],
+  ['Parts & repairs (average)', '£300–£600/yr', 'Track replacement alone is £1,200–£2,500'],
+  ['Storage (if rented space)', '£600–£1,800/yr', 'Or security cost on own land'],
+  ['Trailer for transport', '£3,000–£8,000 (one-off)', 'Plus tow vehicle rated to the load'],
+  ['Depreciation', '£1,500–£4,000/yr', 'Roughly 10–15% on used machinery'],
+  ['TOTAL annual ownership cost', '~£3,600–£9,200/yr', 'Excluding purchase price repayments'],
+];
+
+const buyOrHireBreakEven: [string, string, string, string][] = [
+  ['1–5 days', '£200–£1,000', '~£6,000', 'Hire — no contest'],
+  ['6–15 days', '£1,200–£3,000', '~£6,000', 'Hire — still clearly cheaper'],
+  ['16–30 days', '£3,200–£6,000', '~£6,000', 'Hire — roughly equal once extras counted'],
+  ['30–60 days', '£6,000–£12,000', '~£6,000 + capital cost', 'Marginal — depends on capital position'],
+  ['60+ days', '£12,000+', '~£6,000 + capital cost', 'Buying may make sense — model your numbers'],
+];
+
+const buyOrHireProsConsRows: [string, string, string][] = [
+  ['Upfront cost', 'Low — day rate only', 'High — £12k–£60k+'],
+  ['Flexibility', 'Hire any size for any job', 'Locked into one machine'],
+  ['Maintenance', 'Not your problem', 'Your responsibility, your cost'],
+  ['Storage', 'Not required', 'Secure storage needed'],
+  ['Insurance', 'Usually covered by depot', 'Your own policy needed'],
+  ['Breakdown', 'Depot replaces machine', "You're off work until fixed"],
+  ['Resale value', 'N/A', 'Depreciates 10–15%/year'],
+  ['Best for', 'Occasional and varied use', 'Heavy, consistent, single-size use'],
+];
+
+const buyOrHireFaqs: Faq[] = [
+  [
+    'Is it worth buying a second-hand mini digger?',
+    'Potentially, if you use a digger more than 40–60 days per year and have the infrastructure for storage and servicing. A well-maintained used 1.5-tonne machine from a reputable dealer costs £12,000–£25,000. Get a full service history and pre-purchase inspection from an independent engineer before committing.',
+  ],
+  [
+    'What are the ongoing costs of owning a mini digger?',
+    'Budget for annual insurance (£800–£2,000), annual service (£400–£800), repairs (£300–£600 average but unpredictable), and storage. Depreciation runs at roughly 10–15% per year on used machinery. Total annual ownership cost for a 1.5-tonne machine is typically £3,600–£9,200 before purchase costs.',
+  ],
+  [
+    'Can I hire my own mini digger out to recover costs?',
+    "Yes — but this turns you into a plant hire company with associated insurance, liability, and legal obligations. You'll need specialist hire-fleet insurance (not standard plant all-risks), potentially VAT registration, and terms of hire. Consult a specialist trade insurer before going down this route.",
+  ],
+  [
+    'What finance options are available for buying a mini digger?',
+    'Hire purchase, finance lease, and operating lease are all widely available through plant finance specialists. Most require a deposit of 10–20% and spread payments over 3–5 years. Interest rates vary considerably — compare at least 3 plant finance providers before committing.',
+  ],
+  [
+    'Does buying a mini digger make sense for a sole trader landscaper?',
+    "Rarely below 40–50 digger days per year. At lower usage, the flexibility to hire different sizes for different jobs is worth more than the cost saving. Many landscapers find hiring better suits their varied site access requirements (tight gardens vs open groundworks).",
+  ],
+];
+
+function MiniDiggerBuyOrHireBody() {
+  return (
+    <>
+      {/* Quick Verdict box */}
+      <section className="rounded-2xl border-2 border-brand-primary/30 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Quick Verdict</h2>
+        <div className="space-y-3 text-sm font-medium leading-relaxed text-gray-700">
+          <p>
+            <span className="font-extrabold text-brand-primary">Hire if:</span> You need a mini
+            digger fewer than 8–12 times per year. Almost every homeowner and most tradespeople fall
+            into this category.
+          </p>
+          <p>
+            <span className="font-extrabold text-[#030213]">Buy if:</span> You use a mini digger
+            more than 12 days per year, have secure storage, can handle servicing and insurance, and
+            won't need a range of sizes for different jobs.
+          </p>
+          <p className="rounded-xl bg-white px-4 py-3 text-xs text-gray-500">
+            <span className="font-extrabold text-gray-700">The maths:</span> A second-hand 1.5-tonne
+            mini digger costs £12,000–£25,000. At £200/day hire equivalent, that's 60–125 hire-days
+            to break even before you factor in insurance, maintenance, storage and depreciation.
+          </p>
+        </div>
+      </section>
+
+      <Link
+        to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          Mini Digger Hire UK: Prices &amp; Sizes Compared →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/mini-digger-cost-comparison.webp"
+        alt="Mini digger buy vs hire cost comparison UK — breakeven analysis for homeowners and tradespeople"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Purchase price table */}
+      <section>
+        <H2>The Cost to Buy a Mini Digger in the UK</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Machine size</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">New price (approx.)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Used price (5–10 yr old)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Key brands</th>
+              </tr>
+            </thead>
+            <tbody>
+              {buyOrHirePurchaseTable.map(([size, newPrice, usedPrice, brands], i) => (
+                <tr key={size} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{size}</td>
+                  <td className="px-4 py-3 font-bold text-gray-700">{newPrice}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{usedPrice}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{brands}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Hidden costs table */}
+      <section>
+        <H2>The Hidden Costs of Owning a Mini Digger</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Cost</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Annual estimate (1.5t machine)</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {buyOrHireOwnershipCosts.map(([cost, est, notes], i) => {
+                const isTotal = cost.startsWith('TOTAL');
+                return (
+                  <tr key={cost} className={`border-b border-gray-50 ${isTotal ? 'bg-[#F8F9FC] font-extrabold' : i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                    <td className={`px-5 py-3 ${isTotal ? 'font-extrabold text-gray-900' : 'font-bold text-gray-700'}`}>{cost}</td>
+                    <td className={`px-5 py-3 ${isTotal ? 'font-extrabold text-brand-primary' : 'font-bold text-brand-primary'}`}>{est}</td>
+                    <td className="px-5 py-3 font-medium text-gray-500">{notes}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk-2026-price-guide"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: What You'll Pay in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      {/* Break-even table */}
+      <section>
+        <H2>Break-Even Comparison: Buy vs Hire</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Hire days/year</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Annual hire cost (1.5t @£200/day)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Annual ownership cost (mid est.)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              {buyOrHireBreakEven.map(([days, hireCost, ownCost, verdict], i) => (
+                <tr key={days} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{days}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{hireCost}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{ownCost}</td>
+                  <td className={`px-4 py-3 font-bold ${verdict.startsWith('Hire') ? 'text-brand-primary' : 'text-gray-700'}`}>{verdict}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs font-medium text-gray-400">
+          Ownership cost above excludes the purchase price itself and any finance costs. Add loan
+          repayments or the opportunity cost of capital tied up in the machine to your annual tally.
+        </p>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/mini-digger-hire-cost-uk.webp"
+        alt="Mini digger on a UK residential site — hire vs buy cost analysis on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Scenarios */}
+      <section>
+        <H2>Scenarios: Who Should Buy, Who Should Hire?</H2>
+        <div className="space-y-6">
+          {[
+            {
+              title: 'Weekend DIY Homeowner',
+              body: "You need a digger 1–3 times a year for garden projects, a pond, or landscaping. Hire every time. Owning makes no financial sense at this usage level, and storage and transport add complications you don't need.",
+              verdict: 'hire',
+            },
+            {
+              title: 'Small Landscaping Business (solo trader)',
+              body: "You're on site 120–150 days a year but not always using a digger — maybe 20–40 digger days annually. Hire is still very likely the right answer. The flexibility to hire different sizes for different jobs (0.8t for tight access, 3t for groundworks) is worth more than the savings from owning a single machine.",
+              verdict: 'hire',
+            },
+            {
+              title: 'Groundworks Contractor (2–4 person operation)',
+              body: "If your team uses a 3-tonne digger 60+ days a year, the financial case for ownership starts to stack up — but only if you have secure storage, a low-loader trailer already in your fleet, and the capacity to manage servicing. Many groundworkers still choose long-term hire or contract hire at this scale for flexibility.",
+              verdict: 'marginal',
+            },
+            {
+              title: 'Small Building Firm (4–10 staff)',
+              body: "At this scale, plant ownership for frequently-used machines can make sense. However, most firms at this level use a mix: own their most-used size, hire everything else. The admin and insurance overhead of a full owned fleet is significant.",
+              verdict: 'mixed',
+            },
+          ].map(({ title, body, verdict }) => (
+            <div key={title} className="rounded-xl border border-gray-100 bg-[#F8F9FC]/60 p-5">
+              <div className="mb-2 flex items-center gap-3">
+                <span className={`rounded-full px-3 py-1 text-xs font-extrabold ${verdict === 'hire' ? 'bg-brand-primary/10 text-brand-primary' : 'bg-gray-200 text-gray-600'}`}>
+                  {verdict === 'hire' ? 'Hire' : verdict === 'marginal' ? 'Marginal' : 'Mixed'}
+                </span>
+                <H3>{title}</H3>
+              </div>
+              <p className="text-sm font-medium leading-relaxed text-gray-500">{body}</p>
+            </div>
+          ))}
+        </div>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money — And How To Do It Properly →
+          </span>
+        </Link>
+      </section>
+
+      {/* Pros/cons table */}
+      <section>
+        <H2>Hire vs Buy: Pros &amp; Cons Summary</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900"> </th>
+                <th className="px-5 py-3 text-left font-extrabold text-brand-primary">Hire</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Buy</th>
+              </tr>
+            </thead>
+            <tbody>
+              {buyOrHireProsConsRows.map(([label, hire, buy], i) => (
+                <tr key={label} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{label}</td>
+                  <td className="px-5 py-3 font-medium text-gray-600">{hire}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{buy}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link
+          to="/blog/do-i-need-licence-to-operate-mini-digger"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Do I Need a Licence to Operate a Mini Digger? The Honest Answer →
+          </span>
+        </Link>
+      </section>
+
+      <FaqSection faqs={buyOrHireFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Not Ready to Buy? Compare Hire Prices Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, pick your machine size and dates, and compare quotes from
+          local UK suppliers — no commitment, no phone-round.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -4500,6 +4808,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Digger Hire',
     faqs: miniDiggerLicenceFaqs,
     Body: MiniDiggerLicenceBody,
+  },
+  {
+    slug: 'mini-digger-buy-or-hire-full-uk-cost-comparison',
+    category: 'Mini Digger Hire',
+    title: 'Mini Digger: Buy or Hire? Full UK Cost Comparison',
+    excerpt:
+      'New and used purchase prices, hidden ownership costs, break-even analysis by hire days, and real-world verdicts for homeowners, landscapers and groundworkers.',
+    intro:
+      'Buying a 1.5-tonne mini digger costs between £12,000 and £25,000 second-hand, or £25,000–£60,000 new. Hiring the same machine runs £160–£230 per day. The break-even point is around 60–125 hire-days of use per year — before maintenance, insurance, storage, and depreciation are counted. This guide runs the numbers properly for UK homeowners and small trade businesses.',
+    image: '/images/blog/mini-digger-cost-comparison.webp',
+    imageAlt: 'Mini digger buy vs hire full UK cost comparison — breakeven analysis on Tooli.uk',
+    datePublished: '2026-07-16',
+    metaTitle: 'Buy or Hire a Mini Digger? Full Cost Comparison | Tooli.uk',
+    metaDescription:
+      'Should you buy or hire a mini digger? Honest cost comparison, breakeven calculator, and the real-world verdict for UK homeowners and tradespeople.',
+    primaryCta: 'Compare Mini Digger Hire',
+    faqs: buyOrHireFaqs,
+    Body: MiniDiggerBuyOrHireBody,
   },
 ];
 
