@@ -4915,6 +4915,310 @@ function MiniDiggerAttachmentsBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 18 — 1.5 Tonne vs 3 Tonne Digger                          */
+/* ------------------------------------------------------------------ */
+
+const vs15v3SpecTable: [string, string, string][] = [
+  ['Operating weight', '1,400–1,700 kg', '2,800–3,200 kg'],
+  ['Max dig depth', '2.2–2.6 m', '3.0–3.8 m'],
+  ['Max reach (arm extended)', '3.8–4.5 m', '5.0–6.0 m'],
+  ['Standard bucket capacity', '0.03–0.05 m³', '0.07–0.12 m³'],
+  ['Bucket width (standard GP)', '400–600 mm', '450–700 mm'],
+  ['Transport width', '990–1,200 mm', '1,300–1,550 mm'],
+  ['Typical gate clearance needed', '~1,000–1,200 mm', '~1,350–1,600 mm'],
+  ['Typical hire rate / day', '£160–£230', '£220–£320'],
+  ['Typical hire rate / week', '£500–£700', '£680–£950'],
+  ['Delivery on low-loader', 'Standard trailer', 'Standard or flatbed trailer'],
+];
+
+const vs15v3JobTable: [string, string, string, string][] = [
+  ['Garden clearance, topsoil removal', '✓', 'Both work', '1.5t is sufficient unless large volume'],
+  ['Patio/driveway base preparation', '✓', 'Better for depth >250 mm', '3t if going deeper than a standard sub-base'],
+  ['Pond digging (up to 1.5 m deep)', '✓', 'Overkill', '1.5t is the right tool'],
+  ['Trench for drainage pipes (<30 m run)', '✓', 'Either works', '1.5t is efficient for standard depth trenches'],
+  ['Trench for drainage pipes (>30 m run)', 'Works', '✓', '3t moves spoil faster over longer distances'],
+  ['Foundation digging (single-storey extension)', 'Borderline', '✓', 'Foundation depth usually needs 3t reach'],
+  ['Foundation digging (two-storey or basement)', 'No', '✓ or larger', 'May need 5t+ — consult structural engineer'],
+  ['Tree stump removal', '✓', 'Either works', '1.5t fine for most residential stumps'],
+  ['Large tree stump / root ball', 'Struggles', '✓', 'Weight and torque matter for big root balls'],
+  ['Site levelling / cut-and-fill', 'Small areas', '✓', '3t bucket capacity reduces cycles significantly'],
+  ['Demolition work with breaker', 'Light duty', '✓', '3t handles breaker attachments more efficiently'],
+  ['Tight access (narrow gate or passageway)', '✓', 'May not fit', 'Measure gate width before booking 3t'],
+];
+
+const vs15v3ProductivityTable: [string, string, string, string][] = [
+  ['10 m³ (small trench or patio prep)', '1 day', '0.5 day', '3t may be cheaper total'],
+  ['25 m³ (medium garden job)', '2–3 days', '1–1.5 days', '3t likely cheaper total'],
+  ['50 m³ (large landscaping project)', '4–5 days', '2–3 days', '3t significantly cheaper total'],
+  ['100 m³+ (groundworks/foundation)', 'Not suitable', '4–6 days', '3t or larger required'],
+];
+
+const vs15v3Faqs: Faq[] = [
+  [
+    'Is the 1.5-tonne digger powerful enough to break up concrete?',
+    'Not without a hydraulic breaker attachment. With a matched breaker fitted, a 1.5-tonne machine can break up concrete slabs, light block paving, and brick. For heavy reinforced concrete or significant volumes, the 3-tonne with a larger breaker is faster and better suited.',
+  ],
+  [
+    'What is the maximum trench depth a 1.5-tonne digger can reach?',
+    'The maximum dig depth on a 1.5-tonne mini digger is typically 2.2–2.6 metres, varying by model. This is sufficient for most residential drainage (which rarely exceeds 1.5 metres) and single-storey extension strip foundations (typically 700–1,000 mm).',
+  ],
+  [
+    'Can a 1.5-tonne digger fit through a standard side gate?',
+    'Usually yes — but measure first. Most 1.5-tonne mini diggers have a transport width of 990–1,200 mm. A standard timber garden gate opening is typically 900–1,000 mm, which may be too narrow. If the gate is under 1,000 mm, consider a micro digger (0.8t, ~750–850 mm wide).',
+  ],
+  [
+    'Is it worth paying the extra £80/day for the 3-tonne machine?',
+    "Often yes — particularly on jobs involving more than 20 cubic metres of material, foundation work, or deep trenching. The 3t's larger bucket capacity and deeper reach frequently offset the extra daily rate by completing the job in fewer days.",
+  ],
+  [
+    "What is the 3-tonne digger's main advantage over the 1.5-tonne?",
+    'Three things: deeper dig depth (3.0–3.8 m vs 2.2–2.6 m), larger bucket capacity (roughly double), and greater stability and power for breaker work. These matter for foundation digging, drainage at depth, and large-volume material movement.',
+  ],
+];
+
+function Digger15v3Body() {
+  return (
+    <>
+      {/* Quick Verdict */}
+      <section className="rounded-2xl border-2 border-brand-primary/30 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Quick Verdict</h2>
+        <div className="space-y-3 text-sm font-medium leading-relaxed text-gray-700">
+          <p>
+            <span className="font-extrabold text-brand-primary">1.5t:</span> Best for most
+            residential garden and landscaping jobs. Standard choice for patio prep, light trenching,
+            pond digging, and garden clearance. Fits through a standard side gate.
+          </p>
+          <p>
+            <span className="font-extrabold text-[#030213]">3t:</span> Step up when dig depth
+            exceeds 2.3 metres, you're doing foundation work, drainage runs exceed 30 metres, or
+            you're shifting large volumes of material quickly.
+          </p>
+          <p className="rounded-xl bg-white px-4 py-3 text-xs text-gray-500">
+            <span className="font-extrabold text-gray-700">Rule of thumb:</span> If you're unsure
+            and the site has reasonable access, hire the 3t. The additional cost per day (roughly
+            £60–£90 more) is usually less than an extra hire day caused by underpowering the job.
+          </p>
+        </div>
+      </section>
+
+      <Link
+        to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">
+          Mini Digger Hire UK: Prices &amp; Sizes Compared →
+        </span>
+      </Link>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/1-5-tonne-vs-3-tonne-digger.webp"
+        alt="1.5 tonne vs 3 tonne digger comparison — which mini digger should you hire for your UK job?"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Spec comparison table */}
+      <section>
+        <H2>Side-by-Side Comparison</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Spec</th>
+                <th className="px-5 py-3 text-left font-extrabold text-brand-primary">1.5 Tonne Digger</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">3 Tonne Digger</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vs15v3SpecTable.map(([spec, t15, t3], i) => (
+                <tr key={spec} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{spec}</td>
+                  <td className="px-5 py-3 font-medium text-brand-primary">{t15}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{t3}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Job-by-job table */}
+      <section>
+        <H2>Job-by-Job Decision Guide</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Job type</th>
+                <th className="px-4 py-3 text-center font-extrabold text-brand-primary">1.5t</th>
+                <th className="px-4 py-3 text-center font-extrabold text-gray-900">3t</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vs15v3JobTable.map(([job, t15, t3, notes], i) => (
+                <tr key={job} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{job}</td>
+                  <td className={`px-4 py-3 text-center font-bold ${t15 === '✓' ? 'text-brand-primary' : t15 === 'No' ? 'text-red-500' : 'text-gray-400'}`}>{t15}</td>
+                  <td className={`px-4 py-3 text-center font-bold ${t3.startsWith('✓') ? 'text-gray-900' : t3 === 'Overkill' || t3 === 'Either works' ? 'text-gray-400' : 'text-gray-500'}`}>{t3}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link
+          to="/blog/mini-digger-attachments-explained-which-one-do-you-need"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Attachments Explained: Which One Do You Need? →
+          </span>
+        </Link>
+      </section>
+
+      <section>
+        <H2>Access: The Factor That Often Decides It</H2>
+        <Prose>
+          <p>
+            If the work site has a gate narrower than 1,350 mm clear width, the 3-tonne machine
+            won't fit. A 1.5-tonne machine typically needs 1,000–1,200 mm. A micro digger (0.8t)
+            needs 750–850 mm.
+          </p>
+          <p>
+            Measure your access before booking. Not the gate opening — the narrowest point along the
+            route, including any overhanging structures, bins, or fencing that reduces effective
+            width.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Dig Depth: When the 3-Tonne Becomes Necessary</H2>
+        <Prose>
+          <p>
+            Most residential patios, paths, and garden clearance jobs require excavation to
+            200–400 mm depth. A 1.5-tonne machine handles all of that comfortably.
+          </p>
+          <p>
+            When you need to go below 600 mm consistently — drainage, foundation trenches, or land
+            drainage at depth — the 1.5t's maximum dig depth of 2.2–2.6 metres starts to feel
+            limiting. At 3 metres and beyond, the 3-tonne machine's 3.0–3.8 m dig depth becomes
+            important.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/mini-digger-hire-cost-uk-2026-price-guide"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Mini Digger Hire Cost UK: What You'll Pay in 2026 →
+          </span>
+        </Link>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/mini-digger-hire-cost-uk.webp"
+        alt="Mini digger on a UK residential site — compare 1.5t and 3t hire prices on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Productivity table */}
+      <section>
+        <H2>Speed and Productivity</H2>
+        <Prose>
+          <p>
+            The 3-tonne machine's larger bucket (roughly 2× the capacity of a 1.5t) means fewer
+            cycles per cubic metre of material moved. On a large job, this translates directly to
+            time saved.
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Volume of material</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">1.5t (days est.)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">3t (days est.)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Cost difference @mid-rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vs15v3ProductivityTable.map(([vol, t15, t3, diff], i) => (
+                <tr key={vol} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{vol}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{t15}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{t3}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{diff}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/do-i-need-licence-to-operate-mini-digger"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Do I Need a Licence to Operate a Mini Digger? →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-buy-or-hire-full-uk-cost-comparison"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger: Buy or Hire? Full UK Cost Comparison →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-cost-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: How To Compare Prices And Avoid Overpaying in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-london-prices-local-availability"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire London: Prices &amp; Local Availability →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={vs15v3Faqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare 1.5t and 3t Digger Hire Prices Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, select your machine size and dates, and compare quotes
+          from local UK suppliers — delivery included in every result.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -5222,6 +5526,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Digger Hire',
     faqs: attachmentsFaqs,
     Body: MiniDiggerAttachmentsBody,
+  },
+  {
+    slug: '1-5-tonne-vs-3-tonne-digger-which-one-do-you-actually-need',
+    category: 'Mini Digger Hire',
+    title: '1.5 Tonne vs 3 Tonne Digger: Which One Do You Actually Need?',
+    excerpt:
+      'Side-by-side spec comparison, job-by-job decision guide, and a productivity table showing when the 3t pays for itself. The honest answer before you book.',
+    intro:
+      'The 1.5-tonne mini digger is the most hired size in the UK — versatile, compact, and the right tool for the majority of residential jobs. The 3-tonne machine digs deeper, reaches further, carries more per bucket load, and gets large jobs done significantly faster. The day-rate difference is typically £60–£90. This guide compares the two machines across the most common UK hire scenarios so you can make the right call before you book.',
+    image: '/images/blog/1-5-tonne-vs-3-tonne-digger.webp',
+    imageAlt: '1.5 tonne vs 3 tonne digger comparison — which mini digger should you hire for your UK job?',
+    datePublished: '2026-07-16',
+    metaTitle: '1.5 Tonne vs 3 Tonne Digger: Which Should You Hire? | Tooli.uk',
+    metaDescription:
+      'Not sure whether to hire a 1.5t or 3t mini digger? This guide settles it. Compare dig depth, reach, bucket size, and job suitability in one place.',
+    primaryCta: 'Compare Digger Hire Prices',
+    faqs: vs15v3Faqs,
+    Body: Digger15v3Body,
   },
 ];
 
