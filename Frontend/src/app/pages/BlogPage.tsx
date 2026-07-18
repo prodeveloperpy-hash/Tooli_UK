@@ -5219,6 +5219,350 @@ function Digger15v3Body() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 19 — How to Hire a Mini Digger Without a CPCS Card         */
+/* ------------------------------------------------------------------ */
+
+const cpcsCollectionTable: [string, string, string][] = [
+  ['Photo ID (driving licence or passport)', 'Identity verification', 'Accepted at all depots'],
+  ['Proof of address', 'Secondary ID check', 'Not always required — call ahead to confirm'],
+  ['Payment card (credit or debit)', 'Deposit + hire charge', 'Deposit typically £250–£600 held separately'],
+  ['Vehicle and trailer if self-collecting', 'Machine transport', 'Depot will supervise loading'],
+];
+
+const cpcsRequirementTable: [string, string][] = [
+  ['Private domestic project on your own land', 'No'],
+  ['Residential project for a client (self-employed tradesperson)', 'Not legally required, but check your liability insurance'],
+  ['Commercial site with a principal contractor', 'Yes — most will require it'],
+  ['Site operating under CDM 2015 with a principal designer', 'Yes — competence records may be checked'],
+  ['Operator hired alongside machine from depot', 'Yes — depot-supplied operators will hold CPCS'],
+];
+
+const cpcsFaqs: Faq[] = [
+  [
+    'Do I need a CPCS card to hire a mini digger in the UK?',
+    'No — not for private domestic use. Hire depots do not legally require a CPCS card from private hirers on residential projects. You will need photo ID, a deposit, and to demonstrate basic operational competence. On commercial sites, your site manager will specify CPCS requirements.',
+  ],
+  [
+    'What ID do I need to hire a mini digger?',
+    'At minimum, a valid photo ID (driving licence or passport). Some depots also ask for proof of address (utility bill or bank statement within 3 months). Call the depot ahead of collection to confirm their specific requirements so you don\'t arrive unprepared.',
+  ],
+  [
+    'Can a hire depot refuse to let me take a digger without a CPCS card?',
+    'Yes. Hire companies can set their own conditions of hire. Some depots decline private hirers for larger machines, particularly if they have doubts about the hirer\'s competence. This is a commercial decision — if declined, compare alternative suppliers on Tooli.uk.',
+  ],
+  [
+    'What happens if I damage the digger during hire?',
+    'You are liable for damage caused by misuse, negligence, or operator error. If you took out the depot\'s damage waiver, your liability may be capped (subject to terms). The deposit held on your card may be retained in part or full to cover damage. Always photograph the machine on collection and return.',
+  ],
+  [
+    'Is PUWER relevant when I\'m just digging my own garden?',
+    'Yes. PUWER 1998 (Provision and Use of Work Equipment Regulations) applies wherever work equipment is in use, including private domestic projects. It requires that anyone using work equipment is competent to do so safely. Non-compliance creates personal liability if an accident occurs.',
+  ],
+  [
+    'Can I hire a digger and pay someone else to operate it?',
+    'Yes — you can hire the machine and arrange your own operator. However, any operator you use during your hire period becomes your responsibility for PUWER compliance purposes. Ensure they are competent and, for commercial sites, CPCS-carded.',
+  ],
+  [
+    'What is Line Search Before U Dig, and do I need to use it?',
+    'Line Search Before U Dig (LSBUD) is the UK\'s free service for checking the location of buried utility services before excavation. It is not a legal requirement for private land, but it is strongly advised — hitting a buried gas pipe or electrical cable is a life-safety risk. Register at lsbud.co.uk and run a search before any digging.',
+  ],
+];
+
+function CpcsHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">
+          What You Need to Hire Without a CPCS Card
+        </h2>
+        <CheckList
+          items={[
+            'Valid photo ID: driving licence or passport',
+            'Proof of address: utility bill or bank statement dated within the last 3 months (not all depots require this)',
+            'A credit or debit card for the deposit (typically £250–£600)',
+            'Transport arranged if self-collecting (trailer, tow vehicle rated to the weight)',
+            'Ability to demonstrate basic competence — most depots will walk you through the controls',
+          ]}
+        />
+        <p className="mt-4 text-sm font-semibold text-red-600">
+          ✗ CPCS card: not required for private/domestic hire (but required on most commercial sites)
+        </p>
+      </section>
+
+      {/* Why no CPCS needed */}
+      <section>
+        <H2>Why You Don't Need a CPCS Card for Private Hire</H2>
+        <Prose>
+          <p>
+            The CPCS (Construction Plant Competence Scheme) card is an industry competence scheme,
+            not a government-mandated licence. It proves you are trained and tested to operate
+            specific plant machinery — but it is enforced at site level by principal contractors
+            on commercial construction sites, not by law for private land use.
+          </p>
+          <p>
+            For a homeowner hiring a mini digger to dig a garden pond, clear ground for a patio,
+            or excavate a trench for drainage pipes on their own property, no CPCS card is
+            required. The hire depot has no legal obligation to demand one.
+          </p>
+          <p>
+            What is required, however, is competence under PUWER 1998. You must be capable of
+            operating the machine safely. In practice, this means understanding the controls,
+            knowing how to perform a pre-start check, and being able to operate without causing a
+            hazard to yourself, others, or the machine.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/do-i-need-licence-to-operate-mini-digger"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Do I Need a Licence to Operate a Mini Digger? →
+          </span>
+        </Link>
+      </section>
+
+      {/* Step-by-step */}
+      <section>
+        <H2>Step-by-Step: How to Hire a Mini Digger Without a CPCS Card</H2>
+
+        <H3>Step 1: Find a Suitable Supplier</H3>
+        <Prose>
+          <p>
+            Use Tooli.uk to compare mini digger hire prices from local depots. Not all depots
+            hire to private individuals for domestic projects — some trade-only depots require a
+            business account. Filter by location and confirm the depot hires to private customers
+            before making a booking.
+          </p>
+        </Prose>
+
+        <H3>Step 2: Book in Advance</H3>
+        <Prose>
+          <p>
+            During spring and summer, 1.5-tonne diggers book up fast — especially at weekends.
+            Call or book online at least 3–5 working days ahead. Tell the depot what you need the
+            machine for; they can confirm the right size and available attachments.
+          </p>
+        </Prose>
+
+        <H3>Step 3: Sort Your Transport (if Self-Collecting)</H3>
+        <Prose>
+          <p>
+            Mini diggers are not road-legal. They must be transported on a trailer or low-loader.
+            To self-collect a 1.5-tonne machine, you need:
+          </p>
+        </Prose>
+        <CheckList
+          items={[
+            'A trailer with a Gross Vehicle Weight (GVW) rated at least 2,000 kg with ramps or a full-length deck',
+            'A towing vehicle with a towing capacity that exceeds the loaded trailer weight',
+            'Appropriate trailer braking if the trailer exceeds 750 kg',
+            'Ratchet straps rated to secure the machine during transport',
+          ]}
+        />
+        <Prose>
+          <p>
+            If you don't have trailer access, book delivery and collection from the depot. This
+            adds cost (typically £80–£200 return) but is the simplest option.
+          </p>
+        </Prose>
+
+        <H3>Step 4: What to Bring on Collection Day</H3>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Item</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Why It's Needed</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cpcsCollectionTable.map(([item, why, notes], i) => (
+                <tr key={item} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{item}</td>
+                  <td className="px-4 py-3 text-gray-600">{why}</td>
+                  <td className="px-4 py-3 text-gray-500">{notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <H3>Step 5: The Handover</H3>
+        <Prose>
+          <p>
+            Before you leave the depot, the hire desk should walk you through the machine
+            controls. Take this seriously — even if you've used a digger before, different
+            machines have different control layouts and safety interlocks. Ask about:
+          </p>
+        </Prose>
+        <CheckList
+          items={[
+            'How to perform the pre-start inspection (fluid levels, track tension, greasing points)',
+            'Emergency stop location and procedure',
+            'How to engage the slew lock for transport',
+            'What the machine\'s warning lights indicate',
+            'Fuel type and expected consumption rate',
+          ]}
+        />
+
+        <H3>Step 6: Operate Safely</H3>
+        <Prose>
+          <p>
+            Even on private domestic land, PUWER 1998 requires you to operate work equipment
+            safely. Practically, that means:
+          </p>
+        </Prose>
+        <CheckList
+          items={[
+            'Check the working area for buried services (gas, water, electricity, telecoms) before digging. Call 0800 96 93 35 (LSBUD) or use their free online check at lsbud.co.uk.',
+            'Keep bystanders — particularly children — well clear of the machine\'s swing radius.',
+            'Do not operate a diesel machine in an enclosed space without adequate ventilation.',
+            'Wear appropriate PPE: hard hat, steel-toe boots, hi-vis vest where relevant.',
+          ]}
+        />
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/mini-digger-hire-cost-uk.webp"
+        alt="Mini digger on a UK site — compare hire prices without needing a CPCS card on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* When CPCS required */}
+      <section>
+        <H2>When You Will Need a CPCS Card</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Situation</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">CPCS Card Required?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cpcsRequirementTable.map(([situation, required], i) => (
+                <tr key={situation} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-medium text-gray-700">{situation}</td>
+                  <td className={`px-4 py-3 font-bold ${required === 'No' ? 'text-brand-primary' : required.startsWith('Yes') ? 'text-red-600' : 'text-amber-700'}`}>{required}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Can depot refuse */}
+      <section>
+        <H2>Can Any Hire Depot Refuse Without a CPCS Card?</H2>
+        <Prose>
+          <p>
+            Yes. This is within a hire depot's rights. Some depots have policies that require
+            demonstrated operator experience for machines over a certain size — this is a
+            commercial decision, not a legal requirement. If one depot declines, use Tooli.uk to
+            find an alternative local supplier who hires to private individuals.
+          </p>
+        </Prose>
+      </section>
+
+      {/* Never used a digger before */}
+      <section>
+        <H2>What If I've Never Used a Digger Before?</H2>
+        <Prose>
+          <p>
+            Ask the depot for a thorough handover. Most are happy to spend 15–20 minutes at the
+            yard demonstrating the controls before you load the machine. For complete beginners,
+            some depots offer short paid induction sessions — worth asking about, particularly
+            before tackling a complex or high-risk job.
+          </p>
+          <p>
+            Alternatively, consider hiring an operator alongside the machine for your first job. A
+            competent plant operator typically costs £200–£400 per day on top of the machine hire
+            — but on a job you're unsure about, having a professional on site protects you, your
+            property, and your hire deposit.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/1-5-tonne-vs-3-tonne-digger-which-one-do-you-actually-need"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              1.5 Tonne vs 3 Tonne Digger: Which One Do You Need? →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-attachments-explained-which-one-do-you-need"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Attachments Explained: Which One Do You Need? →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-buy-or-hire-full-uk-cost-comparison"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger: Buy or Hire? Full UK Cost Comparison →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-cost-uk-2026-price-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire UK: Prices &amp; Sizes Compared →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-london-prices-local-availability"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire London: Prices &amp; Local Availability →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={cpcsFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Find a Depot That Hires to Private Customers</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, select mini digger hire, and compare quotes from local
+          suppliers — no CPCS card required for private residential jobs.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -5544,6 +5888,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Digger Hire Prices',
     faqs: vs15v3Faqs,
     Body: Digger15v3Body,
+  },
+  {
+    slug: 'how-to-hire-mini-digger-without-cpcs-card-what-you-need-to-know',
+    category: 'Compliance & Safety',
+    title: 'How to Hire a Mini Digger Without a CPCS Card: What You Need to Know',
+    excerpt:
+      'You can hire a mini digger in the UK without a CPCS card for private domestic use. Here\'s what you actually need to bring, how the handover works, and when a CPCS card does become a requirement.',
+    intro:
+      'Yes — you can hire a mini digger in the UK without a CPCS card for private domestic use. Most hire depots do not require a CPCS card from private hirers, and there is no legal requirement to hold one when operating a digger on private land. What you will need is valid photo ID, a deposit held on card, and proof you can operate the machine safely.',
+    image: '/images/blog/hire-mini-digger-without-cpcs-card.webp',
+    imageAlt: 'Hiring a mini digger without a CPCS card in the UK — what you need to know',
+    datePublished: '2026-07-18',
+    metaTitle: 'Can You Hire a Mini Digger Without a CPCS Card? | Tooli.uk',
+    metaDescription:
+      'You don\'t need a CPCS card to hire a mini digger in the UK for private use. Here\'s what you do need, and how to hire safely and legally.',
+    primaryCta: 'Compare Mini Digger Hire',
+    faqs: cpcsFaqs,
+    Body: CpcsHireBody,
   },
 ];
 
