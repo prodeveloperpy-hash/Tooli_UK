@@ -5830,6 +5830,290 @@ function ScaffoldTowerHireBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article — Do You Need PASMA to Hire a Scaffold Tower in the UK?     */
+/* ------------------------------------------------------------------ */
+
+const pasmaRequirementTable: [string, string][] = [
+  ['Commercial construction site', 'Yes — required by most principal contractors'],
+  ['Local authority or social housing site', 'Yes — standard requirement'],
+  ['Private residential work (trade)', 'Recommended — not always enforced, but expected'],
+  ['DIY homeowner on own property', 'No legal requirement — safe use rules still apply'],
+  ['School, hospital or public building', 'Yes — typically written into CDM documentation'],
+];
+
+const pasmaAtAGlance = [
+  'Hire depots do not legally require PASMA training before hiring you a tower',
+  'Most commercial sites require a valid PASMA card for anyone assembling or using a tower',
+  'PASMA training is one day and covers assembly, inspection, use and dismantling',
+  'DIY homeowners have no legal card requirement but must still follow safe working at height rules',
+  'The Work at Height Regulations 2005 apply to all tower use in the UK — trade or DIY',
+];
+
+const pasmaCourseCoverage = [
+  'UK legislation, including the Work at Height Regulations 2005 and PUWER',
+  'Tower types, components, load ratings and manufacturer markings',
+  'Pre-use inspection checklist — what to look for and when to reject a component',
+  'Assembly using the stairway-through method (the industry standard safe assembly approach)',
+  'Working safely on uneven ground, near overhead hazards, and in wind',
+  'Dismantling and safe storage',
+];
+
+const pasmaFaqs: Faq[] = [
+  [
+    'How much does PASMA training cost?',
+    'Expect to pay roughly £180–£250 for a one-day PASMA Towers for Users course at an accredited centre. Some employers cover the cost for their operatives. Cards are valid for five years.',
+  ],
+  [
+    'Is PASMA the same as IPAF?',
+    'No. PASMA covers mobile access towers — the aluminium frame towers you assemble by hand. IPAF covers powered access equipment like cherry pickers, scissor lifts and boom lifts. They\'re separate qualifications for different types of equipment.',
+  ],
+  [
+    'Does my PASMA card cover all tower types?',
+    'PASMA Towers for Users covers prefabricated mobile access towers — the standard aluminium hire towers. It does not cover traditional tube-and-fitting scaffold (that requires CISRS training) or powered access platforms (IPAF).',
+  ],
+  [
+    'Do I need to renew my PASMA card?',
+    'PASMA cards are valid for five years. Renewal requires a refresher course. Letting a card lapse won\'t get you arrested, but it may mean a site manager won\'t let you work until you\'ve renewed.',
+  ],
+];
+
+function PasmaRequirementBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={pasmaAtAGlance} />
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/do-you-need-pasma-to-hire-scaffold-tower.webp"
+        alt="Do you need PASMA to hire a scaffold tower in the UK — rules for tradespeople and DIY homeowners"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+        <p>
+          Short answer: not to hire one, but almost certainly to use one on a commercial site.
+          PASMA (Prefabricated Access Suppliers' and Manufacturers' Association) training is the
+          UK's recognised standard for mobile access tower use. Most principal contractors make it
+          a site requirement. If you're a DIY homeowner working on your own property, no card is
+          legally required — but the Work at Height Regulations 2005 still bind you to working
+          safely at height. Here's exactly what applies in each situation.
+        </p>
+      </section>
+
+      <section>
+        <H2>What Is PASMA?</H2>
+        <Prose>
+          <p>
+            <a
+              href="https://www.pasma.co.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              PASMA
+            </a>{' '}
+            is the UK trade body for mobile access tower manufacturers and suppliers. Their Towers
+            for Users training course is a one-day, accredited programme covering the AUID method
+            — Assembly, Use, Inspection, and Dismantling. Pass the written and practical
+            assessments, and you get a PASMA card valid for five years.
+          </p>
+          <p>
+            It's not a statutory licence in the way an IPAF PAL Card or CPCS card is — there's no
+            specific law that names PASMA by name. But it has become the construction industry's
+            accepted proof of competence for mobile tower work, and most principal contractors
+            treat it as mandatory.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>When Is PASMA Required?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Situation</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">PASMA Required?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pasmaRequirementTable.map(([situation, required], i) => (
+                <tr key={situation} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-medium text-gray-700">{situation}</td>
+                  <td className={`px-5 py-3 font-bold ${required.startsWith('No') ? 'text-brand-primary' : required.startsWith('Yes') ? 'text-red-600' : 'text-amber-700'}`}>{required}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link
+          to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained →
+          </span>
+        </Link>
+      </section>
+
+      {/* Product image */}
+      <img
+        src="/images/blog/scaffold-tower-hire-uk-and-pasma.webp"
+        alt="Aluminium scaffold tower with platform, guard rails and locking castors ready for hire"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>What Does a PASMA Course Cover?</H2>
+        <Prose>
+          <p>
+            A PASMA Towers for Users course runs for one day at an accredited training centre.
+            You'll cover:
+          </p>
+        </Prose>
+        <CheckList items={pasmaCourseCoverage} />
+        <p className="mt-6 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+          After the written test, you receive a PASMA card. Most centres issue it on the day or
+          within a few days by post.
+        </p>
+      </section>
+
+      <section>
+        <H2>Do Hire Depots Check Your PASMA Card?</H2>
+        <Prose>
+          <p>
+            For standard height towers — roughly up to 5 m working height — most UK hire depots
+            don't ask for a PASMA card when you collect. They'll hand you the safety documentation
+            and erection guide, and that's it.
+          </p>
+          <p>
+            For larger towers (6 m working height and above), or where delivery is to a named
+            commercial site, a growing number of depots do ask for proof of PASMA training. It's
+            their risk management, not a statutory rule. Always check at point of booking if
+            you're unsure.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>What Does the HSE Say?</H2>
+        <Prose>
+          <p>
+            The Health and Safety Executive doesn't name PASMA in legislation. But the{' '}
+            <a
+              href="https://www.hse.gov.uk/work-at-height/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Work at Height Regulations 2005
+            </a>{' '}
+            (SI 2005/735) require that anyone working at height is competent to do so. Competence
+            means the right skills, knowledge, and experience for the task — and PASMA training is
+            the widely accepted way to demonstrate that in the mobile tower context.
+          </p>
+          <p>
+            For employers, there's a separate duty under PUWER (Provision and Use of Work
+            Equipment Regulations 1998) to ensure operatives are trained and competent to use the
+            equipment they're issued. Sending someone up a scaffold tower without training isn't a
+            grey area under PUWER.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>What Happens If You Don't Have PASMA?</H2>
+        <Prose>
+          <p>
+            On a commercial site, no PASMA card usually means no access to the tower. The site
+            manager can and will refuse to let you work. If there's an incident involving a tower
+            and an untrained operative, the legal exposure for both the operative and the employer
+            increases significantly.
+          </p>
+          <p>
+            For DIY jobs on your own property, the risk is personal. You won't be turned away by a
+            depot. But if something goes wrong, insurers may ask questions about competence —
+            particularly if the incident results in a third-party claim.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Keep Reading</H2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/mini-digger-hire-cost-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: Avoid Overpaying in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire Comparison UK: Compare Construction Equipment & Plant Hire Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire UK: Prices &amp; Sizes Compared →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-cost-uk-2026-price-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-buy-or-hire-full-uk-cost-comparison"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger: Buy or Hire? Full UK Cost Comparison →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={pasmaFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Scaffold Tower Hire Prices Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, choose your size, and compare quotes from UK hire
+          depots in minutes. No account needed. No phone calls.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -6191,6 +6475,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Scaffold Tower Hire',
     faqs: scaffoldTowerFaqs,
     Body: ScaffoldTowerHireBody,
+  },
+  {
+    slug: 'do-you-need-pasma-to-hire-scaffold-tower-in-the-uk',
+    category: 'Compliance & Safety',
+    title: 'Do You Need PASMA to Hire a Scaffold Tower in the UK?',
+    excerpt:
+      'Not to hire one, but almost certainly to use one on a commercial site. Here\'s exactly when PASMA is required, what the course covers, and what the law actually says for trade and DIY use.',
+    intro:
+      'Short answer: not to hire one, but almost certainly to use one on a commercial site. PASMA training is the UK\'s recognised standard for mobile access tower use, and most principal contractors make it a site requirement. DIY homeowners face no legal card requirement, but the Work at Height Regulations 2005 still apply. Here\'s exactly what applies in each situation.',
+    image: '/images/blog/do-you-need-pasma-to-hire-scaffold-tower.webp',
+    imageAlt: 'Do you need PASMA to hire a scaffold tower in the UK — rules for tradespeople and DIY homeowners',
+    datePublished: '2026-07-23',
+    metaTitle: 'Do You Need PASMA to Hire a Scaffold Tower? | Tooli.uk',
+    metaDescription:
+      'Is a PASMA card required to hire or use a scaffold tower in the UK? Clear rules for tradespeople and DIY homeowners.',
+    primaryCta: 'Compare Scaffold Tower Hire',
+    faqs: pasmaFaqs,
+    Body: PasmaRequirementBody,
   },
 ];
 
