@@ -5563,6 +5563,273 @@ function CpcsHireBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article — Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules     */
+/* ------------------------------------------------------------------ */
+
+const scaffoldTowerSizeTable: [string, string, string][] = [
+  ['2.2 m', '0.2 m', 'Indoor ceiling work, low exterior painting'],
+  ['3.2 m', '1.2 m', 'Single-storey walls, window fitting'],
+  ['4.2 m', '2.2 m', 'First-floor exterior, gutters and eaves'],
+  ['5.2 m', '3.2 m', 'Two-storey rendering, fascia runs'],
+  ['7.2 m', '5.2 m', 'Chimney repointing, gable work'],
+  ['10.2 m+', '8.2 m+', 'Commercial facades, larger structures'],
+];
+
+const scaffoldTowerAtAGlance = [
+  'Scaffold towers range from 2.2 m to 12 m+ working height — choose by task, not by guesswork',
+  'PASMA training is required on most UK commercial sites and strongly recommended for all users',
+  'Indoor towers (narrower, lighter) and outdoor towers (wider, heavier) are different hire items',
+  'Rates vary by height, width, duration and region — compare suppliers before you book',
+  'Weekly hire almost always works out cheaper per day than booking daily from day three onwards',
+];
+
+const scaffoldTowerBeforeHireItems = [
+  'Working height — calculate properly, don\'t underestimate',
+  'Indoor or outdoor use — different widths and base plate configurations',
+  'Ground conditions — slopes and soft ground need adjustable legs or outriggers',
+  'Duration — day, weekend, or week hire changes the total cost significantly',
+  'Delivery vs self-collect — delivery charges are real costs, always get the full delivered price',
+  'PASMA requirement — check with the site manager and the hire depot before booking',
+];
+
+const scaffoldTowerFaqs: Faq[] = [
+  [
+    'Do I need a PASMA card to hire a scaffold tower?',
+    'For commercial sites, yes — most principal contractors require it. For residential DIY, no legal card is needed, but safe use under the Work at Height Regulations 2005 is still your responsibility.',
+  ],
+  [
+    'What is the Safe Working Load of a hired scaffold tower?',
+    'Most standard hired towers are rated at 275 kg per platform bay. Always check the manufacturer\'s data sheet and never overload — tools, materials, and the operative all count toward that total.',
+  ],
+  [
+    'Can I hire a scaffold tower without a van?',
+    'Yes — most UK hire depots offer delivery to site. Smaller towers pack down small enough to fit in an estate car, but confirm the longest section length before self-collecting.',
+  ],
+  [
+    'Are scaffold tower hire rates quoted including VAT?',
+    'Most depot rates are quoted ex-VAT. Add 20% for the true cost. VAT-registered businesses can reclaim it. On Tooli.uk we clearly show whether rates are inc or ex-VAT so you\'re comparing like for like.',
+  ],
+];
+
+function ScaffoldTowerHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">At a Glance</h2>
+        <CheckList items={scaffoldTowerAtAGlance} />
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/scaffold-tower-hire-uk.webp"
+        alt="Scaffold tower hire UK — prices, sizes and PASMA compliance compared on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>What Is a Scaffold Tower?</H2>
+        <Prose>
+          <p>
+            A mobile access tower (the term used in PASMA documentation) is a self-supporting
+            aluminium frame that you assemble on site, add platform decks to, and move around on
+            lockable castors. Unlike traditional tube-and-fitting scaffolds, it doesn't tie to the
+            building. Most hired towers fit in a van or trailer and assemble without tools in
+            under 40 minutes with two people.
+          </p>
+          <p>
+            They're used every day by decorators, roofers, window fitters, groundworkers, and
+            builders across the UK, plus DIYers running extensions or large renovation projects.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Sizes: Choosing by Working Height</H2>
+        <Prose>
+          <p>
+            Working height is the key measurement — it's where you stand, not the top of the
+            frame. A common mistake is confusing platform height with working height. Always
+            check both figures when comparing products.
+          </p>
+        </Prose>
+        <div className="mt-4 overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Working Height</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Platform Height</th>
+                <th className="px-5 py-3 text-left font-extrabold text-gray-900">Common UK Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scaffoldTowerSizeTable.map(([working, platform, use], i) => (
+                <tr key={working} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-5 py-3 font-bold text-gray-700">{working}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{platform}</td>
+                  <td className="px-5 py-3 font-medium text-gray-500">{use}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          Indoor towers are typically 0.85 m wide. Outdoor towers run to 1.45 m. The wider base
+          gives more stability at height outdoors, but it won't fit through a standard door —
+          check access routes before you book.
+        </p>
+      </section>
+
+      {/* Product image */}
+      <img
+        src="/images/blog/scaffold-tower-hire-uk-and-pasma.webp"
+        alt="Aluminium scaffold tower with platform, guard rails and locking castors ready for hire"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Getting the Height Right</H2>
+        <Prose>
+          <p>
+            Add at least 1 m to the highest point you need to touch to get your required working
+            height. You want the work at roughly chest level — not stretched above your head or
+            crouched at your feet. Both positions are tiring and increase the chance of a fall.
+          </p>
+          <p>
+            Check ceiling heights and door widths before hiring for indoor jobs. A 5 m tower needs
+            clearance to stand upright and frame sections long enough to cause access problems in
+            narrow hallways.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>PASMA: What It Is and When You Need It</H2>
+        <Prose>
+          <p>
+            <a
+              href="https://www.pasma.co.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              PASMA
+            </a>{' '}
+            (Prefabricated Access Suppliers' and Manufacturers' Association) runs the UK's
+            recognised training scheme for mobile access towers. A PASMA card — earned on a
+            one-day accredited course — proves you can safely assemble, use, inspect, and
+            dismantle a tower.
+          </p>
+          <p>
+            On commercial sites, most principal contractors require a valid PASMA card before any
+            operative sets foot on a hired tower. It's not a legal licence in the way CPCS or IPAF
+            cards are, but it's become the de facto site standard.
+          </p>
+          <p>
+            For homeowners doing DIY work on their own property, there's no legal obligation to
+            hold a PASMA card. But the{' '}
+            <a
+              href="https://www.hse.gov.uk/work-at-height/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Work at Height Regulations 2005
+            </a>{' '}
+            still apply — you must take reasonable precautions to prevent falls. Read the erection
+            guide your hire depot supplies. Every depot is required to provide one.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>What to Sort Before You Hire</H2>
+        <CheckList items={scaffoldTowerBeforeHireItems} />
+      </section>
+
+      <section>
+        <H2>Scaffold Tower vs Cherry Picker</H2>
+        <Prose>
+          <p>
+            For a fixed task in one spot over multiple days — painting, repointing, fascia work —
+            a scaffold tower is almost always the more cost-effective choice. Cherry pickers cover
+            ground faster when you're repositioning constantly, but the hire rates and licence
+            requirements add up quickly.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Keep Reading</H2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/mini-digger-hire-cost-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: Avoid Overpaying in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire Comparison UK: Compare Construction Equipment & Plant Hire Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-uk-prices-and-sizes-compared"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire UK: Prices &amp; Sizes Compared →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-hire-cost-uk-2026-price-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/mini-digger-buy-or-hire-full-uk-cost-comparison"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Mini Digger: Buy or Hire? Full UK Cost Comparison →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={scaffoldTowerFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Scaffold Tower Hire Prices Now</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk, choose your size, and compare quotes from UK hire
+          depots in minutes. No account needed. No phone calls.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -5906,6 +6173,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Digger Hire',
     faqs: cpcsFaqs,
     Body: CpcsHireBody,
+  },
+  {
+    slug: 'scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained',
+    category: 'Access Equipment',
+    title: 'Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained',
+    excerpt:
+      'From 2.2 m indoor towers to 12 m+ commercial rigs, here\'s how to pick the right scaffold tower, what PASMA actually requires, and how to compare hire rates across UK suppliers.',
+    intro:
+      'A scaffold tower is one of the most practical pieces of hired access equipment on UK sites. It sets up quickly, works in tight spaces, and gives you a solid working platform at the height you actually need. Whether you\'re repointing brickwork, clearing gutters, fitting fascias, or painting a gable end, the right tower makes the job safer and faster. This guide covers sizes, what to expect on rates, PASMA rules, and how to compare suppliers on Tooli.uk.',
+    image: '/images/blog/scaffold-tower-hire-uk.webp',
+    imageAlt: 'Scaffold tower hire UK — prices, sizes and PASMA compliance compared on Tooli.uk',
+    datePublished: '2026-07-23',
+    metaTitle: 'Scaffold Tower Hire UK: Sizes, Rates & PASMA | Tooli.uk',
+    metaDescription:
+      'Hiring a scaffold tower in the UK? Compare day, week and month rates, choose the right size, and understand PASMA requirements.',
+    primaryCta: 'Compare Scaffold Tower Hire',
+    faqs: scaffoldTowerFaqs,
+    Body: ScaffoldTowerHireBody,
   },
 ];
 
