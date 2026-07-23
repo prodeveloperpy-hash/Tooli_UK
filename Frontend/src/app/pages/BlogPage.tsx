@@ -6811,6 +6811,334 @@ function IpafLicenceBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 22 — Scaffold Tower Hire Cost UK 2026                      */
+/* ------------------------------------------------------------------ */
+
+const scaffoldCostRatesTable: [string, string, string, string, string][] = [
+  ['Low-level tower', 'Up to 2.5 m', '£18–£28', '£40–£65', '£110–£160'],
+  ['Standard single-width', 'Up to 4.2 m', '£22–£35', '£55–£85', '£140–£200'],
+  ['Single-width mid-height', 'Up to 6.0 m', '£28–£42', '£70–£110', '£180–£260'],
+  ['Single-width high', 'Up to 8.2 m', '£38–£55', '£90–£140', '£230–£340'],
+  ['Single-width XL', 'Up to 10.0 m', '£48–£70', '£120–£175', '£290–£420'],
+  ['Double-width standard', 'Up to 6.0 m', '£45–£65', '£110–£160', '£270–£380'],
+  ['Double-width high', 'Up to 8.0 m', '£55–£80', '£130–£200', '£320–£460'],
+  ['Stairway tower', 'Up to 8.0 m', '£55–£80', '£130–£200', '£320–£460'],
+];
+
+const scaffoldDeliveryTable: [string, string][] = [
+  ['Self-collect', '£0'],
+  ['Under 10 miles', '£40–£65'],
+  ['10–25 miles', '£60–£90'],
+  ['25–50 miles', '£80–£120'],
+  ['50+ miles', 'POA — typically £100+'],
+];
+
+const scaffoldDurationTable: [string, string, string][] = [
+  ['1 day', '£22–£35 (day rate)', 'Baseline'],
+  ['3 days', '£66–£105 (3× day rate) vs £55–£85 (weekly)', 'Book weekly from day 3 onwards'],
+  ['1 week', '£55–£85', 'Save ~25% vs 5 day rates'],
+  ['2 weeks', '£95–£150 (most depots offer a discount)', 'Better than 2× weekly'],
+  ['4 weeks', '£140–£200', 'Roughly 2.5× the weekly rate'],
+];
+
+const scaffoldJobCostTable: [string, string, string, string, string, string][] = [
+  ['Exterior house painting (2-storey)', 'Standard single-width', '1 week', '£70', 'Self-collect', '~£70'],
+  ['Fascia, soffit, guttering (3 elevations)', 'Standard single-width', '2 weeks', '£130', '£80 return', '~£210'],
+  ['Chimney pointing (semi-det)', 'Single-width high (8 m)', '1 week', '£110', '£80 return', '~£190'],
+  ['Interior ceiling repair (commercial unit)', 'Low-level double-width', '2 weeks', '£260', '£80 return', '~£340'],
+  ['Exterior rendering (3-storey commercial)', 'Double-width high', '4 weeks', '£400', '£120 return', '~£520'],
+];
+
+const scaffoldCostFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a scaffold tower for a week?',
+    'A standard single-width scaffold tower for a 4-metre working height costs around £55–£85 per week in the UK. Taller and double-width towers run £90–£200 per week. All prices are VAT-inclusive guidance — confirm current local rates on Tooli.uk.',
+  ],
+  [
+    'Is a scaffold tower cheaper than a cherry picker?',
+    'Yes — significantly. A scaffold tower costs £55–£200 per week. A self-drive cherry picker runs £350–£900 per week. For fixed-position work lasting more than one day, scaffold towers are almost always the more cost-effective choice.',
+  ],
+  [
+    'Can I get a scaffold tower for less than a week?',
+    'Day rates are available from most depots, typically £18–£70 per day depending on tower size. However, if your job runs 3 or more days, the weekly rate is cheaper. Many depots also offer flexible pricing for 3-day weekend hires.',
+  ],
+  [
+    'Do hire companies charge VAT on scaffold tower hire?',
+    'VAT-registered hire companies (most commercial depots) add 20% VAT to hire charges. Always confirm whether a quote is ex-VAT before comparing across suppliers.',
+  ],
+  [
+    'What deposit do I need for scaffold tower hire?',
+    'Typically £100–£300 held on a credit or debit card at collection. Released in full on undamaged return. The deposit is held separately from the hire charge — it is not an additional payment, just a security hold.',
+  ],
+];
+
+function ScaffoldCostBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Cost Quick Reference</h2>
+        <CheckList
+          items={[
+            'Low-level tower: £40–£65/week',
+            'Standard single-width (4 m working height): £55–£85/week',
+            'Mid-height single-width (6 m): £70–£110/week',
+            'High single-width (8–10 m): £90–£175/week',
+            'Double-width / stairway: £110–£200/week',
+            'Delivery: typically £40–£120 return (or self-collect free if you have a van)',
+          ]}
+        />
+      </section>
+
+      {/* Full rates table */}
+      <section>
+        <H2>Scaffold Tower Hire Rates 2026: Full Breakdown</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Tower Type</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Working Height</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Day Rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Week Rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">4-Week Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scaffoldCostRatesTable.map(([type, height, day, week, month], i) => (
+                <tr key={type} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{type}</td>
+                  <td className="px-4 py-3 text-gray-600">{height}</td>
+                  <td className="px-4 py-3 text-gray-600">{day}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{week}</td>
+                  <td className="px-4 py-3 text-gray-600">{month}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-gray-400">VAT-inclusive guidance. Compare live quotes on Tooli.uk.</p>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/scaffold-tower-hire-cost.webp"
+        alt="Standard single-width scaffold tower assembled against a two-storey UK terraced house for gutter cleaning"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Additional costs */}
+      <section>
+        <H2>Additional Costs to Budget For</H2>
+
+        <H3>Delivery and Collection</H3>
+        <Prose>
+          <p>
+            Self-collection in a van or estate car with roof bars cuts delivery cost to zero for most
+            hire towers. If you need delivery:
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Distance from Depot</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Typical Delivery Charge (return)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scaffoldDeliveryTable.map(([distance, charge], i) => (
+                <tr key={distance} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-medium text-gray-700">{distance}</td>
+                  <td className={`px-4 py-3 font-bold ${distance === 'Self-collect' ? 'text-brand-primary' : 'text-gray-600'}`}>{charge}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <H3>Damage Waiver</H3>
+        <Prose>
+          <p>
+            Scaffold tower sections are lightweight aluminium — they dent and bend. Most depots offer
+            a damage waiver at £5–£15 per week capping accidental damage liability. Worth taking,
+            especially for taller towers where the cost of replacing bent or twisted sections adds up
+            quickly.
+          </p>
+        </Prose>
+
+        <H3>Deposit</H3>
+        <Prose>
+          <p>
+            Deposits on scaffold tower hire are typically £100–£300 held on card. Released in full on
+            undamaged return. Photograph every section on collection — dents and scratches from
+            previous hirers should be logged with the depot before you take the equipment away.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire UK: Prices, Sizes &amp; PASMA Rules →
+            </span>
+          </Link>
+          <Link
+            to="/blog/do-you-need-pasma-to-hire-scaffold-tower-in-the-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Do You Need PASMA to Hire a Scaffold Tower? →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/scaffold-tower-hire-cost-uk.webp"
+        alt="Double-width scaffold tower with aluminium stairway access on a large commercial building UK"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Duration savings */}
+      <section>
+        <H2>Duration Savings: When Weekly Beats Daily</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Duration</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Standard Single-Width Cost</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Verdict</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scaffoldDurationTable.map(([duration, cost, verdict], i) => (
+                <tr key={duration} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{duration}</td>
+                  <td className="px-4 py-3 text-gray-600">{cost}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{verdict}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Prose>
+          <p className="mt-4">
+            The pattern is clear: if your job runs 3 or more working days, book by the week. If it
+            runs more than 8 days, check whether a discounted second-week or monthly rate is available.
+          </p>
+        </Prose>
+      </section>
+
+      {/* Real job scenarios */}
+      <section>
+        <H2>Total Cost Examples: Real Job Scenarios</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Job</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Tower Type</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Duration</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Hire Cost</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Delivery</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Approx Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {scaffoldJobCostTable.map(([job, tower, duration, hire, delivery, total], i) => (
+                <tr key={job} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{job}</td>
+                  <td className="px-4 py-3 text-gray-600">{tower}</td>
+                  <td className="px-4 py-3 text-gray-600">{duration}</td>
+                  <td className="px-4 py-3 text-gray-600">{hire}</td>
+                  <td className="px-4 py-3 text-gray-600">{delivery}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{total}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-gray-400">Figures use mid-range market rates as guidance. Confirm current quotes on Tooli.uk.</p>
+      </section>
+
+      {/* How to keep costs down */}
+      <section>
+        <H2>How to Keep Scaffold Tower Hire Costs Down</H2>
+        <CheckList
+          items={[
+            'Self-collect if you have a van or large estate car — saves £40–£120 per hire.',
+            'Book weekly from day 3 — daily rates are always more expensive per day than the weekly equivalent.',
+            'Hire the minimum height that safely suits the job — each height step adds cost and assembly complexity.',
+            'Compare at least 3 local suppliers before booking — rates for identical towers vary by 15–25% between depots.',
+            'Return the tower in clean condition — dirty or damaged sections attract charges that wipe out any savings from shopping around.',
+          ]}
+        />
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/cherry-picker-vs-scaffold-tower-which-access-option-do-you-actually-need"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Cherry Picker vs Scaffold Tower: Which Do You Need? →
+            </span>
+          </Link>
+          <Link
+            to="/blog/ipaf-licence-hire-cherry-picker-hire-what-you-actually-need"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              IPAF Licence for Cherry Picker Hire: What You Need →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-save-money"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              How Tool Hire Comparison Actually Saves Your Money →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={scaffoldCostFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Scaffold Tower Hire Prices Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare scaffold tower hire quotes from local UK
+          suppliers — all-in pricing, delivery included, available by day or week.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -7226,6 +7554,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Cherry Picker Hire',
     faqs: ipafFaqs,
     Body: IpafLicenceBody,
+  },
+  {
+    slug: 'scaffold-tower-hire-cost-uk-what-you-pay-in-2026',
+    category: 'Cost & Project Guides',
+    title: 'Scaffold Tower Hire Cost UK: What You\'ll Pay in 2026',
+    excerpt:
+      'Scaffold tower hire costs £40–£220 per week in 2026. Full breakdown of day, week and monthly rates by tower type and height — plus delivery, damage waiver, and deposit costs.',
+    intro:
+      'Scaffold tower hire in the UK costs between £40 and £220 per week in 2026, depending on height, width configuration, and hire duration. A standard single-width 4-metre working height tower runs around £55–£85 per week. Double-width and stairway towers for heavier work come in at £110–£200 per week.',
+    image: '/images/blog/scaffold-tower-hire-cost.webp',
+    imageAlt: 'Standard single-width scaffold tower assembled against a two-storey UK terraced house for gutter cleaning',
+    datePublished: '2026-07-23',
+    metaTitle: 'Scaffold Tower Hire Cost UK 2026: Day, Week & Month Rates | Tooli.uk',
+    metaDescription:
+      'How much does scaffold tower hire cost in the UK? 2026 rates for day, week and month by tower height and type. Compare local suppliers on Tooli.uk.',
+    primaryCta: 'Compare Scaffold Tower Hire',
+    faqs: scaffoldCostFaqs,
+    Body: ScaffoldCostBody,
   },
 ];
 
