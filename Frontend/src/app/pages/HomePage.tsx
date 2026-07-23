@@ -65,8 +65,8 @@ export function HomePage() {
   return (
     <div className="w-full bg-white">
       <PageMeta
-        title="Tooli UK"
-        description="Tooli UK helps you compare tool and plant hire prices across the UK. Get competitive quotes from trusted local suppliers and find the best hire rates in minutes."
+        title="Compare Tool & Plant Hire Prices UK | Free Comparison | Tooli UK"
+        description="Compare Tool and plant Hire Prices across the UK. Get competitive quotes from trusted local suppliers and find the best hire rates in minutes."
         canonicalUrl="https://www.tooli.uk/"
         image="https://www.tooli.uk/images/logo.webp"
       />
