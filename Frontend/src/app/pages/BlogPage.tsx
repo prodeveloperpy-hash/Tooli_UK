@@ -6467,6 +6467,350 @@ function CherryPickerVsScaffoldBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 21 — IPAF Licence for Cherry Picker Hire                   */
+/* ------------------------------------------------------------------ */
+
+const ipafCategoryTable: [string, string, string, string][] = [
+  ['1a', 'Static vertical — vehicle-mounted', 'Static vehicle-mounted platforms', 'Less common in general hire'],
+  ['1b', 'Static boom — vehicle-mounted', 'Vehicle-mounted articulated booms', 'Specialist — road maintenance etc.'],
+  ['3a', 'Mobile vertical — scissor/vertical lifts', 'Scissor lifts, vertical mast platforms', 'Ground-level movement only'],
+  ['3b', 'Mobile boom — cherry pickers', 'Articulated booms, telescopic booms, knuckle booms', 'Most common hire category'],
+  ['3a + 3b', 'Combined', 'Scissor and boom', 'Standard combined course offering'],
+];
+
+const ipafCourseTable: [string, string, string, string][] = [
+  ['IPAF 3b only', '1 day', 'Boom lifts, cherry pickers', '£180–£280'],
+  ['IPAF 3a only', '1 day', 'Scissor lifts', '£180–£280'],
+  ['IPAF 3a + 3b Combined', '1–1.5 days', 'Scissor lifts + boom lifts', '£220–£340'],
+  ['IPAF Refresher (5-yr renewal)', 'Half day', 'Renewal of existing category', '£120–£180'],
+  ['IPAF MEWPs for Managers', '1 day', 'Managerial / supervisory level', '£200–£300'],
+];
+
+const ipafSituationTable: [string, string][] = [
+  ['Private homeowner hiring a cherry picker for a domestic garden project', 'Not legally required — Work at Height Regs still apply'],
+  ['Self-employed tradesperson on a client\'s domestic property', 'Not legally required — but strongly advised for PUWER compliance'],
+  ['Any operator on a commercial construction site', 'Yes — enforced by principal contractor in virtually all cases'],
+  ['CDM 2015 notifiable project', 'Yes — competence likely to be audited'],
+  ['Operating on or adjacent to a public highway', 'Yes — and additional traffic management requirements apply'],
+  ['Operator supplied by a hire company', 'Yes — depot-supplied operators hold current IPAF cards as a condition of employment'],
+];
+
+const ipafFaqs: Faq[] = [
+  [
+    'Do I need an IPAF card to hire a cherry picker in the UK?',
+    'Not for private domestic use — hire depots are not legally required to demand an IPAF card. For any commercial site work, an IPAF PAL card (Category 3b for boom lifts and cherry pickers) is effectively mandatory. Work at Height Regulations 2005 require competence at height regardless of land type.',
+  ],
+  [
+    'What is the difference between IPAF 3a and 3b?',
+    'Category 3a covers mobile vertical platforms — scissor lifts and vertical mast platforms, which only move vertically and travel on the ground in the lowered position. Category 3b covers mobile boom-type machines — cherry pickers, articulated booms, and telescopic booms, which can reach over obstacles. Most hirers of cherry pickers need 3b.',
+  ],
+  [
+    'How long does IPAF training take?',
+    'One day for a single category (3a or 3b). Combined 3a+3b takes 1–1.5 days. The IPAF PAL card is issued upon successful completion and is valid for 5 years, after which a half-day refresher is required for renewal.',
+  ],
+  [
+    'Is IPAF training available near me?',
+    'IPAF has an extensive network of approved UK training centres. Find your nearest provider using the training centre locator at ipaf.org. Courses are available across England, Scotland, Wales, and Northern Ireland.',
+  ],
+  [
+    'Do I need to wear a harness in a cherry picker?',
+    'Yes — always, in a boom-type MEWP (cherry picker or articulated boom). A full-body harness must be attached to the platform anchor point at all times when elevated. IPAF training includes correct harness use as a core element.',
+  ],
+  [
+    'Is IPAF recognised on all UK construction sites?',
+    'Yes — IPAF PAL cards are recognised across the UK construction industry and by HSE. The PAL card database allows site managers to verify operator status instantly at ipaf.org. Most principal contractors accept IPAF as the only recognised standard for MEWP operation.',
+  ],
+  [
+    'Can I use a cherry picker if I\'ve only done PASMA training?',
+    'No. PASMA covers unpowered mobile scaffold towers only. Operating a powered access platform (cherry picker, scissor lift) without the appropriate IPAF training would leave you non-compliant with Work at Height Regulations and uninsured in most cases. The two qualifications are entirely separate.',
+  ],
+];
+
+function IpafLicenceBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">IPAF at a Glance</h2>
+        <CheckList
+          items={[
+            'Private domestic use: no IPAF card legally required — Work at Height Regs still apply',
+            'Commercial sites: IPAF PAL card effectively mandatory in most cases',
+            'Category 3b: boom lifts, cherry pickers, knuckle booms — most common hire machine type',
+            'Category 3a: scissor lifts, vertical lifts (non-boom MEWPs)',
+            'IPAF PAL card valid 5 years; renewal via half-day refresher course',
+            'IPAF is NOT the same as PASMA — IPAF covers powered platforms, PASMA covers scaffold towers',
+          ]}
+        />
+      </section>
+
+      {/* What is IPAF */}
+      <section>
+        <H2>What Is IPAF?</H2>
+        <Prose>
+          <p>
+            IPAF (International Powered Access Federation) is the trade association and certification
+            body for the powered access industry worldwide. In the UK, its PAL (Powered Access Licence)
+            card system is the industry-standard competence qualification for operators of MEWPs (Mobile
+            Elevated Work Platforms) — which includes cherry pickers, scissor lifts, boom lifts, and
+            spider lifts.
+          </p>
+          <p>
+            IPAF training is recognised by the HSE, the Construction Industry Training Board (CITB),
+            and most principal contractors across the UK. The PAL card database allows employers and
+            site managers to verify operator qualifications online at{' '}
+            <a
+              href="https://www.ipaf.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              ipaf.org
+            </a>
+            .
+          </p>
+        </Prose>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/ipaf-licence-what-you-need.webp"
+        alt="Operator in full-body harness operating a cherry picker boom lift on a UK commercial construction site — IPAF PAL card required"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* PAL Card Categories */}
+      <section>
+        <H2>IPAF PAL Card Categories</H2>
+        <Prose>
+          <p>
+            The PAL card system uses a category grid. The categories relevant to cherry picker and
+            MEWP hire are:
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Category</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Machine Type</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Common Examples</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ipafCategoryTable.map(([cat, type, examples, notes], i) => (
+                <tr key={cat} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className={`px-4 py-3 font-extrabold ${cat === '3b' || cat === '3a + 3b' ? 'text-brand-primary' : 'text-gray-700'}`}>{cat}</td>
+                  <td className="px-4 py-3 text-gray-700">{type}</td>
+                  <td className="px-4 py-3 text-gray-600">{examples}</td>
+                  <td className="px-4 py-3 text-gray-500">{notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Prose>
+          <p className="mt-4">
+            For most UK hirers looking to use a cherry picker or boom lift, Category 3b is the
+            relevant qualification. If you also plan to use scissor lifts, a combined 3a+3b course is
+            the most efficient route.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/cherry-picker-vs-scaffold-tower-which-access-option-do-you-actually-need"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Cherry Picker vs Scaffold Tower: Which Access Option Do You Need? →
+          </span>
+        </Link>
+      </section>
+
+      {/* IPAF Training */}
+      <section>
+        <H2>IPAF Training: What's Involved?</H2>
+
+        <H3>Theory Component</H3>
+        <Prose>
+          <p>
+            Covers: MEWP types and selection, pre-use inspection, safe use principles, fall protection
+            (harness use is mandatory on boom lifts), emergency procedures, rescuing an incapacitated
+            operator, hazard recognition (overhead cables, slopes, ground conditions, wind speed).
+          </p>
+        </Prose>
+
+        <H3>Practical Component</H3>
+        <Prose>
+          <p>
+            Hands-on assessment on the specific machine type (3a or 3b) at the training centre.
+            Operators must demonstrate: pre-start checks, safe operation, working within rated
+            capacities, emergency descent.
+          </p>
+        </Prose>
+
+        <H3>Assessment</H3>
+        <Prose>
+          <p>
+            Written theory test and practical assessment. Pass rates are high for operators who engage
+            with the training — the day moves fast and the practical element is the most important
+            component.
+          </p>
+        </Prose>
+
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Course</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Duration</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Categories Covered</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Typical Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ipafCourseTable.map(([course, duration, cats, cost], i) => (
+                <tr key={course} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{course}</td>
+                  <td className="px-4 py-3 text-gray-600">{duration}</td>
+                  <td className="px-4 py-3 text-gray-600">{cats}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{cost}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/what-you-need-to-hire-a-cherry-picker.webp"
+        alt="Articulated boom lift at full extension on an exterior building maintenance job UK"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Situation guide */}
+      <section>
+        <H2>When You Need an IPAF Card: Situation Guide</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Situation</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">IPAF Card Required?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ipafSituationTable.map(([situation, required], i) => (
+                <tr key={situation} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-medium text-gray-700">{situation}</td>
+                  <td className={`px-4 py-3 font-bold ${required.startsWith('Not') ? 'text-amber-700' : required.startsWith('Yes') ? 'text-red-600' : 'text-gray-500'}`}>{required}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Harness requirements */}
+      <section>
+        <H2>Harness Requirements on Cherry Pickers</H2>
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+          <p className="text-sm font-semibold">
+            Under the Work at Height Regulations 2005 and IPAF guidance, a full-body harness attached
+            to the manufacturer's anchor point must be worn by every person in the platform of a
+            boom-type MEWP (Category 3b) at all times when the platform is elevated. This is not
+            optional — even if the platform has railings.
+          </p>
+        </div>
+        <Prose>
+          <p className="mt-4">
+            Scissor lifts (Category 3a) do not require a harness as standard, but site rules may
+            specify one. Confirm requirements with the depot and the site manager before use.
+          </p>
+          <p>
+            For full HSE MEWP guidance, see{' '}
+            <a
+              href="https://www.hse.gov.uk/work-equipment-machinery/mobile-elevating-work-platforms.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              hse.gov.uk — MEWP safety guidance
+            </a>
+            . Primary legislation:{' '}
+            <a
+              href="https://www.legislation.gov.uk/uksi/2005/735"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Work at Height Regulations 2005
+            </a>
+            .
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/do-you-need-pasma-to-hire-scaffold-tower-in-the-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Do You Need PASMA to Hire a Scaffold Tower? →
+            </span>
+          </Link>
+          <Link
+            to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire UK: Prices, Sizes &amp; PASMA Rules →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-save-money"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              How Tool Hire Comparison Actually Saves Your Money →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={ipafFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Find Cherry Picker Hire Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare cherry picker and powered access hire from local
+          UK suppliers — delivery, operating weight, and all-in pricing in one place.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -6864,6 +7208,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Access Equipment Hire',
     faqs: cherryPickerFaqs,
     Body: CherryPickerVsScaffoldBody,
+  },
+  {
+    slug: 'ipaf-licence-hire-cherry-picker-hire-what-you-actually-need',
+    category: 'Compliance & Safety',
+    title: 'IPAF Licence for Cherry Picker Hire: What You Actually Need',
+    excerpt:
+      'You don\'t need an IPAF card for private domestic use — but on any commercial site it\'s effectively mandatory. Full guide to IPAF PAL card categories 3a and 3b, what training involves, and when it applies to you.',
+    intro:
+      'You do not need an IPAF card to hire a cherry picker for private domestic use in the UK — hire depots have no legal obligation to demand one. On commercial construction sites, an IPAF PAL card (Powered Access Licence) is effectively mandatory. Category 3b covers boom lifts and cherry pickers; Category 3a covers scissor lifts.',
+    image: '/images/blog/ipaf-licence-what-you-need.webp',
+    imageAlt: 'Operator in full-body harness operating a cherry picker boom lift on a UK commercial construction site — IPAF PAL card required',
+    datePublished: '2026-07-23',
+    metaTitle: 'IPAF Licence: What You Need to Hire a Cherry Picker UK | Tooli.uk',
+    metaDescription:
+      'Do you need an IPAF card to hire a cherry picker in the UK? Full guide to IPAF PAL card categories, training, and when it applies to you.',
+    primaryCta: 'Compare Cherry Picker Hire',
+    faqs: ipafFaqs,
+    Body: IpafLicenceBody,
   },
 ];
 
