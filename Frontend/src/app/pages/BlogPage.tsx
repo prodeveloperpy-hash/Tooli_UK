@@ -7139,6 +7139,312 @@ function ScaffoldCostBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 23 — Wacker Plate Hire UK: Prices & Plate Sizes Compared   */
+/* ------------------------------------------------------------------ */
+
+const wackerPriceTable: [string, string, string, string, string, string][] = [
+  ['Small forward', '50–75 kg', '400–450 mm', '£45–£65', '£75–£100', '£140–£190'],
+  ['Medium forward', '75–150 kg', '450–550 mm', '£60–£90', '£95–£140', '£190–£270'],
+  ['Large forward', '150–250 kg', '550–650 mm', '£80–£120', '£125–£180', '£250–£360'],
+  ['Reversible plate', '200–350 kg', '550–700 mm', '£90–£130', '£140–£200', '£280–£390'],
+  ['Heavy reversible', '350–550 kg', '650–800 mm', '£110–£160', '£170–£240', '£340–£480'],
+];
+
+const wackerJobTable: [string, string, string][] = [
+  ['Patio slab base preparation (MOT Type 1, 75–100 mm)', 'Small forward (50–75 kg)', 'Light compaction duty, easy to manoeuvre between existing features'],
+  ['Block paving driveway (Type 1 sub-base, 100–150 mm)', 'Medium forward (75–150 kg)', 'Deeper base layer needs more compaction force; wider plate covers area faster'],
+  ['Concrete driveway sub-base (150–200 mm deep)', 'Large forward or reversible (150–250 kg)', 'Thick layers require heavy compaction to reach target density'],
+  ['Tarmac re-lay (surface course)', 'Medium forward (rubber pad fitted)', 'Rubber pad protects the surface — confirm the depot supplies one'],
+  ['Trench backfill compaction', 'Medium to large forward', 'Confined spaces may limit reversible plate access'],
+  ['Road base / hardcore (200 mm+ deep)', 'Heavy reversible (300–550 kg)', 'Deep granular layers require high compaction energy; reversible avoids hand-turning at trench ends'],
+  ['Landscaping / topsoil consolidation', 'Small forward (50–75 kg)', 'Only light consolidation needed — heavy plate will over-compact and damage soil structure'],
+  ['Slate / decorative aggregate', 'Small forward or hand rammer', 'Large plates can fracture decorative stone — use with care or substitute a hand rammer'],
+];
+
+const wackerComparisonTable: [string, string, string][] = [
+  ['Direction of travel', 'Forward only', 'Forward and reverse'],
+  ['Manoeuvring at trench ends', 'Manual lift and turn', 'Self-reversing — no manual lifting'],
+  ['Operating weight', '50–250 kg', '200–550 kg'],
+  ['Compaction force', 'Lower–medium', 'Medium–high'],
+  ['Best for', 'Patios, paths, block paving, open areas', 'Trenches, road base, deep compaction layers, confined runs'],
+  ['Hire cost premium', 'Baseline', 'Typically 15–25% more than equivalent forward plate'],
+];
+
+const wackerFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a wacker plate for a day?',
+    'A small forward wacker plate (50–75 kg) costs around £45–£65 per day in the UK. A medium plate (75–150 kg) for driveway work runs £60–£90/day. A large reversible plate for road-base compaction is typically £90–£130/day. All prices are VAT-inclusive guidance — confirm current rates on Tooli.uk.',
+  ],
+  [
+    'Do I need a licence to use a wacker plate?',
+    'No — there is no formal licence requirement to operate a wacker plate. Under PUWER 1998, you must be competent to use work equipment safely. Most hire depots will give you a brief handover on collection. Hearing protection is mandatory under the Control of Noise at Work Regulations 2005.',
+  ],
+  [
+    'What is the difference between a wacker plate and a roller?',
+    'A wacker plate (vibrating plate compactor) uses vibration to compact granular materials like MOT Type 1, gravel, and hardcore. A roller uses static weight and often vibration to compact larger areas — more commonly used on road surfaces and large groundworks. For domestic patio and driveway prep, a wacker plate is the standard choice.',
+  ],
+  [
+    'Can I use a wacker plate on block paving?',
+    'Yes — but only with a rubber or polyurethane pad fitted beneath the plate. Running a bare steel wacker plate on block paving will scratch and chip the surface. Most depots supply a rubber pad for block paving use — confirm this is included or hire it separately.',
+  ],
+  [
+    'What fuel does a wacker plate use?',
+    'Most hire-fleet wacker plates run on petrol. Return the machine with the same fuel level as collected. Larger reversible plates may be diesel — confirm at the point of hire.',
+  ],
+];
+
+function WackerPlateBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Wacker Plate Hire at a Glance</h2>
+        <CheckList
+          items={[
+            'Small forward plate (50–75 kg): typically £45–£65/day — patios, paths, light sub-base',
+            'Medium forward plate (75–150 kg): typically £60–£90/day — driveways, block paving, heavier sub-base',
+            'Large forward plate (150–250 kg): typically £80–£120/day — commercial paving, thick compaction',
+            'Reversible plate (200–500 kg): typically £90–£130/day — road base, deep granular layers',
+            'Petrol: most common in hire fleets; diesel available on larger plates',
+            'No licence required to operate a wacker plate — competence required under PUWER',
+          ]}
+        />
+      </section>
+
+      {/* Price table */}
+      <section>
+        <H2>Wacker Plate Hire Prices UK 2026</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Plate Class</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Weight</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Plate Width</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Day Rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Weekend</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Week Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wackerPriceTable.map(([cls, weight, width, day, weekend, week], i) => (
+                <tr key={cls} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{cls}</td>
+                  <td className="px-4 py-3 text-gray-600">{weight}</td>
+                  <td className="px-4 py-3 text-gray-600">{width}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                  <td className="px-4 py-3 text-gray-600">{weekend}</td>
+                  <td className="px-4 py-3 text-gray-600">{week}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-gray-400">VAT-inclusive guidance. Compare live quotes on Tooli.uk.</p>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/wacker-plate-hire-uk.webp"
+        alt="Medium forward wacker plate compacting MOT Type 1 sub-base for a block paving driveway UK"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Plate to job */}
+      <section>
+        <H2>Plate Size to Job: Quick Reference</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Job</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Recommended Plate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wackerJobTable.map(([job, plate, reason], i) => (
+                <tr key={job} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{job}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{plate}</td>
+                  <td className="px-4 py-3 text-gray-600">{reason}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Forward vs Reversible */}
+      <section>
+        <H2>Forward Plate vs Reversible Plate: Which Do You Need?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Feature</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Forward Plate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Reversible Plate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wackerComparisonTable.map(([feature, forward, reversible], i) => (
+                <tr key={feature} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{feature}</td>
+                  <td className="px-4 py-3 text-gray-600">{forward}</td>
+                  <td className="px-4 py-3 text-gray-600">{reversible}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/tool-hire-comparison-save-money"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              How Tool Hire Comparison Actually Saves Your Money →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire Comparison UK: Compare Plant Hire Suppliers →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/wacker-plate-hire-uk-prices-sizes-compared.webp"
+        alt="Reversible vibrating plate compactor in a trench during drainage groundwork on a UK building site"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Petrol vs Diesel */}
+      <section>
+        <H2>Petrol vs Diesel Wacker Plate</H2>
+        <Prose>
+          <p>
+            Most wacker plates in UK hire fleets are petrol-powered. Diesel plates are available on
+            larger reversible models — they are more economical on extended jobs but typically add
+            10–15% to the hire rate. Never operate a petrol or diesel plate in an enclosed or poorly
+            ventilated space — CO poisoning risk is serious and rapid.
+          </p>
+        </Prose>
+      </section>
+
+      {/* Safe operation */}
+      <section>
+        <H2>Operating a Wacker Plate Safely</H2>
+        <CheckList
+          items={[
+            'Wear hearing protection — wacker plates generate 95–105 dB. HSE Control of Noise at Work Regulations 2005 set mandatory hearing protection above 85 dB.',
+            'Wear steel-toe boots and high-visibility clothing on any site with vehicle movement.',
+            'Check for buried services before compacting — use LSBUD (lsbud.co.uk) before any groundwork.',
+            'Keep bystanders well clear — the plate can eject surface stones at force.',
+            'Do not operate on slopes steeper than the manufacturer\'s rated gradient — most plates are rated to a maximum 20–25% slope.',
+            'Fit the rubber pad when compacting block paving or tarmac — running a bare steel plate on finished paving will damage the surface.',
+          ]}
+        />
+        <Prose>
+          <p className="mt-4">
+            For legal requirements, see{' '}
+            <a
+              href="https://www.hse.gov.uk/noise/regulations.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE Control of Noise at Work Regulations 2005
+            </a>
+            ,{' '}
+            <a
+              href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE PUWER guidance
+            </a>
+            , and{' '}
+            <a
+              href="https://www.lsbud.co.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              LSBUD
+            </a>{' '}
+            for buried service checks.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Plant Hire London: Compare Local Plant Hire Companies →
+            </span>
+          </Link>
+          <Link
+            to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-sw19-london-postcode-area-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire SW19: London Postcode Area Guide →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={wackerFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Wacker Plate Hire Prices Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare wacker plate hire from local UK suppliers —
+          all plate sizes, petrol and diesel, by day or week.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -7572,6 +7878,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Scaffold Tower Hire',
     faqs: scaffoldCostFaqs,
     Body: ScaffoldCostBody,
+  },
+  {
+    slug: 'wacker-plate-hire-uk-prices-plate-sizes-compared',
+    category: 'Equipment Hire',
+    title: 'Wacker Plate Hire UK: Prices & Plate Sizes Compared',
+    excerpt:
+      'Wacker plate hire costs £45–£160 per day in the UK depending on plate size and type. Guide to choosing between small forward plates and heavy reversible compactors — with a plate-to-job quick reference.',
+    intro:
+      'Wacker plate hire in the UK runs from around £45 to £130 per day depending on plate size and power source. A small forward-plate compactor (50–60 kg) suits patio slabs and path base preparation. A large reversible plate (300 kg+) handles road-base compaction and thick sub-base layers. Choosing the wrong size is the most common hiring mistake.',
+    image: '/images/blog/wacker-plate-hire-uk.webp',
+    imageAlt: 'Medium forward wacker plate compacting MOT Type 1 sub-base for a block paving driveway UK',
+    datePublished: '2026-07-23',
+    metaTitle: 'Wacker Plate Hire UK: Prices & Plate Sizes Compared | Tooli.uk',
+    metaDescription:
+      'Compare wacker plate hire prices across the UK. Guide to plate sizes, compaction depth, petrol vs diesel, and day rates. Find local suppliers on Tooli.uk.',
+    primaryCta: 'Compare Wacker Plate Hire',
+    faqs: wackerFaqs,
+    Body: WackerPlateBody,
   },
 ];
 
