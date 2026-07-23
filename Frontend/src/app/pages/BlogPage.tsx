@@ -6114,6 +6114,359 @@ function PasmaRequirementBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 20 — Cherry Picker vs Scaffold Tower                       */
+/* ------------------------------------------------------------------ */
+
+const cpVsStComparisonTable: [string, string, string][] = [
+  ['Cost (weekly)', '£55–£200/week', '£350–£900/week (self-drive)'],
+  ['Setup time', '30–60 min (assembly)', '5–15 min (drive to position and raise)'],
+  ['Repositioning', 'Requires dismantling and moving', 'Fully mobile — reposition in minutes'],
+  ['Max working height', 'Up to 10–12 m (hire towers)', 'Up to 12–20 m (common hire range)'],
+  ['Platform stability', 'Excellent — fixed structure', 'Good (stabilisers deployed) — some movement at height'],
+  ['Access requirement', 'Pedestrian access path', 'Vehicle-width access + firm, level ground'],
+  ['Qualification (commercial sites)', 'PASMA card', 'IPAF PAL card (3a or 3b)'],
+  ['Indoor use', 'Yes — compact models available', 'Limited — requires ceiling clearance'],
+  ['Materials & tools on platform', 'Yes — rated platform load', 'Limited — small platform, weight sensitive'],
+  ['Delivery method', 'Sections in van or hire delivery', 'Self-drive or transport on low-loader'],
+];
+
+const cpVsStCostTable: [string, string, string, string][] = [
+  ['Two-storey exterior painting (5 days)', '£90 hire', '£600–£800 hire', 'Scaffold tower'],
+  ['Fascia & guttering (3 days, one elevation)', '£70 hire', '£450–£600 hire', 'Scaffold tower'],
+  ['Tree pruning (6–8 hours, multiple positions)', 'Not suitable', '£200–£320 day hire', 'Cherry picker'],
+  ['Roof inspection (large commercial building)', 'Not suitable', '£350–£500 day hire', 'Cherry picker'],
+  ['Exterior rendering (2 weeks)', '£200–£260 total', '£1,400–£1,800 total', 'Scaffold tower'],
+  ['Emergency repair at 15 m height', 'Not available at this height', 'Day hire only practical option', 'Cherry picker'],
+];
+
+const cpVsStQualTable: [string, string, string][] = [
+  ['Scaffold tower', 'PASMA card (Tower for Users)', 'No card required — but Work at Height Regs apply'],
+  ['Cherry picker / MEWP (boom)', 'IPAF PAL card (Category 3b)', 'No card required — but Work at Height Regs apply'],
+  ['Scissor lift (MEWP)', 'IPAF PAL card (Category 3a)', 'No card required — but Work at Height Regs apply'],
+];
+
+const cherryPickerFaqs: Faq[] = [
+  [
+    'Is a cherry picker cheaper to hire than a scaffold tower?',
+    'No — cherry pickers are significantly more expensive. A scaffold tower hire runs £55–£200 per week. A self-drive cherry picker typically costs £350–£900 per week. For jobs lasting more than one or two days, scaffold towers are almost always the more cost-effective choice.',
+  ],
+  [
+    'Can I hire a cherry picker without an IPAF card?',
+    'For private domestic use on your own land, yes — hire depots are not legally required to demand an IPAF card. On commercial sites, an IPAF PAL card (3a or 3b depending on machine type) will be required. Some depots decline to hire MEWPs to uncarded operators even for domestic use — call ahead to confirm.',
+  ],
+  [
+    'What is the height limit of a hire scaffold tower?',
+    'Standard single-width hire towers reach up to 10–12 metres working height. Double-width towers can go higher but physical limits apply based on base-to-height ratio. For working heights above 10 metres, a cherry picker or other MEWP is often more practical.',
+  ],
+  [
+    'Do I need a driving licence to operate a cherry picker?',
+    'Self-drive towable cherry pickers require a vehicle to tow them (valid driving licence). Self-propelled cherry pickers do not require a road driving licence to operate on private land, but competence and, on commercial sites, an IPAF card is required. Road-legal towable models need a valid towing-rated licence.',
+  ],
+  [
+    'Which is safer — a scaffold tower or cherry picker?',
+    'Both are safe when used correctly. Scaffold towers have no mechanical failure risk but carry assembly-error risks if not built correctly. Cherry pickers eliminate assembly risk but require awareness of tip-over risk, overhead cables, and ground stability. PASMA and IPAF training respectively address the specific risks of each type.',
+  ],
+];
+
+function CherryPickerVsScaffoldBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Quick Comparison</h2>
+        <CheckList
+          items={[
+            'Scaffold tower: lower cost, stable platform, better for prolonged fixed-position work',
+            'Cherry picker: faster setup, repositionable, better for intermittent tasks at height',
+            'Cherry picker costs 3–6x more per day than an equivalent scaffold tower',
+            'Cherry picker requires IPAF PAL card on commercial sites; scaffold tower requires PASMA',
+            'Cherry pickers need level, firm ground and overhead clearance — towers are more flexible',
+          ]}
+        />
+      </section>
+
+      {/* Main comparison table */}
+      <section>
+        <H2>Side-by-Side Comparison</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Factor</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Scaffold Tower</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Cherry Picker / MEWP</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cpVsStComparisonTable.map(([factor, tower, picker], i) => (
+                <tr key={factor} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{factor}</td>
+                  <td className="px-4 py-3 text-gray-600">{tower}</td>
+                  <td className="px-4 py-3 text-gray-600">{picker}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/cherry-picker-vs-scaffold-tower-which-to-hire.webp"
+        alt="Side-by-side comparison of a scaffold tower and a cherry picker boom lift on a UK construction site"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* When to choose scaffold tower */}
+      <section>
+        <H2>When to Choose a Scaffold Tower</H2>
+
+        <H3>Fixed-Position Work Over Multiple Days</H3>
+        <Prose>
+          <p>
+            If you're painting a two-storey exterior, replacing fascias and soffits, or pointing a
+            chimney over several days, a scaffold tower gives you the most cost-effective and stable
+            platform. Once assembled and stabilised, it stays in position and you can focus on the job
+            rather than repositioning equipment.
+          </p>
+        </Prose>
+
+        <H3>Indoor Access Work</H3>
+        <Prose>
+          <p>
+            Scaffold towers are the standard choice for interior work at height — ceiling repairs,
+            coving, commercial fit-out. Low-level towers slip through standard doorways. Cherry pickers
+            require significant headroom clearance and are rarely practical indoors.
+          </p>
+        </Prose>
+
+        <H3>Budget-Conscious Longer Jobs</H3>
+        <Prose>
+          <p>
+            On a 2-week exterior painting contract, a scaffold tower at £150 total hire versus a cherry
+            picker at £1,400+ over the same period is a straightforward financial decision in most cases.
+            The tower wins unless frequent repositioning is genuinely required.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire UK: Prices, Sizes &amp; PASMA Rules →
+            </span>
+          </Link>
+          <Link
+            to="/blog/do-you-need-pasma-to-hire-scaffold-tower-in-the-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Do You Need PASMA to Hire a Scaffold Tower? →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* When to choose cherry picker */}
+      <section>
+        <H2>When to Choose a Cherry Picker</H2>
+
+        <H3>Intermittent Tasks Requiring Frequent Repositioning</H3>
+        <Prose>
+          <p>
+            Tree surgery, streetlight maintenance, roof inspection across a large building, or any job
+            where you need to access a dozen different points at height — a cherry picker saves significant
+            time versus repeatedly dismantling and repositioning a tower. Time is often the deciding factor.
+          </p>
+        </Prose>
+
+        <H3>Restricted Access Around Obstacles</H3>
+        <Prose>
+          <p>
+            A cherry picker boom can reach over walls, fences, and parked vehicles to access areas a
+            tower simply cannot reach from the ground. On sites with irregular obstacles, the cherry
+            picker's articulated or telescopic boom is often the only practical solution.
+          </p>
+        </Prose>
+
+        <H3>Very High Working Heights</H3>
+        <Prose>
+          <p>
+            Standard hire scaffold towers top out at 10–12 metres working height. If your job requires
+            14 metres, 18 metres, or more, a cherry picker or MEWP (Mobile Elevated Work Platform) is
+            the only hire-fleet option.
+          </p>
+        </Prose>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/cherry-picker-vs-scaffold-tower.webp"
+        alt="Self-drive cherry picker MEWP on a residential street for guttering maintenance UK"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Cost comparison table */}
+      <section>
+        <H2>Cost Comparison: Same Job, Two Approaches</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Job Scenario</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Scaffold Tower (est.)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Cherry Picker (est.)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Better Choice</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cpVsStCostTable.map(([scenario, tower, picker, winner], i) => (
+                <tr key={scenario} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{scenario}</td>
+                  <td className="px-4 py-3 text-gray-600">{tower}</td>
+                  <td className="px-4 py-3 text-gray-600">{picker}</td>
+                  <td className={`px-4 py-3 font-bold ${winner === 'Scaffold tower' ? 'text-brand-primary' : winner === 'Cherry picker' ? 'text-amber-700' : 'text-gray-500'}`}>{winner}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money →
+          </span>
+        </Link>
+      </section>
+
+      {/* Qualifications table */}
+      <section>
+        <H2>Qualifications: What Each Access Option Requires</H2>
+        <Prose>
+          <p>
+            On commercial sites, both types of access equipment require specific competence
+            qualifications:
+          </p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Access Type</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Qualification Required (Commercial Sites)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Domestic Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cpVsStQualTable.map(([type, commercial, domestic], i) => (
+                <tr key={type} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{type}</td>
+                  <td className="px-4 py-3 text-gray-600">{commercial}</td>
+                  <td className="px-4 py-3 text-gray-500">{domestic}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Prose>
+          <p className="mt-4">
+            For domestic homeowners, no card is legally required — but the{' '}
+            <a
+              href="https://www.hse.gov.uk/work-equipment-machinery/falls.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              Work at Height Regulations 2005
+            </a>{' '}
+            still apply. You must take all reasonable steps to prevent falls regardless of whether you
+            hold a card. Find IPAF training at{' '}
+            <a
+              href="https://www.ipaf.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              ipaf.org
+            </a>{' '}
+            and PASMA training at{' '}
+            <a
+              href="https://www.pasma.co.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              pasma.co.uk
+            </a>
+            .
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Plant Hire London: Compare Local Plant Hire Companies →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-sw19-london-postcode-area-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire SW19: London Postcode Area Guide →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire Comparison UK: Compare Plant Hire Suppliers →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={cherryPickerFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Cherry Picker and Scaffold Tower Hire Prices</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare quotes for scaffold towers, cherry pickers, and
+          access equipment from local UK suppliers — delivery and all-in pricing included.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -6493,6 +6846,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Scaffold Tower Hire',
     faqs: pasmaFaqs,
     Body: PasmaRequirementBody,
+  },
+  {
+    slug: 'cherry-picker-vs-scaffold-tower-which-access-option-do-you-actually-need',
+    category: 'Access Equipment',
+    title: 'Cherry Picker vs Scaffold Tower: Which Access Option Do You Actually Need?',
+    excerpt:
+      'Cherry pickers and scaffold towers both get you to height — but they suit very different jobs. Compare cost, height, qualifications and access requirements to pick the right option for your project.',
+    intro:
+      'Cherry pickers and scaffold towers both get you to height — but they suit very different jobs. A scaffold tower gives you a stable, fixed working platform at low weekly cost. A cherry picker gives you reach, mobility, and the ability to work at angles a tower can\'t match, but costs significantly more per day. The right choice depends on how long you\'re working at height, how often you need to reposition, and how much overhead clearance you have.',
+    image: '/images/blog/cherry-picker-vs-scaffold-tower-which-to-hire.webp',
+    imageAlt: 'Side-by-side comparison of a scaffold tower and a cherry picker boom lift on a UK construction site',
+    datePublished: '2026-07-23',
+    metaTitle: 'Cherry Picker vs Scaffold Tower: Which to Hire? | Tooli.uk',
+    metaDescription:
+      'Cherry picker or scaffold tower — which is right for your job? Honest comparison of cost, height, access, and qualification requirements for UK hirers.',
+    primaryCta: 'Compare Access Equipment Hire',
+    faqs: cherryPickerFaqs,
+    Body: CherryPickerVsScaffoldBody,
   },
 ];
 
