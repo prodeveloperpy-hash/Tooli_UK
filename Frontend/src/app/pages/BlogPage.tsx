@@ -7445,6 +7445,292 @@ function WackerPlateBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 24 — What Size Wacker Plate for a Patio?                   */
+/* ------------------------------------------------------------------ */
+
+const wackerPatioSizeTable: [string, string, string, string][] = [
+  ['Flag paving (concrete or natural stone)', '75–100 mm Type 1', 'Small forward plate', '50–75 kg'],
+  ['Block paving (domestic)', '100–150 mm Type 1', 'Small to medium forward (with rubber pad)', '50–120 kg'],
+  ['Block paving (driveway)', '150–200 mm Type 1', 'Medium forward (with rubber pad)', '100–150 kg'],
+  ['Gravel or hoggin patio', '50–75 mm compacted', 'Small forward plate', '50–75 kg'],
+  ['Porcelain tiles (on mortar bed)', '75–100 mm Type 1 + screed', 'Small forward — or hand tamper on delicate tiles', '50–75 kg'],
+  ['Resin-bound surface', '100–150 mm Type 1', 'Medium forward', '100–150 kg'],
+];
+
+const wackerPassesTable: [string, string, string, string][] = [
+  ['400 mm (small plate)', '~50 passes', '~100 passes', '2–3 hours for 20 m²'],
+  ['500 mm (medium plate)', '~40 passes', '~80 passes', '1.5–2.5 hours for 20 m²'],
+  ['600 mm (large plate)', '~34 passes', '~67 passes', '1–2 hours for 20 m²'],
+];
+
+const wackerPatioFaqs: Faq[] = [
+  [
+    'What size wacker plate do I need for a 30 m² patio?',
+    'A small forward plate (50–75 kg, 400–450 mm wide) is the right size for most domestic 30 m² patios. It is manoeuvrable in a garden setting, correctly matched to 75–150 mm Type 1 sub-base depths, and available from most local hire depots at around £45–£65 per day.',
+  ],
+  [
+    'Do I need a rubber pad to compact block paving?',
+    'Yes — always. Running a bare steel wacker plate on block paving will scratch and chip the surface. A rubber or polyurethane pad must be fitted beneath the plate for any work on finished or semi-finished paving. Confirm the depot supplies one before booking — some charge separately for the pad.',
+  ],
+  [
+    'Can a wacker plate compact wet sub-base?',
+    'It is best to compact when sub-base material is slightly damp but not waterlogged. Dry Type 1 compacts less well. Saturated ground does not compact at all — the vibration moves water through the material without achieving density. Wait until ground conditions are correct before compacting.',
+  ],
+  [
+    'How many passes does a wacker plate need?',
+    'For a domestic patio sub-base, 4–6 passes over each section is typically sufficient. Check with a spirit level as you go. Multiple thin layers (100 mm max each) compacted separately always outperform a single thick layer with multiple passes.',
+  ],
+  [
+    'Is a wacker plate the same as a tamper?',
+    'No. A hand tamper (or punner) is a manual tool for small area compaction, particularly in trenches and tight corners. A wacker plate is a petrol or diesel powered vibrating plate compactor. Both compact, but a wacker plate covers larger areas far more efficiently and is the correct tool for sub-base preparation on a patio.',
+  ],
+];
+
+function WackerPatioSizeBody() {
+  return (
+    <>
+      {/* Plate by patio type table */}
+      <section>
+        <H2>Wacker Plate Size by Patio Type</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Patio Type</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Sub-Base Depth</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Recommended Plate Size</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Plate Weight</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wackerPatioSizeTable.map(([type, depth, plate, weight], i) => (
+                <tr key={type} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{type}</td>
+                  <td className="px-4 py-3 text-gray-600">{depth}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{plate}</td>
+                  <td className="px-4 py-3 text-gray-600">{weight}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Link
+          to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared →
+          </span>
+        </Link>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/what-size-wacker-plate.webp"
+        alt="Small 60 kg forward wacker plate compacting MOT Type 1 sub-base for a residential patio UK"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Passes table */}
+      <section>
+        <H2>Patio Size and Number of Passes</H2>
+        <Prose>
+          <p>Wacker plate width determines how many passes are needed to cover your patio area:</p>
+        </Prose>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Plate Width</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Passes for 20 m²</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Passes for 40 m²</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Time Estimate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wackerPassesTable.map(([width, p20, p40, time], i) => (
+                <tr key={width} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{width}</td>
+                  <td className="px-4 py-3 text-gray-600">{p20}</td>
+                  <td className="px-4 py-3 text-gray-600">{p40}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Prose>
+          <p className="mt-4">
+            For a standard 20–30 m² domestic patio, a small plate (400–450 mm) is perfectly adequate
+            — the extra coverage per pass from a larger plate rarely justifies the additional hire cost
+            or the extra weight to manoeuvre in a domestic garden.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-4 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money →
+          </span>
+        </Link>
+      </section>
+
+      {/* Key rules */}
+      <section>
+        <H2>Key Rules for Wacker Plate Use on a Patio</H2>
+
+        <H3>Always Fit the Rubber Pad</H3>
+        <Prose>
+          <p>
+            If you are compacting block paving or any finished surface, fit the rubber or polyurethane
+            pad beneath the plate. Without it, the steel base plate will scratch, chip, and disfigure
+            the paving. Most depots include a rubber pad with block paving hire — confirm before you
+            collect.
+          </p>
+        </Prose>
+
+        <H3>Compact Before Laying, Not After</H3>
+        <Prose>
+          <p>
+            The sub-base (MOT Type 1 or sharp sand bedding layer) should be compacted before you lay
+            the slabs or blocks. Do not run a wacker plate over fully laid slabs to 'bed them in' —
+            use a rubber-headed mallet or a plate with a pad if final compaction of block paving is
+            needed.
+          </p>
+        </Prose>
+
+        <H3>Compact in Layers</H3>
+        <Prose>
+          <p>
+            Type 1 sub-base should be compacted in layers of no more than 100 mm at a time. Tipping a
+            200 mm depth and running one pass over it does not give you a properly compacted base —
+            split it into two 100 mm lifts, compacting between layers.
+          </p>
+        </Prose>
+
+        <H3>Watch Plate Direction on Slopes</H3>
+        <Prose>
+          <p>
+            Compact across a slope rather than up and down it where possible. If the ground is uneven,
+            work from the outside edges toward the centre. Keep the plate moving at all times —
+            holding it stationary concentrates compaction force and can create a surface depression.
+          </p>
+        </Prose>
+
+        <H3>How Many Passes?</H3>
+        <Prose>
+          <p>
+            Typically 4–6 passes over each section gives adequate compaction on a domestic sub-base.
+            Use a spirit level or straight edge to check for high/low spots as you go — it is much
+            easier to correct during compaction than after slabs are laid.
+          </p>
+        </Prose>
+        <Prose>
+          <p>
+            Always check for buried utility services before any groundwork using{' '}
+            <a
+              href="https://www.lsbud.co.uk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              LSBUD (lsbud.co.uk)
+            </a>
+            . Wearing hearing protection is mandatory under the{' '}
+            <a
+              href="https://www.hse.gov.uk/noise"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE Control of Noise at Work Regulations 2005
+            </a>
+            .
+          </p>
+        </Prose>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/what-size-wacker-plate-do.webp"
+        alt="Rubber pad fitted beneath wacker plate being used to compact domestic block paving without surface damage"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Can I use any plate? */}
+      <section>
+        <H2>Can I Use Any Wacker Plate for a Patio?</H2>
+        <Prose>
+          <p>
+            In theory yes — but in practice, a plate that is too heavy risks over-compacting a shallow
+            sub-base, pushing fine material to the surface and creating an unstable layer. A plate that
+            is too light will not achieve adequate compaction density, especially on a 150 mm+
+            sub-base. Match the plate to the sub-base depth using the table above.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Plant Hire London: Compare Local Plant Hire Companies →
+            </span>
+          </Link>
+          <Link
+            to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-sw19-london-postcode-area-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire SW19: London Postcode Area Guide →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={wackerPatioFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Find a Wacker Plate for Your Patio Project</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare wacker plate hire from local UK suppliers — small
+          forward plates to large reversible compactors, available by day or week.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -7896,6 +8182,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Wacker Plate Hire',
     faqs: wackerFaqs,
     Body: WackerPlateBody,
+  },
+  {
+    slug: 'what-size-wacker-plate-do-i-need-for-a-patio-the-direct-answer',
+    category: 'Equipment Hire',
+    title: 'What Size Wacker Plate Do I Need for a Patio? The Direct Answer',
+    excerpt:
+      'For most domestic patios a small to medium forward plate (50–150 kg) is correct. This guide matches wacker plate size to sub-base depth, surface type, and patio area with a quick-reference table.',
+    intro:
+      'For a standard domestic patio — slabs or block paving on a 75–150 mm compacted Type 1 sub-base — a small to medium forward wacker plate weighing 50–150 kg is the right choice. Heavier plates are unnecessary and can over-compact or damage shallow sub-bases. The key decision is sub-base depth, patio area size, and surface material.',
+    image: '/images/blog/what-size-wacker-plate.webp',
+    imageAlt: 'Small 60 kg forward wacker plate compacting MOT Type 1 sub-base for a residential patio UK',
+    datePublished: '2026-07-24',
+    metaTitle: 'What Size Wacker Plate Do I Need for a Patio? | Tooli.uk',
+    metaDescription:
+      'For most patio jobs, a small to medium forward plate (50–150 kg) is the right choice. Here\'s exactly how to match wacker plate size to your patio project.',
+    primaryCta: 'Compare Wacker Plate Hire',
+    faqs: wackerPatioFaqs,
+    Body: WackerPatioSizeBody,
   },
 ];
 
