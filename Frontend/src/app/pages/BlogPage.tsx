@@ -7731,6 +7731,304 @@ function WackerPatioSizeBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 25 — Wacker Plate Hire Cost UK 2026                        */
+/* ------------------------------------------------------------------ */
+
+const wackerCostRatesTable: [string, string, string, string, string][] = [
+  ['Small forward', '50–75 kg', '£45–£65', '£75–£100', '£140–£190'],
+  ['Medium forward', '75–150 kg', '£60–£90', '£95–£140', '£190–£270'],
+  ['Large forward', '150–250 kg', '£80–£120', '£125–£180', '£250–£360'],
+  ['Reversible plate', '200–350 kg', '£90–£130', '£140–£200', '£280–£390'],
+  ['Heavy reversible', '350–550 kg', '£110–£160', '£170–£240', '£340–£480'],
+];
+
+const wackerTotalCostTable: [string, string, string, string, string, string, string][] = [
+  ['20 m² patio sub-base', 'Small forward', '1 day', '£55', '£10', '£8', '~£73'],
+  ['Block paving driveway (40 m²)', 'Medium forward', '1 day', '£75', '£10', '£10', '~£95'],
+  ['Resin driveway sub-base prep', 'Medium forward', '1 day', '£75', '£0', '£10', '~£85'],
+  ['Trench backfill (drainage, 30 m)', 'Reversible plate', '1 day', '£110', '£0', '£15', '~£125'],
+  ['Road base (large commercial area)', 'Heavy reversible', '2 days', '£290', '£0', '£35', '~£325'],
+];
+
+const wackerCostFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a wacker plate for a day?',
+    'A small forward wacker plate costs around £45–£65 per day in the UK. A medium plate for driveway work runs £60–£90/day. A large reversible plate for deep compaction is £90–£160/day. All prices are VAT-inclusive guidance — confirm current local rates on Tooli.uk.',
+  ],
+  [
+    'Are weekend wacker plate rates cheaper than two day rates?',
+    'Usually yes. A weekend (Friday to Monday) rate is typically 1.5–1.8× the daily rate, versus 2× if you paid two separate day rates. If your job spans Saturday and Sunday, always book the weekend rate.',
+  ],
+  [
+    'Does wacker plate hire include a rubber pad for block paving?',
+    'Not always — it depends on the depot. Some include the rubber pad in the hire price; others charge £5–£15 extra per day. Always confirm before booking if you\'re working on block paving or tarmac.',
+  ],
+  [
+    'Can I hire a wacker plate for less than a day?',
+    'Half-day rates are available from some depots, typically 60–70% of the full-day rate. However, most jobs requiring a wacker plate take a full day when you account for travel, setup, compaction, and return. Check with your local depot — Tooli.uk lists suppliers offering flexible rate structures.',
+  ],
+  [
+    'What is the deposit on wacker plate hire?',
+    'Typically £100–£250 held on a credit or debit card. Released in full on return of the machine in good working order and with the original fuel level. Photograph the plate on collection to protect against pre-existing damage disputes.',
+  ],
+];
+
+function WackerCostBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Cost Quick Reference</h2>
+        <CheckList
+          items={[
+            'Small forward plate (50–75 kg): £45–£65/day | £75–£100/weekend',
+            'Medium forward plate (75–150 kg): £60–£90/day | £95–£140/weekend',
+            'Large forward plate (150–250 kg): £80–£120/day | £125–£180/weekend',
+            'Reversible plate (200–350 kg): £90–£130/day | £140–£200/weekend',
+            'Heavy reversible (350–550 kg): £110–£160/day | £170–£240/weekend',
+            'Rubber pad for block paving: £5–£15/day extra (some depots include it)',
+          ]}
+        />
+      </section>
+
+      {/* Rates table */}
+      <section>
+        <H2>Wacker Plate Hire Rates 2026</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Plate Class</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Weight</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Day Rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Weekend (Fri–Mon)</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Week Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wackerCostRatesTable.map(([cls, weight, day, weekend, week], i) => (
+                <tr key={cls} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{cls}</td>
+                  <td className="px-4 py-3 text-gray-600">{weight}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                  <td className="px-4 py-3 text-gray-600">{weekend}</td>
+                  <td className="px-4 py-3 text-gray-600">{week}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-gray-400">VAT-inclusive guidance. Compare live rates on Tooli.uk.</p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared →
+            </span>
+          </Link>
+          <Link
+            to="/blog/what-size-wacker-plate-do-i-need-for-a-patio-the-direct-answer"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              What Size Wacker Plate Do I Need for a Patio? →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/wacker-plate-hire-cost-uk.webp"
+        alt="Medium forward wacker plate on hire at a residential driveway block paving project UK"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Additional costs */}
+      <section>
+        <H2>Additional Costs</H2>
+
+        <H3>Rubber Pad</H3>
+        <Prose>
+          <p>
+            If you're compacting block paving or tarmac, you need a rubber or polyurethane pad fitted
+            beneath the plate to avoid surface damage. Some depots include this; others charge £5–£15
+            per day. Always confirm before booking — arriving on site without a pad when you're laying
+            block paving means a wasted trip back to the depot.
+          </p>
+        </Prose>
+
+        <H3>Fuel</H3>
+        <Prose>
+          <p>
+            Most wacker plates run on petrol. Budget approximately £5–£15 per day of use depending on
+            plate size and running time. Return the machine with the same fuel level as collected.
+          </p>
+        </Prose>
+
+        <H3>Delivery</H3>
+        <Prose>
+          <p>
+            Wacker plates are compact enough to fit in the boot of most estate cars and SUVs.
+            Self-collection is easy and saves the delivery charge (typically £30–£70 return for a
+            wacker plate). For a heavier reversible plate, a van is more practical.
+          </p>
+        </Prose>
+
+        <H3>Deposit</H3>
+        <Prose>
+          <p>
+            Deposits on wacker plate hire are typically £100–£250 held on card, released on undamaged
+            return.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-4 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money →
+          </span>
+        </Link>
+      </section>
+
+      {/* Total cost examples */}
+      <section>
+        <H2>Total Cost Examples</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Job</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Plate Size</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Duration</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Hire Cost</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Rubber Pad</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Fuel Est.</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {wackerTotalCostTable.map(([job, plate, duration, hire, pad, fuel, total], i) => (
+                <tr key={job} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{job}</td>
+                  <td className="px-4 py-3 text-gray-600">{plate}</td>
+                  <td className="px-4 py-3 text-gray-600">{duration}</td>
+                  <td className="px-4 py-3 text-gray-600">{hire}</td>
+                  <td className="px-4 py-3 text-gray-600">{pad}</td>
+                  <td className="px-4 py-3 text-gray-600">{fuel}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{total}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/what-size-wacker-plate-do.webp"
+        alt="Rubber pad fitted beneath forward plate compactor on block paving — essential to prevent surface damage"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Weekend vs day rate */}
+      <section>
+        <H2>Weekend vs Day Rate: Is It Worth Booking a Weekend?</H2>
+        <Prose>
+          <p>
+            Most hire depots offer a Friday-to-Monday weekend rate equivalent to 1.5–1.8 times the
+            single day rate. If your job runs into Saturday and Sunday, a weekend rate is almost always
+            cheaper than paying two individual day rates. Check whether your depot charges the weekend
+            rate from Friday collection or Saturday — this varies.
+          </p>
+          <p>
+            For full operator competence requirements when using hired work equipment, see{' '}
+            <a
+              href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE PUWER guidance
+            </a>
+            . Hearing protection is mandatory under the{' '}
+            <a
+              href="https://www.hse.gov.uk/noise"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE Control of Noise at Work Regulations 2005
+            </a>
+            .
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Plant Hire London: Compare Local Plant Hire Companies →
+            </span>
+          </Link>
+          <Link
+            to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-sw19-london-postcode-area-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire SW19: London Postcode Area Guide →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={wackerCostFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Wacker Plate Hire Prices Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare day and weekend rates from local UK suppliers —
+          forward plates and reversible compactors, with or without rubber pad.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -8200,6 +8498,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Wacker Plate Hire',
     faqs: wackerPatioFaqs,
     Body: WackerPatioSizeBody,
+  },
+  {
+    slug: 'wacker-plate-hire-cost-uk-what-you-pay-in-2026',
+    category: 'Cost & Project Guides',
+    title: 'Wacker Plate Hire Cost UK: What You\'ll Pay in 2026',
+    excerpt:
+      'Wacker plate hire costs £45–£160 per day in the UK in 2026. Full breakdown of day, weekend, and week rates by plate class — plus rubber pad, fuel, delivery, and deposit costs with real job examples.',
+    intro:
+      'Hiring a wacker plate in the UK costs between £45 and £160 per day in 2026 depending on the plate size. A small forward plate (50–75 kg) for patio and path preparation runs £45–£65 per day. A large reversible plate for road base or deep compaction costs £110–£160 per day. Weekend rates offer a saving over two separate day hires.',
+    image: '/images/blog/wacker-plate-hire-cost-uk.webp',
+    imageAlt: 'Medium forward wacker plate on hire at a residential driveway block paving project UK',
+    datePublished: '2026-07-24',
+    metaTitle: 'Wacker Plate Hire Cost UK 2026: Day & Weekend Rates | Tooli.uk',
+    metaDescription:
+      'How much does wacker plate hire cost in the UK? Day and weekend rates by plate size for 2026. Compare local suppliers and save on Tooli.uk.',
+    primaryCta: 'Compare Wacker Plate Hire',
+    faqs: wackerCostFaqs,
+    Body: WackerCostBody,
   },
 ];
 
