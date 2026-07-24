@@ -8348,6 +8348,336 @@ function DehumidifierHireBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 27 — Site Heater Hire UK                                   */
+/* ------------------------------------------------------------------ */
+
+const siteHeaterPriceTable: [string, string, string, string, string][] = [
+  ['Diesel indirect (small)', '30 kW', 'Medium rooms, small shells', '£35–£55', '£130–£200'],
+  ['Diesel indirect (medium)', '50–70 kW', 'Large shells, warehouses', '£55–£85', '£200–£310'],
+  ['Diesel indirect (large)', '100 kW+', 'Very large or open structures', '£90–£130', '£330–£470'],
+  ['Propane cabinet (small)', '15–20 kW', 'Open/ventilated areas — spot heat', '£25–£40', '£95–£150'],
+  ['Propane cabinet (large)', '40–60 kW', 'Large open-air or ventilated sites', '£45–£70', '£165–£255'],
+  ['Electric fan heater', '3–9 kW', 'Site offices, welfare, small rooms', '£20–£35', '£75–£130'],
+];
+
+const siteHeaterDecisionTable: [string, string][] = [
+  ['Unfinished building shell (enclosed) — large area', 'Diesel indirect heater (50–100 kW)'],
+  ['Well-ventilated or open site — spot heating', 'Propane cabinet heater'],
+  ['Site office or welfare facility', 'Electric fan heater (3–9 kW)'],
+  ['Frost protection for concrete or screed', 'Diesel indirect or propane — indirect preferred'],
+  ['Drying programme alongside dehumidifier', 'Diesel indirect or electric — keep room sealed'],
+  ['Small finished room (decorated, post-fit out)', 'Electric fan heater only — no combustion risk'],
+];
+
+const siteHeaterFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a site heater in the UK?',
+    'Site heater hire costs between £30 and £130 per day in the UK depending on type and output. A diesel indirect heater (50 kW) runs £55–£85/day. A propane cabinet heater (large) costs £45–£70/day. Electric fan heaters start from £20–£35/day. Fuel costs are additional.',
+  ],
+  [
+    'Can I use a propane heater inside a building?',
+    'Only with permanent adequate ventilation. Flueless LPG heaters exhaust combustion gases directly into the space they heat. In a sealed or poorly ventilated building, carbon monoxide levels can reach dangerous concentrations rapidly. Use a diesel indirect heater (which has a flue) for any enclosed or semi-enclosed internal space.',
+  ],
+  [
+    'What size site heater do I need for a large building shell?',
+    'A 50–70 kW diesel indirect heater is the standard specification for a medium to large unfinished building shell. For very large open structures or exposed sites, 100 kW+ units are available. As a rough guide, 1 kW per 10–15 m³ of heated volume is a starting point — your hire depot can advise on specific site conditions.',
+  ],
+  [
+    'Do I need a CO alarm with a site heater?',
+    'Strongly advised with any combustion heater, even diesel indirect units with a correctly installed flue. CO alarms are inexpensive and available from most hire depots. On a site with workers present, a CO alarm is the right decision — CO is odourless, colourless, and can incapacitate rapidly.',
+  ],
+  [
+    'Can a site heater and dehumidifier be used together?',
+    'Yes — and it is the most effective combination for winter drying programmes. The heater warms the air (warm air holds more moisture), and the dehumidifier extracts the moisture-laden air. Keep windows and doors closed to prevent humid outside air undermining the process.',
+  ],
+];
+
+function SiteHeaterHireBody() {
+  return (
+    <>
+      {/* Three types */}
+      <section>
+        <H2>The Three Types of Site Heater Available to Hire</H2>
+
+        <H3>1. Diesel Space Heater (Indirect Fired)</H3>
+        <Prose>
+          <p>
+            The most commonly hired site heater for large enclosed spaces. Burns diesel fuel and
+            exhausts combustion gases via a flue — making them safe to use in occupied or enclosed
+            buildings. Heat output typically ranges from 30 kW to 100 kW. A 50 kW diesel indirect
+            heater can warm a large open shell effectively and runs for 8–12 hours on a standard
+            200-litre drum.
+          </p>
+          <p>
+            <strong>Best for:</strong> large building shells, warehouses, unfinished interiors, frost
+            protection on groundworks.
+          </p>
+        </Prose>
+
+        <H3>2. Propane Cabinet Heater (Flueless)</H3>
+        <Prose>
+          <p>
+            Runs on LPG (propane) cylinders and does not require a flue connection. Compact, portable,
+            and cheap to hire — but crucially, they exhaust combustion gases directly into the space.
+            Flueless propane heaters must never be used in enclosed spaces without adequate
+            ventilation.{' '}
+            <a
+              href="https://www.hse.gov.uk/gas/lpg-use-workplace.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-brand-primary hover:underline"
+            >
+              HSE requires permanent, adequate natural ventilation
+            </a>{' '}
+            when using LPG heaters on site. Carbon monoxide poisoning is a real and rapid risk.
+          </p>
+          <p>
+            <strong>Best for:</strong> well-ventilated open spaces, temporary outdoor work areas,
+            spot heating on open sites.
+          </p>
+        </Prose>
+
+        <H3>3. Electric Fan Heater</H3>
+        <Prose>
+          <p>
+            The safest option for enclosed spaces — no combustion, no flue, no gas. Limited to lower
+            outputs (typically 3–9 kW) making them suitable for small rooms, site offices, and welfare
+            facilities rather than large unfinished shells. Running costs on site electricity can be
+            significant at higher outputs.
+          </p>
+          <p>
+            <strong>Best for:</strong> site offices, welfare units, finished rooms with permanent
+            power, drying out in conjunction with a dehumidifier.
+          </p>
+        </Prose>
+        <Link
+          to="/blog/dehumidifier-hire-uk-prices-which-size-to-choose"
+          className="mt-4 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            Dehumidifier Hire UK: Prices &amp; Which Size to Choose →
+          </span>
+        </Link>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/site-heater-hire-uk.webp"
+        alt="Large diesel indirect site heater operating inside an unfinished UK building shell during winter construction"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Price table */}
+      <section>
+        <H2>Site Heater Hire Prices UK 2026</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Heater Type</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Output</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Best For</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Day Rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Week Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {siteHeaterPriceTable.map(([type, output, bestFor, day, week], i) => (
+                <tr key={type} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{type}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{output}</td>
+                  <td className="px-4 py-3 text-gray-600">{bestFor}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                  <td className="px-4 py-3 text-gray-600">{week}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-gray-400">VAT-inclusive guidance. Diesel and propane fuel costs are additional. Compare live quotes on Tooli.uk.</p>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money →
+          </span>
+        </Link>
+      </section>
+
+      {/* Running costs */}
+      <section>
+        <H2>Running Costs: The Number That Really Matters</H2>
+        <Prose>
+          <p>
+            Hire rate is only half the picture. Fuel costs on site heaters can exceed the hire cost
+            on extended winter jobs. A 50 kW diesel heater running 12 hours per day consumes roughly
+            30–40 litres of diesel — at current UK pump prices, that is £45–£60 per day in fuel alone
+            on top of the hire charge.
+          </p>
+          <p>
+            Electric heaters avoid fuel cost entirely but draw heavily on site power. A 9 kW electric
+            fan heater running 10 hours per day costs approximately £12–£18 per day in electricity at
+            commercial site rates — much lower than diesel, but only useful at lower outputs.
+          </p>
+          <p>
+            For multi-week winter site jobs, a diesel indirect heater is almost always the most
+            cost-effective option for large spaces. Pair it with a dehumidifier running simultaneously
+            to manage the moisture load and keep the drying programme on track.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/dehumidifier-hire-uk-prices-which-size-to-choose"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Dehumidifier Hire UK: Prices &amp; Which Size to Choose →
+            </span>
+          </Link>
+          <Link
+            to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/site-heater-hire-uk-types.webp"
+        alt="Propane cabinet heater on an outdoor construction site with adequate ventilation — site heater hire UK"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Safety */}
+      <section>
+        <H2>Safety: What You Must Know Before Hiring a Site Heater</H2>
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+          <p className="text-sm font-semibold">
+            Flueless propane heaters must NEVER be used in an enclosed, unventilated space. CO
+            poisoning can be fatal within minutes.{' '}
+            <a
+              href="https://www.hse.gov.uk/gas/co-in-the-workplace.htm"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold underline hover:text-amber-900"
+            >
+              See HSE guidance on CO in the workplace.
+            </a>
+          </p>
+        </div>
+        <CheckList
+          items={[
+            'Diesel indirect heaters: Safe in enclosed spaces as combustion gases exit via a flue. Check the flue outlet is unobstructed and exits to open air.',
+            'Electric heaters: Safe in all conditions — but confirm the site\'s power supply is rated for the load before running multiple units.',
+            'Fire risk: Keep all heaters clear of flammable materials by the manufacturer\'s minimum clearance distance — typically 1–2 metres.',
+            'Carbon monoxide detection: A CO alarm is strongly advised on any site using combustion heaters, even with a flue. CO is odourless and colourless.',
+          ]}
+        />
+      </section>
+
+      {/* Decision table */}
+      <section>
+        <H2>Which Site Heater Should You Hire?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Situation</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Best Heater Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {siteHeaterDecisionTable.map(([situation, heater], i) => (
+                <tr key={situation} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-medium text-gray-700">{situation}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{heater}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Hire tips */}
+      <section>
+        <H2>Hire Tips Before You Book</H2>
+        <CheckList
+          items={[
+            'Confirm whether diesel fuel is included in the hire rate — it almost never is. Budget separately.',
+            'Ask about delivery of fuel drums if you\'re on a remote or scaffold-access-only site.',
+            'For frost protection, set the heater to maintain a minimum of 5°C — the threshold below which fresh concrete and mortar are at risk.',
+            'Hire a CO alarm alongside any combustion heater — most depots supply them.',
+          ]}
+        />
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Plant Hire London: Compare Local Plant Hire Companies →
+            </span>
+          </Link>
+          <Link
+            to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-sw19-london-postcode-area-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire SW19: London Postcode Area Guide →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={siteHeaterFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Site Heater Hire Prices Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare diesel, propane, and electric site heater hire
+          from local UK suppliers — by day or week, with fuel and delivery options included.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -8853,6 +9183,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Dehumidifier Hire',
     faqs: dehumidifierFaqs,
     Body: DehumidifierHireBody,
+  },
+  {
+    slug: 'site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost',
+    category: 'Equipment Hire',
+    title: 'Site Heater Hire UK: Which Type Do You Need and What Does It Cost?',
+    excerpt:
+      'Site heater hire costs £20–£130 per day in the UK. Diesel indirect, propane cabinet, and electric options compared — with a safety guide on CO risk, fuel costs, and a decision table matching heater to job.',
+    intro:
+      'Keeping a building site warm through a UK winter protects freshly laid concrete and plaster from frost damage, lets trades work safely, and keeps drying programmes on schedule. Site heater hire costs between £30 and £120 per day depending on heater type and output.',
+    image: '/images/blog/site-heater-hire-uk.webp',
+    imageAlt: 'Large diesel indirect site heater operating inside an unfinished UK building shell during winter construction',
+    datePublished: '2026-07-24',
+    metaTitle: 'Site Heater Hire UK: Prices & Types Compared 2026 | Tooli.uk',
+    metaDescription:
+      'Compare site heater hire prices across the UK for 2026. Diesel, propane, and electric options explained. Which type suits your site? Compare on Tooli.uk.',
+    primaryCta: 'Compare Site Heater Hire',
+    faqs: siteHeaterFaqs,
+    Body: SiteHeaterHireBody,
   },
 ];
 
