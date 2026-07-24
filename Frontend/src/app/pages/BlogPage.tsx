@@ -8029,6 +8029,325 @@ function WackerCostBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article 26 — Dehumidifier Hire UK: Prices & Which Size to Choose   */
+/* ------------------------------------------------------------------ */
+
+const dehumidifierPriceTable: [string, string, string, string, string, string][] = [
+  ['Small', '20–30 L/day', 'Single room, minor damp, small new-build', '£35–£55', '£130–£200', '£320–£480'],
+  ['Medium', '40–60 L/day', '2–4 rooms, screed drying, post-plastering', '£55–£80', '£200–£290', '£490–£700'],
+  ['Large', '70–100 L/day', 'Whole house, large commercial units, flood recovery', '£75–£110', '£270–£400', '£650–£950'],
+  ['Industrial', '100–180 L/day', 'Serious flood recovery, large sites, industrial drying', '£100–£150', '£360–£540', '£850–£1,300'],
+];
+
+const dehumidifierMoistureTable: [string, string, string][] = [
+  ['One damp bedroom — background moisture', 'Low', '20–30 L/day'],
+  ['Post-plastering single room drying', 'Medium', '30–50 L/day'],
+  ['Concrete screed drying (per 50 m²)', 'High', '50–70 L/day'],
+  ['Post-flood drying (2–3 rooms)', 'Very high', '70–100 L/day'],
+  ['Full house new-build drying-out programme', 'High — extended duration', '70–100 L/day (multiple units or extended hire)'],
+  ['Serious flood recovery (whole property)', 'Very high', '100–180 L/day'],
+  ['Large commercial unit post-construction', 'High — large volume', '100–180 L/day or multiple units'],
+];
+
+const dehumidifierDryingTable: [string, string, string][] = [
+  ['Single wet room (minor flood/leak)', 'Medium (50 L/day)', '3–7 days'],
+  ['Screed drying (100 m²)', 'Large (80 L/day)', '3–6 weeks'],
+  ['Post-plaster new-build (3-bed house)', 'Large (80 L/day)', '4–8 weeks'],
+  ['Post-flood ground floor (2 rooms)', 'Industrial (120 L/day)', '1–3 weeks'],
+  ['Full new-build drying programme (detached house)', 'Large (80 L/day) or 2× medium', '6–12 weeks'],
+];
+
+const dehumidifierFaqs: Faq[] = [
+  [
+    'How much does it cost to hire an industrial dehumidifier?',
+    'A large industrial dehumidifier (100–180 L/day extraction) costs around £100–£150 per day or £360–£540 per week in the UK. For whole-house drying after a flood or during a new-build drying programme, a large machine or multiple medium units are typically more cost-effective than a single small machine running for longer.',
+  ],
+  [
+    'How long does it take to dry out a flooded room?',
+    'A minor flood in a single room with a medium dehumidifier (50 L/day) typically takes 3–7 days. Serious flood recovery involving structural materials (plasterboard, joists, screed) takes longer — often 2–4 weeks with professional-grade equipment. Drying time depends on material type, machine size, temperature, and ventilation.',
+  ],
+  [
+    'What is the difference between a refrigerant and desiccant dehumidifier?',
+    'Refrigerant dehumidifiers use a compressor and cooling coils to condense moisture — efficient above 15°C. Desiccant dehumidifiers use a chemical rotor (silica gel) to absorb moisture — effective at temperatures as low as 1°C. For winter drying on unheated UK sites, a desiccant machine is the right choice.',
+  ],
+  [
+    'Can I hire a dehumidifier for a new-build drying-out programme?',
+    'Yes — building drying hire is a core use case for industrial dehumidifier hire. New-build drying programmes typically run 4–12 weeks. Hire companies with building drying experience can help specify the right size and hire duration.',
+  ],
+  [
+    'Do I need more than one dehumidifier for a large house?',
+    'Possibly. For a full detached house new-build drying programme, one large unit (80–100 L/day) may be sufficient if the building is well sealed and the machine is moved between floors. For faster drying, or a property with complex layouts, running two medium units simultaneously is often more effective.',
+  ],
+  [
+    'What power supply does a hired dehumidifier need?',
+    'Small and medium hire dehumidifiers (up to 60 L/day) typically run on a standard 13A socket. Large and industrial units (70 L/day+) may require a 16A or 32A supply. Confirm power requirements with the hire depot — particularly if the site is unfinished and relies on a temporary power supply.',
+  ],
+];
+
+function DehumidifierHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6 md:p-8">
+        <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Dehumidifier Hire at a Glance</h2>
+        <CheckList
+          items={[
+            'Small (20–30 L/day): £35–£55/day — single room, minor moisture, small new-build rooms',
+            'Medium (40–60 L/day): £55–£80/day — 2–4 rooms, post-flood drying, concrete screeds',
+            'Large (70–100 L/day): £75–£110/day — whole-house drying, large commercial units',
+            'Industrial (100–180 L/day): £100–£150/day — serious flood recovery, large sites',
+            'Desiccant types available for very low-temperature drying — typically 20% more to hire',
+            'Most machines require a standard 13A socket; larger units may need 16A or 32A',
+          ]}
+        />
+      </section>
+
+      {/* Price table */}
+      <section>
+        <H2>Dehumidifier Hire Prices UK 2026</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Capacity</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Extraction</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Best For</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Day Rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Week Rate</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">4-Week Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dehumidifierPriceTable.map(([cap, extract, bestFor, day, week, month], i) => (
+                <tr key={cap} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{cap}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{extract}</td>
+                  <td className="px-4 py-3 text-gray-600">{bestFor}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                  <td className="px-4 py-3 text-gray-600">{week}</td>
+                  <td className="px-4 py-3 text-gray-600">{month}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 text-xs text-gray-400">VAT-inclusive guidance. Compare live quotes on Tooli.uk.</p>
+        <Link
+          to="/blog/tool-hire-comparison-save-money"
+          className="mt-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+        >
+          <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+          <span className="text-sm font-bold text-brand-primary">
+            How Tool Hire Comparison Actually Saves Your Money →
+          </span>
+        </Link>
+      </section>
+
+      {/* Hero image */}
+      <img
+        src="/images/blog/dehumidifier-hire-uk.webp"
+        alt="Industrial dehumidifier operating in a newly plastered UK new-build house during the drying-out programme"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* How to choose size */}
+      <section>
+        <H2>How to Choose the Right Size Dehumidifier</H2>
+
+        <H3>1. Understand Extraction Rate (L/day)</H3>
+        <Prose>
+          <p>
+            The key spec is litres of moisture extracted per day at a defined temperature and humidity.
+            Manufacturers rate machines at 30°C and 80% relative humidity — in a real UK building
+            drying situation (often 10–15°C), the actual extraction rate will be 30–50% lower than the
+            rated figure. Factor this in when sizing up.
+          </p>
+        </Prose>
+
+        <H3>2. Match to Room Volume and Moisture Load</H3>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Situation</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Moisture Load</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Recommended Capacity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dehumidifierMoistureTable.map(([situation, load, capacity], i) => (
+                <tr key={situation} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{situation}</td>
+                  <td className="px-4 py-3 text-gray-600">{load}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{capacity}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <H3>3. Refrigerant vs Desiccant</H3>
+        <Prose>
+          <p>
+            Most hire-fleet dehumidifiers are refrigerant (compressor-based) machines. They work best
+            above 15°C. Below 15°C, extraction rate drops significantly and the coils may ice up. For
+            winter drying on unheated sites, a desiccant dehumidifier is the correct choice — it
+            maintains effective extraction at temperatures as low as 1–5°C. Desiccant machines
+            typically cost 15–20% more to hire and consume more electricity.
+          </p>
+        </Prose>
+
+        <H3>4. Power Requirements</H3>
+        <Prose>
+          <p>
+            Small and medium machines run on a standard 13A household socket. Large and industrial
+            units may require a 16A or 32A supply — confirm with the hire depot before booking if your
+            site has limited power infrastructure.
+          </p>
+        </Prose>
+
+        <H3>5. Continuous Drainage</H3>
+        <Prose>
+          <p>
+            Industrial dehumidifiers extract large volumes of water rapidly. Most can be connected to a
+            drain hose (supplied with the hire) to discharge directly to a drain rather than into a
+            collection tank — essential for continuous operation over multiple days without manual
+            emptying. Confirm the drainage setup before the machine is delivered.
+          </p>
+        </Prose>
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/tool-hire-london"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire in London: Compare Prices From Local Suppliers →
+            </span>
+          </Link>
+          <Link
+            to="/blog/plant-hire-london-compare-local-plant-hire-companies"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Plant Hire London: Compare Local Plant Hire Companies →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      {/* Secondary image */}
+      <img
+        src="/images/blog/dehumidifier-hire-uk-prices-which-size.webp"
+        alt="Large commercial dehumidifier with drain hose connected during flood recovery in a UK property"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      {/* Drying times */}
+      <section>
+        <H2>How Long Will It Take to Dry Out a Building?</H2>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 bg-[#F8F9FC]">
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Scenario</th>
+                <th className="px-4 py-3 text-left font-extrabold text-gray-900">Machine Size</th>
+                <th className="px-4 py-3 text-left font-extrabold text-brand-primary">Estimated Drying Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dehumidifierDryingTable.map(([scenario, size, time], i) => (
+                <tr key={scenario} className={`border-b border-gray-50 ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FC]/40'}`}>
+                  <td className="px-4 py-3 font-bold text-gray-700">{scenario}</td>
+                  <td className="px-4 py-3 text-gray-600">{size}</td>
+                  <td className="px-4 py-3 font-bold text-brand-primary">{time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Prose>
+          <p className="mt-4">
+            Drying times vary significantly with temperature, ventilation, material type (screed dries
+            slower than plasterboard), and season. Hire depots with building drying experience can
+            advise on specific site situations.
+          </p>
+        </Prose>
+      </section>
+
+      {/* Effective use */}
+      <section>
+        <H2>Using a Dehumidifier Effectively</H2>
+        <CheckList
+          items={[
+            'Keep windows and doors closed while the machine is running — bringing in humid outdoor air undermines the drying process.',
+            'Pair with a site heater in winter — warm air holds more moisture and improves extraction rate significantly.',
+            'Empty the collection tank regularly if not using drain hose drainage — a full tank stops the machine.',
+            'Position the machine centrally in the space being dried, not in a corner.',
+            'Use a relative humidity meter (hygrometer) to track progress. Target below 60% RH for occupied spaces, below 75% RH for structural drying.',
+          ]}
+        />
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <Link
+            to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Scaffold Tower Hire Cost UK: What You'll Pay in 2026 →
+            </span>
+          </Link>
+          <Link
+            to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-sw19-london-postcode-area-guide"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire SW19: London Postcode Area Guide →
+            </span>
+          </Link>
+          <Link
+            to="/blog/tool-hire-comparison-uk"
+            className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+          >
+            <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+            <span className="text-sm font-bold text-brand-primary">
+              Tool Hire Comparison UK: Compare Plant Hire Suppliers →
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <FaqSection faqs={dehumidifierFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Dehumidifier Hire Prices Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk and compare industrial dehumidifier hire from local UK
+          suppliers — all capacities, refrigerant and desiccant, by day or week.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -8516,6 +8835,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Wacker Plate Hire',
     faqs: wackerCostFaqs,
     Body: WackerCostBody,
+  },
+  {
+    slug: 'dehumidifier-hire-uk-prices-which-size-to-choose',
+    category: 'Equipment Hire',
+    title: 'Dehumidifier Hire UK: Prices & Which Size to Choose',
+    excerpt:
+      'Industrial dehumidifier hire costs £35–£150 per day in the UK. Full guide to extraction rates, refrigerant vs desiccant, drying times by scenario, and how to match machine size to your building drying job.',
+    intro:
+      'Industrial dehumidifier hire in the UK costs between £35 and £150 per day depending on the machine\'s extraction capacity. A 20-litre/day unit suits a single damp room or small new-build drying task. A 90-litre/day commercial machine dries a full house or large site in a fraction of the time. Getting the size right is critical — an undersized machine will run continuously without achieving adequate drying.',
+    image: '/images/blog/dehumidifier-hire-uk.webp',
+    imageAlt: 'Industrial dehumidifier operating in a newly plastered UK new-build house during the drying-out programme',
+    datePublished: '2026-07-24',
+    metaTitle: 'Dehumidifier Hire UK: Prices & Which Size to Choose | Tooli.uk',
+    metaDescription:
+      'Compare industrial dehumidifier hire prices across the UK. Guide to extraction rates, drying times, and which size suits your building project. Tooli.uk.',
+    primaryCta: 'Compare Dehumidifier Hire',
+    faqs: dehumidifierFaqs,
+    Body: DehumidifierHireBody,
   },
 ];
 
