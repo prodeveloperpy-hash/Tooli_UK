@@ -8677,6 +8677,369 @@ function SiteHeaterHireBody() {
   );
 }
 
+/* Article 28 — Winter Site Kit: Heaters & Dehumidifiers for UK Builders */
+
+const winterKitDehumidifierTable: [string, string, string, string][] = [
+  ['Minor condensation / single room', 'Refrigerant 20 L', '20 litres/day', '£35–£45'],
+  ['New-build drying programme', 'Refrigerant 50 L', '50 litres/day', '£55–£75'],
+  ['Post-flood / severe damp', 'Desiccant 90 L', '90 litres/day', '£95–£120'],
+  ['Large site / warehouse', 'Commercial desiccant', '150+ litres/day', '£120–£150'],
+];
+
+const winterKitSizingTable: [string, string, string][] = [
+  ['Single room (up to 50 m²)', '20 L refrigerant', '3–5 days'],
+  ['Mid-terraced house', '50 L refrigerant', '5–10 days'],
+  ['New-build detached (plaster drying)', '50–90 L', '7–14 days'],
+  ['Post-screed drying — single floor', '50 L + ventilation', '10–21 days'],
+  ['Full new-build site', '90 L+ desiccant', '14–28 days'],
+];
+
+const winterKitCostTable: [string, string, string, string][] = [
+  ['Diesel indirect heater', '£45–£80', '£180–£320', 'Concrete protection, unfinished shell'],
+  ['Propane cabinet heater', '£30–£55', '£120–£220', 'Smaller rooms, plastering'],
+  ['Electric heater', '£20–£35', '£80–£140', 'Finished areas, enclosed spaces'],
+  ['Refrigerant dehumidifier 50 L', '£55–£75', '£220–£300', 'General building drying'],
+  ['Desiccant dehumidifier 90 L', '£95–£120', '£380–£480', 'Winter drying (works in cold)'],
+  ['Full winter kit (heater + dehu)', '£120–£185', '£480–£740', 'Complete site protection'],
+];
+
+const winterKitFaqs: Faq[] = [
+  [
+    'Do I need both a heater and a dehumidifier for winter construction?',
+    'Not always — but the combination works better than either alone in most winter scenarios. A heater prevents frost damage to fresh concrete and plaster but raises ambient humidity as it warms the air. A dehumidifier removes that moisture, speeding the drying programme and reducing condensation risk on cold surfaces.',
+  ],
+  [
+    'Can a refrigerant dehumidifier work in cold weather?',
+    'Refrigerant machines lose efficiency below 10–12°C and stop working effectively below 5°C. For UK winter sites where temperatures approach freezing, hire a desiccant dehumidifier — it works effectively down to −20°C and is the correct choice for unheated or partially heated structures.',
+  ],
+  [
+    'How long does screed take to dry in winter?',
+    'A rule of thumb is 1 day per mm of screed thickness at 20°C with good ventilation. In winter, unheated conditions can extend this to 2–3 days per mm. Running a heater above 10°C and a dehumidifier continuously can bring drying times close to summer rates.',
+  ],
+  [
+    'What size dehumidifier do I need for a new-build house drying programme?',
+    'A 50 L/day refrigerant unit covers a typical 3-bed new-build through its initial plaster drying phase. For faster drying or larger properties, step up to a 90 L desiccant unit — especially important in winter when ambient temperatures are low.',
+  ],
+  [
+    'Is CO a risk from site heaters indoors?',
+    'Yes — it is a serious risk. Direct-fired heaters produce carbon monoxide as a combustion byproduct. Use only indirect diesel heaters or flued propane heaters in enclosed or occupied spaces, always provide adequate ventilation, and fit a CO alarm. Never leave a combustion heater running in a sealed building.',
+  ],
+];
+
+function WinterSiteKitBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">At a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>A heater alone raises humidity — pair it with a dehumidifier for safe drying</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Refrigerant dehumidifiers stop working below 5°C — use desiccant in winter</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Indirect diesel heaters are the safest combustion option for enclosed UK sites</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Full winter kit hire (heater + dehu) costs £120–£185/day or £480–£740/week</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Screed needs 1 day per mm to dry — heater + dehu keeps this on programme</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Always fit a CO detector when running any combustion heater indoors</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          A UK winter brings three threats to construction programmes: frost that ruins fresh concrete and plaster,
+          high ambient humidity that prevents drying, and condensation on cold surfaces that triggers mould and
+          adhesion failures. The answer to all three is a <strong>winter site kit</strong> — a matched pair of
+          site heater and dehumidifier working together to maintain temperature and control moisture at the same time.
+        </p>
+        <p>
+          This guide walks through which machines to hire, how to size them correctly, and what each scenario —
+          concrete pour, screed drying, plasterwork — actually demands from your winter kit.
+        </p>
+      </Prose>
+
+      <H2>Why You Need Both a Heater and a Dehumidifier</H2>
+      <Prose>
+        <p>
+          Site managers often hire a heater and assume the job is done. It isn't. Warming cold air raises its
+          relative humidity. Air at 5°C holding 5 g/m³ of moisture becomes air at 20°C with the same absolute
+          moisture — but now at 30% relative humidity rather than 80%. That sounds better, but in a new-build with
+          cold concrete floors and walls, that warm moist air immediately condensates on cold surfaces and the
+          relative humidity at the surface boundary layer climbs back above 80%.
+        </p>
+        <p>
+          A dehumidifier removes water from the air mass directly, reducing the total moisture load rather than
+          just redistributing it. The combination — heater raising temperature, dehumidifier lowering moisture
+          content — is the only reliable way to drive drying programmes forward in winter.
+        </p>
+      </Prose>
+
+      {/* Internal link — dehumidifier article */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Dehumidifier Hire UK: Prices &amp; Which Size to Choose</p>
+          <Link to="/blog/dehumidifier-hire-uk-prices-which-size-to-choose" className="text-sm text-brand-primary hover:underline">
+            Full sizing guide and hire prices →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Choosing the Right Dehumidifier for Your Site</H2>
+      <Prose>
+        <p>
+          The most important choice is between <strong>refrigerant</strong> and <strong>desiccant</strong> machines.
+          Refrigerant units are efficient and cheaper to hire but lose performance below 10°C and stop extracting
+          moisture below 5°C. If your site is unheated or ambient temperatures regularly fall near zero, a desiccant
+          machine is the correct hire — it works effectively to −20°C and is the standard choice for UK winter
+          drying programmes.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Condition</th>
+              <th className="px-3 py-2 text-left font-semibold">Machine Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Extraction Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Hire Cost/Day</th>
+            </tr>
+          </thead>
+          <tbody>
+            {winterKitDehumidifierTable.map(([condition, machine, rate, cost], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{condition}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{machine}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{rate}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{cost}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <H2>Sizing Guide: Space to Machine</H2>
+      <Prose>
+        <p>
+          Matching machine capacity to the space being dried is critical. An undersized dehumidifier runs
+          continuously without achieving the target relative humidity — typically 75% RH or below for screed
+          drying, 60% RH or below for plasterwork. Use the table below as a starting point, then increase
+          capacity if the space is poorly ventilated or ambient temperatures are very low.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Space</th>
+              <th className="px-3 py-2 text-left font-semibold">Recommended Unit</th>
+              <th className="px-3 py-2 text-left font-semibold">Expected Drying Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {winterKitSizingTable.map(([space, unit, time], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{space}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{unit}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold">{time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <img
+        src="/images/blog/site-heater-hire-uk-types.webp"
+        alt="Diesel indirect site heater and industrial dehumidifier paired together inside a UK construction site shell in winter"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      <H2>Winter Site Kit Hire Costs</H2>
+      <Prose>
+        <p>
+          Hiring the full winter kit — a site heater plus a dehumidifier — typically costs between
+          £120 and £185 per day or £480 to £740 per week from a UK hire company. Week rates offer
+          a significant saving over individual day hires, and most drying programmes run for at least
+          5–7 days, making the weekly rate the standard option.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Equipment</th>
+              <th className="px-3 py-2 text-left font-semibold">Day Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Week Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Best For</th>
+            </tr>
+          </thead>
+          <tbody>
+            {winterKitCostTable.map(([equip, day, week, bestFor], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{equip}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{day}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{week}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{bestFor}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — site heater article */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Heater Hire UK: Which Type Do You Need?</p>
+          <Link to="/blog/site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost" className="text-sm text-brand-primary hover:underline">
+            Diesel, propane and electric options compared →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Scenario 1: Protecting a Concrete Pour</H2>
+      <Prose>
+        <p>
+          Concrete poured below 5°C risks incomplete hydration. Ice crystal formation in fresh concrete
+          permanently weakens the matrix — a problem no amount of curing time will fix. The target is to
+          keep the pour above 5°C (ideally above 10°C) for at least 72 hours after placement.
+        </p>
+        <p>
+          Use a <strong>diesel indirect heater</strong> positioned to circulate warm air across the pour.
+          Cover the concrete with polythene sheeting to trap heat and moisture. Run the heater continuously
+          for the first three days. A dehumidifier is less critical at this stage — the concrete needs
+          moisture for curing — but add one if condensation is forming on formwork or reinforcement.
+        </p>
+      </Prose>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Compare Tool Hire Prices Across the UK</p>
+          <Link to="/blog/tool-hire-comparison-uk" className="text-sm text-brand-primary hover:underline">
+            Find the best rates from local suppliers →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Scenario 2: Screed Drying</H2>
+      <Prose>
+        <p>
+          Screed must reach below 75% relative humidity (or 0.5% moisture content for bonded screed)
+          before floor coverings can be laid. The standard drying rate is 1 day per mm of thickness at
+          20°C with adequate ventilation. A 75 mm screed takes 75 days at ambient summer conditions —
+          or three months in a cold, unventilated new-build in January.
+        </p>
+        <p>
+          The combination of a heater maintaining 15–20°C and a <strong>50 L+ desiccant dehumidifier</strong>
+          running continuously can cut drying time to 30–40 days for the same 75 mm screed. Open doors
+          and windows periodically to purge moisture-laden air. Test with a hygrometer rather than relying
+          on time estimates alone.
+        </p>
+      </Prose>
+
+      <H2>Scenario 3: Plasterwork</H2>
+      <Prose>
+        <p>
+          Fresh plaster needs to dry out slowly and evenly. Rapid drying from direct heat causes cracking;
+          too-slow drying in cold, damp conditions prevents the plaster setting properly. The ideal approach
+          is a <strong>propane cabinet heater</strong> positioned away from the plastered surface — not
+          blowing directly onto the walls — with a dehumidifier removing moisture from the air mass.
+        </p>
+        <p>
+          Maintain 10–15°C in the room. Avoid running the heater at full output against a single wall;
+          slow, even heat is far better for plasterwork than intense localised drying. A 20–50 L
+          dehumidifier is usually sufficient for a single room.
+        </p>
+      </Prose>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Day, weekend and week rates compared →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Winter Site Safety Checklist</H2>
+      <Prose>
+        <p>
+          Running combustion heaters and electrical dehumidifiers together in a construction environment
+          introduces specific hazards. Work through this checklist before commissioning your winter kit:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Never run a direct-fired gas or diesel heater in an enclosed space without adequate ventilation',
+          'Fit a CO detector when using any combustion heater indoors — check it is working before each shift',
+          'Keep dehumidifier drain hoses away from electrical cables and floor traffic routes',
+          'Switch to a desiccant dehumidifier when ambient temperature drops below 10°C',
+          'Check heater fuel lines and connections for leaks before each day of use',
+          'Never leave a combustion heater running unattended overnight in a building with fresh plaster or exposed timber',
+        ]}
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Compare Winter Site Kit Hire Near You</H2>
+      <Prose>
+        <p>
+          Hire costs for site heaters and dehumidifiers vary between suppliers — especially for longer
+          hire periods. Use Tooli.uk to{' '}
+          <Link
+            to="/search"
+            className="font-medium text-brand-primary hover:underline"
+          >
+            compare now
+          </Link>{' '}
+          and find the best rate from local UK suppliers on both heaters and dehumidifiers in a single search.
+        </p>
+      </Prose>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: 2026 Price Guide</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Hire Your Winter Site Kit Today</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to compare site heater and dehumidifier hire from local UK
+          suppliers — by day, weekend, or week.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-8 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -9201,6 +9564,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Site Heater Hire',
     faqs: siteHeaterFaqs,
     Body: SiteHeaterHireBody,
+  },
+  {
+    slug: 'winter-site-kit-heaters-and-dehumidifiers-for-uk-builders',
+    category: 'Equipment Hire',
+    title: 'Winter Site Kit: Heaters & Dehumidifiers for UK Builders',
+    excerpt:
+      'A winter site kit pairs a site heater with a dehumidifier to protect concrete, screed, and plasterwork on UK construction sites. Full guide to machine selection, sizing, costs, and safety — with scenario tips for concrete pours, screed drying, and plastering.',
+    intro:
+      'A UK winter brings frost risk, high humidity, and condensation — all of which threaten freshly laid concrete, screed, and plasterwork. The answer is a matched winter site kit: a site heater to maintain temperature and a dehumidifier to control moisture, working together to keep your programme on track. This guide covers which machines to hire, how to size them, and what each scenario demands.',
+    image: '/images/blog/winter-site-kit-heaters-dehumidifiers.webp',
+    imageAlt: 'Winter site kit setup inside a UK new-build shell — site heater and industrial dehumidifier protecting freshly laid concrete',
+    datePublished: '2026-07-30',
+    metaTitle: 'Winter Site Kit: Heaters & Dehumidifiers for UK Builders | Tooli.uk',
+    metaDescription:
+      'Build a complete winter site kit for UK construction. Guide to pairing site heaters and dehumidifiers for concrete pours, screed drying, and plasterwork. Compare hire prices on Tooli.uk.',
+    primaryCta: 'Compare Winter Site Kit Hire',
+    faqs: winterKitFaqs,
+    Body: WinterSiteKitBody,
   },
 ];
 
