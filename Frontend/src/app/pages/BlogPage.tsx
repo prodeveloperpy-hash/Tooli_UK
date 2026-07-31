@@ -9040,6 +9040,380 @@ function WinterSiteKitBody() {
   );
 }
 
+/* Article 29 — Skip Hire Sizes & Prices UK: Full Comparison 2026 */
+
+const skipPriceTable: [string, string, string, string, string][] = [
+  ['Mini skip', '2–3 yards', '25–35 bin bags', '£90–£160', 'Garden waste, small bathroom, single-room clear'],
+  ['Midi skip', '4 yards', '40–50 bin bags', '£130–£200', 'Kitchen strip-out, small home renovation'],
+  ['Builders skip (small)', '6 yards', '60–70 bin bags', '£180–£260', 'General construction, multi-room light clearance'],
+  ['Builders skip (large)', '8 yards', '80–90 bin bags', '£220–£320', 'Most-hired size — renovation, roofing, groundworks'],
+  ['Maxi skip', '10 yards', '100–110 bin bags', '£260–£360', 'Large renovation, loft conversion, full house clear'],
+  ['Large maxi', '12 yards', '120–130 bin bags', '£300–£420', 'Serious demolition waste, commercial fit-outs'],
+  ['Roll-on/roll-off (small)', '16–20 yards', '~200 bin bags', '£350–£500', 'Commercial sites, large-scale clearances'],
+  ['Roll-on/roll-off (large)', '35–40 yards', '~400 bin bags', '£480–£650', 'Major demolition, housebuilder site clearance'],
+];
+
+const skipWasteTable: [string, string, string][] = [
+  ['General household waste (non-hazardous)', 'Yes', 'Standard mix — no restrictions'],
+  ['Soil and turf', 'Yes (check with depot)', 'Heavy — may incur additional weight charge'],
+  ['Bricks, rubble, concrete', 'Yes (check with depot)', 'Inert waste — weight surcharge common on larger volumes'],
+  ['Timber and wood', 'Yes', 'Untreated preferred — treated timber may attract surcharge'],
+  ['Plasterboard', 'Check first', 'Many depots charge a surcharge — landfill restrictions'],
+  ['Asbestos', 'No — never', 'Requires licensed asbestos waste contractor'],
+  ['Hazardous chemicals / paint', 'No', 'Hazardous waste rules apply — separate licensed disposal'],
+  ['Electrical items (fridges, TV, appliances)', 'No (most depots)', 'WEEE regulations — arrange separate collection'],
+  ['Gas cylinders', 'No', 'Hazardous — return to supplier or specialist disposal'],
+  ['Tyres', 'No (most depots)', 'Specialist tyre disposal required — separate charge'],
+  ['Food waste', 'No', 'Biological waste — separate disposal only'],
+];
+
+const skipRegionTable: [string, string, string][] = [
+  ['London (Central)', '£280–£380', 'Highest rates — congestion, disposal costs'],
+  ['London (Outer)', '£240–£330', 'Still above national average'],
+  ['South East (Surrey, Kent, Sussex)', '£230–£320', '10–15% above national average'],
+  ['South West (Bristol, Devon)', '£200–£290', 'Near national average'],
+  ['Midlands (Birmingham, Coventry)', '£190–£280', 'Near national average'],
+  ['North West (Manchester, Liverpool)', '£185–£270', 'Slightly below national average'],
+  ['Yorkshire (Leeds, Sheffield)', '£180–£265', 'Slightly below national average'],
+  ['Scotland (Glasgow, Edinburgh)', '£195–£280', 'VAT-inclusive — similar to Midlands'],
+  ['Wales (Cardiff)', '£185–£265', 'Near national average'],
+];
+
+const skipFaqs: Faq[] = [
+  [
+    'How much does an 8-yard skip cost to hire in the UK?',
+    'An 8-yard builders skip — the most commonly hired size for renovation and construction work — costs approximately £220–£320 in most parts of the UK. London and the South East run higher at £280–£380. All prices are VAT-inclusive guidance — confirm current local rates on Tooli.uk.',
+  ],
+  [
+    'What is the most popular skip size for house renovation?',
+    'The 8-yard builders skip is the most hired skip size for general house renovation, roofing, and construction clearance in the UK. It holds approximately 80–90 bin bags of waste and is large enough for most single-property projects without overspending on a larger size.',
+  ],
+  [
+    'Can I put soil in a skip?',
+    'Yes — most skips accept soil, turf, and spoil from garden and groundwork projects. However, soil is very heavy and some depots apply a weight surcharge when volumes are significant. Call ahead to confirm your depot\'s policy before filling a skip entirely with heavy inert material.',
+  ],
+  [
+    'Can I overfill a skip?',
+    'No. Skip lorry drivers are legally required to refuse collection of a skip filled above the load line. Material above the fill line creates an unacceptably hazardous load for road transport. If you overfill, you\'ll pay a wasted journey charge and still need to remove the excess before collection.',
+  ],
+  [
+    'Do I need a permit for a skip on the road?',
+    'Yes — if the skip is placed on a public highway (road or pavement), you need a skip licence from the local council. Skip permits typically cost £25–£75 depending on the council and are usually valid for 1–4 weeks. Skips on private driveways or land do not require a permit.',
+  ],
+  [
+    'How long does skip hire last?',
+    'Standard skip hire periods are 7–14 days with most UK hire companies. Extensions are usually available — call your depot before the hire period ends if you need more time. Same-day or next-day collection is rarely possible during busy periods, so plan your loading schedule accordingly.',
+  ],
+];
+
+function SkipHireSizesBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Skip Hire at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Mini skip (2–3 yards): £90–£160 — garden waste, small bathroom clearance</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Midi skip (4 yards): £130–£200 — kitchen strip-out, small renovation clearance</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Builders skip (6–8 yards): £180–£320 — most popular, general construction waste</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Maxi skip (10–12 yards): £260–£420 — large renovations, multi-room clearances</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Roll-on/roll-off (16–40 yards): £350–£650 — commercial sites, large demolitions</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Road permit required if skip is placed on public highway — typically £25–£75 from the council</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          Skip hire in the UK costs between <strong>£90 and £650</strong> depending on the skip size and
+          how long you need it. A 2-yard mini skip for a small garden clearance runs around £90–£140.
+          An 8-yard builders skip — the most commonly hired size — costs around £200–£320. A 40-yard
+          roll-on/roll-off skip for large commercial clearances starts from £450.
+        </p>
+        <p>
+          The biggest mistake hirers make is ordering too small, then paying for a second collection.
+          This guide covers every skip size, current UK prices, waste types accepted, and permit rules
+          so you get the right skip first time.
+        </p>
+      </Prose>
+
+      <H2>Skip Hire Prices UK 2026: Full Size Breakdown</H2>
+      <Prose>
+        <p>
+          All prices are VAT-inclusive guidance based on average UK market rates. Regional variation
+          applies — London and the South East run 10–20% higher than the national average.
+          Use Tooli.uk to{' '}
+          <Link to="/search" className="font-medium text-brand-primary hover:underline">compare now</Link>{' '}
+          and confirm current quotes from local suppliers.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Skip Size</th>
+              <th className="px-3 py-2 text-left font-semibold">Capacity</th>
+              <th className="px-3 py-2 text-left font-semibold">Approx Equivalent</th>
+              <th className="px-3 py-2 text-left font-semibold">Typical Price Range</th>
+              <th className="px-3 py-2 text-left font-semibold">Best For</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipPriceTable.map(([size, capacity, equiv, price, bestFor], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{size}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{capacity}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{equiv}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{price}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{bestFor}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-gray-500">*All prices VAT-inclusive guidance. Confirm live rates on Tooli.uk.</p>
+      </div>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>What Can and Cannot Go in a Skip?</H2>
+      <Prose>
+        <p>
+          Not all waste is accepted in a standard skip. Mixing hazardous waste with general waste is
+          illegal under the{' '}
+          <a href="https://www.legislation.gov.uk/ukpga/1990/43" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Environmental Protection Act 1990
+          </a>{' '}
+          and the{' '}
+          <a href="https://www.legislation.gov.uk/uksi/2005/894" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Hazardous Waste Regulations 2005
+          </a>{' '}
+          and can result in significant fines. When in doubt, ask your hire depot before loading.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Waste Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Accepted in Standard Skip?</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipWasteTable.map(([waste, accepted, notes], i) => {
+              const isNo = accepted.toLowerCase().startsWith('no');
+              return (
+                <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td className="border-b border-gray-100 px-3 py-2 font-medium">{waste}</td>
+                  <td className={`border-b border-gray-100 px-3 py-2 font-semibold ${isNo ? 'text-red-600' : 'text-green-700'}`}>{accepted}</td>
+                  <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-semibold">Important: Asbestos &amp; Hazardous Waste</p>
+        <p className="mt-1 text-sm">
+          Asbestos must never go in a standard skip. It requires a licensed asbestos waste contractor.
+          The{' '}
+          <a href="https://www.gov.uk/government/publications/waste-duty-of-care-code-of-practice" target="_blank" rel="noopener noreferrer" className="font-medium underline">
+            EA Waste Duty of Care Code of Practice
+          </a>{' '}
+          sets out legal obligations for all waste producers — including domestic skip hirers.
+        </p>
+      </div>
+
+      <img
+        src="/images/blog/skip-hire-sizes-uk.webp"
+        alt="Mini 2-yard garden skip filled with green waste and turf from a residential garden clearance"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      <H2>How Long Can You Keep a Skip?</H2>
+      <Prose>
+        <p>
+          Standard skip hire periods are typically <strong>7–14 days</strong>. Most depots allow
+          extension by arrangement. Key rules to know:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Standard hire period: 7–14 days depending on the supplier',
+          'Extensions: usually available at a daily or weekly surcharge — always ask before the hire period expires',
+          'Collection: most depots collect within 1–2 working days of your call — book ahead during busy periods',
+          'Overfilling: a skip loaded above the fill line cannot legally be transported — the driver will refuse collection and you may be charged a wasted journey fee',
+          'Road permits: if your skip is on a public highway, arrange the permit before the skip is placed',
+        ]}
+      />
+
+      {/* Internal link — wacker plate cost */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/wacker-plate-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Day, weekend and week rates compared →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Skip Hire by Region: Price Variation</H2>
+      <Prose>
+        <p>
+          Skip hire prices vary significantly by region. London and the South East carry the highest
+          rates due to land costs, disposal charges, and operating costs. The table below shows
+          approximate 8-yard builders skip prices by region for 2026.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Region</th>
+              <th className="px-3 py-2 text-left font-semibold">8-Yard Builders Skip (approx)</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipRegionTable.map(([region, price, notes], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{region}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{price}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Tips for Getting the Best Skip Hire Price</H2>
+      <Prose>
+        <p>
+          Skip hire prices are negotiable — especially for longer hire periods and multiple skips.
+          A few practical points to save money:
+        </p>
+        <ul>
+          <li>
+            <strong>Order the right size first time.</strong> A second collection and swap to a larger
+            skip almost always costs more than upgrading in the first booking.
+          </li>
+          <li>
+            <strong>Choose a midweek delivery.</strong> Friday and Monday collections are busiest —
+            some depots offer better rates for Tuesday–Thursday slots.
+          </li>
+          <li>
+            <strong>Keep heavy waste separate.</strong> Mixing concrete and rubble with lighter waste
+            can push a skip into the weight-surcharge bracket. If you have significant inert waste,
+            ask about a dedicated inert skip or grab lorry alternative.
+          </li>
+          <li>
+            <strong>Compare local suppliers.</strong> National skip hire brands rarely offer the lowest
+            rate — local independents often beat them on price for the same service.
+          </li>
+        </ul>
+      </Prose>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — dehumidifier */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Dehumidifier Hire UK: Prices &amp; Which Size to Choose</p>
+          <Link to="/blog/dehumidifier-hire-uk-prices-which-size-to-choose" className="text-sm text-brand-primary hover:underline">
+            Full sizing guide and hire prices →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — site heater */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Heater Hire UK: Which Type Do You Need?</p>
+          <Link to="/blog/site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost" className="text-sm text-brand-primary hover:underline">
+            Diesel, propane and electric options compared →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Skip Hire Prices Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — skip hire prices from local UK suppliers by size, duration, and waste type.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -9582,6 +9956,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Winter Site Kit Hire',
     faqs: winterKitFaqs,
     Body: WinterSiteKitBody,
+  },
+  {
+    slug: 'skip-hire-sizes-prices-uk-full-comparison-2026',
+    category: 'Cost & Project Guides',
+    title: 'Skip Hire Sizes & Prices UK: Full Comparison 2026',
+    excerpt:
+      'Skip hire in the UK costs £90–£650 depending on size. Full 2026 price guide covering mini, midi, builders, maxi and roll-on/roll-off skips — with a waste acceptance table, regional price comparison, permit rules, and tips for getting the best rate.',
+    intro:
+      'Skip hire in the UK costs between £90 and £650 depending on the skip size and how long you need it. A 2-yard mini skip for a small garden clearance runs around £90–£140. An 8-yard builders skip — the most commonly hired size — costs around £200–£320. A 40-yard roll-on/roll-off skip for large commercial clearances starts from £450. The biggest mistake hirers make is ordering too small, then paying for a second collection.',
+    image: '/images/blog/skip-hire-sizes-prices-uk.webp',
+    imageAlt: '8-yard builders skip outside a UK terraced house loaded with renovation rubble and timber — skip hire UK',
+    datePublished: '2026-07-31',
+    metaTitle: 'Skip Hire Sizes & Prices UK: Full Comparison 2026 | Tooli.uk',
+    metaDescription:
+      'Compare skip hire sizes and prices across the UK. Full guide to mini, midi, builders and maxi skips — costs, capacity, permit rules. Compare on Tooli.uk.',
+    primaryCta: 'Compare Skip Hire',
+    faqs: skipFaqs,
+    Body: SkipHireSizesBody,
   },
 ];
 
