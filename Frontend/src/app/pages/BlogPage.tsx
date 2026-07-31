@@ -10480,6 +10480,350 @@ function GeneratorHireBody() {
   );
 }
 
+/* Article 33 — What Size Generator Do I Need for Power Tools? The Direct Answer */
+
+const genSizeQuickTable: [string, string, string][] = [
+  ['1 × SDS drill + site lighting', '4 kVA', '6 kVA — gives comfortable headroom'],
+  ['1 × angle grinder + 1 × drill + lighting', '6 kVA', '10 kVA — motor surge needs headroom'],
+  ['Circular saw + drill + air compressor', '10 kVA', '15 kVA — compressor surge is large'],
+  ['2 × grinder + saw + lighting + radio', '12 kVA', '15–20 kVA'],
+  ['Full trade site (4 tools + welfare unit)', '20 kVA', '30 kVA — welfare kettle is a load spike'],
+  ['Large site — 6 tools + welfare + office', '35 kVA', '45–60 kVA'],
+  ['Commercial plant + tools + welfare', '60 kVA+', '100 kVA — consult depot'],
+];
+
+const genSurgTable: [string, string, string, string][] = [
+  ['SDS/rotary drill — 800W', '800W', '1,600–2,000W', '4 kVA'],
+  ['Corded drill — 600W', '600W', '1,200–1,500W', '3 kVA'],
+  ['Circular saw — 1,200W', '1,200W', '2,500–3,000W', '5 kVA'],
+  ['Angle grinder — 1,000W', '1,000W', '2,200–2,500W', '5 kVA'],
+  ['Angle grinder — 2,000W', '2,000W', '4,500–5,500W', '8 kVA'],
+  ['Disc cutter (petrol)', 'Petrol engine', 'No electrical surge', 'No generator needed'],
+  ['Air compressor — 1,500W', '1,500W', '3,500–5,000W', '8 kVA'],
+  ['Air compressor — 2,500W', '2,500W', '5,500–7,500W', '12 kVA'],
+  ['Table saw — 1,800W', '1,800W', '4,000–5,000W', '8 kVA'],
+  ['Core drill — 2,000W (110V)', '2,000W', '4,500–5,500W', '8 kVA'],
+  ['Concrete mixer — 750W', '750W', '1,500–2,000W', '4 kVA'],
+  ['Site kettle — 3,000W', '3,000W', '3,000W (resistive — no surge)', '5 kVA'],
+  ['LED site floodlight — 150W', '150W', '150W (no motor)', 'Any'],
+];
+
+const genSizeFaqs: Faq[] = [
+  [
+    'What generator do I need to run two angle grinders?',
+    'To run two 2,000W angle grinders simultaneously, you need a generator that can handle the starting surge of one grinder (approximately 4,500–5,500W) plus the running load of the other (2,000W). Total peak demand: ~6,500W. At 0.8 power factor = 8.1 kVA. Plus 25% headroom = at least a 10 kVA generator. A 15 kVA unit gives comfortable margin.',
+  ],
+  [
+    'Can I run a compressor from a 6 kVA generator?',
+    'It depends on the compressor size. A small single-cylinder compressor (750W rated) has a starting surge of around 1,500–2,000W and can start on a 6 kVA generator — though with little headroom for other simultaneous loads. A 2-cylinder or larger compressor (2,500W+ rated) needs at least a 10–12 kVA generator to start reliably.',
+  ],
+  [
+    'Why does my generator trip when I start a power tool?',
+    'The tool\'s starting surge is exceeding the generator\'s rated or peak output. This is the most common cause of generator breaker trips on site. The solution is a larger generator — not a different breaker or a different tool. Use the starting surge values in the table above to size correctly.',
+  ],
+  [
+    'Do I need a generator for 110V tools?',
+    'Only if you have no mains power supply. Most hire generators above 6 kVA provide a 110V outlet via a built-in centre-tap transformer. Confirm 110V availability at the point of hire — some smaller generators are 240V only and would need a separate transformer step-down unit for 110V tools.',
+  ],
+  [
+    'What is a kVA?',
+    'kVA (kilovolt-ampere) is the unit of apparent power used to rate generators. In practical terms, a generator\'s kW (kilowatt) output in real power is approximately 80% of its kVA rating (assuming a 0.8 power factor for typical construction site loads). A 10 kVA generator delivers approximately 8 kW of usable power to your tools.',
+  ],
+];
+
+function WhatSizeGeneratorBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">The Key Rule</h2>
+        <p className="text-sm text-gray-700">
+          Size your generator to the <strong>starting surge</strong> of your largest motor — not its
+          rated wattage. Electric motors draw 2–3× their running current at start-up. A generator
+          sized only to running loads will trip its overload breaker every time a motor starts.
+        </p>
+        <ul className="mt-3 space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Single drill or small saw: <strong>4–6 kVA</strong></span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>2–3 tools + lighting: <strong>10–15 kVA</strong></span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Full trade site (4 tools + welfare): <strong>20–30 kVA</strong></span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Always add 25% headroom above your calculated minimum</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          For a single corded drill or small circular saw, a <strong>4–6 kVA generator</strong> is
+          sufficient. For a typical trade-site setup with two or three power tools running
+          simultaneously, you need <strong>10–15 kVA</strong>. The key number is not the tool's rated
+          wattage — it is the starting surge current, which is 2–3 times higher. Size your generator
+          to the surge, not the run, or you'll trip the breaker every time a motor starts.
+        </p>
+      </Prose>
+
+      <H2>Quick Reference: Generator Size by Tool Setup</H2>
+      <Prose>
+        <p>
+          Use this table as a fast first check. The minimum is the lowest rating that will work;
+          the recommended size gives comfortable headroom for surge and leaves capacity to add loads.
+          To{' '}
+          <Link to="/search" className="font-medium text-brand-primary hover:underline">compare now</Link>{' '}
+          on generator hire rates from local suppliers, enter your postcode on Tooli.uk.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">What You're Running</th>
+              <th className="px-3 py-2 text-left font-semibold">Min Generator Size</th>
+              <th className="px-3 py-2 text-left font-semibold">Recommended Hire Size</th>
+            </tr>
+          </thead>
+          <tbody>
+            {genSizeQuickTable.map(([setup, min, recommended], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{setup}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-amber-700 font-semibold">{min}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{recommended}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — generator hire prices */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Generator Hire UK: Prices &amp; Power Output Guide 2026</p>
+          <Link to="/blog/generator-hire-uk-prices-power-output-guide-2026" className="text-sm text-brand-primary hover:underline">
+            Full kVA price guide and fuel cost estimates →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Why Starting Surge Matters More Than Rated Wattage</H2>
+      <Prose>
+        <p>
+          Every power tool with an electric motor draws <strong>2–3 times its rated current</strong> for
+          a fraction of a second when it starts. This is called the <em>starting surge</em> or inrush
+          current. A 2,000W angle grinder has a starting surge of approximately 4,500–5,000W.
+        </p>
+        <p>
+          A generator rated at 5 kVA cannot start a 2,000W angle grinder without tripping the overload
+          protection — because the 4,500W surge exceeds its capacity. You need at least 7–8 kVA to
+          start that single grinder reliably. The{' '}
+          <a href="https://www.hse.gov.uk/construction/safetytopics/electricalsafety.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            HSE guidance on electrical safety on construction sites
+          </a>{' '}
+          recommends 110V reduced-low-voltage systems for outdoor and wet-condition tool use, which most
+          hire generators above 6 kVA support via a built-in centre-tap transformer.
+        </p>
+        <p>
+          <strong>The rule:</strong> size the generator to handle the starting surge of your largest
+          motor, plus the running load of everything else running simultaneously.
+        </p>
+      </Prose>
+
+      <img
+        src="/images/blog/what-size-generator-do-i-need-for-power-tools.png"
+        alt="Site worker operating a 110V angle grinder powered from a diesel generator on a UK outdoor construction site"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      <H2>Tool-by-Tool Starting Surge Reference</H2>
+      <Prose>
+        <p>
+          The table below shows rated power, typical starting surge, and the minimum generator rating
+          needed to start each tool in isolation. When running multiple tools together, use the
+          three-step calculation below.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Power Tool</th>
+              <th className="px-3 py-2 text-left font-semibold">Rated Power</th>
+              <th className="px-3 py-2 text-left font-semibold">Typical Starting Surge</th>
+              <th className="px-3 py-2 text-left font-semibold">Min Generator to Start</th>
+            </tr>
+          </thead>
+          <tbody>
+            {genSurgTable.map(([tool, rated, surge, minGen], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{tool}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{rated}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-amber-700 font-medium">{surge}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{minGen}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>The Calculation in Three Steps</H2>
+
+      <H3>Step 1: Identify Your Peak Simultaneous Load</H3>
+      <Prose>
+        <p>
+          Write down every tool that could be running at the same time at peak load. Be realistic —
+          not every tool on a site runs simultaneously, but be conservative. Include the welfare kettle
+          if it's on the same circuit — a 3,000W kettle is a significant load spike even though it
+          has no starting surge.
+        </p>
+      </Prose>
+
+      <H3>Step 2: Calculate Total Running Load + Largest Starting Surge</H3>
+      <Prose>
+        <p>
+          Add the running power of all tools <strong>except</strong> the one with the largest starting
+          surge. Add the starting surge of that single largest tool instead of its running load. This
+          is your peak demand figure in watts (W).
+        </p>
+      </Prose>
+
+      <H3>Step 3: Convert to kVA and Add 25% Headroom</H3>
+      <Prose>
+        <p>
+          Divide the peak demand in watts by 1,000 to get kW. Divide by 0.8 (power factor) to get
+          kVA, as governed by the{' '}
+          <a href="https://www.theiet.org/publishing/wiring-regulations" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            IET Wiring Regulations BS 7671
+          </a>
+          . Add 25% headroom: kVA × 1.25 = recommended generator size.
+        </p>
+      </Prose>
+
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-5 py-4 text-sm">
+        <p className="font-bold text-brand-primary">Worked Example</p>
+        <p className="mt-2 text-gray-700">
+          Circular saw (1,200W running) + angle grinder (2,000W — largest motor, use starting surge
+          of 4,500W) + site lighting (500W) = <strong>6,200W peak demand</strong>
+        </p>
+        <p className="mt-1 text-gray-700">÷ 1,000 = 6.2 kW → ÷ 0.8 = 7.75 kVA → × 1.25 = <strong>9.7 kVA minimum</strong></p>
+        <p className="mt-1 font-semibold text-brand-primary">Hire a 10 kVA generator.</p>
+        <p className="mt-2 text-xs text-gray-500">Formula: (Running loads + largest surge) ÷ 1,000 ÷ 0.8 × 1.25 = recommended kVA</p>
+      </div>
+
+      <img
+        src="/images/blog/what-size-generator.png"
+        alt="Close-up of a 15 kVA hire generator control panel showing 110V and 240V output sockets"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      <H2>110V vs 240V: Does It Change the Calculation?</H2>
+      <Prose>
+        <p>
+          No — the calculation is the same in watts or kW regardless of voltage. Most site tools are
+          110V on UK construction sites (safer outdoors and in wet conditions). Confirm your generator
+          provides 110V output — not all smaller generators do. A 110V centre-tap transformer is
+          built into most hire models above 6 kVA, limiting shock voltage to 55V to earth.
+        </p>
+        <p>
+          If you're running 240V equipment (welfare unit, battery chargers, site office) from the same
+          generator, factor those loads into your calculation as normal — they have no motor surge
+          unless they contain a motor.
+        </p>
+      </Prose>
+
+      <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-semibold">Check 110V availability before booking</p>
+        <p className="mt-1 text-sm">
+          Some generators below 6 kVA are 240V only. If your tools are 110V, confirm the generator
+          has a 110V outlet — or ask the depot to include a separate centre-tap transformer in the hire.
+        </p>
+      </div>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — skip hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Full price guide for every skip size →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Hire the Right Generator Today</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — diesel generator hire from local UK suppliers by kVA output, with 110V and 240V options confirmed at booking.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -11094,6 +11438,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Generator Hire',
     faqs: generatorFaqs,
     Body: GeneratorHireBody,
+  },
+  {
+    slug: 'what-size-generator-do-i-need-for-power-tools-the-direct-answer',
+    category: 'Equipment Hire',
+    title: 'What Size Generator Do I Need for Power Tools? The Direct Answer',
+    excerpt:
+      'Size your generator to the starting surge — not the rated wattage. A 2,000W angle grinder surges to 4,500W at start-up and needs at least an 8 kVA generator. Full tool-by-tool surge reference table, a three-step calculation guide, and quick reference by site setup.',
+    intro:
+      'For a single corded drill or small circular saw, a 4–6 kVA generator is sufficient. For a typical trade-site setup with two or three power tools running simultaneously, you need 10–15 kVA. The key number is not the tool\'s rated wattage — it is the starting surge current, which is 2–3 times higher. Size your generator to the surge, not the run, or you\'ll trip the breaker every time a motor starts.',
+    image: '/images/blog/what-size-generator-do-i-need-for-power-tools.png',
+    imageAlt: 'Site worker operating a 110V angle grinder powered from a diesel generator on a UK outdoor construction site',
+    datePublished: '2026-07-31',
+    metaTitle: 'What Size Generator Do I Need for Power Tools? | Tooli.uk',
+    metaDescription:
+      'Not sure what generator size to hire for power tools? This guide calculates exactly what you need — from a single drill to a full trade-site setup.',
+    primaryCta: 'Compare Generator Hire',
+    faqs: genSizeFaqs,
+    Body: WhatSizeGeneratorBody,
   },
 ];
 
