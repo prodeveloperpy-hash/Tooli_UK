@@ -10115,6 +10115,371 @@ function SkipPermitBody() {
   );
 }
 
+/* Article 32 — Generator Hire UK: Prices & Power Output Guide 2026 */
+
+const generatorPriceTable: [string, string, string, string, string, string][] = [
+  ['Small site', '6–10 kVA', '£60–£100', '£95–£155', '£220–£370', '£560–£940'],
+  ['Medium site', '15–20 kVA', '£90–£150', '£140–£230', '£330–£550', '£840–£1,400'],
+  ['Large site', '30–45 kVA', '£140–£220', '£210–£340', '£510–£810', '£1,300–£2,100'],
+  ['Commercial (small)', '60 kVA', '£200–£280', '£300–£430', '£730–£1,020', '£1,850–£2,600'],
+  ['Commercial (medium)', '100 kVA', '£260–£360', '£390–£550', '£950–£1,320', '£2,400–£3,400'],
+  ['Industrial', '150–250 kVA', '£350–£520', '£520–£780', '£1,280–£1,900', '£3,200–£4,800'],
+];
+
+const generatorLoadTable: [string, string, string, string][] = [
+  ['LED site light string (10 units)', '0.5 kW', '0.5 kW (no motor)', 'Any'],
+  ['Site radio / battery charger', '0.1–0.3 kW', '0.3 kW', 'Any'],
+  ['SDS drill (1,000W)', '1.0 kW', '2.0 kW', '4 kVA+'],
+  ['Circular saw (1,200W)', '1.2 kW', '2.5 kW', '5 kVA+'],
+  ['Angle grinder (2,000W)', '2.0 kW', '4.5 kW', '7 kVA+'],
+  ['Table saw (1,800W)', '1.8 kW', '4.0 kW', '6 kVA+'],
+  ['Air compressor (2-cylinder)', '1.5–2.5 kW', '4.0–6.0 kW', '10 kVA+'],
+  ['Core drill (110V, 2,000W)', '2.0 kW', '4.5 kW', '7 kVA+'],
+  ['Concrete mixer (750W)', '0.75 kW', '1.5 kW', '4 kVA+'],
+  ['Welfare unit (kettle + sockets)', '3.0 kW', '3.0 kW', '6 kVA+'],
+  ['2 × angle grinder + lighting + radio', '~5 kW running', '~11 kW surge', '15 kVA+'],
+  ['Full trade site (4 tools + welfare)', '~8 kW running', '~18 kW surge', '30 kVA+'],
+];
+
+const generatorVoltageTable: [string, string, string][] = [
+  ['110V', 'Power tools, site lighting, most construction equipment', 'Standard on UK construction sites — safer for outdoor/wet conditions'],
+  ['240V', 'Welfare units, kettles, chargers, some IT equipment', 'Available on most hire generators as a separate output'],
+  ['400V / 3-phase', 'Large plant, heavy equipment, commercial HVAC', 'Available on larger hire generators — confirm specification at booking'],
+];
+
+const generatorFaqs: Faq[] = [
+  [
+    'What size generator do I need for a building site?',
+    'A small trade site with 2–3 power tools and site lighting typically needs a 10–15 kVA generator. A medium trade site with 4–6 simultaneous tools plus a welfare unit needs 20–30 kVA. A large commercial site with plant and heavy equipment needs 60 kVA or above. Use the load calculation guide to arrive at your specific requirement.',
+  ],
+  [
+    'Do I need a generator on a construction site?',
+    'If your site has no mains power connection — a new-build, a remote location, or a road or groundworks project — yes. Generators are also used as backup power during mains disruptions, for 110V reduced-voltage tool supply, and for temporary power before the permanent connection is commissioned.',
+  ],
+  [
+    'Can I run 110V tools from a generator?',
+    'Yes — most site generators provide both 110V (via a built-in 110V outlet or centre-tap transformer) and 240V outputs. Always confirm the 110V output capacity with the hire depot before booking — some smaller generators are 240V only.',
+  ],
+  [
+    'How much fuel does a generator use per day?',
+    'A 10 kVA generator running at 50% load for 10 hours uses approximately 15–25 litres of diesel. A 60 kVA unit at 50% load uses 80–120 litres per 10-hour day. Fuel is not included in hire rates — budget separately at current pump prices.',
+  ],
+  [
+    'Do I need to provide diesel for a hire generator?',
+    'Yes. Virtually all hire generators are delivered empty or with a minimal amount of fuel and you are expected to supply diesel. Return the generator with the same fuel level as collected. Some depots offer fuel delivery as an add-on service.',
+  ],
+  [
+    'Can I hire a generator without a trade account?',
+    'Yes. Most UK hire depots hire generators to private individuals and one-off trade customers without a trade account. You will need valid photo ID and a card for the deposit. Call ahead to confirm requirements.',
+  ],
+];
+
+function GeneratorHireBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Generator Hire at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>6–10 kVA:</strong> £60–£100/day — 2–3 power tools + lighting for small sites or DIY</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>15–20 kVA:</strong> £90–£150/day — trade site with 4–6 tools, welfare unit, site office</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>30–45 kVA:</strong> £140–£220/day — large trade site, multiple heavy tools simultaneously</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>60–100 kVA:</strong> £200–£320/day — commercial site, plant, large-scale power requirements</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>100 kVA+:</strong> £280–£450/day — major events, large construction sites, industrial use</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Most hire generators are diesel — fuel is your responsibility and <strong>not</strong> included in the hire rate</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          Generator hire in the UK costs between <strong>£60 and £450 per day</strong> depending on
+          power output. A 6 kVA site generator handles a handful of power tools and site lighting.
+          A 60 kVA towable generator powers an entire medium commercial site. The most common hiring
+          mistake is undersizing — which means tripped breakers, damaged tools, and a wasted day.
+        </p>
+        <p>
+          This guide covers UK hire rates by kVA output, how to calculate what you need, fuel costs,
+          and what to check before you book.
+        </p>
+      </Prose>
+
+      <H2>Generator Hire Prices UK 2026</H2>
+      <Prose>
+        <p>
+          All prices are VAT-inclusive guidance based on average UK market rates. Diesel fuel is
+          additional — see the fuel cost section below. Use Tooli.uk to{' '}
+          <Link to="/search" className="font-medium text-brand-primary hover:underline">compare now</Link>{' '}
+          and confirm current quotes from local suppliers.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Generator Size</th>
+              <th className="px-3 py-2 text-left font-semibold">Rated Output</th>
+              <th className="px-3 py-2 text-left font-semibold">Day Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Weekend Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Week Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">4-Week Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {generatorPriceTable.map(([size, output, day, weekend, week, month], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{size}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold">{output}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{day}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{weekend}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{week}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{month}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-gray-500">*All prices VAT-inclusive guidance. Diesel fuel is additional — not included in hire rates. Compare current supplier quotes on Tooli.uk.</p>
+      </div>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>How to Calculate What Size Generator You Need</H2>
+
+      <H3>Step 1: List Your Power Loads</H3>
+      <Prose>
+        <p>
+          Write down every piece of equipment that will be running from the generator simultaneously —
+          not just what <em>might</em> run, but what will realistically run at the same time at peak
+          load. Use the table below as a reference for common site equipment.
+        </p>
+      </Prose>
+
+      <H3>Step 2: Account for Starting (Surge) Current</H3>
+      <Prose>
+        <p>
+          Electric motors — angle grinders, circular saws, core drills, compressors — draw <strong>2–3
+          times their running current at start-up</strong>. A generator rated at 6 kVA running current
+          must handle this surge without tripping. Use starting current for the calculation, not running
+          current. The HSE guidance on{' '}
+          <a href="https://www.hse.gov.uk/construction/safetytopics/electricalsafety.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            electrical safety on construction sites
+          </a>{' '}
+          covers temporary supply requirements including generator use.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Common Site Equipment</th>
+              <th className="px-3 py-2 text-left font-semibold">Running Current</th>
+              <th className="px-3 py-2 text-left font-semibold">Starting Surge</th>
+              <th className="px-3 py-2 text-left font-semibold">Recommended Min Generator</th>
+            </tr>
+          </thead>
+          <tbody>
+            {generatorLoadTable.map(([equipment, running, surge, minGen], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{equipment}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{running}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-amber-700 font-medium">{surge}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{minGen}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <H3>Step 3: Apply the Rule of Thumb</H3>
+      <Prose>
+        <p>
+          Total your peak simultaneous running loads in kW, then multiply by <strong>1.25</strong> to
+          account for motor starting surges and leave headroom. Convert to kVA using:{' '}
+          <strong>kVA = kW ÷ 0.8</strong> (power factor for typical generator loads). This gives your
+          minimum generator rating.
+        </p>
+        <p>
+          <strong>Example:</strong> Two angle grinders (2.0 kW each) + site lighting (0.5 kW) + radio
+          (0.2 kW) = 4.7 kW running. Multiply by 1.25 = 5.9 kW. Divide by 0.8 = <strong>7.4 kVA
+          minimum</strong>. A 10 kVA generator gives comfortable headroom.
+        </p>
+      </Prose>
+
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-4 py-3 text-sm text-gray-700">
+        <p className="font-semibold text-brand-primary">Quick Sizing Formula</p>
+        <p className="mt-1">Total running kW × 1.25 ÷ 0.8 = <strong>minimum kVA rating</strong></p>
+        <p className="mt-1 text-xs text-gray-500">Always round up to the next standard generator size and confirm with your hire depot.</p>
+      </div>
+
+      <img
+        src="/images/blog/generator-hire-uk-prices.webp"
+        alt="Site engineer checking kVA output on a 30 kVA hire generator control panel on a UK construction site"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — site heater */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Heater Hire UK: Which Type Do You Need?</p>
+          <Link to="/blog/site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost" className="text-sm text-brand-primary hover:underline">
+            Diesel, propane and electric options compared →
+          </Link>
+        </div>
+      </div>
+
+      <H2>110V vs 240V: Which Output Does Your Site Need?</H2>
+      <Prose>
+        <p>
+          UK construction sites predominantly use <strong>110V reduced-low-voltage (RLV)</strong> power
+          for most tools — drills, saws, grinders, compressors. 110V is significantly safer than 240V
+          in wet or outdoor conditions because the centre-tapped transformer limits shock voltage to
+          55V to earth. This is governed by{' '}
+          <a href="https://www.theiet.org/publishing/wiring-regulations" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            IET Wiring Regulations BS 7671
+          </a>{' '}
+          and the{' '}
+          <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            HSE PUWER regulations
+          </a>{' '}
+          which apply to generators as work equipment.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Voltage</th>
+              <th className="px-3 py-2 text-left font-semibold">Used For</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {generatorVoltageTable.map(([voltage, uses, notes], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-bold text-brand-primary">{voltage}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{uses}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Fuel Costs: The Hidden Cost of Generator Hire</H2>
+      <Prose>
+        <p>
+          Hire rates do not include diesel fuel. Budget approximately:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          '6–10 kVA generator at 50% load: 1.5–2.5 litres per hour (~£25–£35 per 10-hour day)',
+          '20–30 kVA generator at 50% load: 3–6 litres per hour (~£50–£100 per 10-hour day)',
+          '60 kVA generator at 50% load: 8–12 litres per hour (~£130–£180 per 10-hour day)',
+          'Return the generator with the same fuel level as collected — most depots specify this in the hire agreement',
+          'Some depots offer fuel delivery as an add-on — ask when booking if site access for a fuel bowser is possible',
+        ]}
+      />
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — dehumidifier */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Dehumidifier Hire UK: Prices &amp; Which Size to Choose</p>
+          <Link to="/blog/dehumidifier-hire-uk-prices-which-size-to-choose" className="text-sm text-brand-primary hover:underline">
+            Full sizing guide and hire prices →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — skip hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Full price guide for every skip size →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Generator Hire Prices Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — diesel generator hire from local UK suppliers by kVA output, day rate, and hire duration.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -10711,6 +11076,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Skip Hire',
     faqs: skipPermitFaqs,
     Body: SkipPermitBody,
+  },
+  {
+    slug: 'generator-hire-uk-prices-power-output-guide-2026',
+    category: 'Equipment Hire',
+    title: 'Generator Hire UK: Prices & Power Output Guide 2026',
+    excerpt:
+      'Generator hire in the UK costs £60–£450 per day depending on kVA output. Full 2026 price guide covering 6 kVA site generators to 250 kVA industrial units — with a step-by-step load calculation guide, 110V vs 240V explained, and diesel fuel cost estimates.',
+    intro:
+      'Generator hire in the UK costs between £60 and £450 per day depending on power output. A 6 kVA site generator handles a handful of power tools and site lighting. A 60 kVA towable generator powers an entire medium commercial site. The most common hiring mistake is undersizing — which means tripped breakers, damaged tools, and a wasted day.',
+    image: '/images/blog/generator-hire-uk.webp',
+    imageAlt: 'Towable diesel generator on a UK construction site providing 110V power to tools and site lighting',
+    datePublished: '2026-07-31',
+    metaTitle: 'Generator Hire UK: Prices & Power Output Guide 2026 | Tooli.uk',
+    metaDescription:
+      'Compare diesel generator hire prices across the UK. Full guide to kVA output, which size suits your site, day and week rates. Compare on Tooli.uk.',
+    primaryCta: 'Compare Generator Hire',
+    faqs: generatorFaqs,
+    Body: GeneratorHireBody,
   },
 ];
 
