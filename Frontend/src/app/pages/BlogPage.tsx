@@ -9414,6 +9414,363 @@ function SkipHireSizesBody() {
   );
 }
 
+/* Article 30 — What Size Skip Do I Need? The Practical UK Guide */
+
+const skipProjectTable: [string, string, string][] = [
+  ['Single-room garden tidy / small clear-out', '2–3 yard mini skip', 'Fits under most permits; sufficient for light volume'],
+  ['Garden waste — full clearance (medium garden)', '4–6 yard midi/small builders', 'Green waste is bulky but light — volume over weight'],
+  ['Single bathroom strip-out', '4–6 yard midi/small builders', 'Ceramics, timber, pipework — medium density waste'],
+  ['Full kitchen strip-out', '6–8 yard builders skip', 'Units, worktops, tiles, appliances — high volume'],
+  ['Loft conversion clearance (insulation, boarding)', '6–8 yard builders skip', 'Lightweight but high volume'],
+  ['Single-storey extension demolition', '8–10 yard builders/maxi', 'Mixed rubble, masonry, timber — dense and bulky'],
+  ['Full house renovation (multi-room)', '10–12 yard maxi or multiple 8-yard', 'Volume is the limiting factor — don\'t underestimate'],
+  ['Driveway excavation (3-car width)', '8–10 yard — or arrange muck away', 'Soil and tarmac are very heavy — weight may exceed volume limits'],
+  ['Garage demolition', '8–10 yard', 'Masonry, roof tiles, timber — high mixed density'],
+  ['Full house clearance / estate clear', '10–12 yard maxi', 'General household goods — often surprisingly bulky'],
+  ['Commercial fit-out strip or office clear', '16–20 yard RoRo', 'Volume and duration usually demand a larger container'],
+];
+
+const skipVolumeTable: [string, string, string, string][] = [
+  ['Mini', '2 yards', '1.5 m³', '25–35 bags'],
+  ['Midi', '4 yards', '3.0 m³', '40–50 bags'],
+  ['Small builders', '6 yards', '4.6 m³', '60–70 bags'],
+  ['Standard builders', '8 yards', '6.1 m³', '80–90 bags'],
+  ['Maxi', '10 yards', '7.6 m³', '100–110 bags'],
+  ['Large maxi', '12 yards', '9.2 m³', '120–130 bags'],
+  ['Small RoRo', '16–20 yards', '12–15 m³', '160–200 bags'],
+  ['Large RoRo', '35–40 yards', '27–31 m³', '350–400 bags'],
+];
+
+const skipComparisonTable: [string, string, string, string][] = [
+  ['Typical price', '£90–£160', '£130–£200', '£180–£320'],
+  ['Fits on driveway', 'Easily', 'Yes', 'Usually — check width'],
+  ['Road permit needed', 'Often not (private drive)', 'If on road: yes', 'If on road: yes'],
+  ['Best for', 'Small garden / 1 room', 'Kitchen or bathroom', 'Full renovation / groundworks'],
+  ['Weight limit (typical)', '~1 tonne', '~1.5 tonnes', '2–3 tonnes'],
+];
+
+const skipSizeFaqs: Faq[] = [
+  [
+    'What size skip do I need for a bathroom?',
+    'A 4-yard midi skip is sufficient for a small bathroom strip-out. For a larger bathroom with a full set of fixtures, tiles, and subfloor, a 6-yard small builders skip gives more comfortable capacity. If you\'re also doing pipework and plaster replacement, go straight to an 8-yard builders skip to avoid a second delivery.',
+  ],
+  [
+    'What is the most popular skip size in the UK?',
+    'The 8-yard builders skip is the most commonly hired skip size in the UK. It handles most residential renovation and construction waste volumes comfortably, fits on most driveways, and sits at a price point that makes it the default choice for builders, landscapers, and DIY homeowners tackling significant projects.',
+  ],
+  [
+    'Can I mix waste types in the same skip?',
+    'Yes — general mixed waste (timber, masonry, ceramics, packaging) can go in together. The important restrictions are on hazardous waste (asbestos, chemicals, electrical appliances, tyres, gas cylinders) which must never go in a standard skip. Plasterboard in large quantities may attract a surcharge due to landfill restrictions — check with your depot.',
+  ],
+  [
+    'Do mini skips need a road permit?',
+    'If a mini skip is placed on your private driveway or off-road space, no permit is needed. If it\'s placed on a public road or pavement, a skip licence from the local council is required regardless of size. Skip permits typically cost £25–£75 depending on the council.',
+  ],
+  [
+    'How many bin bags fit in an 8-yard skip?',
+    'Approximately 80–90 standard bin bags fit in an 8-yard builders skip. In practice, construction waste is not bagged and is loaded loose — a more useful guide is that an 8-yard skip fits roughly 6.1 cubic metres of material, which equates to a full kitchen strip-out with room for bathroom fixtures as well.',
+  ],
+];
+
+function WhatSizeSkipBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">The Golden Rule</h2>
+        <p className="text-sm text-gray-700">
+          The cost difference between a 6-yard and 8-yard skip is typically <strong>£40–£60</strong>.
+          The cost of a second skip delivery and collection when the first one fills up is typically
+          <strong> £150–£250</strong>. Sizing up is almost always cheaper than ordering a second skip.
+          If you're on the borderline between two sizes, always go for the larger.
+        </p>
+      </div>
+
+      <Prose>
+        <p>
+          The most common skip hire mistake in the UK is ordering too small. A 4-yard midi skip for
+          a full bathroom strip-out fills up before you've touched the floor tiles. An 8-yard builders
+          skip handles a full bathroom and kitchen combined with room to spare. This guide matches the
+          right skip size to the right project using real volume estimates — so you hire once, not twice.
+        </p>
+      </Prose>
+
+      <H2>Skip Size to Project: Quick Reference</H2>
+      <Prose>
+        <p>
+          Use this table to match your project to the right skip size. When two sizes are listed,
+          the smaller suits a typical version of that project; the larger covers a bigger or messier
+          execution. When in doubt, size up — see the golden rule above.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Project</th>
+              <th className="px-3 py-2 text-left font-semibold">Recommended Skip Size</th>
+              <th className="px-3 py-2 text-left font-semibold">Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipProjectTable.map(([project, size, why], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{project}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{size}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{why}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — skip hire prices */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Full price guide for every skip size →
+          </Link>
+        </div>
+      </div>
+
+      <H2>How Skip Sizes Work: The Volume Basics</H2>
+      <Prose>
+        <p>
+          Skip size is measured in <strong>cubic yards</strong> — an old imperial unit still standard
+          across the UK hire industry. One cubic yard is roughly 0.76 cubic metres, or about 10–12
+          standard household bin bags loosely packed. The table below converts between units and gives
+          a practical bin-bag equivalent for each size.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Skip Size</th>
+              <th className="px-3 py-2 text-left font-semibold">Cubic Yards</th>
+              <th className="px-3 py-2 text-left font-semibold">Cubic Metres (approx)</th>
+              <th className="px-3 py-2 text-left font-semibold">Rough Equivalent in Bin Bags</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipVolumeTable.map(([size, yards, metres, bags], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{size}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{yards}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{metres}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold">{bags}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <img
+        src="/images/blog/skip-hire-sizes-uk.webp"
+        alt="4-yard midi skip outside a UK semi-detached house during a bathroom renovation — skip hire residential"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Weight Limits: The Factor Most Hirers Overlook</H2>
+      <Prose>
+        <p>
+          Skip size refers to <strong>volume, not weight</strong>. Every skip has a maximum permitted
+          load weight — typically 1–3 tonnes for smaller skips, up to 6–8 tonnes for larger builders
+          skips. Dense waste materials — soil, concrete, bricks, tarmac — fill the weight limit long
+          before they fill the volume.
+        </p>
+        <p>
+          If your project involves significant quantities of soil, rubble, or hardcore, follow these
+          practical rules:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Mix heavy inert material with lighter waste to spread the weight through the available volume',
+          'Consider a muck-away lorry for large volumes of soil or spoil — more efficient than multiple skip swaps',
+          'Tell your hire depot what materials you\'re putting in — they can advise on weight limits and surcharges',
+          'Never fill a skip above the load line — the driver is legally required to refuse an overloaded skip',
+          'Plasterboard in large quantities may attract a surcharge — check with your depot before loading',
+        ]}
+      />
+
+      <Prose>
+        <p>
+          The{' '}
+          <a href="https://www.gov.uk/government/publications/waste-duty-of-care-code-of-practice" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            EA Waste Duty of Care Code of Practice
+          </a>{' '}
+          sets out legal obligations for all waste producers — including domestic skip hirers. In
+          Scotland, waste licensing is governed by{' '}
+          <a href="https://www.sepa.org.uk/regulations/waste" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            SEPA
+          </a>
+          ; in Wales by{' '}
+          <a href="https://www.naturalresourceswales.gov.uk" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Natural Resources Wales
+          </a>.
+        </p>
+      </Prose>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Mini Skip vs Midi Skip vs Builders Skip: Key Differences</H2>
+      <Prose>
+        <p>
+          The three most commonly hired skip sizes for residential work cover the range from a single
+          room clear-out to a full renovation. Here's how they compare on price, access, and suitability:
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Feature</th>
+              <th className="px-3 py-2 text-left font-semibold">Mini (2–3 yd)</th>
+              <th className="px-3 py-2 text-left font-semibold">Midi (4 yd)</th>
+              <th className="px-3 py-2 text-left font-semibold">Builders (6–8 yd)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipComparisonTable.map(([feature, mini, midi, builders], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{feature}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{mini}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{midi}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{builders}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Road Permits: When Do You Need One?</H2>
+      <Prose>
+        <p>
+          A skip placed on a <strong>public road or pavement</strong> requires a skip licence from
+          the local council — regardless of size. Permits typically cost £25–£75 and are usually valid
+          for 1–4 weeks. Your skip hire company can often arrange the permit on your behalf for a small
+          admin fee; always confirm this before the skip is delivered.
+        </p>
+        <p>
+          A skip placed on a <strong>private driveway or private land</strong> does not require a
+          permit. If access to your property is tight, a mini or midi skip may be the practical choice
+          even if a builders skip would be preferable on capacity grounds.
+        </p>
+      </Prose>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — wacker plate cost */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/wacker-plate-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Day, weekend and week rates compared →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — dehumidifier */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Dehumidifier Hire UK: Prices &amp; Which Size to Choose</p>
+          <Link to="/blog/dehumidifier-hire-uk-prices-which-size-to-choose" className="text-sm text-brand-primary hover:underline">
+            Full sizing guide and hire prices →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — site heater */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Heater Hire UK: Which Type Do You Need?</p>
+          <Link to="/blog/site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost" className="text-sm text-brand-primary hover:underline">
+            Diesel, propane and electric options compared →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Find the Right Skip at the Right Price</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — skip hire prices from local UK suppliers for every size, from mini skips to RoRo containers.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -9974,6 +10331,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Skip Hire',
     faqs: skipFaqs,
     Body: SkipHireSizesBody,
+  },
+  {
+    slug: 'what-size-skip-do-i-need-the-practical-uk-guide',
+    category: 'Cost & Project Guides',
+    title: 'What Size Skip Do I Need? The Practical UK Guide',
+    excerpt:
+      'The most common skip hire mistake in the UK is ordering too small. This guide matches every project type — from a single bathroom strip-out to a full house renovation — to the right skip size, with volume tables, weight limit guidance, and road permit rules.',
+    intro:
+      'The most common skip hire mistake in the UK is ordering too small. A 4-yard midi skip for a full bathroom strip-out fills up before you\'ve touched the floor tiles. An 8-yard builders skip handles a full bathroom and kitchen combined with room to spare. This guide matches the right skip size to the right project using real volume estimates — so you hire once, not twice.',
+    image: '/images/blog/what-size-skip-do-i-need.webp',
+    imageAlt: 'Visual comparison chart of UK skip sizes from 2-yard mini to 40-yard RoRo with dimensions and capacity in cubic yards',
+    datePublished: '2026-07-31',
+    metaTitle: 'What Size Skip Do I Need? UK Skip Size Guide | Tooli.uk',
+    metaDescription:
+      'Not sure what size skip to hire? This guide matches skip size to project type for UK homeowners and builders. Avoid hiring too small — and wasting money.',
+    primaryCta: 'Compare Skip Hire',
+    faqs: skipSizeFaqs,
+    Body: WhatSizeSkipBody,
   },
 ];
 
