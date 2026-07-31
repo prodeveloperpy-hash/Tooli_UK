@@ -9771,6 +9771,350 @@ function WhatSizeSkipBody() {
   );
 }
 
+/* Article 31 — Do I Need a Permit for a Skip on the Road? The Direct Answer */
+
+const skipPermitPlacementTable: [string, string, string][] = [
+  ['Private driveway or forecourt', 'No', 'Not a public highway — no permit needed'],
+  ['Private car park', 'No', 'Private land — no highway permit needed'],
+  ['Public road (any part of the carriageway)', 'Yes', 'Always — no exceptions for size'],
+  ['Public pavement / footway', 'Yes', 'Part of the public highway'],
+  ['Shared access road (unadopted)', 'Check with council', 'Status may vary — call the local highways department'],
+  ['Yellow line or restricted zone', 'Consult council', 'Some local authorities refuse permits in restricted zones'],
+];
+
+const skipPermitCostTable: [string, string, string][] = [
+  ['London Borough Councils', '£55–£100', '2 weeks'],
+  ['Metropolitan Borough Councils (Manchester, Birmingham etc.)', '£35–£75', '2–4 weeks'],
+  ['County/District Councils (commuter belt, rural)', '£25–£60', '2–4 weeks'],
+  ['Scottish Local Authorities', '£30–£70', '2–4 weeks'],
+  ['Welsh Local Authorities', '£25–£60', '2–4 weeks'],
+];
+
+const skipPermitFaqs: Faq[] = [
+  [
+    'Who is responsible for getting the skip permit?',
+    'In most cases, the skip hire company obtains the permit from the local council on your behalf. Your responsibility is to tell them at the point of booking that the skip will be placed on a public road. If you fail to declare this and the skip ends up on the highway without a permit, you may share liability for the breach.',
+  ],
+  [
+    'How much does a skip road permit cost?',
+    'Typically £25–£100 depending on the local authority. London borough permits are at the higher end (£55–£100). Most councils outside London charge £25–£75. The cost is usually passed through to you as a line item on the hire invoice.',
+  ],
+  [
+    'Can a skip go on double yellow lines?',
+    'Some councils permit this; others refuse. It depends entirely on the local authority. Always consult the hire company — they will know the local rules. Even where a permit is granted, it may come with specific conditions such as time restrictions.',
+  ],
+  [
+    'How long is a skip permit valid for?',
+    'Typically 2–4 weeks, depending on the local authority. If your hire extends beyond the permit period, the company must renew it. Let them know if you\'re running over time — don\'t let the permit lapse with the skip still in place on the road.',
+  ],
+  [
+    'Do I need a permit if the skip is half on my drive and half on the road?',
+    'Yes. Any part of a skip that occupies the public highway — including the footway — technically requires a permit. If in doubt, get the permit. The fine for non-compliance is significantly more expensive than the permit itself.',
+  ],
+  [
+    'What markings does a skip on a road need?',
+    'Reflective amber markers at each end and illuminated lights from dusk to dawn. These requirements are set out in the Builders\' Skips (Markings) Regulations 1984. The hire company is responsible for fitting the markings — check they are in place when the skip is delivered.',
+  ],
+];
+
+function SkipPermitBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Skip Permit Rules at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span>Skip on private drive or land: <strong>no permit required</strong></span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Skip on public road or pavement: <strong>council permit required — always</strong></span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Permit typically obtained by the hire company on your behalf — tell them when booking</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Permit cost: typically £25–£75 depending on local authority (£55–£100 in London)</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Permit validity: typically 2–4 weeks — check with the hire company</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" /><span>Operating without a permit: fine from the council, potential removal at your cost</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          <strong>Yes</strong> — if a skip is placed on a public highway in the UK, a skip licence
+          from the local council is legally required. This applies regardless of skip size. The permit
+          is obtained by the hire company on your behalf in most cases — but you need to tell them the
+          skip is going on the road when you book.
+        </p>
+        <p>
+          Skip permits typically cost £25–£75 depending on the local authority and are usually valid
+          for 2–4 weeks. Here is exactly what the rules are, who is responsible, and what happens
+          without one.
+        </p>
+      </Prose>
+
+      <H2>The Legal Position</H2>
+      <Prose>
+        <p>
+          Placing a skip on a public highway without authorisation constitutes an obstruction under the{' '}
+          <a href="https://www.legislation.gov.uk/ukpga/1980/66" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Highways Act 1980
+          </a>.
+          Both the skip hire company and the hirer can be held liable. In practice, enforcement
+          typically falls on the hire company — which is why reputable hire firms require you to
+          declare the placement location when booking.
+        </p>
+        <p>
+          The marking requirements for road-placed skips are set by the{' '}
+          <a href="https://www.legislation.gov.uk/uksi/1984/1933" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Builders' Skips (Markings) Regulations 1984
+          </a>
+          {' '}— reflective amber markers and lights at each end, visible from dusk to dawn.
+        </p>
+      </Prose>
+
+      <H3>Who Is Responsible?</H3>
+      <Prose>
+        <p>
+          The skip hire company holds the skip permit in most cases — they apply to the local highway
+          authority (the council) on your behalf. Your responsibility is to tell the hire company that
+          the skip will be on a public road at the time of booking. If you tell them it's going on your
+          drive and then place it on the road, you may bear liability for the resultant breach of the
+          permit condition.
+        </p>
+      </Prose>
+
+      {/* Internal link — skip hire prices */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Full price guide for every skip size →
+          </Link>
+        </div>
+      </div>
+
+      <H2>When Do You Need a Permit?</H2>
+      <Prose>
+        <p>
+          The key question is whether the skip occupies any part of the <strong>public highway</strong> —
+          which includes the road surface, the kerb, and the footway (pavement). If it does, a permit
+          is required without exception.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Skip Placement</th>
+              <th className="px-3 py-2 text-left font-semibold">Permit Required?</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipPermitPlacementTable.map(([placement, required, notes], i) => {
+              const isYes = required.toLowerCase().startsWith('yes');
+              const isNo = required.toLowerCase() === 'no';
+              return (
+                <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td className="border-b border-gray-100 px-3 py-2 font-medium">{placement}</td>
+                  <td className={`border-b border-gray-100 px-3 py-2 font-semibold ${isYes ? 'text-red-600' : isNo ? 'text-green-700' : 'text-amber-600'}`}>{required}</td>
+                  <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — what size skip */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">What Size Skip Do I Need? The Practical UK Guide</p>
+          <Link to="/blog/what-size-skip-do-i-need-the-practical-uk-guide" className="text-sm text-brand-primary hover:underline">
+            Match skip size to your project →
+          </Link>
+        </div>
+      </div>
+
+      <H2>What Does a Skip Permit Cost?</H2>
+      <Prose>
+        <p>
+          Skip permit costs vary by local authority. They are typically paid by the hire company and
+          passed through to you as a line item on the invoice. In London, allow extra lead time —
+          some boroughs take 3–5 working days to process a permit. Book well ahead for road-placed
+          skips in busy London postcodes.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Local Authority Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Typical Permit Cost</th>
+              <th className="px-3 py-2 text-left font-semibold">Typical Validity Period</th>
+            </tr>
+          </thead>
+          <tbody>
+            {skipPermitCostTable.map(([authority, cost, validity], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{authority}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{cost}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{validity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-gray-500">If the skip needs to stay longer than the permit period, the hire company must renew the permit. Tell the company if your hire is likely to extend beyond the initial period.</p>
+      </div>
+
+      <img
+        src="/images/blog/do-i-need-a-permit-for-a-skip.webp"
+        alt="Skip permit notice attached to a builders skip on a public pavement in a London residential street"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Safety Requirements on Road-Placed Skips</H2>
+      <Prose>
+        <p>
+          A skip placed on a public highway in the UK must by law comply with the{' '}
+          <a href="https://www.legislation.gov.uk/uksi/1984/1933" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Builders' Skips (Markings) Regulations 1984
+          </a>.
+          The hire company is responsible for ensuring the skip is correctly marked on delivery.
+          If markings are damaged or removed during hire, notify the company immediately.
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Marked at each end with reflective amber markers or lights — required under the Highways Act 1980 and the Builders\' Skips (Markings) Regulations 1984',
+          'Illuminated at night — flashing or fixed lights at each end, mandatory from dusk to dawn on public highways',
+          'Not overfilled — skip must not be loaded above the fill line, creating a hazardous road obstruction',
+          'Covered if necessary — if material could blow onto the highway, a net cover must be used',
+          'Check markings are in place when the skip is delivered — report any missing lights to the hire company immediately',
+        ]}
+      />
+
+      <H2>What Happens Without a Permit?</H2>
+
+      <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-semibold">Consequences of placing a skip without a permit</p>
+        <ul className="mt-2 space-y-1 text-sm">
+          <li>• The local council can issue a fixed penalty notice or fine to the hire company and/or hirer</li>
+          <li>• The council can order immediate removal of the skip at the hirer's cost</li>
+          <li>• Persistent non-compliance risks the skip company's operating licence under the Highways Act 1980</li>
+          <li>• In London, enforcement is common — especially in permit-controlled residential zones</li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          In practice, councils often issue a warning for a first offence. However, the cost of removal
+          — typically £200–£400 — far exceeds the permit fee. Legitimate hire companies will refuse to
+          place a skip on a road without a valid permit in place. The{' '}
+          <a href="https://www.gov.uk/guidance/permits-and-licences" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            GOV.UK guidance on permits and licences
+          </a>{' '}
+          covers the highway permit framework in full.
+        </p>
+      </Prose>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Practical Tips to Avoid Permit Problems</H2>
+      <CheckList
+        items={[
+          'Tell the hire company at booking whether the skip goes on your drive or the road — not after delivery',
+          'If your driveway is gated or access is awkward, confirm the depot knows before the lorry arrives — failed deliveries incur a charge',
+          'In London, some boroughs take 3–5 working days to process permits — book well ahead for road-placed skips',
+          'If the permit is due to expire before collection, call the company proactively — don\'t wait for them to chase you',
+          'If the skip is half on your drive and half touching the road or pavement, get the permit — it\'s cheaper than the fine',
+        ]}
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — site heater */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Heater Hire UK: Which Type Do You Need?</p>
+          <Link to="/blog/site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost" className="text-sm text-brand-primary hover:underline">
+            Diesel, propane and electric options compared →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Hire a Skip?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — skip hire prices from local UK suppliers including road permit arrangement where needed.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -10349,6 +10693,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Skip Hire',
     faqs: skipSizeFaqs,
     Body: WhatSizeSkipBody,
+  },
+  {
+    slug: 'do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer',
+    category: 'Compliance & Safety',
+    title: 'Do I Need a Permit for a Skip on the Road? The Direct Answer',
+    excerpt:
+      'Yes — any skip placed on a public highway in the UK legally requires a council permit under the Highways Act 1980. Full guide to who gets the permit, what it costs by council type, how long it lasts, and the marking requirements under the Builders\' Skips (Markings) Regulations 1984.',
+    intro:
+      'Yes — if a skip is placed on a public highway in the UK, a skip licence from the local council is legally required. This applies regardless of skip size. The permit is obtained by the hire company on your behalf in most cases — but you need to tell them the skip is going on the road when you book. Skip permits typically cost £25–£75 and are valid for 2–4 weeks.',
+    image: '/images/blog/do-i-need-a-permit-for-a-skip-on-the-road.webp',
+    imageAlt: 'Skip placed on a UK residential road with required amber reflective markers and flashing warning lights fitted',
+    datePublished: '2026-07-31',
+    metaTitle: 'Do I Need a Skip Permit for the Road? UK Rules | Tooli.uk',
+    metaDescription:
+      'Yes — if your skip goes on a public road in the UK, a highway permit is legally required. Here\'s what it costs, who gets it, and what happens if you skip it.',
+    primaryCta: 'Compare Skip Hire',
+    faqs: skipPermitFaqs,
+    Body: SkipPermitBody,
   },
 ];
 
