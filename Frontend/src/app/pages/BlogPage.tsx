@@ -11184,6 +11184,365 @@ function CutOffSawHireBody() {
   );
 }
 
+/* Article 35 — Abrasive Wheels Regulations UK: What Hirers Must Know */
+
+const abrasiveEquipmentTable: [string, string, string][] = [
+  ['Petrol cut-off saw / abrasive saw', 'Yes', 'Mounted abrasive wheel — core application'],
+  ['Electric disc cutter', 'Yes', 'Same wheel mounting principle'],
+  ['Angle grinder (all sizes)', 'Yes', 'Particularly relevant when changing discs'],
+  ['Floor saw / road saw', 'Yes', 'Large-diameter abrasive or diamond wheels'],
+  ['Bench grinder', 'Yes', 'Fixed abrasive wheels — wheel dressing also covered'],
+  ['Diamond blade on cut-off saw', 'Yes', 'Diamond blades subject to the same PUWER training requirement'],
+  ['Cordless angle grinder', 'Yes', 'Battery-powered does not exempt from PUWER'],
+  ['Wire wheel attachment on angle grinder', 'Yes — under PUWER Reg 9', 'Wire wheels are not abrasive wheels per se but PUWER training still applies'],
+  ['Jigsaw, circular saw (wood)', 'No', 'Different cutting mechanism — PUWER applies but abrasive wheel regs do not'],
+];
+
+const abrasiveTrainingTable: [string, string][] = [
+  ['Types of abrasive wheels and discs', 'Identification of wheel types, materials, max RPM ratings, correct application'],
+  ['Marking and storage', 'How wheels are marked (speed, material, diameter), storage requirements (humidity, temperature, stacking)'],
+  ['Inspection before mounting', 'Checking for cracks, chips, and damage — ring test procedure for vitrified wheels'],
+  ['Mounting procedure', 'Correct blotters, flanges, nut tightening sequence — overtightening causes wheel breakage'],
+  ['Speed matching', 'Machine RPM vs wheel max RPM — never fit a wheel with a lower max RPM than the machine speed'],
+  ['Safe operating procedures', 'Guards, work rests, wheel dressing, working position relative to wheel rotation'],
+  ['Hazards and PPE', 'Fragmentation risk, sparks, noise, dust, eye and face protection requirements'],
+  ['Legal duties (PUWER, HSWA 1974)', 'Operator and employer duties — when and why to stop work'],
+];
+
+const abrasiveAccidentTable: [string, string, string][] = [
+  ['Wheel fragmentation / disc burst', 'Wheel RPM exceeds machine RPM, or cracked disc mounted', 'Speed matching and pre-use inspection taught in training'],
+  ['Kickback injury', 'Disc snagged or bound in cut — operator loses control', 'Correct grip, cutting technique and guard use covered in training'],
+  ['Incorrect disc for material', 'Abrasive disc used on metal, or wrong stone disc on concrete', 'Material matching section of training covers this explicitly'],
+  ['Eye injury from fragments', 'No eye protection worn, or wrong PPE class', 'PPE requirements covered — BS EN 166 rated eye protection for grinding'],
+  ['Disc breakage from overtightening', 'Mounting flange overtightened, cracking the disc at the bore', 'Correct mounting procedure covered in torque and flange sequence module'],
+];
+
+const abrasiveWheelsFaqs: Faq[] = [
+  [
+    'Do I need training to use a hire cut-off saw?',
+    'Yes — under PUWER 1998 Regulation 9, anyone who mounts, adjusts, or uses abrasive wheel equipment must have received adequate training. This applies regardless of whether you hire or own the machine, and regardless of whether you\'re on private or commercial land. It is a statutory competence requirement, not a card system.',
+  ],
+  [
+    'Is there a specific abrasive wheels certificate I need?',
+    'No — there is no prescribed certificate or card. PUWER requires adequate training with documented records. Many training providers issue completion certificates (typically after a half-day or 1-day course), and these are useful evidence of compliance, but the regulations do not mandate a specific format or issuing body.',
+  ],
+  [
+    'What is HSG17?',
+    'HSG17 is the HSE guidance document \'Safe Use of Abrasive Wheels.\' It is the definitive technical reference for abrasive wheel safety in the UK, covering wheel types, marking, storage, mounting, speed matching, and operating procedures. It is free to download from the HSE website and is the document training providers base their courses on.',
+  ],
+  [
+    'Does PUWER apply on private land?',
+    'Yes — PUWER 1998 applies wherever work equipment is in use in connection with work activities, including self-employed workers operating on private domestic land (their own or a client\'s property). The domestic householder using equipment purely for DIY is not subject to PUWER, but any trade or commercial operator is.',
+  ],
+  [
+    'Can my employer be liable if I use a hire disc cutter without training?',
+    'Yes. Under PUWER Regulation 9, the employer has a duty to ensure training has been provided. If an accident occurs and training records cannot be produced, the employer faces potential prosecution under PUWER and the Health and Safety at Work Act 1974. Self-employed workers face the same liability in both capacities.',
+  ],
+  [
+    'What PPE is required when using a cut-off saw or disc cutter?',
+    'As a minimum: BS EN 166-compliant face shield or safety glasses for fragmentation, FFP3 dust mask (P3 filter) for silica dust, hearing protection (abrasive saws typically generate 100–115 dB), steel-toe boots, and close-fitting clothing. Gloves are generally not recommended for rotating equipment as they can snag.',
+  ],
+];
+
+function AbrasiveWheelsBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Abrasive Wheels Rules at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>PUWER 1998 Reg 9:</strong> training required for anyone who mounts, adjusts, or operates an abrasive wheel</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Applies to:</strong> cut-off saws, disc cutters, angle grinders, bench grinders, floor saws</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>No card system — a competence requirement backed by training records</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Employer and employee both have duties — self-employed workers are treated as both</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>HSE Guidance Document HSG17 is the definitive reference for abrasive wheel safety</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Hire depots are not required to check training before hire — but PUWER still applies on site</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          Anyone who mounts, adjusts, or operates abrasive wheel equipment — including cut-off saws,
+          disc cutters, angle grinders, and bench grinders — must have received adequate training under{' '}
+          <a href="https://www.legislation.gov.uk/uksi/1998/2306" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            PUWER 1998 Regulation 9
+          </a>.
+          This is not a licence or a card system. It is a competence requirement backed by statute.
+          Non-compliance creates personal and employer liability if an accident occurs.
+        </p>
+      </Prose>
+
+      <H2>The Legal Framework</H2>
+
+      <H3>PUWER 1998 Regulation 9</H3>
+      <Prose>
+        <p>
+          Regulation 9 of the{' '}
+          <a href="https://www.legislation.gov.uk/uksi/1998/2306" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Provision and Use of Work Equipment Regulations 1998 (SI 1998/2306)
+          </a>{' '}
+          states (paraphrased): <em>Every employer shall ensure that all persons who use work equipment
+          have received adequate training for purposes of health and safety, including training in the
+          methods which may be adopted when using the work equipment, any risks which such use may
+          entail and precautions to be taken.</em>
+        </p>
+        <p>
+          The HSE has historically identified abrasive wheel equipment as a specific high-risk category
+          requiring particular attention to training — reflected in the dedicated guidance document{' '}
+          <a href="https://www.hse.gov.uk/pubns/books/hsg17.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            HSG17 (Safe Use of Abrasive Wheels)
+          </a>.
+        </p>
+      </Prose>
+
+      <H3>The Health and Safety at Work Act 1974</H3>
+      <Prose>
+        <p>
+          Section 2 of the HSWA 1974 places a general duty on employers to ensure the health, safety,
+          and welfare of employees. Section 3 extends a similar duty to non-employees (including the
+          public) who may be affected by work activities. Section 7 places a duty on employees to take
+          reasonable care for their own safety and the safety of others.
+        </p>
+        <p>
+          Self-employed workers operating a cut-off saw are treated simultaneously as the employer
+          (duty under Section 2 and PUWER Reg 9) and the employee (duty under Section 7).
+        </p>
+      </Prose>
+
+      {/* Internal link — cut-off saw hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Cut-Off Saw &amp; Disc Cutter Hire UK: Prices Compared</p>
+          <Link to="/blog/cut-off-saw-and-disc-cutter-hire-uk-prices-compared" className="text-sm text-brand-primary hover:underline">
+            Full price guide — petrol and electric disc cutters →
+          </Link>
+        </div>
+      </div>
+
+      <H2>What Equipment Is Covered?</H2>
+      <Prose>
+        <p>
+          The abrasive wheel regulations apply broadly to any machine that uses a bonded abrasive or
+          diamond wheel — whether powered by petrol, electricity, or battery. The table below lists
+          common site equipment and whether the training requirement applies.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Equipment</th>
+              <th className="px-3 py-2 text-left font-semibold">Covered?</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {abrasiveEquipmentTable.map(([equipment, covered, notes], i) => {
+              const isYes = covered.toLowerCase().startsWith('yes');
+              return (
+                <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td className="border-b border-gray-100 px-3 py-2 font-medium">{equipment}</td>
+                  <td className={`border-b border-gray-100 px-3 py-2 font-semibold ${isYes ? 'text-brand-primary' : 'text-gray-500'}`}>{covered}</td>
+                  <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>What Training Is Required?</H2>
+      <Prose>
+        <p>
+          The regulations do not specify a minimum course duration, specific training provider, or a
+          certification card. What is required is that training is:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Adequate — covers the specific machine type and the risks associated with it',
+          'Documented — training records must be kept by the employer',
+          'Task-specific — training on an angle grinder does not automatically cover a cut-off saw, as mounting procedure and technique differ',
+          'Refreshed when equipment types change or significant time has elapsed',
+        ]}
+      />
+
+      <img
+        src="/images/blog/abrasive-wheels-regulations-uk.webp"
+        alt="Close-up of abrasive disc speed rating label (max RPM) matching machine specification before mounting"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      <H2>What's Typically Covered in Abrasive Wheel Training?</H2>
+      <Prose>
+        <p>
+          Training providers base their courses on{' '}
+          <a href="https://www.hse.gov.uk/pubns/books/hsg17.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            HSG17
+          </a>.
+          A typical half-day or 1-day course covers the following modules:
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Training Module</th>
+              <th className="px-3 py-2 text-left font-semibold">Key Content</th>
+            </tr>
+          </thead>
+          <tbody>
+            {abrasiveTrainingTable.map(([module, content], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{module}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-700">{content}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      <H2>What Hire Depots Are — and Are Not — Required to Do</H2>
+      <Prose>
+        <p>
+          UK hire depots have a duty under PUWER to ensure that equipment is suitable for use and that
+          safe use information is provided. They are <strong>not</strong> legally required to verify
+          that the hirer has completed abrasive wheel training before releasing equipment. In practice:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Most depots provide a basic operational handover on collection',
+          'Commercial depots with trade accounts may record operator training status for liability management',
+          'The hirer remains responsible for PUWER compliance on site, regardless of what the depot does or does not check',
+          'Placing a cut-off saw into the hands of an untrained operator — even as a site manager or principal contractor — creates personal PUWER liability',
+        ]}
+      />
+
+      <H2>Common Abrasive Wheel Accidents and How the Regs Prevent Them</H2>
+      <Prose>
+        <p>
+          The{' '}
+          <a href="https://www.hse.gov.uk/construction/healthrisks/silica-quartz.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            HSE COSHH guidance on silica dust from cut-off saws
+          </a>{' '}
+          identifies these as the most frequent causes of injury and ill health from abrasive wheel
+          equipment. Proper training directly reduces each risk:
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Accident Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Cause</th>
+              <th className="px-3 py-2 text-left font-semibold">How Training Prevents It</th>
+            </tr>
+          </thead>
+          <tbody>
+            {abrasiveAccidentTable.map(([accident, cause, prevention], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium text-red-700">{accident}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-700">{cause}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-700">{prevention}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — skip hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Full price guide for every skip size →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Hire a Cut-Off Saw or Disc Cutter</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Once your training is in order, enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — petrol and electric cut-off saw hire from local UK suppliers, by blade size and hire duration.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -11834,6 +12193,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Cut-Off Saw Hire',
     faqs: cutOffSawFaqs,
     Body: CutOffSawHireBody,
+  },
+  {
+    slug: 'abrasive-wheels-regulations-uk-what-hirers-must-know',
+    category: 'Compliance & Safety',
+    title: 'Abrasive Wheels Regulations UK: What Hirers Must Know',
+    excerpt:
+      'PUWER 1998 Regulation 9 requires adequate training before anyone mounts, adjusts, or operates abrasive wheel equipment — including hire cut-off saws, disc cutters, and angle grinders. Full guide to what the law requires, what training covers, and what hire depots are and are not obliged to check.',
+    intro:
+      'Anyone who mounts, adjusts, or operates abrasive wheel equipment — including cut-off saws, disc cutters, angle grinders, and bench grinders — must have received adequate training under PUWER 1998 Regulation 9. This is not a licence or a card system. It is a competence requirement backed by statute. Non-compliance creates personal and employer liability if an accident occurs.',
+    image: '/images/blog/abrasive-wheels-regulations-uk-what-hirers-must-know.webp',
+    imageAlt: 'Abrasive wheel training course — delegate being shown correct disc mounting procedure on a cut-off saw UK',
+    datePublished: '2026-07-31',
+    metaTitle: 'Abrasive Wheels Regulations UK: What Hirers Must Know | Tooli.uk',
+    metaDescription:
+      'PUWER Regulation 9 requires training before using abrasive wheel equipment. Here\'s exactly what applies to cut-off saw and disc cutter hirers in the UK.',
+    primaryCta: 'Compare Cut-Off Saw Hire',
+    faqs: abrasiveWheelsFaqs,
+    Body: AbrasiveWheelsBody,
   },
 ];
 
