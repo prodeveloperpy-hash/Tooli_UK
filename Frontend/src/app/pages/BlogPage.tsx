@@ -11543,6 +11543,341 @@ function AbrasiveWheelsBody() {
   );
 }
 
+/* Article 36 — Site Lighting Tower Hire UK: Prices & Types Compared */
+
+const lightingTowerPriceTable: [string, string, string, string, string, string, string][] = [
+  ['Standard 4-head', 'Metal halide (4 × 1,000W)', 'Diesel', '300,000+ lm', '£60–£100', '£220–£370', '£560–£940'],
+  ['LED 4-head', 'LED (4 × 150–400W)', 'Diesel', '250,000–400,000 lm', '£75–£120', '£275–£440', '£700–£1,120'],
+  ['Solar hybrid LED', 'LED', 'Solar + battery', '120,000–200,000 lm', '£80–£130', '£295–£480', '£750–£1,220'],
+  ['Single-head mast light', 'LED or halide', 'Diesel / electric', '80,000–150,000 lm', '£45–£80', '£165–£295', '£420–£750'],
+  ['Trailer-mounted LED (2-head)', 'LED', 'Diesel / solar', '150,000–250,000 lm', '£55–£90', '£200–£330', '£510–£840'],
+  ['High-mast tower (8+ heads)', 'LED or halide', 'Diesel', '600,000+ lm', '£130–£180', '£475–£660', '£1,200–£1,680'],
+];
+
+const lightingTowerComparisonTable: [string, string, string, string][] = [
+  ['Light quality', 'Warm white — good for area lighting', 'Cool white — excellent visibility and contrast', 'Cool white LED'],
+  ['Output', 'Very high (300,000+ lm)', 'High (250,000–400,000 lm)', 'Medium (120,000–200,000 lm)'],
+  ['Fuel cost per night (10hr)', '£15–£30 (diesel)', '£8–£18 (less diesel)', '£0 (solar-charged)'],
+  ['Warm-up time', '3–5 minutes to full output', 'Instant', 'Instant'],
+  ['Noise', 'Diesel generator — significant', 'Diesel generator — significant', 'Silent'],
+  ['Remote / off-grid use', 'Requires diesel resupply', 'Requires diesel resupply', 'Ideal — self-sufficient'],
+  ['Environmental / noise restrictions', 'Not suitable for quiet sites', 'Not suitable for quiet sites', 'Best for sensitive sites'],
+  ['Hire cost premium', 'Baseline', '+15–25% vs metal halide', '+20–35% vs metal halide'],
+  ['Best for', 'Active construction sites, roadworks', 'Sites requiring visibility quality', 'Remote sites, night events, eco requirements'],
+];
+
+const lightingCoverageLuxTable: [string, string, string][] = [
+  ['General movement around site', '20 lux', 'Up to 4,000 m²'],
+  ['Site access roads and footways', '50 lux', 'Up to 2,500 m²'],
+  ['Active construction work areas', '100 lux', 'Up to 1,200 m²'],
+  ['Inspection and detailed work', '200–500 lux', 'Supplementary local lighting needed'],
+  ['Vehicle movement and plant operation', '100 lux minimum', 'Up to 1,200 m²'],
+];
+
+const lightingTowerFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a site lighting tower?',
+    'A standard diesel-powered 4-head site lighting tower costs approximately £60–£100 per day in the UK. LED towers run £75–£120/day. Solar-hybrid units are £80–£130/day. Weekly rates offer better value for ongoing site use — typically equivalent to 3–4 day rates. Confirm current rates on Tooli.uk.',
+  ],
+  [
+    'How large an area does one lighting tower cover?',
+    'A standard 4-head tower illuminates approximately 2,000–4,000 m² at 20 lux (general movement level). For active construction work requiring 100 lux, coverage per tower reduces to approximately 1,000–1,200 m². For precise compliance with HSE lux requirements, a lighting assessment should be carried out.',
+  ],
+  [
+    'What is the difference between LED and metal halide lighting towers?',
+    'Metal halide towers produce a very high light output but require a 3–5 minute warm-up period, consume more fuel, and produce a warmer light colour. LED towers deliver comparable or better lumen output, light up instantly, use significantly less fuel, have a longer service life, and produce a cooler, higher-contrast white light preferred for detailed work.',
+  ],
+  [
+    'Can I hire a solar lighting tower for a remote site?',
+    'Yes — solar-hybrid LED towers are specifically designed for off-grid and remote site use. They charge their battery pack via solar panels during daylight and run the LEDs through the night without any diesel. They are also silent — useful for noise-sensitive urban sites or events. Output is lower than diesel towers at around 120,000–200,000 lumens.',
+  ],
+  [
+    'Do site lighting towers include fuel?',
+    'No — diesel fuel is not included in the hire rate. Most towers are delivered with a partial or empty tank. You are responsible for fuelling. Budget 1.2–2.5 litres per hour depending on tower type. Confirm the tank capacity and your refuelling obligations with the hire depot before delivery.',
+  ],
+  [
+    'What are the legal lighting requirements on a construction site?',
+    'HSE and CDM 2015 set minimum illuminance levels for different site activities. General site movement requires 20 lux. Active construction work areas require 100 lux minimum. Detailed inspection work may require 200–500 lux. HSE Guidance Note HS(G)38 covers lighting at work in detail.',
+  ],
+];
+
+function SiteLightingTowerBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Site Lighting Tower at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Diesel metal halide (4-head):</strong> £60–£100/day — most widely available, high-output workhorse</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Diesel LED (4-head):</strong> £75–£120/day — lower fuel use, whiter light, longer service life</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Solar-hybrid LED:</strong> £80–£130/day — no fuel cost, silent, remote sites and eco requirements</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Mast light (fixed):</strong> £45–£80/day — smaller area, events and welfare lighting</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Standard 4-head tower illuminates 2,000–4,000 m² at road-lighting standard</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Diesel towers consume 1.2–2.5 litres/hr — fuel is not included in hire rates</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          Site lighting tower hire in the UK costs between <strong>£45 and £180 per day</strong> depending
+          on the type and output. A standard diesel-powered metal halide tower covers approximately
+          2,000–3,000 m² and is the most widely hired type for UK construction sites, road maintenance,
+          and events. LED towers reduce fuel consumption significantly — though they command a small hire
+          premium. Solar-hybrid towers are the right choice for quiet, remote, or environmentally
+          sensitive sites.
+        </p>
+      </Prose>
+
+      <H2>Site Lighting Tower Hire Prices UK 2026</H2>
+      <Prose>
+        <p>
+          All prices are VAT-inclusive guidance. Diesel fuel is not included — budget 1.2–2.5 L/hr
+          depending on tower size. Use Tooli.uk to{' '}
+          <Link to="/search" className="font-medium text-brand-primary hover:underline">compare now</Link>{' '}
+          and confirm current quotes from local suppliers.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Tower Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Light Source</th>
+              <th className="px-3 py-2 text-left font-semibold">Power</th>
+              <th className="px-3 py-2 text-left font-semibold">Output</th>
+              <th className="px-3 py-2 text-left font-semibold">Day Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Week Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">4-Week Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lightingTowerPriceTable.map(([type, source, power, output, day, week, month], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{type}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-xs">{source}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{power}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-xs">{output}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{day}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{week}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{month}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-gray-500">*All prices VAT-inclusive guidance. Diesel fuel not included — budget 1.2–2.5 L/hr depending on tower size.</p>
+      </div>
+
+      {/* Internal link — generator hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Generator Hire UK: Prices &amp; Power Output Guide 2026</p>
+          <Link to="/blog/generator-hire-uk-prices-power-output-guide-2026" className="text-sm text-brand-primary hover:underline">
+            Size a generator for electric site lighting →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Metal Halide vs LED vs Solar: Which Type to Hire?</H2>
+      <Prose>
+        <p>
+          The three main technologies — diesel metal halide, diesel LED, and solar-hybrid LED — each
+          suit different site conditions. Metal halide remains the most available and cheapest to hire;
+          LED is the right choice where fuel savings and light quality matter; solar is the answer for
+          off-grid, silent, or environmentally sensitive sites.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Feature</th>
+              <th className="px-3 py-2 text-left font-semibold">Diesel Metal Halide</th>
+              <th className="px-3 py-2 text-left font-semibold">Diesel LED</th>
+              <th className="px-3 py-2 text-left font-semibold">Solar Hybrid LED</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lightingTowerComparisonTable.map(([feature, halide, led, solar], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{feature}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{halide}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{led}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{solar}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <img
+        src="/images/blog/site-lighting-tower-hire-uk.webp"
+        alt="Solar-hybrid LED lighting tower on a remote rural construction site — no diesel required"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Coverage and Placement Guide</H2>
+      <Prose>
+        <p>
+          A single 4-head lighting tower illuminates approximately 2,000–4,000 m² at a standard
+          working level (similar to a car park or road lighting standard). Actual coverage depends on
+          mast height, head orientation, site obstructions, and the lux level required by the activity.
+        </p>
+        <p>
+          Under{' '}
+          <a href="https://www.hse.gov.uk/construction/cdm/2015" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            CDM 2015
+          </a>
+          , the principal contractor has a duty to provide adequate lighting for the construction phase.{' '}
+          <a href="https://www.hse.gov.uk/pubns/books/hsg38.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            HSE Guidance Note HS(G)38 (Lighting at Work)
+          </a>{' '}
+          and the{' '}
+          <a href="https://www.nationalhighways.co.uk/safety/roadworks" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            National Highways roadworks lighting standards
+          </a>{' '}
+          set out minimum lux levels by activity type:
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Activity</th>
+              <th className="px-3 py-2 text-left font-semibold">HSE Minimum Lux Level</th>
+              <th className="px-3 py-2 text-left font-semibold">Coverage per Tower (approx)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lightingCoverageLuxTable.map(([activity, lux, coverage], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{activity}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{lux}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{coverage}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      <H2>How Long Will the Fuel Last?</H2>
+      <Prose>
+        <p>
+          Diesel lighting towers have a built-in generator and integral fuel tank, typically holding
+          80–150 litres. Consumption at full load:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Standard 4-head metal halide tower (4 × 1,000W): approximately 1.8–2.5 litres per hour',
+          'LED 4-head tower: approximately 0.8–1.5 litres per hour (significantly lower)',
+          'At 10 hours per night, a metal halide tower uses 18–25 litres — approximately 3–7 nights per tank depending on capacity',
+          'Most hire companies will refill or exchange tanks at additional cost — confirm this arrangement before booking if the hire runs longer than 3–4 nights',
+          'Solar-hybrid towers require no diesel — but ensure sufficient daylight hours to charge the battery pack (minimum 4–6 hours direct sun recommended)',
+        ]}
+      />
+
+      {/* Internal link — site heater */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Heater Hire UK: Which Type Do You Need?</p>
+          <Link to="/blog/site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost" className="text-sm text-brand-primary hover:underline">
+            Diesel, propane and electric options compared →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — skip hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Full price guide for every skip size →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Site Lighting Tower Hire Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — diesel, LED and solar lighting tower hire from local UK suppliers, by output, duration, and fuel type.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -12211,6 +12546,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Cut-Off Saw Hire',
     faqs: abrasiveWheelsFaqs,
     Body: AbrasiveWheelsBody,
+  },
+  {
+    slug: 'site-lighting-tower-hire-uk-prices-and-types-compared',
+    category: 'Equipment Hire',
+    title: 'Site Lighting Tower Hire UK: Prices & Types Compared',
+    excerpt:
+      'Site lighting tower hire costs £45–£180 per day in the UK. Full 2026 guide to diesel metal halide, LED, and solar-hybrid towers — with lux coverage tables for HSE CDM 2015 compliance, fuel consumption estimates, and a type comparison by site condition.',
+    intro:
+      'Site lighting tower hire in the UK costs between £45 and £180 per day depending on the type and output. A standard diesel-powered metal halide tower covers approximately 2,000–3,000 m² and is the most widely hired type for UK construction sites, road maintenance, and events. LED towers significantly reduce fuel consumption. Solar-hybrid towers are the right choice for quiet, remote, or environmentally sensitive sites.',
+    image: '/images/blog/site-lighting-tower-hire-uk-prices-types.webp',
+    imageAlt: 'Four-head diesel LED site lighting tower illuminating a large UK construction site at night',
+    datePublished: '2026-08-01',
+    metaTitle: 'Site Lighting Tower Hire UK: Prices & Types 2026 | Tooli.uk',
+    metaDescription:
+      'Compare site lighting tower hire prices across the UK. LED vs metal halide, diesel vs solar, coverage areas and day rates. Compare suppliers on Tooli.uk.',
+    primaryCta: 'Compare Lighting Tower Hire',
+    faqs: lightingTowerFaqs,
+    Body: SiteLightingTowerBody,
   },
 ];
 
