@@ -10824,6 +10824,366 @@ function WhatSizeGeneratorBody() {
   );
 }
 
+/* Article 34 — Cut-Off Saw & Disc Cutter Hire UK: Prices Compared */
+
+const cutOffSawPriceTable: [string, string, string, string, string, string][] = [
+  ['Small petrol cut-off saw', '300 mm', 'Petrol', '£40–£65', '£65–£100', '£155–£240'],
+  ['Standard petrol cut-off saw', '350 mm', 'Petrol', '£50–£80', '£80–£125', '£190–£300'],
+  ['Large petrol cut-off saw', '400 mm', 'Petrol', '£60–£90', '£95–£140', '£230–£340'],
+  ['Electric disc cutter', '230 mm', '110V electric', '£35–£55', '£55–£85', '£130–£200'],
+  ['Electric disc cutter (large)', '300 mm', '110/240V electric', '£45–£70', '£70–£110', '£170–£260'],
+  ['Floor saw (road saw)', '350–400 mm', 'Petrol', '£90–£150', '£140–£230', '£340–£560'],
+  ['Table / bench saw (masonry)', '300 mm', 'Electric', '£55–£85', '£85–£130', '£200–£315'],
+];
+
+const cutOffSawComparisonTable: [string, string, string][] = [
+  ['Power source', 'Self-contained — petrol', 'Requires 110V or 240V supply'],
+  ['Best environment', 'Outdoor, roadworks, open sites', 'Indoor, enclosed spaces, dust-sensitive areas'],
+  ['Exhaust fumes', 'Yes — significant CO risk indoors', 'None'],
+  ['Noise level', '100–115 dB', '85–100 dB (quieter)'],
+  ['Dust production', 'High — water suppression essential', 'High — water suppression or extraction essential'],
+  ['Weight (typical)', '10–14 kg', '5–9 kg'],
+  ['Hire cost', 'Slightly higher', 'Slightly lower'],
+  ['Ideal for', 'Kerbs, paviors, tarmac cuts, outdoor masonry', 'Internal block cuts, bathroom tiling, quieter sites'],
+];
+
+const cutOffBladeTable: [string, string, string, string][] = [
+  ['Abrasive (composite) disc', 'Soft masonry, block, brick', 'Short — consumable', 'Included or available from depot — cheap'],
+  ['Diamond segmented blade', 'Hard concrete, granite, engineering brick', 'Long — specialist', 'Usually additional hire or purchase cost'],
+  ['Diamond continuous rim', 'Ceramic tiles, smooth-cut masonry', 'Long', 'Low chipping — finish quality blade'],
+  ['Asphalt / road blade', 'Tarmac, asphalt, road surfaces', 'Medium', 'Specific to road-cutting machines'],
+];
+
+const cutOffSawFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a disc cutter for a day?',
+    'A standard petrol cut-off saw (350 mm blade) costs approximately £50–£80 per day in the UK. An electric disc cutter (230 mm) costs £35–£55/day. Floor saws for road cutting run £90–£150/day. All prices are VAT-inclusive guidance — confirm current rates on Tooli.uk.',
+  ],
+  [
+    'Do I need training to use a hire cut-off saw?',
+    'Yes — under PUWER 1998 Regulation 9, operators of abrasive wheel equipment must have received adequate training. This is a competence requirement rather than a specific card or certification, but records should be kept. On commercial sites, site managers may ask for evidence of abrasive wheel training before permitting use.',
+  ],
+  [
+    'Can I use a disc cutter indoors?',
+    'A petrol disc cutter must never be used in enclosed or poorly ventilated spaces — carbon monoxide from the exhaust poses a serious and rapid health risk. Use an electric disc cutter for indoor applications. Dust suppression and RPE (FFP3 mask) are required regardless of machine type.',
+  ],
+  [
+    'What is the difference between a cut-off saw and a disc cutter?',
+    'They are the same thing — cut-off saw, disc cutter, abrasive wheel cutter, and angle grinder (at smaller sizes) all describe similar cutting machines. The terms are used interchangeably in the UK hire trade. Floor saws (road saws) are a related but distinct machine specifically for cutting flat surfaces.',
+  ],
+  [
+    'What blades come with a hire cut-off saw?',
+    'Most hire depots supply the machine with a standard abrasive composite disc fitted. Diamond blades are usually available at an additional cost or as a separate hire/purchase item. Specify the material you\'re cutting when booking — the depot can advise on the right blade type.',
+  ],
+];
+
+function CutOffSawHireBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Cut-Off Saw Hire at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Petrol cut-off saw (300–350 mm blade):</strong> £40–£75/day — outdoor masonry, kerbs, blocks</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Petrol cut-off saw (350–400 mm blade):</strong> £55–£90/day — heavier cutting, concrete</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Electric disc cutter (230–300 mm blade):</strong> £35–£65/day — indoor/quiet sites, less dust</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Abrasive wheel training required by PUWER 1998 Reg 9 for all commercial operators</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Dust suppression (water feed) required on most hire machines — confirm at booking</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Diamond blades vs abrasive discs — different materials, different hire machines</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          Cut-off saw hire in the UK costs between <strong>£35 and £90 per day</strong> depending on
+          whether the machine is petrol or electric and the blade diameter. Petrol disc cutters are the
+          most commonly hired type — they work without a power source, making them the default choice
+          for roadworks, site clearance, and outdoor masonry cutting. Electric models are quieter and
+          produce no exhaust fumes, making them better suited for indoor or enclosed cutting.
+        </p>
+        <p>
+          This guide covers hire rates, blade types, the abrasive wheels training requirement, and dust
+          control rules.
+        </p>
+      </Prose>
+
+      <H2>Cut-Off Saw Hire Prices UK 2026</H2>
+      <Prose>
+        <p>
+          All prices are VAT-inclusive guidance based on average UK market rates. Use Tooli.uk to{' '}
+          <Link to="/search" className="font-medium text-brand-primary hover:underline">compare now</Link>{' '}
+          and confirm current quotes from local suppliers.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Machine Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Blade Size</th>
+              <th className="px-3 py-2 text-left font-semibold">Fuel / Power</th>
+              <th className="px-3 py-2 text-left font-semibold">Day Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Weekend Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Week Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cutOffSawPriceTable.map(([machine, blade, fuel, day, weekend, week], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{machine}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{blade}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{fuel}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{day}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{weekend}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{week}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-gray-500">*All prices VAT-inclusive guidance. Confirm live rates on Tooli.uk.</p>
+      </div>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Petrol vs Electric Cut-Off Saw: Which to Hire?</H2>
+      <Prose>
+        <p>
+          The choice between petrol and electric comes down to where you are cutting and whether you
+          have access to a power supply. A petrol machine is the default on road and groundworks sites;
+          an electric machine is the only safe choice indoors.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Factor</th>
+              <th className="px-3 py-2 text-left font-semibold">Petrol</th>
+              <th className="px-3 py-2 text-left font-semibold">Electric</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cutOffSawComparisonTable.map(([factor, petrol, electric], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{factor}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{petrol}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{electric}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-semibold">Never use a petrol cut-off saw indoors</p>
+        <p className="mt-1 text-sm">
+          Carbon monoxide from petrol engine exhaust is colourless and odourless — it accumulates
+          rapidly in enclosed spaces and causes incapacitation within minutes at high concentrations.
+          Use an electric disc cutter for any indoor or enclosed cutting.
+        </p>
+      </div>
+
+      <img
+        src="/images/blog/cut-off-saw-disc-cutter-hire.webp"
+        alt="Electric disc cutter being used on a block wall inside a UK building — indoor cut-off saw hire"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Choose the right plate for your groundworks →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Blade Types: Abrasive vs Diamond</H2>
+      <Prose>
+        <p>
+          The blade fitted to a hire cut-off saw determines what materials it will cut effectively and
+          safely. Most depots supply a standard abrasive composite disc; diamond blades are usually
+          available at additional cost. Always specify the material you're cutting when booking.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Blade Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Best For</th>
+              <th className="px-3 py-2 text-left font-semibold">Lifespan</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cutOffBladeTable.map(([blade, bestFor, lifespan, notes], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{blade}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{bestFor}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{lifespan}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-semibold">Blade speed rating — safety critical</p>
+        <p className="mt-1 text-sm">
+          Never fit a blade or disc not rated for the machine speed. The machine's maximum RPM must
+          be equal to or less than the blade's rated RPM. Fitting an incorrect disc to a high-speed
+          cut-off saw creates a serious fragmentation risk under{' '}
+          <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-amber-900 hover:underline">
+            PUWER 1998
+          </a>.
+        </p>
+      </div>
+
+      {/* Internal link — generator hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Generator Hire UK: Prices &amp; Power Output Guide 2026</p>
+          <Link to="/blog/generator-hire-uk-prices-power-output-guide-2026" className="text-sm text-brand-primary hover:underline">
+            Size a generator for your electric disc cutter →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Dust Control: A Legal Requirement</H2>
+      <Prose>
+        <p>
+          Silica dust produced by cutting masonry, concrete, and stone is a carcinogen. Under the{' '}
+          <a href="https://www.hse.gov.uk/coshh" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            Control of Substances Hazardous to Health Regulations 2002 (COSHH)
+          </a>
+          , employers and self-employed workers have a legal duty to control exposure to silica dust.
+          The{' '}
+          <a href="https://www.hse.gov.uk/construction/healthrisks/silica-quartz.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            HSE guidance on silica dust and cut-off saws
+          </a>{' '}
+          sets out the hierarchy of controls:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Water suppression (wet cutting): the standard method on hire machines — most hire cut-off saws have an integrated water feed. Confirm at booking and ensure the water supply is connected before cutting',
+          'On-tool extraction: required where wet cutting is not possible (e.g. electrical cuts near moisture) — an H-class vacuum extractor must be used',
+          'RPE (respiratory protective equipment): FFP3 half-mask minimum when cutting dry, even briefly — P3 is the correct filter class for silica dust',
+          'Exclusion zone: keep bystanders clear of the cutting area — silica dust disperses widely and is invisible in the air',
+        ]}
+      />
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Abrasive Wheels: Training Requirement</H2>
+      <Prose>
+        <p>
+          Under{' '}
+          <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            PUWER 1998 Regulation 9
+          </a>
+          , anyone who mounts, adjusts, or operates a cut-off saw with an abrasive wheel must have
+          received adequate training. This is not a card or certificate system like CPCS or PASMA —
+          it is a competence requirement. Training records should be kept.
+        </p>
+        <p>
+          Most hire depots will not refuse to hire a cut-off saw on the basis of lacking a specific
+          card. However, using an abrasive wheel without training on a commercial site may constitute
+          a PUWER breach if audited.
+        </p>
+      </Prose>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Full breakdown of day and week rates →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and plasterwork through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — skip hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Full price guide for every skip size →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — site heater */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Heater Hire UK: Which Type Do You Need?</p>
+          <Link to="/blog/site-heater-hire-uk-which-type-do-you-need-and-what-does-it-cost" className="text-sm text-brand-primary hover:underline">
+            Diesel, propane and electric options compared →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Cut-Off Saw Hire Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — petrol and electric disc cutter hire from local UK suppliers by blade size and hire duration.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -11456,6 +11816,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Generator Hire',
     faqs: genSizeFaqs,
     Body: WhatSizeGeneratorBody,
+  },
+  {
+    slug: 'cut-off-saw-and-disc-cutter-hire-uk-prices-compared',
+    category: 'Equipment Hire',
+    title: 'Cut-Off Saw & Disc Cutter Hire UK: Prices Compared',
+    excerpt:
+      'Cut-off saw hire costs £35–£90 per day in the UK. Full 2026 price guide covering petrol and electric disc cutters, floor saws, and masonry bench saws — with blade type guide, COSHH dust control rules, and PUWER abrasive wheel training requirements.',
+    intro:
+      'Cut-off saw hire in the UK costs between £35 and £90 per day depending on whether the machine is petrol or electric and the blade diameter. Petrol disc cutters are the most commonly hired type — they work without a power source, making them the default choice for roadworks, site clearance, and outdoor masonry cutting. Electric models are quieter and produce no exhaust fumes, making them better suited for indoor or enclosed cutting.',
+    image: '/images/blog/cut-off-saw-disc-cutter-hire-uk-prices-compared.webp',
+    imageAlt: 'Operator using a petrol cut-off saw with water suppression to cut kerb stone on a UK road — disc cutter hire',
+    datePublished: '2026-07-31',
+    metaTitle: 'Cut-Off Saw & Disc Cutter Hire UK: Prices Compared 2026 | Tooli.uk',
+    metaDescription:
+      'Compare cut-off saw and disc cutter hire prices across the UK. Petrol vs electric, blade sizes, abrasive wheel rules. Find local suppliers on Tooli.uk.',
+    primaryCta: 'Compare Cut-Off Saw Hire',
+    faqs: cutOffSawFaqs,
+    Body: CutOffSawHireBody,
   },
 ];
 
