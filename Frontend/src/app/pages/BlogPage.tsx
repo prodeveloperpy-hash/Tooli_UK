@@ -11878,6 +11878,684 @@ function SiteLightingTowerBody() {
   );
 }
 
+/* Article 37 — Mini Dumper Hire UK: Prices & Capacities Compared */
+
+const miniDumperPriceTable: [string, string, string, string, string, string][] = [
+  ['Pedestrian dumper', '500 kg', 'Tracked / wheeled', '£90–£130', '£140–£200', '£280–£390'],
+  ['Ride-on mini dumper', '1 tonne', 'Tracked', '£130–£180', '£200–£275', '£400–£540'],
+  ['Standard mini dumper', '2 tonne', 'Tracked', '£170–£230', '£260–£350', '£540–£690'],
+  ['Large mini dumper', '3 tonne', 'Tracked', '£210–£280', '£320–£430', '£660–£840'],
+  ['Swivel skip dumper', '1–2 tonne', 'Tracked', '£180–£250', '£275–£380', '£570–£750'],
+  ['High-tip dumper', '2–3 tonne', 'Tracked', '£200–£270', '£305–£410', '£635–£810'],
+];
+
+const miniDumperTrackedTable: [string, string, string][] = [
+  ['Ground pressure', 'Low — spreads weight across tracks', 'Higher — small contact area on tyres'],
+  ['Lawn / soft ground performance', 'Excellent — minimal surface damage', 'Poor — tyres cut into wet soft ground'],
+  ['Tarmac / hard surfaces', 'Rubber tracks: acceptable. Steel tracks: damaging', 'Excellent — no surface damage'],
+  ['Stability on slopes', 'Better — lower centre of gravity', 'Lower — higher tip risk on grades'],
+  ['Manoeuvrability (tight spaces)', 'Excellent — zero-turn capability', 'Good — standard turning circle'],
+  ['Speed across site', 'Slower (1.5–3 km/h)', 'Faster (5–10 km/h on flat)'],
+  ['Most common UK hire type', 'Tracked (dominant in hire fleets)', 'Wheeled (less common in hire fleets)'],
+];
+
+const miniDumperPayloadTable: [string, string, string][] = [
+  ['500 kg', '~0.3 m³', 'Light spoil removal, garden waste, small volumes'],
+  ['1 tonne', '~0.6 m³', 'Residential landscaping, single-skip spoil runs'],
+  ['2 tonne', '~1.2 m³', 'Standard trade use — groundworks, patio sub-base, drainage'],
+  ['3 tonne', '~1.8 m³', 'High-volume earthmoving, commercial landscaping, road base'],
+];
+
+const miniDumperFaqs: Faq[] = [
+  [
+    'How much does it cost to hire a mini dumper for a day?',
+    'A 1-tonne tracked ride-on mini dumper costs approximately £130–£180 per day in the UK. A 2-tonne tracked dumper runs £170–£230/day. A 3-tonne machine is £210–£280/day. Pedestrian (500 kg) dumpers are the cheapest at £90–£130/day. All prices are VAT-inclusive guidance — compare current local rates on Tooli.uk.',
+  ],
+  [
+    'Do I need a licence to drive a mini dumper?',
+    'No formal licence is required to operate a mini dumper on private land for domestic or trade purposes. On managed commercial construction sites, a CPCS (Construction Plant Competence Scheme) card for the dumper category is required in most cases.',
+  ],
+  [
+    'What is the difference between a swivel skip dumper and a standard dumper?',
+    'A swivel skip dumper has a skip that rotates left and right before tipping, allowing spoil to be deposited beside the machine as well as in front. This is particularly useful in trench work and drainage projects where spoil needs to be placed cleanly beside the excavation. Standard dumpers tip forward only.',
+  ],
+  [
+    'Can a mini dumper damage a lawn?',
+    'A rubber-tracked mini dumper causes less damage to lawns than a wheeled machine, but will leave track impressions on soft or wet ground. Use scaffold boards or trackway panels to protect the most sensitive areas. Avoid running any heavy tracked machine over soft ground after heavy rain.',
+  ],
+  [
+    'What is the maximum payload of a mini hire dumper?',
+    'Most UK hire-fleet mini dumpers range from 500 kg (pedestrian) to 3 tonnes (large tracked). The most commonly hired size for residential and trade groundworks is the 2-tonne tracked machine, which carries approximately 1.2 cubic metres per load — enough for efficient spoil removal on most drainage and landscaping jobs.',
+  ],
+  [
+    'Can a mini dumper go through a standard garden gate?',
+    'The 1-tonne tracked mini dumper is typically 800–900 mm wide, which clears a standard 900 mm garden gate with minimal margin. Some models are narrower — check the transport width specification with the depot before booking. Pedestrian (500 kg) models are generally 600–700 mm wide and fit through most garden gates.',
+  ],
+];
+
+function MiniDumperHireBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Mini Dumper Hire at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Pedestrian (500 kg):</strong> £90–£130/day — garden work, tight access, manual-tipping</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Ride-on 1-tonne (tracked):</strong> £130–£180/day — residential groundworks, landscaping</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>2-tonne tracked dumper:</strong> £170–£230/day — most popular size for trade use</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>3-tonne tracked dumper:</strong> £210–£280/day — high-volume earthmoving, commercial sites</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>No formal licence required on private land — CPCS card needed on most commercial sites</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span>Swivel skip models allow side-discharge — essential for trench edge spoil placement</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          Mini dumper hire in the UK costs between <strong>£90 and £280 per day</strong> depending on
+          payload capacity. A 500 kg pedestrian dumper is the smallest widely available hire machine —
+          suitable for shifting spoil in tight residential gardens. A 3-tonne tracked dumper is the
+          workhorse for groundworkers and landscapers moving significant volumes of material across site.
+        </p>
+        <p>
+          This guide covers hire rates by capacity, tracked vs wheeled, licence requirements, and the
+          most common job applications across UK residential and commercial sites.
+        </p>
+      </Prose>
+
+      <H2>Mini Dumper Hire Prices UK 2026</H2>
+      <Prose>
+        <p>
+          All prices are VAT-inclusive guidance based on average UK market rates. Use Tooli.uk to{' '}
+          <Link to="/search" className="font-medium text-brand-primary hover:underline">compare now</Link>{' '}
+          and confirm current quotes from local suppliers.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Machine Class</th>
+              <th className="px-3 py-2 text-left font-semibold">Payload</th>
+              <th className="px-3 py-2 text-left font-semibold">Track/Wheel</th>
+              <th className="px-3 py-2 text-left font-semibold">Day Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Weekend Rate</th>
+              <th className="px-3 py-2 text-left font-semibold">Week Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {miniDumperPriceTable.map(([machine, payload, track, day, weekend, week], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{machine}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold">{payload}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{track}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-semibold text-brand-primary">{day}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{weekend}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{week}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-gray-500">*All prices VAT-inclusive guidance. Confirm live rates on Tooli.uk.</p>
+      </div>
+
+      {/* Internal link — mini digger */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Digger Hire Cost UK: How to Compare Prices in 2026</p>
+          <Link to="/blog/mini-digger-hire-cost-uk-2026-price-guide" className="text-sm text-brand-primary hover:underline">
+            Mini diggers and dumpers often hired together →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Tracked vs Wheeled Mini Dumpers: Which to Hire?</H2>
+      <Prose>
+        <p>
+          For most UK residential and landscaping applications — garden clearance, drainage, lawn areas —
+          a <strong>rubber-tracked mini dumper</strong> is the correct hire choice. Tracked machines
+          spread their weight more evenly, handle soft ground without cutting in, and offer zero-turn
+          manoeuvrability essential in tight gardens. Wheeled dumpers are faster on hard standing but
+          unsuitable for soft or sensitive surfaces.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Feature</th>
+              <th className="px-3 py-2 text-left font-semibold">Tracked</th>
+              <th className="px-3 py-2 text-left font-semibold">Wheeled</th>
+            </tr>
+          </thead>
+          <tbody>
+            {miniDumperTrackedTable.map(([feature, tracked, wheeled], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{feature}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{tracked}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{wheeled}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <img
+        src="/images/blog/mini-dumper-hire-uk.webp"
+        alt="Rubber-tracked mini dumper on a wet lawn with scaffold board trackway protecting the grass surface"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Compact sub-base after each dumper load →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Payload Capacity: What Can Each Machine Carry?</H2>
+      <Prose>
+        <p>
+          Payload refers to the maximum load the dumper can safely carry per trip. Matching the payload
+          to your material volume determines how many runs are needed per skip or lorry load — and
+          therefore how long the job takes. The 2-tonne machine carries approximately 1.2 m³ per load,
+          which at typical soil density means roughly one tonne of material per trip.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Payload</th>
+              <th className="px-3 py-2 text-left font-semibold">Material Volume per Load</th>
+              <th className="px-3 py-2 text-left font-semibold">Common Applications</th>
+            </tr>
+          </thead>
+          <tbody>
+            {miniDumperPayloadTable.map(([payload, volume, apps], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-bold text-brand-primary">{payload}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{volume}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-700">{apps}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — skip hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Size your skip to the dumper payload →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Standard vs Swivel Skip vs High-Tip: Which Configuration?</H2>
+
+      <H3>Standard Forward-Tipping</H3>
+      <Prose>
+        <p>
+          The basic configuration — skip tips forward to discharge. Suitable for most spoil-moving
+          applications where material is tipped into a skip, lorry, or soil heap on open ground.
+        </p>
+      </Prose>
+
+      <H3>Swivel Skip</H3>
+      <Prose>
+        <p>
+          The skip rotates left and right as well as tipping. Invaluable for trench work where spoil
+          needs to be placed neatly beside the open trench rather than in front of the machine.
+          Eliminates hand-shovelling to reposition spoil from the trench edge — a significant time
+          saving on drainage and foundation projects.
+        </p>
+      </Prose>
+
+      <H3>High-Tip</H3>
+      <Prose>
+        <p>
+          The skip tips to a greater height — useful for tipping directly into skips, lorries, or
+          elevated hoppers without a ramp. More common on larger site dumpers than residential
+          mini dumpers, but available in 2–3 tonne hire configurations.
+        </p>
+      </Prose>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>Can I Use a Mini Dumper on a Lawn?</H2>
+      <Prose>
+        <p>
+          A rubber-tracked mini dumper causes significantly less damage to lawns and soft ground than
+          a wheeled machine. That said, any tracked machine running over soft wet ground will leave
+          impressions. Under{' '}
+          <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            PUWER
+          </a>
+          , the operator must assess ground conditions before use. Protect lawn areas using these measures:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Use scaffold boards or trackway panels under the dumper\'s route across sensitive areas',
+          'Restrict access to established dry periods — avoid running over soft ground after rain',
+          'Minimise the number of passes over the same line — vary the route where possible',
+          'Aerate and over-seed affected areas immediately after work is complete',
+          'Check transport width with the depot before booking to confirm the machine fits through access gates',
+        ]}
+      />
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect concrete and groundworks through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — site lighting */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Site Lighting Tower Hire UK: Prices &amp; Types Compared</p>
+          <Link to="/blog/site-lighting-tower-hire-uk-prices-and-types-compared" className="text-sm text-brand-primary hover:underline">
+            Light your site for night or winter groundworks →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Mini Dumper Hire Near You</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — tracked mini dumper hire from local UK suppliers by payload capacity, configuration, and hire duration.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* Article 38 — Do You Need a Licence to Drive a Site Dumper? The Honest Answer */
+
+const dumperLicenceSituationTable: [string, string, string][] = [
+  ['Private domestic project — garden, landscaping, self-build', 'No', 'PUWER competence requirement still applies'],
+  ['Small trade project on client\'s private land', 'No formal card — but PUWER applies', 'Consider training for liability protection'],
+  ['Managed commercial construction site', 'Yes — in almost all cases', 'Principal contractor enforces this as a site rule'],
+  ['CDM 2015 notifiable project', 'Yes — competence records likely checked', 'Principal designer may audit operator cards'],
+  ['Ground adjacent to a public highway', 'Yes — treated as commercial', 'Enhanced risk environment — enforcement more likely'],
+];
+
+const dumperCpcsTable: [string, string, string][] = [
+  ['A09', 'Forward Tipping Dumper — pedestrian operated', 'Covers walk-behind pedestrian dumpers'],
+  ['A09', 'Forward Tipping Dumper — ride-on (up to 10 tonne)', 'Covers 1t, 2t, 3t ride-on dumpers most commonly hired'],
+  ['A09 (Swivel Skip variant)', 'Swivel Skip Dumper', 'Some CPCS providers issue separately — confirm with your test centre'],
+];
+
+const dumperCpcsVsCscsTable: [string, string, string][] = [
+  ['CPCS', 'Plant operator competence — task-tested for specific machine', 'Yes — CPCS A09 covers site dumper operation'],
+  ['CSCS', 'Site access — proves general H&S knowledge (CITB test)', 'No — site access only, not machine operation'],
+  ['Both', 'May be required on some managed commercial sites', 'CSCS to enter the site; CPCS to operate the dumper'],
+];
+
+const dumperLicenceFaqs: Faq[] = [
+  [
+    'Do I need a licence to drive a site dumper on a construction site?',
+    'On private domestic land, no formal licence or card is required — but PUWER 1998 requires competence. On a managed commercial construction site, a CPCS card (category A09 for site dumpers) is required by most principal contractors. A road driving licence is not relevant — site dumpers are not road vehicles.',
+  ],
+  [
+    'What is CPCS A09?',
+    'CPCS A09 is the Construction Plant Competence Scheme category covering forward-tipping site dumpers — both pedestrian (walk-behind) and ride-on models up to 10 tonnes. The CPCS blue trained operator card must be renewed after 2 years by achieving an NVQ/SVQ.',
+  ],
+  [
+    'Can I operate a site dumper without CPCS on my own property?',
+    'Yes — on private domestic land, no CPCS card is legally required. PUWER 1998 still requires that you are competent to use the machine safely. If you have never operated a dumper before, request a handover from the hire depot and start with slower, controlled movements before taking on heavier work.',
+  ],
+  [
+    'Is CPCS the same as a driving licence for dumpers?',
+    'No. CPCS is a construction plant competence certification — it proves you are trained and tested to operate a specific type of plant machinery. A road driving licence permits you to drive road-legal vehicles on public roads. Site dumpers are not road vehicles and a road licence neither qualifies nor disqualifies you from operating one.',
+  ],
+  [
+    'How long does CPCS training for a site dumper take?',
+    'Training for CPCS A09 typically takes 1–2 days, followed by the technical test on the same or a subsequent day. For operators with existing plant experience, 1 day of training before the test is often sufficient. Budget £400–£800 for the full process including training, test, and card application.',
+  ],
+  [
+    'Does PUWER apply to a site dumper on my garden renovation?',
+    'Yes. PUWER 1998 applies wherever work equipment is used in connection with work activities — including self-employed workers on residential projects. Pure DIY by a homeowner on their own property is generally outside PUWER\'s scope, but any trade or commercial element brings it into scope. The safest position is always to ensure the operator is competent regardless of land type.',
+  ],
+];
+
+function SiteDumperLicenceBody() {
+  return (
+    <>
+      {/* At a glance */}
+      <div className="mb-8 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-brand-primary">Site Dumper Licence Rules at a Glance</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span><strong>Private land / domestic project:</strong> no formal licence or card required</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>Commercial construction site:</strong> CPCS card required in most cases</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>PUWER 1998:</strong> competence required on ALL land — private or commercial</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-600" /><span><strong>Road driving licence:</strong> not required — site dumpers are not road vehicles</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" /><span><strong>CPCS A09:</strong> the category covering forward-tipping and swivel skip site dumpers</span></li>
+          <li className="flex items-start gap-2"><CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" /><span>A road driving licence does not authorise you to operate a site dumper on a building site</span></li>
+        </ul>
+      </div>
+
+      <Prose>
+        <p>
+          <strong>No</strong> — there is no legal requirement to hold a formal driving licence to operate
+          a site dumper on private land. A road driving licence is not required either — site dumpers
+          are not road-legal vehicles. However, on most managed commercial construction sites, operators
+          must hold a valid{' '}
+          <a href="https://www.cpcs.uk.com/categories" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            CPCS (Construction Plant Competence Scheme) card
+          </a>{' '}
+          for the dumper category. And under{' '}
+          <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            PUWER 1998
+          </a>
+          , all operators — on any land — must be competent to use the machine safely.
+        </p>
+      </Prose>
+
+      <H2>The Legal Position</H2>
+
+      <H3>PUWER 1998 and Operator Competence</H3>
+      <Prose>
+        <p>
+          The Provision and Use of Work Equipment Regulations 1998 (PUWER) Regulation 9 requires that
+          anyone operating work equipment — including site dumpers — has received adequate training. This
+          applies on private domestic land as well as commercial sites. It is the same competence duty
+          that applies to mini diggers, cut-off saws, and all other work equipment.
+        </p>
+        <p>
+          On private land, this means demonstrating competence through experience, a brief depot
+          handover, or formal training — but not necessarily a specific card. On a commercial site,
+          the principal contractor enforces a competence card requirement in almost all cases under{' '}
+          <a href="https://www.hse.gov.uk/construction/cdm/2015" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            CDM 2015
+          </a>.
+        </p>
+      </Prose>
+
+      <H3>Site Dumpers Are Not Road Vehicles</H3>
+      <Prose>
+        <p>
+          A site dumper cannot legally travel on a public highway. It must be transported on a flatbed
+          lorry or low-loader. A road driving licence is therefore not required to operate a site dumper
+          on site — but a valid driving licence is required to tow the machine's transport trailer.
+        </p>
+      </Prose>
+
+      {/* Internal link — mini dumper hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Mini Dumper Hire UK: Prices &amp; Capacities Compared</p>
+          <Link to="/blog/mini-dumper-hire-uk-prices-and-capacities-compared" className="text-sm text-brand-primary hover:underline">
+            Day rates for tracked dumpers by payload →
+          </Link>
+        </div>
+      </div>
+
+      <H2>When a CPCS Card Is Required</H2>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Situation</th>
+              <th className="px-3 py-2 text-left font-semibold">CPCS Card Required?</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dumperLicenceSituationTable.map(([situation, required, notes], i) => {
+              const isNo = required.toLowerCase().startsWith('no formal') || required.toLowerCase() === 'no';
+              const isYes = required.toLowerCase().startsWith('yes');
+              return (
+                <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                  <td className="border-b border-gray-100 px-3 py-2 font-medium">{situation}</td>
+                  <td className={`border-b border-gray-100 px-3 py-2 font-semibold ${isYes ? 'text-brand-primary' : isNo ? 'text-green-700' : 'text-amber-600'}`}>{required}</td>
+                  <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — mini digger licence */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Do I Need a Licence to Operate a Mini Digger?</p>
+          <Link to="/blog/do-i-need-licence-to-operate-mini-digger" className="text-sm text-brand-primary hover:underline">
+            Same PUWER / CPCS framework explained for diggers →
+          </Link>
+        </div>
+      </div>
+
+      <H2>What Is the CPCS Card for a Site Dumper?</H2>
+      <Prose>
+        <p>
+          CPCS (Construction Plant Competence Scheme) is the industry-standard operator competence
+          scheme in the UK. The relevant category for site dumpers is:
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">CPCS Category</th>
+              <th className="px-3 py-2 text-left font-semibold">Machine Type</th>
+              <th className="px-3 py-2 text-left font-semibold">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dumperCpcsTable.map(([category, machine, notes], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-bold text-brand-primary">{category}</td>
+                <td className="border-b border-gray-100 px-3 py-2 font-medium">{machine}</td>
+                <td className="border-b border-gray-100 px-3 py-2 text-gray-600">{notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-xs text-gray-500">CPCS categories and card formats do change — always verify current requirements at cpcs.uk.com before booking training.</p>
+      </div>
+
+      <img
+        src="/images/blog/do-you-need-a-licence.webp"
+        alt="CPCS blue trained operator card alongside a site dumper on a managed construction site UK"
+        className="mb-8 w-full rounded-xl object-cover"
+        loading="lazy"
+      />
+
+      <H2>CPCS vs CSCS: What's the Difference?</H2>
+      <Prose>
+        <p>
+          These two cards are often confused — they serve entirely different purposes. A CSCS card
+          proves general site safety awareness and grants site access. A CPCS card proves plant
+          operator competence for a specific machine type. On many commercial sites, both are required.
+        </p>
+      </Prose>
+
+      <div className="mb-8 overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-brand-primary text-white">
+              <th className="px-3 py-2 text-left font-semibold">Card</th>
+              <th className="px-3 py-2 text-left font-semibold">Purpose</th>
+              <th className="px-3 py-2 text-left font-semibold">For Site Dumpers?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dumperCpcsVsCscsTable.map(([card, purpose, forDumpers], i) => (
+              <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="border-b border-gray-100 px-3 py-2 font-bold text-brand-primary">{card}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{purpose}</td>
+                <td className="border-b border-gray-100 px-3 py-2">{forDumpers}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Internal link — tool hire comparison */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">How Tool Hire Comparison Actually Saves You Money</p>
+          <Link to="/blog/tool-hire-comparison-save-money" className="text-sm text-brand-primary hover:underline">
+            How to compare and avoid overpaying →
+          </Link>
+        </div>
+      </div>
+
+      <H2>How to Get a CPCS Dumper Card</H2>
+      <CheckList
+        items={[
+          'Step 1: Pass the CITB Health, Safety & Environment test if you don\'t already hold a valid CSCS card',
+          'Step 2: Complete a CPCS training course for category A09 (site dumper) at an approved CPCS test centre',
+          'Step 3: Pass the CPCS technical test — operational assessment on the machine in a controlled environment',
+          'Step 4: Apply for the CPCS trained operator card (blue card) — valid 2 years, after which an NVQ or SVQ is required for the experienced operator card (red card)',
+        ]}
+      />
+      <Prose>
+        <p>
+          Find approved CPCS test centres at{' '}
+          <a href="https://www.cpcs.uk.com/categories" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-primary hover:underline">
+            cpcs.uk.com
+          </a>. Training typically takes 1–2 days. Budget <strong>£400–£800</strong> for training,
+          testing, and card fees combined. For sole traders, CPCS training costs are generally
+          recoverable against tax as a business expense.
+        </p>
+      </Prose>
+
+      {/* Internal link — scaffold tower */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <MapPin className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Scaffold Tower Hire Cost UK: What You'll Pay in 2026</p>
+          <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="text-sm text-brand-primary hover:underline">
+            Full rate breakdown by tower type and duration →
+          </Link>
+        </div>
+      </div>
+
+      <H2>What This Means When Hiring a Mini Dumper</H2>
+      <Prose>
+        <p>
+          Hire depots are not legally required to ask for your CPCS card before releasing a mini
+          dumper. Most will not ask. However, the consequences of operating without a card in the
+          wrong context are significant:
+        </p>
+      </Prose>
+
+      <CheckList
+        items={[
+          'Using a site dumper on a commercial site without a CPCS card will result in refusal of access or removal from site',
+          'If an accident occurs on any land and you cannot demonstrate competence, PUWER creates personal liability',
+          'Principal contractors and site managers may ask to record your card details as part of their own CDM duty of care',
+          'For sole traders and small builders regularly using dumpers, a CPCS A09 card is a worthwhile investment',
+        ]}
+      />
+
+      {/* Internal link — wacker plate */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <Wrench className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Wacker Plate Hire UK: Prices &amp; Plate Sizes Compared</p>
+          <Link to="/blog/wacker-plate-hire-uk-prices-plate-sizes-compared" className="text-sm text-brand-primary hover:underline">
+            Compact your sub-base after each dumper load →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — skip hire */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</p>
+          <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="text-sm text-brand-primary hover:underline">
+            Size your skip to match your dumper payload →
+          </Link>
+        </div>
+      </div>
+
+      {/* Internal link — winter site kit */}
+      <div className="my-6 flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10">
+        <ShieldCheck className="h-5 w-5 shrink-0 text-brand-primary" />
+        <div>
+          <p className="text-sm font-semibold text-gray-900">Winter Site Kit: Heaters &amp; Dehumidifiers for UK Builders</p>
+          <Link to="/blog/winter-site-kit-heaters-and-dehumidifiers-for-uk-builders" className="text-sm text-brand-primary hover:underline">
+            Protect groundworks through winter →
+          </Link>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Hire a Mini Dumper?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Once your competence is confirmed, enter your postcode on Tooli.uk to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — tracked mini dumper hire from local UK suppliers by payload, configuration, and duration.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -12564,6 +13242,42 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Lighting Tower Hire',
     faqs: lightingTowerFaqs,
     Body: SiteLightingTowerBody,
+  },
+  {
+    slug: 'mini-dumper-hire-uk-prices-and-capacities-compared',
+    category: 'Equipment Hire',
+    title: 'Mini Dumper Hire UK: Prices & Capacities Compared',
+    excerpt:
+      'Mini dumper hire costs £90–£280 per day in the UK. Full 2026 guide to pedestrian, 1-tonne, 2-tonne and 3-tonne tracked dumpers — with payload capacity table, tracked vs wheeled comparison, swivel skip explained, and lawn protection tips.',
+    intro:
+      'Mini dumper hire in the UK costs between £90 and £280 per day depending on payload capacity. A 500 kg pedestrian dumper is the smallest widely available hire machine — suitable for shifting spoil in tight residential gardens. A 3-tonne tracked dumper is the workhorse for groundworkers and landscapers moving significant volumes of material across site.',
+    image: '/images/blog/mini-dumper-hire-uk-prices-capacities-compared.webp',
+    imageAlt: '2-tonne tracked mini dumper transporting excavated soil across a UK residential landscaping site',
+    datePublished: '2026-08-01',
+    metaTitle: 'Mini Dumper Hire UK: Prices & Capacities Compared 2026 | Tooli.uk',
+    metaDescription:
+      'Compare mini dumper hire prices across the UK. Full guide to tracked vs wheeled, payload capacities, day rates, and licence requirements. Tooli.uk.',
+    primaryCta: 'Compare Mini Dumper Hire',
+    faqs: miniDumperFaqs,
+    Body: MiniDumperHireBody,
+  },
+  {
+    slug: 'do-you-need-a-licence-to-drive-a-site-dumper-the-honest-answer',
+    category: 'Compliance & Safety',
+    title: 'Do You Need a Licence to Drive a Site Dumper? The Honest Answer',
+    excerpt:
+      'No formal licence is required to drive a site dumper on private land — but PUWER 1998 requires competence on all land, and a CPCS A09 card is required on most commercial sites. Full guide to when each rule applies, what CPCS A09 covers, and how CPCS differs from CSCS.',
+    intro:
+      'No — there is no legal requirement to hold a formal driving licence to operate a site dumper on private land. A road driving licence is not required either — site dumpers are not road-legal vehicles. However, on most managed commercial construction sites, operators must hold a valid CPCS card for the dumper category. And under PUWER 1998, all operators must be competent to use the machine safely — on any land.',
+    image: '/images/blog/do-you-need-a-licence-to-drive-a-site-dumper.webp',
+    imageAlt: 'Site dumper operator on a commercial UK construction site — CPCS A09 card required for commercial site use',
+    datePublished: '2026-08-01',
+    metaTitle: 'Do You Need a Licence to Drive a Site Dumper? | Tooli.uk',
+    metaDescription:
+      'No formal licence is required to drive a site dumper on private land. On commercial sites, a CPCS card is required. Here\'s exactly what applies to you.',
+    primaryCta: 'Compare Mini Dumper Hire',
+    faqs: dumperLicenceFaqs,
+    Body: SiteDumperLicenceBody,
   },
 ];
 
