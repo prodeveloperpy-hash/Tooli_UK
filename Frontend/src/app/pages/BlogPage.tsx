@@ -12556,6 +12556,336 @@ function SiteDumperLicenceBody() {
   );
 }
 
+/* Article 39 — Tool Hire SW19: Compare Prices in Wimbledon & Merton */
+
+const sw19WimbledonEquipmentTable: [string, string, string, string][] = [
+  ['Mini digger (0.8t)', '£100–£175', '£380–£550', 'Tight access in residential gardens — 0.8t fits through most SW19 side gates'],
+  ['Mini digger (1.5t)', '£160–£230', '£500–£700', 'Standard for driveway excavation and extension footings'],
+  ['Scaffold tower (4m WH)', '£22–£35/day', '£55–£85/week', 'Loft dormer and external decoration — high local demand'],
+  ['Scaffold tower (6m WH)', '£28–£42/day', '£70–£110/week', 'Two-storey Wimbledon Victorian terrace standard'],
+  ['Concrete mixer (130L)', '£35–£55', '£100–£150', 'Pointing, rendering, and small-pour work'],
+  ['Disc cutter / cut-off saw', '£50–£80', '£190–£300', 'Block cutting for extensions and driveway edgings'],
+  ['Skip (6 yard)', '£200–£280', 'N/A (per hire)', 'Road permit required in most SW19 residential streets'],
+  ['Skip (8 yard)', '£250–£340', 'N/A (per hire)', 'Most common size for loft and extension clearance'],
+  ['Dehumidifier (40 L/day)', '£55–£80', '£200–£290', 'Post-plaster drying in newly converted spaces'],
+  ['Pressure washer (commercial)', '£45–£75', '£150–£250', 'Driveway and patio cleaning — strong seasonal demand'],
+];
+
+const sw19WimbledonPostcodeTable: [string, string, string][] = [
+  ['SW17', 'Tooting, Balham', 'Minimal — same depot zone in most cases'],
+  ['SW20', 'Raynes Park, West Wimbledon', 'Minimal — contiguous with SW19'],
+  ['CR4', 'Mitcham', 'Minimal — common South London depot location'],
+  ['SM4', 'Morden', 'Low — 10–15 min drive'],
+  ['SW16', 'Streatham, Norbury', 'Low — 15–20 min drive'],
+  ['KT1 / KT2', 'Kingston upon Thames', 'Low to medium — across the borough boundary'],
+  ['SW18', 'Wandsworth, Earlsfield', 'Low — North of SW19 along A3'],
+];
+
+const sw19WimbledonTradeTable: [string, string, string][] = [
+  ['Builders & groundworkers', 'Loft conversions, rear extensions, driveway dig-outs', 'Mini digger, scaffold tower, concrete mixer, skip'],
+  ['Landscapers', 'Garden redesigns, patio installation, fencing', 'Wacker plate, mini digger, rotavator, skip'],
+  ['Plasterers & decorators', 'Internal renovation, extension fit-out', 'Scaffold tower (internal), dehumidifier, mixer'],
+  ['Roofers', 'Victorian terrace re-roofing, dormer construction', 'Scaffold tower (6–8m WH), edge protection'],
+  ['DIY homeowners', 'Bathroom renovation, garden landscaping, decorating', 'Disc cutter, scaffold tower, pressure washer, skip'],
+];
+
+const sw19WimbledonFaqs: Faq[] = [
+  ['Where can I hire tools in SW19?', 'SW19 is served by hire depots in Mitcham (CR4), Tooting (SW17), and Kingston upon Thames (KT1), all within 10–20 minutes. Tooli.uk compares prices from suppliers serving SW19 so you can get the best local rate without ringing round individually.'],
+  ['Do I need a skip permit in SW19?', 'Yes — if the skip goes on a public road or pavement anywhere in SW19. The London Borough of Merton issues skip licences for all roads within the borough. Your hire company applies on your behalf, but you must tell them at booking that the skip is going on the road. Permit cost is typically £55–£100 for a London borough.'],
+  ['Can a mini digger get through a SW19 side gate?', "Depends on the gate width. A 0.8-tonne micro digger needs approximately 750–850mm of clearance. A 1.5-tonne machine needs 990–1,200mm. Many Victorian terrace side passages in SW19 are 800–900mm — measure carefully and tell the depot the exact width when booking. A micro digger is the right call for most SW19 residential side-access jobs."],
+  ['What are the parking and access rules for delivery lorries in SW19?', 'Most SW19 residential streets are covered by Merton CPZ parking restrictions. Delivery lorries for plant equipment typically need a loading bay or a parking suspension — your hire company can advise on what is needed for your specific street. Confirm access route and any height restrictions before the delivery vehicle sets off.'],
+  ['Do I need to be home when tools are delivered in SW19?', "For smaller equipment delivered in a van, most depots accept a safe-place instruction if you've arranged it in advance. For plant machinery (mini diggers, scaffold towers, skips) someone must be present to accept delivery, sign the hire agreement, and confirm the placement location is accessible."],
+  ['Is there weekend tool hire available in SW19?', 'Saturday hire is available from most depots covering SW19. Sunday collection is generally not available — most South London depots do not operate on Sundays. If you need tools Monday morning, collect or take delivery on Friday and pay the weekend rate, which is typically 1.5–1.8x the daily rate.'],
+];
+
+function SW19WimbledonHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-[#030213]">SW19 Tool Hire at a Glance</h2>
+        <ul className="space-y-2">
+          {[
+            'Covers: Wimbledon, South Wimbledon, Colliers Wood, Merton, Raynes Park (partial)',
+            'Nearest hire depot areas: Mitcham, Tooting, Kingston upon Thames, Wandsworth',
+            'Typical delivery lead time: same-day possible, next-day reliable from South London depots',
+            'Congestion and parking: narrow residential roads — confirm delivery access before booking',
+            'Most-hired equipment: scaffold towers, mini diggers, skips, disc cutters, concrete mixers',
+            'Permitted development activity is high — loft conversions and extensions drive strong hire demand',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-700">
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <H2>About SW19: The Local Context That Matters for Hire</H2>
+      <Prose>
+        SW19 is one of South London's most active renovation postcodes. The area's mix of Edwardian and Victorian
+        terraced housing generates consistent demand for building and groundwork hire equipment — loft conversions in
+        Wimbledon Village, side-return extensions across Colliers Wood, and driveway work along the residential roads
+        running off the A238.
+      </Prose>
+      <Prose>
+        The town centre redevelopment around Wimbledon station (the Broadway regeneration scheme) has also brought
+        commercial construction activity into the SW19 core, increasing demand for welfare units, generators, and
+        larger plant hire in and around the station area.
+      </Prose>
+      <Prose>
+        Key local infrastructure note: the A219 Wimbledon Hill Road and Church Road create congestion hotspots during
+        peak hours. Low emission zone (LEZ) restrictions apply to older diesel plant vehicles — confirm your hire
+        company's vehicle compliance before booking delivery of larger equipment into the SW19 zone.
+      </Prose>
+
+      <Link
+        to="/blog/tool-hire-london"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire in London: Compare Prices From Local Suppliers</span>
+      </Link>
+
+      <H2>Most-Hired Equipment in SW19 and What It Costs</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Equipment</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Typical Day Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Typical Week Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">SW19 Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sw19WimbledonEquipmentTable.map(([equip, day, week, notes], i) => (
+              <tr key={equip} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{equip}</td>
+                <td className="px-4 py-3 text-gray-700">{day}</td>
+                <td className="px-4 py-3 text-gray-700">{week}</td>
+                <td className="px-4 py-3 text-gray-600">{notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500">*All prices VAT-inclusive guidance. Compare current SW19 supplier quotes on Tooli.uk.</p>
+
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare SW19 Tool Hire Prices</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — local suppliers serving SW19, Wimbledon, Colliers Wood, and Merton.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+
+      <img
+        src="/images/blog/tool-hire-sw19-wimbledon.webp"
+        alt="Scaffold tower erected outside a two-storey Victorian terrace in Wimbledon for loft dormer construction"
+        className="w-full rounded-2xl object-cover"
+      />
+
+      <H2>Postcode Areas Served From SW19 Depots</H2>
+      <Prose>
+        Depots serving SW19 typically also cover the following neighbouring postcodes — useful if you're managing
+        projects across borough boundaries:
+      </Prose>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Postcode</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Area</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Typical Add-On Delivery Cost vs SW19</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sw19WimbledonPostcodeTable.map(([postcode, area, cost], i) => (
+              <tr key={postcode} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-bold text-[#030213]">{postcode}</td>
+                <td className="px-4 py-3 text-gray-700">{area}</td>
+                <td className="px-4 py-3 text-gray-700">{cost}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Link
+        to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</span>
+      </Link>
+
+      <H2>Delivery to SW19: What to Know Before You Book</H2>
+      <H3>Access and Parking</H3>
+      <Prose>
+        Many SW19 residential streets are narrow Victorian terraces with restricted parking and no dropped kerbs
+        outside the property. Before booking delivery of a skip or plant machinery:
+      </Prose>
+      <CheckList items={[
+        'Measure your access route — gate width and any overhead obstructions on the approach',
+        'Check whether your road has CPZ (Controlled Parking Zone) restrictions — the London Borough of Merton operates extensive CPZs across SW19',
+        'For skip delivery on the road, the hire company must obtain a London Borough of Merton highway permit — tell them at booking, not on the day',
+        'For plant delivery by flatbed lorry, confirm the vehicle can access your street — delivery lorries for mini diggers and dumpers can be up to 8 metres long',
+      ]} />
+
+      <Link
+        to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Do I Need a Permit for a Skip on the Road? The Direct Answer</span>
+      </Link>
+
+      <H3>Low Emission Zone</H3>
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-medium">
+          <strong>LEZ Compliance:</strong> Greater London's Low Emission Zone applies to larger diesel vehicles (lorries,
+          vans over 3.5t) and affects the vehicles used to deliver plant equipment. Reputable hire companies operating in
+          SW19 will use compliant vehicles — but confirm this when booking, as a non-compliant delivery vehicle incurs a
+          TfL penalty charge.{' '}
+          <a href="https://tfl.gov.uk/modes/driving/low-emission-zone" target="_blank" rel="noopener noreferrer" className="underline">
+            TfL LEZ details →
+          </a>
+        </p>
+      </div>
+
+      <Link
+        to="/blog/mini-digger-hire-london-prices-local-availability"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Mini Digger Hire London: Prices &amp; Local Availability</span>
+      </Link>
+
+      <H2>Trade Activity in SW19: Who Hires and What They Need</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Trade</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Common SW19 Projects</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Key Equipment Hired</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sw19WimbledonTradeTable.map(([trade, projects, equipment], i) => (
+              <tr key={trade} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{trade}</td>
+                <td className="px-4 py-3 text-gray-700">{projects}</td>
+                <td className="px-4 py-3 text-gray-700">{equipment}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Link
+        to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained</span>
+      </Link>
+
+      <H2>Weekend and Same-Day Hire in SW19</H2>
+      <Prose>
+        Weekend tool hire is available from most depots serving SW19, but hours are reduced — most South London depots
+        operate Saturday only (typically 7:30am–12:30pm) with Sunday collection not available. If you need equipment
+        for a Monday start, book the Friday and factor in the weekend rate.
+      </Prose>
+      <Prose>
+        Same-day hire in SW19 is possible for smaller items (disc cutters, mixers, small compressors) from depots in
+        Mitcham and Tooting that stock lighter equipment. Plant machinery (mini diggers, dumpers) requires at least
+        24–48 hours' notice for delivery scheduling in SW19.
+      </Prose>
+
+      <Link
+        to="/blog/tool-hire-comparison-uk"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire Comparison UK: Compare Construction Equipment &amp; Plant Hire Suppliers</span>
+      </Link>
+
+      <H2>Neighbouring Areas: Hire Near SW19</H2>
+      <Prose>
+        If you're working near SW19 but your project site falls in a neighbouring postcode, the following resources
+        cover your area and help you compare local hire options:
+      </Prose>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">How Tool Hire Comparison Actually Saves Your Money (And How to Do It Properly)</span>
+      </Link>
+
+      <Link
+        to="/blog/tool-hire-birmingham"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire in Birmingham: Compare Prices From Local Suppliers</span>
+      </Link>
+
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-2 text-sm font-bold text-[#030213]">Useful SW19 Resources</p>
+        <ul className="space-y-2">
+          <li>
+            <a href="https://www.merton.gov.uk/roads-and-transport" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              London Borough of Merton — Skip and Highways Permits
+            </a>
+            <span className="text-sm text-gray-600"> — Skip licence and CPZ applications for SW19 and surrounding Merton roads</span>
+          </li>
+          <li>
+            <a href="https://tfl.gov.uk/modes/driving/low-emission-zone" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              TfL — Low Emission Zone (LEZ)
+            </a>
+            <span className="text-sm text-gray-600"> — LEZ compliance requirements for plant delivery vehicles in Greater London</span>
+          </li>
+          <li>
+            <a href="https://planning.merton.gov.uk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Wimbledon Broadway Regeneration — Planning Portal
+            </a>
+            <span className="text-sm text-gray-600"> — Local planning applications and permitted development activity in SW19</span>
+          </li>
+        </ul>
+      </div>
+
+      <FaqSection faqs={sw19WimbledonFaqs} />
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Hire in SW19?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-white underline">compare now</a>{' '}
+          — local suppliers serving Wimbledon, Colliers Wood, South Wimbledon, and Merton.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -13278,6 +13608,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Mini Dumper Hire',
     faqs: dumperLicenceFaqs,
     Body: SiteDumperLicenceBody,
+  },
+  {
+    slug: 'tool-hire-sw19-compare-prices-in-wimbledon-and-merton',
+    category: 'Location Guides',
+    title: 'Tool Hire SW19: Compare Prices in Wimbledon & Merton',
+    excerpt:
+      'Compare tool hire prices across SW19 — Wimbledon, Colliers Wood, South Wimbledon, and Merton. Equipment rates, delivery rules, skip permits, LEZ guidance, and weekend hire availability from local South London depots.',
+    intro:
+      'SW19 covers Wimbledon, South Wimbledon, Colliers Wood, and the northern edge of Merton — a dense residential and commercial postcode that sits between the A3 and the South Circular. Tool and plant hire demand here runs year-round, driven by an active domestic renovation market, the ongoing commercial development around the Wimbledon town centre corridor, and landscaping work across the substantial private gardens of the area. This guide covers what to hire, what it costs, and which suppliers serve SW19 reliably.',
+    image: '/images/blog/tool-hire-sw19-wimbledon-merton-postcode-area-guide.webp',
+    imageAlt: 'Mini digger being operated in a narrow Victorian terraced garden in Wimbledon SW19 — residential tool hire South London',
+    datePublished: '2026-08-05',
+    metaTitle: 'Tool Hire SW19: Wimbledon & Merton Area | Tooli.uk',
+    metaDescription:
+      'Compare tool hire prices in SW19 — Wimbledon, Colliers Wood, South Wimbledon and Merton. Local suppliers, delivery times, and equipment guide for SW19 hirers.',
+    primaryCta: 'Compare SW19 Tool Hire',
+    faqs: sw19WimbledonFaqs,
+    Body: SW19WimbledonHireBody,
   },
 ];
 

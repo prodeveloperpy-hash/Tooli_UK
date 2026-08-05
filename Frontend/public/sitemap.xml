@@ -266,6 +266,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.tooli.uk/blog/tool-hire-sw19-compare-prices-in-wimbledon-and-merton</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Equipment pages -->
   <url>
