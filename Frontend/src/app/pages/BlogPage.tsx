@@ -14484,6 +14484,232 @@ function BirminghamDiggerHireBody() {
   );
 }
 
+/* Article 46 — Plant Hire Birmingham: Compare Local Plant Hire Companies */
+
+const bhamPlantCategoryTable: [string, string, string, string][] = [
+  ['Mini excavators', '0.8t – 5t', '£90–£420/day', 'Residential groundworks, block paving, drainage across inner and suburban B postcodes'],
+  ['Mid-range excavators', '5t – 13t', '£330–£620/day', 'Commercial foundation work, utility trenching, Big City Plan zone developments'],
+  ['Large excavators', '13t – 25t+', '£520–£880+/day', 'Major infrastructure — West Midlands Metro, A-road improvement schemes, basements'],
+  ['Mini dumpers', '500 kg – 3t', '£90–£280/day', 'Spoil removal on residential sites — high demand across B14–B28 suburban belt'],
+  ['Large site dumpers', '6t – 10t', '£270–£460/day', 'Commercial earthmoving and housebuilder sites across Solihull and Sutton Coldfield'],
+  ['Telehandlers', '7m – 17m lift', '£210–£460/day', 'Block and beam lifts on housebuilder sites — Countryside, Bellway, Persimmon active in WMCA area'],
+  ['Road sweepers', 'Compact to truck-mount', '£270–£620/day', 'Site entrance cleaning — required on managed sites, West Midlands Metro works'],
+  ['Compaction plant', 'Wacker plates to rollers', '£45–£370/day', 'Sub-base and road base compaction for driveway, patio, and highway works'],
+];
+
+const bhamPlantFaqs: Faq[] = [
+  ['What is the difference between tool hire and plant hire in Birmingham?', 'Tool hire covers hand tools and small equipment — disc cutters, mixers, scaffold towers, generators. Plant hire covers self-propelled or towable heavy machinery — excavators, dumpers, telehandlers, road sweepers. Many Birmingham companies offer both, but specialist plant hire companies focus on larger machinery with CPCS operators available.'],
+  ['Do Birmingham plant hire companies offer CPCS-carded operators?', 'Yes — most major plant hire companies serving Birmingham offer operated hire. Operators hold current CPCS cards for their machine categories and are employed directly by the hire company. Specify operated hire on Tooli.uk when requesting quotes.'],
+  ['What LOLER documents should I ask for when hiring a telehandler in Birmingham?', 'Request the current LOLER thorough examination certificate at the point of booking. It should be dated within the last 6 months and cover the specific machine you\'re hiring. Without a current certificate, the machine cannot legally be used for lifting operations on a managed site.'],
+  ['Can I hire plant equipment without a business account in Birmingham?', 'For smaller plant (mini excavators, dumpers), most Birmingham depots hire on a card deposit without a formal trade account. For larger machines (13t+ excavators, telehandlers), a trade account, site details, and CDM documentation may be required. Confirm requirements with your chosen depot when comparing on Tooli.uk.'],
+];
+
+function BirminghamPlantHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-[#030213]">Birmingham Plant Hire at a Glance</h2>
+        <ul className="space-y-2">
+          {[
+            'Excavators: 0.8t to 25t+ — full commercial range available from West Midlands depots',
+            'Dumpers: 500 kg to 10t tracked — strong demand from Birmingham groundwork contractors',
+            'Telehandlers: 7m to 17m — active on housebuilder sites across Solihull and Sutton Coldfield',
+            'Road sweepers: West Midlands Metro and road infrastructure works drive consistent demand',
+            'Operated hire: most Birmingham plant companies supply CPCS-carded operators on request',
+            'CPA-member depots: multiple CPA (Construction Plant-hire Association) members serve the B postcodes',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-700">
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <H2>Plant Hire Categories in Birmingham</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Plant Category</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Common Hire Sizes</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Day Rate Guide</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Key Birmingham Applications</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bhamPlantCategoryTable.map(([category, sizes, rate, apps], i) => (
+              <tr key={category} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{category}</td>
+                <td className="px-4 py-3 text-gray-700">{sizes}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{rate}</td>
+                <td className="px-4 py-3 text-gray-600">{apps}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500">*VAT-inclusive guidance — operator additional where specified. Compare on Tooli.uk.</p>
+
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Birmingham Plant Hire Companies</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — excavators, dumpers, telehandlers and more from local West Midlands plant hire companies.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-uk"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire Comparison UK: Compare Construction Equipment &amp; Plant Hire Suppliers</span>
+      </Link>
+
+      <img
+        src="/images/blog/plant-hire-birmingham.webp"
+        alt="Telehandler lifting roof trusses on a new housebuilder site in Solihull Birmingham — plant hire West Midlands"
+        className="w-full rounded-2xl object-cover"
+      />
+
+      <H2>Key Birmingham Plant Hire Demand Drivers</H2>
+      <H3>West Midlands Metro and Transport Infrastructure</H3>
+      <Prose>
+        The ongoing expansion of the West Midlands Metro tram network — with extensions into Dudley, Brierley Hill,
+        and the city centre — represents one of the largest civil engineering programmes in the Midlands. Excavators
+        (13t+), road sweepers, and specialist rail-adjacent plant are in high demand on these contracts.
+      </Prose>
+
+      <Link
+        to="/blog/tool-hire-birmingham-compare-prices-from-local-suppliers"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire in Birmingham: Compare Prices From Local Suppliers</span>
+      </Link>
+
+      <H3>Big City Plan Commercial Zone (B1–B5)</H3>
+      <Prose>
+        The Big City Plan continues to deliver major commercial, hotel, and residential projects in the B1–B5 core.
+        Basement excavation, foundation work, and high-reach plant for building structures are in consistent demand
+        across Brindleyplace, Eastside, and the Paradise development zone.
+      </Prose>
+
+      <Link
+        to="/blog/mini-digger-hire-birmingham-prices-and-local-availability"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Mini Digger Hire Birmingham: Prices &amp; Local Availability</span>
+      </Link>
+
+      <H3>Housebuilder Activity (Solihull, Sutton Coldfield, Tamworth Fringe)</H3>
+      <Prose>
+        National housebuilders are active across the Solihull, Sutton Coldfield, and Tamworth fringe — delivering
+        volume residential schemes that require telehandlers, larger excavators, and road sweepers on site. Plant
+        hire demand from this sector is consistent and high-value.
+      </Prose>
+
+      <Link
+        to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</span>
+      </Link>
+
+      <H2>LOLER and Lifting Plant in Birmingham</H2>
+      <Prose>
+        Any lifting equipment hired in Birmingham — telehandlers, cranes, man-riding platforms — must have a current
+        LOLER thorough examination certificate. Under the Lifting Operations and Lifting Equipment Regulations 1998
+        (LOLER), inspection certificates must be:
+      </Prose>
+      <CheckList items={[
+        'Provided automatically by the hire company at the start of hire',
+        'Valid — typically 6-monthly for lifting equipment in use, 12-monthly for equipment not in regular use',
+        'Available for inspection by the HSE or principal contractor at any time during hire',
+      ]} />
+
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-medium">
+          <strong>Request at booking:</strong> Ask for the LOLER certificate at the point of booking — not when the
+          machine arrives. Reputable Birmingham plant hire companies provide this documentation as a matter of course.{' '}
+          <a href="https://www.hse.gov.uk/work-equipment-machinery/loler.htm" target="_blank" rel="noopener noreferrer" className="underline">
+            HSE LOLER guidance →
+          </a>
+        </p>
+      </div>
+
+      <Link
+        to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained</span>
+      </Link>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">How Tool Hire Comparison Actually Saves Your Money (And How to Do It Properly)</span>
+      </Link>
+
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-2 text-sm font-bold text-[#030213]">Useful Resources</p>
+        <ul className="space-y-2">
+          <li>
+            <a href="https://www.cpa.uk.net" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Construction Plant-hire Association (CPA)
+            </a>
+            <span className="text-sm text-gray-600"> — CPA-member plant hire companies operating across the West Midlands</span>
+          </li>
+          <li>
+            <a href="https://www.hse.gov.uk/work-equipment-machinery/loler.htm" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              HSE LOLER 1998 — Lifting Equipment Inspections
+            </a>
+            <span className="text-sm text-gray-600"> — LOLER thorough examination requirements for telehandlers and cranes</span>
+          </li>
+          <li>
+            <a href="https://www.westmidlandsmetro.com" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              West Midlands Metro — Construction Programme
+            </a>
+            <span className="text-sm text-gray-600"> — West Midlands Metro extension timetable — relevant for plant demand forecasting in B postcodes</span>
+          </li>
+        </ul>
+      </div>
+
+      <FaqSection faqs={bhamPlantFaqs} />
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Compare Birmingham Plant Hire?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-white underline">compare now</a>{' '}
+          — excavators, telehandlers, dumpers, and sweepers from local West Midlands plant hire companies.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -15332,6 +15558,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Birmingham Digger Hire',
     faqs: bhamDiggerFaqs,
     Body: BirminghamDiggerHireBody,
+  },
+  {
+    slug: 'plant-hire-birmingham-compare-local-plant-hire-companies',
+    category: 'Plant Hire Guide',
+    title: 'Plant Hire Birmingham: Compare Local Plant Hire Companies',
+    excerpt:
+      'Compare plant hire companies serving Birmingham and the West Midlands. Excavators, dumpers, telehandlers and road sweepers — find the best local rate.',
+    intro:
+      'Birmingham is one of the UK\'s most active construction markets — with major infrastructure schemes (West Midlands Metro), a thriving commercial core (Big City Plan B1–B5), and housebuilder activity across Solihull, Sutton Coldfield, and the wider WMCA area. Plant hire demand across the B postcodes is consistent and broad, covering everything from 0.8t mini excavators for residential groundwork to 25t+ machines for metro and highway schemes. Tooli.uk lets you compare plant hire companies across Birmingham quickly — so you\'re not calling around depots one by one.',
+    image: '/images/blog/plant-hire-birmingham-compare-local-plant-hire-companies.webp',
+    imageAlt: 'Plant hire machinery lineup at a Birmingham West Midlands construction depot — excavators, dumpers, telehandlers',
+    datePublished: '2026-08-07',
+    metaTitle: 'Plant Hire Birmingham: Compare Local Plant Hire Companies | Tooli.uk',
+    metaDescription:
+      'Compare plant hire companies serving Birmingham and the West Midlands. Groundwork plant, excavators, dumpers, telehandlers — find the best local rate on Tooli.uk.',
+    primaryCta: 'Compare Birmingham Plant Hire',
+    faqs: bhamPlantFaqs,
+    Body: BirminghamPlantHireBody,
   },
 ];
 
