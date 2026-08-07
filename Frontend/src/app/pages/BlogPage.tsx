@@ -13708,6 +13708,260 @@ function ManchesterPlantHireBody() {
   );
 }
 
+/* Article 43 — Tool Hire M1: Manchester City Centre Postcode Area Guide */
+
+const m1EquipmentTable: [string, string, string, string][] = [
+  ['Generator (15–30 kVA)', '£90–£180', '£330–£660', 'New-build and fit-out temporary power — no mains connection on refurbs'],
+  ['Scaffold tower (indoor, low-level)', '£20–£35', '£50–£80', 'High-ceiling warehouse and industrial conversions'],
+  ['Site lighting tower', '£60–£95', '£220–£360', 'M1 nights-working and enclosed site areas'],
+  ['Disc cutter (electric)', '£35–£65', '£130–£240', 'Internal block and concrete cuts — no petrol exhaust risk'],
+  ['Dehumidifier (large)', '£75–£110', '£270–£400', 'Post-plaster and screed drying in converted commercial buildings'],
+  ['Concrete mixer', '£35–£55', '£100–£155', 'Blockwork and repair mortar on conversion and fit-out sites'],
+  ['Mini dumper (1t)', '£130–£180', '£400–£540', 'Internal and basement spoil removal where machinery access is limited'],
+  ['Welfare unit (self-contained)', 'POA', 'POA', 'Required on most managed M1 commercial sites'],
+];
+
+const m1PostcodeTable: [string, string, string][] = [
+  ['M2', 'Manchester City Centre (south of M1)', 'Deansgate, Spinningfields — similar commercial profile'],
+  ['M3', 'Salford border / Chapel Street', 'MediaCityUK gateway, mixed residential and commercial'],
+  ['M4', 'Rochdale Road corridor', 'Northern edge — Northern Quarter overflow, residential conversion'],
+  ['M12', 'Ardwick', 'Industrial and commercial — depot location for M1 delivery'],
+  ['M15', 'Hulme / Oxford Road', 'University corridor — student housing builds and commercial'],
+];
+
+const m1Faqs: Faq[] = [
+  ['Where can I hire tools for a site in M1 Manchester?', 'M1 is served by depots in Salford (M5), Ardwick (M12), and the wider South Manchester area. Tooli.uk compares prices from suppliers with confirmed delivery coverage for M1, so you can find the best local rate and check delivery availability without ringing multiple depots.'],
+  ['Can I get same-day tool hire in M1?', 'Yes for smaller equipment (disc cutters, generators up to 15 kVA, mixers, dehumidifiers) from Salford and Ardwick depots. For plant machinery (mini diggers, dumpers, scaffold towers for taller commercial sites), 24–48 hours\' notice is standard for M1 delivery due to traffic management requirements.'],
+  ['What are the delivery rules for M1 construction sites?', 'Most managed commercial sites in M1 require deliveries outside peak traffic hours (before 7am or after 7pm), a pre-booked loading bay or street space suspension, and a site representative on-site to accept delivery. For smaller items, kerbside delivery by van during normal hours is more straightforward — confirm requirements with your site manager before booking.'],
+  ['Do I need a generator for a fit-out in M1?', 'If the building being refurbished has no live mains power connection, yes — a temporary generator is needed for tools, lighting, welfare, and any screed drying equipment. A 15–30 kVA diesel generator is sufficient for most single-trade fit-out operations. For larger multi-trade commercial fit-outs, consult your temporary power supplier.'],
+];
+
+function M1ToolHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-[#030213]">Tool Hire M1 at a Glance</h2>
+        <ul className="space-y-2">
+          {[
+            'Covers: Piccadilly, Northern Quarter, Ancoats, edge of NOMA development zone',
+            'Nearest depots: Salford (M5), Ardwick (M12), Openshaw direction — 10–20 min drive',
+            'Delivery in M1: loading bays required for plant — traffic management plans on major sites',
+            'Most-hired equipment: generators, site lighting, scaffold towers, welfare units, disc cutters',
+            'Commercial focus: fit-out and conversion work dominates over residential groundworks in M1',
+            'Same-day: available for small plant from Salford depots — confirm before booking',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-700">
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <H2>About M1: The Construction Context</H2>
+      <Prose>
+        M1 is one of the UK's most active urban regeneration postcodes. The conversion of Manchester's former
+        warehouse and industrial stock — particularly across Ancoats (now a NESC heritage zone) and the Northern
+        Quarter — into residential apartments, restaurants, offices, and hotels has driven sustained fit-out and
+        refurbishment demand for over a decade.
+      </Prose>
+      <Prose>
+        The NOMA (Northern Manchester) development adjacent to M1 represents over £800 million of planned
+        development. Construction on this corridor creates ongoing demand for temporary power, access equipment,
+        and plant for civil and structural work in a congested urban environment.
+      </Prose>
+
+      <Link
+        to="/blog/tool-hire-manchester-compare-prices-from-local-suppliers"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire in Manchester: Compare Prices From Local Suppliers</span>
+      </Link>
+
+      <H2>Equipment Most Hired in M1 and Typical Rates</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Equipment</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Day Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Week Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">M1 Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {m1EquipmentTable.map(([equip, day, week, notes], i) => (
+              <tr key={equip} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{equip}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                <td className="px-4 py-3 text-gray-700">{week}</td>
+                <td className="px-4 py-3 text-gray-600">{notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500">*VAT-inclusive guidance. Compare live M1 rates on Tooli.uk.</p>
+
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare M1 Tool Hire Prices</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — local suppliers with confirmed delivery to M1, Piccadilly, Northern Quarter, and Ancoats.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+
+      <Link
+        to="/blog/generator-hire-uk-prices-power-output-guide-2026"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Generator Hire UK: Prices &amp; Power Output Guide 2026</span>
+      </Link>
+
+      <img
+        src="/images/blog/tool-hire-m1-manchester-city-centre.webp"
+        alt="Scaffold tower inside a high-ceilinged industrial building conversion in the Northern Quarter Manchester M1"
+        className="w-full rounded-2xl object-cover"
+      />
+
+      <H2>Delivery to M1: Urban Site Rules</H2>
+      <H3>Loading Bays and Traffic Management</H3>
+      <Prose>
+        M1 is a busy urban core with limited kerbside access. Most commercial sites on Piccadilly, Great Ancoats
+        Street, and the Northern Quarter require specific delivery arrangements:
+      </Prose>
+      <CheckList items={[
+        'A booked loading bay or traffic management plan for large plant deliveries',
+        'Delivery outside peak hours (typically before 7am or after 7pm on key M1 routes)',
+        'A site contact on-site to accept delivery — on managed commercial builds this is mandatory',
+        'Confirmation of any access height restrictions (car park ramps, undercroft deliveries) before booking',
+      ]} />
+
+      <H3>Parking Suspensions</H3>
+      <Prose>
+        For site operations that require kerbside space in M1, Manchester City Council issues temporary parking
+        suspensions (yellow line suspensions). Your hire company can usually advise on the process — or the
+        principal contractor will have this in place for managed sites. Budget 3–5 working days for MCC to
+        process a suspension application.
+      </Prose>
+
+      <Link
+        to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained</span>
+      </Link>
+
+      <Link
+        to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Do I Need a Permit for a Skip on the Road? The Direct Answer</span>
+      </Link>
+
+      <H2>Neighbouring M Postcodes to M1</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Postcode</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Area</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Relationship to M1</th>
+            </tr>
+          </thead>
+          <tbody>
+            {m1PostcodeTable.map(([postcode, area, rel], i) => (
+              <tr key={postcode} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-bold text-brand-primary">{postcode}</td>
+                <td className="px-4 py-3 font-medium text-[#030213]">{area}</td>
+                <td className="px-4 py-3 text-gray-600">{rel}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Link
+        to="/blog/plant-hire-manchester-compare-local-plant-hire-companies"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Plant Hire Manchester: Compare Local Plant Hire Companies</span>
+      </Link>
+
+      <Link
+        to="/blog/tool-hire-comparison-uk"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire Comparison UK: Compare Construction Equipment &amp; Plant Hire Suppliers</span>
+      </Link>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">How Tool Hire Comparison Actually Saves Your Money (And How to Do It Properly)</span>
+      </Link>
+
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-2 text-sm font-bold text-[#030213]">Useful M1 Resources</p>
+        <ul className="space-y-2">
+          <li>
+            <a href="https://www.manchester.gov.uk/roads" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Manchester City Council — Temporary Traffic Orders
+            </a>
+            <span className="text-sm text-gray-600"> — Parking suspensions and traffic management applications for M1 construction sites</span>
+          </li>
+          <li>
+            <a href="https://www.noma.co.uk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              NOMA Manchester — Development Programme
+            </a>
+            <span className="text-sm text-gray-600"> — Northern Manchester development programme — context for M1 construction activity</span>
+          </li>
+          <li>
+            <a href="https://www.manchester.gov.uk/planning" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Manchester City Council — Planning Applications
+            </a>
+            <span className="text-sm text-gray-600"> — Live planning applications across M1 and wider Manchester city centre</span>
+          </li>
+        </ul>
+      </div>
+
+      <FaqSection faqs={m1Faqs} />
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Hire in M1?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-white underline">compare now</a>{' '}
+          — local suppliers covering Piccadilly, Northern Quarter, Ancoats, and the wider M1 postcode.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -14502,6 +14756,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Manchester Plant Hire',
     faqs: manchesterPlantFaqs,
     Body: ManchesterPlantHireBody,
+  },
+  {
+    slug: 'tool-hire-m1-manchester-city-centre-postcode-area-guide',
+    category: 'Location Guides',
+    title: 'Tool Hire M1: Manchester City Centre Postcode Area Guide',
+    excerpt:
+      'Compare tool and plant hire in M1 — Manchester city centre, Piccadilly, Northern Quarter, and Ancoats. Generator hire, scaffold towers, site lighting, and fit-out equipment from local suppliers covering M1 and neighbouring M postcodes.',
+    intro:
+      'M1 covers Manchester\'s commercial and creative core — Piccadilly, the Northern Quarter, Ancoats, and the edge of the city-centre retail district. Construction activity in M1 is predominantly commercial — fit-outs, residential conversions of former industrial buildings, and infrastructure works supporting the city\'s continued growth.',
+    image: '/images/blog/tool-hire-m1-manchester-city-centre-postcode-area-guide.webp',
+    imageAlt: 'Generator hire powering a fit-out project inside a former warehouse conversion in Ancoats Manchester M1',
+    datePublished: '2026-08-07',
+    metaTitle: 'Tool Hire M1: Manchester City Centre Area Guide | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire in M1 — Manchester city centre, Piccadilly, Northern Quarter and Ancoats. Local suppliers, delivery rules and hire rates for M1 hirers.',
+    primaryCta: 'Compare M1 Tool Hire',
+    faqs: m1Faqs,
+    Body: M1ToolHireBody,
   },
 ];
 
