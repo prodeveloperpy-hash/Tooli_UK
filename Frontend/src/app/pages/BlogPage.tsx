@@ -13178,6 +13178,279 @@ function ManchesterToolHireBody() {
   );
 }
 
+/* Article 41 — Mini Digger Hire Manchester: Prices & Local Availability */
+
+const manchesterDiggerPriceTable: [string, string, string, string, string][] = [
+  ['0.8t micro digger', '£95–£165', '£155–£255', '£360–£520', '~12% below London'],
+  ['1.5t mini digger', '£150–£215', '£235–£330', '£480–£670', '~10% below London'],
+  ['3t mini digger', '£210–£300', '£320–£460', '£650–£920', '~8% below London'],
+  ['5t midi digger', '£280–£420', '£430–£640', '£870–£1,310', '~7% below London'],
+];
+
+const manchesterDiggerDeliveryTable: [string, string, string][] = [
+  ['Under 10 miles', '£60–£90', 'Central Manchester, Salford, Trafford, inner M postcodes'],
+  ['10–20 miles', '£90–£130', 'Stockport, Bolton edge, Oldham edge, Wigan edge'],
+  ['20–35 miles', '£120–£180', 'Preston, Wigan, Macclesfield — POA from most depots'],
+  ['Self-collect', '£0', 'Bring suitable trailer + towing vehicle to the depot'],
+];
+
+const manchesterDiggerJobTable: [string, string, string][] = [
+  ['Victorian terrace side-passage access', '0.8t', 'Most Manchester inner-terrace passages are 800–1,000mm wide — measure before booking'],
+  ['Rear garden clearance and reshaping', '0.8t or 1.5t', '0.8t for tight plots, 1.5t where volume of spoil is significant'],
+  ['Extension footings (single-storey)', '1.5t', 'Standard depth 750–1,000mm — 1.5t handles this comfortably'],
+  ['Driveway excavation (1–2 cars)', '1.5t', 'Sub-base removal and drainage prep'],
+  ['Drainage run / land drain (40m+)', '1.5t or 3t', '3t shifts spoil faster on longer runs'],
+  ['Extension footings (two-storey or on clay)', '3t', 'Deeper foundations and harder ground in parts of South Manchester'],
+  ['Commercial groundworks / site prep', '3t or 5t', 'Commercial M1–M4 sites typically require 3t minimum'],
+];
+
+const manchesterDiggerFaqs: Faq[] = [
+  ['How much does it cost to hire a mini digger in Manchester?', 'A 0.8-tonne micro digger in Manchester costs approximately £95–£165 per day. A 1.5-tonne machine — the most commonly hired size — runs £150–£215 per day. A 3-tonne machine for foundation or groundwork use costs £210–£300 per day. Compare current local rates on Tooli.uk.'],
+  ['Can a mini digger access a Manchester terrace side entry?', 'The micro digger (0.8t, 750–850mm transport width) fits most Manchester Victorian terrace side entries, which are typically 800–1,000mm wide. Measure the narrowest point of the access route — not just the entry — before booking. Some entries have gatepost-to-wall restrictions as low as 750mm.'],
+  ['Is same-day mini digger hire available in Manchester?', 'Yes — for 0.8t and 1.5t machines from depots in Salford and South Manchester, same-day delivery is possible if you book before 9–10am. For 3t+ machines, 24–48 hours\' notice is standard. Call the depot directly for same-day availability — Tooli.uk shows which suppliers cover your postcode.'],
+  ['Do I need a CPCS card to hire a mini digger in Manchester?', 'Not for private domestic use on your own property. Hire depots do not legally require a CPCS card from private hirers. On managed commercial sites across Manchester city centre and Greater Manchester, CPCS card (category A59) will be required by the principal contractor.'],
+  ['What is the delivery charge for mini digger hire in Manchester?', 'Typically £60–£90 return within 10 miles of a Manchester depot. The M1–M4 core and inner M postcodes are within this range from most local suppliers. Self-collection eliminates delivery costs — most depots will help load the machine onto a suitable trailer.'],
+];
+
+function ManchesterDiggerHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-[#030213]">Manchester Mini Digger Hire at a Glance</h2>
+        <ul className="space-y-2">
+          {[
+            '0.8t micro digger: £95–£165/day — tight gardens and side-access residential jobs across Manchester',
+            '1.5t mini digger: £150–£215/day — most common size for Greater Manchester groundwork and landscaping',
+            '3t mini digger: £210–£300/day — foundation work, drainage, commercial sites',
+            'Delivery: typically £60–£130 return from Manchester depots — or self-collect if you have a trailer',
+            'Same-day availability: possible from Salford and South Manchester depots for smaller machines',
+            'No CPCS card needed for private domestic projects — required on managed commercial sites',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-700">
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <H2>Mini Digger Hire Prices in Manchester 2026</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Size Class</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Day Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Weekend Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Week Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">vs London</th>
+            </tr>
+          </thead>
+          <tbody>
+            {manchesterDiggerPriceTable.map(([size, day, weekend, week, vs], i) => (
+              <tr key={size} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{size}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                <td className="px-4 py-3 text-gray-700">{weekend}</td>
+                <td className="px-4 py-3 text-gray-700">{week}</td>
+                <td className="px-4 py-3 text-gray-500 text-xs">{vs}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500">*VAT-inclusive guidance. Compare live Manchester rates on Tooli.uk.</p>
+
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Manchester Mini Digger Prices</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — local suppliers across Greater Manchester, Salford, and Trafford.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-uk"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire Comparison UK: Compare Construction Equipment &amp; Plant Hire Suppliers</span>
+      </Link>
+
+      <H2>Delivery Costs From Manchester Depots</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Distance from Depot</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Typical Delivery Charge (return)</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Areas Typically Covered</th>
+            </tr>
+          </thead>
+          <tbody>
+            {manchesterDiggerDeliveryTable.map(([dist, charge, areas], i) => (
+              <tr key={dist} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{dist}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{charge}</td>
+                <td className="px-4 py-3 text-gray-600">{areas}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">How Tool Hire Comparison Actually Saves Your Money (And How to Do It Properly)</span>
+      </Link>
+
+      <img
+        src="/images/blog/mini-digger-hire-manchester-prices.webp"
+        alt="1.5-tonne mini digger excavating a rear extension foundation in Didsbury Manchester M20"
+        className="w-full rounded-2xl object-cover"
+      />
+
+      <H2>Common Manchester Mini Digger Jobs and Which Size You Need</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Job</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Recommended Size</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Manchester Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            {manchesterDiggerJobTable.map(([job, size, context], i) => (
+              <tr key={job} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{job}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{size}</td>
+                <td className="px-4 py-3 text-gray-600">{context}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Link
+        to="/blog/mini-digger-hire-london-prices-local-availability"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Mini Digger Hire London: Prices &amp; Local Availability</span>
+      </Link>
+
+      <H2>Access in Manchester: What You Need to Know</H2>
+      <H3>Victorian and Edwardian Terraces</H3>
+      <Prose>
+        The majority of Manchester's residential stock — across Hulme, Salford, Didsbury, Chorlton, and Stretford —
+        consists of Victorian and Edwardian terraced housing with rear-access entries (ginnels or jitties in local
+        parlance). These entries are typically 800–1,000mm wide. The 0.8-tonne micro digger at 750–850mm transport
+        width is the correct machine for this access type.
+      </Prose>
+
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-medium">
+          <strong>Measure before booking:</strong> Always measure the narrowest point of your access route — not just
+          the gate opening. Pipework, meter boxes, and brick reveals often reduce the effective clearance by 50–100mm
+          beyond what the opening suggests.
+        </p>
+      </div>
+
+      <H3>Inner-City Commercial Sites</H3>
+      <Prose>
+        On commercial sites in the M1–M4 core (Piccadilly, Deansgate, Ancoats), site access is often managed by a
+        traffic management plan. Confirm machine delivery arrangements with the site manager before booking —
+        low-loaders for 3t+ machines require planned access.
+      </Prose>
+
+      <H3>Ground Conditions</H3>
+      <Prose>
+        Manchester sits on a mix of Triassic sandstone and glacial boulder clay. The inner M postcodes tend to have
+        heavy clay subsoil that makes excavation harder and wetter in winter months. Factor in slower dig rates and
+        extra spoil-disposal costs if your project involves significant depth in clay ground.
+      </Prose>
+
+      <Link
+        to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</span>
+      </Link>
+
+      <Link
+        to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained</span>
+      </Link>
+
+      <Link
+        to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Do I Need a Permit for a Skip on the Road? The Direct Answer</span>
+      </Link>
+
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-2 text-sm font-bold text-[#030213]">Useful Resources</p>
+        <ul className="space-y-2">
+          <li>
+            <a href="https://cpcs.uk.com/categories" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              CPCS — Category A59 (360° Excavator)
+            </a>
+            <span className="text-sm text-gray-600"> — CPCS card information for Manchester-based commercial site operators</span>
+          </li>
+          <li>
+            <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              HSE PUWER — Operator Competence
+            </a>
+            <span className="text-sm text-gray-600"> — PUWER competence requirement applies to all mini digger operators in Manchester and across the UK</span>
+          </li>
+          <li>
+            <a href="https://www.cpa.uk.net" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Construction Plant-hire Association (CPA)
+            </a>
+            <span className="text-sm text-gray-600"> — UK plant hire industry body — member depots across Greater Manchester</span>
+          </li>
+        </ul>
+      </div>
+
+      <FaqSection faqs={manchesterDiggerFaqs} />
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Hire a Mini Digger in Manchester?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-white underline">compare now</a>{' '}
+          — local suppliers across Greater Manchester, Salford, Didsbury, and Chorlton.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -13936,6 +14209,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Manchester Tool Hire',
     faqs: manchesterFaqs,
     Body: ManchesterToolHireBody,
+  },
+  {
+    slug: 'mini-digger-hire-manchester-prices-and-local-availability',
+    category: 'Plant Hire Guide',
+    title: 'Mini Digger Hire Manchester: Prices & Local Availability',
+    excerpt:
+      'Mini digger hire in Manchester costs £95–£300/day depending on size — 10–15% below London rates. Guide to 0.8t, 1.5t, and 3t machines across Greater Manchester, tight-access Victorian terrace jobs, delivery costs, and same-day availability.',
+    intro:
+      'Mini digger hire in Manchester costs between £95 and £300 per day depending on machine size — typically 10–15% below London equivalents for the same class of excavator. Greater Manchester has one of the densest networks of plant hire depots in the North of England, with multiple suppliers covering all M postcodes, Salford, and Trafford from central and suburban locations.',
+    image: '/images/blog/mini-digger-hire-manchester-prices-and-local-availability.webp',
+    imageAlt: '0.8-tonne micro digger working through a Victorian terrace side entry in Manchester — tight-access mini digger hire',
+    datePublished: '2026-08-07',
+    metaTitle: 'Mini Digger Hire Manchester: Prices & Local Availability | Tooli.uk',
+    metaDescription:
+      'Compare mini digger hire prices from Manchester suppliers. Local rates for 0.8t to 5t excavators across M postcodes, Salford, and Trafford. Tooli.uk.',
+    primaryCta: 'Compare Manchester Digger Hire',
+    faqs: manchesterDiggerFaqs,
+    Body: ManchesterDiggerHireBody,
   },
 ];
 
