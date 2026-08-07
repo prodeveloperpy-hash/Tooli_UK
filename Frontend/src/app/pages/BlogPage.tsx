@@ -14232,6 +14232,258 @@ function BirminghamCompareSuppliersBody() {
   );
 }
 
+/* Article 45 — Mini Digger Hire Birmingham: Prices & Local Availability */
+
+const bhamDiggerPriceTable: [string, string, string, string, string][] = [
+  ['0.8t micro digger', '£90–£160', '£145–£250', '£350–£510', '£55–£85'],
+  ['1.5t mini digger', '£145–£210', '£225–£325', '£460–£650', '£65–£100'],
+  ['3t mini digger', '£200–£290', '£305–£445', '£620–£900', '£75–£120'],
+  ['5t midi digger', '£270–£400', '£415–£615', '£840–£1,240', '£90–£150'],
+];
+
+const bhamDiggerJobTable: [string, string, string][] = [
+  ['Block paving driveway excavation (1–2 cars)', '1.5t', 'The single most common mini digger hire trigger in Birmingham — old tarmac removal'],
+  ['Side passage / tight access on semi', '0.8t', '1930s semi-detached side passages typically 800–900mm — 0.8t fits, 1.5t may not'],
+  ['Rear extension foundations (single-storey)', '1.5t', 'Standard strip foundation — 700–900mm depth, 1.5t handles this comfortably'],
+  ['Rear extension foundations (two-storey, deeper)', '3t', 'Deeper and wider strip — 3t\'s greater depth and reach needed'],
+  ['Garden clearance and reshaping', '1.5t', 'Common across Sutton Coldfield and Solihull garden redesigns'],
+  ['Drainage / soakaway installation', '1.5t', 'Standard depth — 1.5t efficient for residential drainage across B postcodes'],
+  ['Perry Barr / Handsworth groundworks', '3t', 'Regeneration zone — commercial and infrastructure scale requires 3t minimum'],
+];
+
+const bhamDiggerFaqs: Faq[] = [
+  ['How much does mini digger hire cost in Birmingham?', 'A 0.8-tonne micro digger in Birmingham costs approximately £90–£160 per day. A 1.5-tonne machine — the most commonly hired size for driveway and extension work — is £145–£210/day. A 3-tonne machine runs £200–£290/day. Compare current local rates on Tooli.uk.'],
+  ['Can a mini digger fit through a Birmingham 1930s semi side passage?', 'A micro digger (0.8t, 750–850mm wide) fits most 1930s semi-detached side passages in Birmingham, which are typically 800–900mm. A standard 1.5-tonne machine (990–1,200mm wide) will not fit through most passages of this width. Measure the narrowest point before booking — gate posts, meter boxes, and outbuildings all reduce effective clearance.'],
+  ['Which Birmingham postcode has the most mini digger hire demand?', 'Block paving driveway work drives the highest volume of mini digger hire across B14, B28, and B72–B74 (Kings Heath, Yardley Wood, Sutton Coldfield) — all areas with high concentrations of 1930s semi-detached housing where front garden paving is a popular home improvement.'],
+  ['Is same-day mini digger hire available in Birmingham?', 'For 0.8t and 1.5t machines, same-day delivery is possible from Erdington (B23) and Sparkbrook (B11) depots if you book before 9–10am. For 3t+ machines, 24–48 hours\' notice is standard.'],
+  ['Do I need a CPCS card to hire a mini digger in Birmingham?', 'Not for domestic use on private land. Hire depots do not require a CPCS card from private hirers. On managed commercial sites across Birmingham (including the Big City Plan zone), CPCS A59 is required by most principal contractors.'],
+];
+
+function BirminghamDiggerHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-[#030213]">Birmingham Mini Digger Hire at a Glance</h2>
+        <ul className="space-y-2">
+          {[
+            '0.8t micro digger: £90–£160/day — tight side passages on 1930s semis and Victorian terraces',
+            '1.5t mini digger: £145–£210/day — most popular size for Birmingham driveway and extension work',
+            '3t mini digger: £200–£290/day — foundation work, drainage, commercial sites',
+            'Delivery: typically £55–£120 return from Birmingham depots',
+            'Same-day: available from Erdington (B23) and Sparkbrook (B11) depots for 0.8t and 1.5t',
+            'No CPCS card needed on private land — required on managed Birmingham commercial sites',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-700">
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <H2>Mini Digger Hire Prices in Birmingham 2026</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Size Class</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Day Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Weekend Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Week Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Delivery (return)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bhamDiggerPriceTable.map(([size, day, weekend, week, delivery], i) => (
+              <tr key={size} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{size}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                <td className="px-4 py-3 text-gray-700">{weekend}</td>
+                <td className="px-4 py-3 text-gray-700">{week}</td>
+                <td className="px-4 py-3 text-gray-600">{delivery}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500">*VAT-inclusive guidance. Compare Birmingham rates on Tooli.uk.</p>
+
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Birmingham Mini Digger Prices</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — local suppliers across Birmingham, Solihull, Sandwell, and the West Midlands.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+
+      <Link
+        to="/blog/tool-hire-birmingham-compare-prices-from-local-suppliers"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire in Birmingham: Compare Prices From Local Suppliers</span>
+      </Link>
+
+      <H2>Birmingham Mini Digger Jobs: Project to Machine Size</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Project Type</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Recommended Size</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Birmingham Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bhamDiggerJobTable.map(([job, size, context], i) => (
+              <tr key={job} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{job}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{size}</td>
+                <td className="px-4 py-3 text-gray-600">{context}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Link
+        to="/blog/tool-hire-comparison-uk"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire Comparison UK: Compare Construction Equipment &amp; Plant Hire Suppliers</span>
+      </Link>
+
+      <img
+        src="/images/blog/mini-digger-hire-birmingham-prices.webp"
+        alt="1.5-tonne mini digger excavating an old tarmac driveway in Sutton Coldfield Birmingham B73 — block paving preparation"
+        className="w-full rounded-2xl object-cover"
+      />
+
+      <H2>Access Across Birmingham's Housing Stock</H2>
+      <H3>1930s Semi-Detached (B14, B28, B72, B73, B74)</H3>
+      <Prose>
+        Birmingham's dominant suburban housing type is the inter-war semi-detached — typically with a side passage
+        of 800–900mm between the house and the boundary wall. This is tight for a 1.5-tonne mini digger (transport
+        width 990–1,200mm). The 0.8-tonne micro digger at 750–850mm is the correct machine for this access type.
+        Confirm the narrowest point of the passage — including any buttresses, gas meter boxes, or gate posts —
+        before booking.
+      </Prose>
+
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-medium">
+          <strong>Measure before booking:</strong> Always measure the narrowest point of your access route, not just
+          the gate opening. Pipework, meter boxes, and brick reveals often reduce effective clearance by 50–100mm
+          beyond what the opening suggests.
+        </p>
+      </div>
+
+      <H3>Victorian and Edwardian Terraces (B11, B12, B13, B19)</H3>
+      <Prose>
+        The inner Birmingham terraces of Moseley, Balsall Heath, Sparkbrook, and Handsworth have rear-entry access
+        via a shared entry or back lane. Back lanes in Birmingham are generally 2–3 metres wide, which accommodates
+        a 1.5-tonne machine. Confirm lane surface condition and width before delivery.
+      </Prose>
+
+      <Link
+        to="/blog/mini-digger-hire-london-prices-local-availability"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Mini Digger Hire London: Prices &amp; Local Availability</span>
+      </Link>
+
+      <H3>Solihull Detached (B90–B93)</H3>
+      <Prose>
+        Solihull's detached housing typically has wider side access and more room to manoeuvre. 1.5-tonne and
+        3-tonne machines are generally accessible here without micro digger compromise.
+      </Prose>
+
+      <Link
+        to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</span>
+      </Link>
+
+      <Link
+        to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained</span>
+      </Link>
+
+      <Link
+        to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Do I Need a Permit for a Skip on the Road? The Direct Answer</span>
+      </Link>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">How Tool Hire Comparison Actually Saves Your Money (And How to Do It Properly)</span>
+      </Link>
+
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-2 text-sm font-bold text-[#030213]">Useful Resources</p>
+        <ul className="space-y-2">
+          <li>
+            <a href="https://cpcs.uk.com/categories" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              CPCS — Category A59 (360° Excavator)
+            </a>
+            <span className="text-sm text-gray-600"> — CPCS card for Birmingham-based commercial site mini digger operators</span>
+          </li>
+          <li>
+            <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              HSE PUWER — Operator Competence
+            </a>
+            <span className="text-sm text-gray-600"> — PUWER competence requirement applies to all mini digger operators</span>
+          </li>
+          <li>
+            <a href="https://www.cpa.uk.net" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Construction Plant-hire Association (CPA)
+            </a>
+            <span className="text-sm text-gray-600"> — CPA-member depots across the West Midlands — Birmingham area suppliers</span>
+          </li>
+        </ul>
+      </div>
+
+      <FaqSection faqs={bhamDiggerFaqs} />
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Hire a Mini Digger in Birmingham?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-white underline">compare now</a>{' '}
+          — local suppliers across Birmingham, Solihull, Erdington, and the wider West Midlands.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -15062,6 +15314,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Birmingham Tool Hire',
     faqs: bhamCompareFaqs,
     Body: BirminghamCompareSuppliersBody,
+  },
+  {
+    slug: 'mini-digger-hire-birmingham-prices-and-local-availability',
+    category: 'Plant Hire Guide',
+    title: 'Mini Digger Hire Birmingham: Prices & Local Availability',
+    excerpt:
+      'Mini digger hire in Birmingham costs £90–£290/day depending on size. Guide to 0.8t, 1.5t, and 3t machines across the B postcodes — including tight-access 1930s semi side passages, block paving jobs, and same-day availability from Erdington and Sparkbrook depots.',
+    intro:
+      'Mini digger hire in Birmingham costs between £90 and £290 per day depending on machine size. The West Midlands has a dense plant hire network with genuine competition between suppliers — which means rates are among the most competitive outside London, and same-day availability from Erdington and Sparkbrook depots is realistic for smaller machines.',
+    image: '/images/blog/mini-digger-hire-birmingham-prices-and-local-availability.webp',
+    imageAlt: '0.8-tonne micro digger accessing the side passage of a 1930s semi-detached house in Birmingham — tight-access hire West Midlands',
+    datePublished: '2026-08-07',
+    metaTitle: 'Mini Digger Hire Birmingham: Prices & Local Availability | Tooli.uk',
+    metaDescription:
+      'Compare mini digger hire prices from Birmingham suppliers. Local rates for 0.8t to 5t excavators across B postcodes, Solihull, and Sandwell. Tooli.uk.',
+    primaryCta: 'Compare Birmingham Digger Hire',
+    faqs: bhamDiggerFaqs,
+    Body: BirminghamDiggerHireBody,
   },
 ];
 
