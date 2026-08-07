@@ -14710,6 +14710,259 @@ function BirminghamPlantHireBody() {
   );
 }
 
+/* Article 47 — Tool Hire B1: Birmingham City Centre Postcode Area Guide */
+
+const b1EquipmentTable: [string, string, string, string][] = [
+  ['Generator (15–30 kVA)', '£85–£180', '£320–£660', 'Fit-out and conversion temp power — many B1 buildings lack live mains during refurb'],
+  ['Indoor scaffold tower (low-level)', '£20–£35', '£50–£80', 'High-ceiling commercial and hotel conversion interiors'],
+  ['Cherry picker / MEWP (electric)', '£120–£200', '£440–£730', 'Internal high-reach access — electric required for enclosed B1 spaces'],
+  ['Site lighting tower', '£60–£95', '£220–£360', 'Enclosed basement and nightwork in B1 commercial sites'],
+  ['Disc cutter (electric)', '£35–£65', '£130–£240', 'Internal concrete and block cuts — petrol exhaust not acceptable in enclosed B1 sites'],
+  ['Dehumidifier (large, 70 L/day)', '£75–£110', '£270–£400', 'Screed drying in converted office-to-residential schemes'],
+  ['Concrete pump / mixer', '£100–£180/day', 'N/A', 'Structural pours — Brindleyplace and Paradise zone active builds'],
+  ['Welfare unit (self-contained)', 'POA', 'POA', 'Required on all managed commercial sites in B1'],
+];
+
+const b1PostcodeTable: [string, string, string][] = [
+  ['B2', 'Birmingham City Centre (east of B1)', 'Bullring, New Street Station — similar commercial profile'],
+  ['B3', 'Jewellery Quarter / Hockley', 'Mixed commercial and residential conversion'],
+  ['B15', 'Edgbaston', 'Residential and private clinic zone — adjacent to Five Ways end of B1'],
+  ['B16', 'Edgbaston / Ladywood', 'Ladywood regeneration corridor, residential'],
+  ['B5', 'Digbeth, Southside', 'Creative industries and HS2 Curzon Street zone — high development activity'],
+];
+
+const b1Faqs: Faq[] = [
+  ['Where can I hire tools for a construction project in B1 Birmingham?', 'B1 is served by depots in Erdington (B23), Sparkbrook (B11), and Solihull (B91) — all typically 15–25 minutes from B1 in off-peak traffic. Tooli.uk compares prices from suppliers with confirmed B1 delivery coverage so you can get the best local rate without ringing round individually.'],
+  ['Does Birmingham\'s Clean Air Zone affect tool hire deliveries to B1?', 'Yes — delivery vehicles that don\'t meet Euro 6 diesel standards incur a daily CAZ charge when entering the Birmingham city centre zone. Reputable hire companies operating in B1 use compliant vehicles and should not charge you separately for this. Confirm your hire company\'s delivery vehicle compliance at the point of booking.'],
+  ['Can I use a petrol disc cutter on a B1 fit-out project?', 'Not in an enclosed space — petrol disc cutters generate significant CO exhaust which is dangerous in enclosed commercial interiors. Use an electric disc cutter (110V or 240V) for all internal cutting work in B1. Silica dust control (water suppression or H-class extraction) is still required regardless of cutter type.'],
+  ['Do I need a generator for a B1 fit-out?', 'If the building is undergoing major refurbishment without a live mains supply, a temporary generator is essential for tools, lighting, and drying equipment. A 15–30 kVA diesel generator is sufficient for most single-trade fit-out operations in a B1 commercial building. Position it outside or in a ventilated plant room with a flue routed to open air.'],
+];
+
+function B1ToolHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-[#030213]">Tool Hire B1 at a Glance</h2>
+        <ul className="space-y-2">
+          {[
+            'Covers: Broad Street, Brindleyplace, Five Ways, western edge of B1 commercial zone',
+            'Nearest depots: Erdington (B23), Sparkbrook (B11), Solihull (B91) — 15–25 min drive',
+            'Delivery in B1: managed site deliveries — loading bays and traffic management required',
+            'Most-hired equipment: generators, site lighting, access platforms, disc cutters, welfare units',
+            'Commercial focus: office fit-out and conversion — groundwork plant less common in B1 core',
+            'Access: Birmingham Clean Air Zone (CAZ) applies — confirm vehicle compliance before booking',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-700">
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <H2>About B1: Birmingham's Commercial Construction Zone</H2>
+      <Prose>
+        B1 is the beating heart of Birmingham's Big City Plan. The Brindleyplace mixed-use development,
+        Centenary Square, and the Paradise Birmingham development zone sit within or immediately adjacent to B1.
+        This area generates sustained demand for fit-out and refurbishment hire equipment — particularly
+        generators (for buildings without live mains supply), access equipment for high-ceiling commercial
+        interiors, and specialist cutting and breaking tools.
+      </Prose>
+      <Prose>
+        B1 is also home to a cluster of hotel and serviced-apartment conversions of former office stock — a
+        significant post-pandemic trend in Birmingham city centre that drives demand for internal access towers,
+        dehumidifiers for post-screed drying, and welfare units on managed conversion sites.
+      </Prose>
+
+      <Link
+        to="/blog/tool-hire-birmingham-compare-prices-from-local-suppliers"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire in Birmingham: Compare Prices From Local Suppliers</span>
+      </Link>
+
+      <H2>Equipment Most Hired in B1 and Typical Rates</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Equipment</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Day Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Week Rate</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">B1 Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {b1EquipmentTable.map(([equipment, day, week, notes], i) => (
+              <tr key={equipment} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{equipment}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{day}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{week}</td>
+                <td className="px-4 py-3 text-gray-600">{notes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500">*VAT-inclusive guidance. Compare B1 rates on Tooli.uk.</p>
+
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare B1 Tool &amp; Plant Hire Prices</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your B1 postcode to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — generators, access platforms, disc cutters and more from Birmingham suppliers with confirmed B1 delivery.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-uk"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire Comparison UK: Compare Construction Equipment &amp; Plant Hire Suppliers</span>
+      </Link>
+
+      <img
+        src="/images/blog/tool-hire-b1-birmingham-city-centre.webp"
+        alt="Electric cherry picker MEWP inside a high-ceiling commercial building conversion in Birmingham city centre — IPAF 3b required"
+        className="w-full rounded-2xl object-cover"
+      />
+
+      <H2>Birmingham Clean Air Zone: What It Means for Hire Deliveries in B1</H2>
+      <Prose>
+        Birmingham's Clean Air Zone (CAZ) covers the city centre including B1. The CAZ charges certain vehicles
+        that do not meet emission standards:
+      </Prose>
+      <CheckList items={[
+        'Vans (over 3.5t): subject to daily charge if not meeting Euro 6 diesel or Euro 4 petrol standards',
+        'HGVs/lorries: subject to daily charge if not meeting Euro 6 diesel standard',
+        'Cars and small vans: currently subject to charge if non-compliant',
+      ]} />
+      <Prose>
+        For plant hire deliveries in B1, this means your hire company's delivery vehicle must be CAZ-compliant
+        or they must pay the daily charge (which may be passed through to you). Reputable Birmingham hire
+        companies operating in B1 use compliant fleet vehicles — confirm this when booking.
+      </Prose>
+
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">
+        <p className="text-sm font-medium">
+          <strong>Check before booking:</strong> Use the{' '}
+          <a href="https://brumbreathes.co.uk" target="_blank" rel="noopener noreferrer" className="underline">
+            Birmingham CAZ vehicle checker
+          </a>{' '}
+          to confirm whether your hire company's delivery vehicle is compliant. A non-compliant vehicle incurs
+          a daily charge — ask the depot directly.
+        </p>
+      </div>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">How Tool Hire Comparison Actually Saves Your Money (And How to Do It Properly)</span>
+      </Link>
+
+      <H2>Neighbouring B Postcodes to B1</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Postcode</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Area</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Relationship to B1</th>
+            </tr>
+          </thead>
+          <tbody>
+            {b1PostcodeTable.map(([postcode, area, rel], i) => (
+              <tr key={postcode} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-bold text-brand-primary">{postcode}</td>
+                <td className="px-4 py-3 font-medium text-[#030213]">{area}</td>
+                <td className="px-4 py-3 text-gray-600">{rel}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Link
+        to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained</span>
+      </Link>
+
+      <Link
+        to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</span>
+      </Link>
+
+      <Link
+        to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Do I Need a Permit for a Skip on the Road? The Direct Answer</span>
+      </Link>
+
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-2 text-sm font-bold text-[#030213]">Useful Resources</p>
+        <ul className="space-y-2">
+          <li>
+            <a href="https://brumbreathes.co.uk" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Birmingham Clean Air Zone — Vehicle Checker
+            </a>
+            <span className="text-sm text-gray-600"> — Check whether your hire delivery vehicle is subject to the Birmingham CAZ charge</span>
+          </li>
+          <li>
+            <a href="https://www.birmingham.gov.uk/bigcityplan" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Birmingham City Council — Big City Plan
+            </a>
+            <span className="text-sm text-gray-600"> — Development pipeline for the B1 commercial zone including Paradise and Eastside</span>
+          </li>
+          <li>
+            <a href="https://www.hse.gov.uk/construction" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              HSE — Electrical Safety and Generators on Construction Sites
+            </a>
+            <span className="text-sm text-gray-600"> — HSE guidance on temporary electrical supply in commercial fit-out environments</span>
+          </li>
+        </ul>
+      </div>
+
+      <FaqSection faqs={b1Faqs} />
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Hire in B1 Birmingham?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your B1 postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-white underline">compare now</a>{' '}
+          — generators, access platforms, disc cutters and welfare units from suppliers with confirmed B1 delivery coverage.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -15576,6 +15829,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Birmingham Plant Hire',
     faqs: bhamPlantFaqs,
     Body: BirminghamPlantHireBody,
+  },
+  {
+    slug: 'tool-hire-b1-birmingham-city-centre-postcode-area-guide',
+    category: 'Location Guides',
+    title: 'Tool Hire B1: Birmingham City Centre Postcode Area Guide',
+    excerpt:
+      'Compare tool and plant hire in B1 — Birmingham city centre, Brindleyplace, Digbeth and Eastside. Local suppliers, delivery access and hire rates for B1 projects.',
+    intro:
+      'B1 is Birmingham\'s commercial core — the postcode covering Broad Street, Brindleyplace, Five Ways, and the eastern edge of Edgbaston. Construction activity here is almost entirely commercial: major office developments, hotel conversions, retail-to-residential schemes, and infrastructure improvements associated with the Big City Plan. This guide covers tool and plant hire for B1 projects — from fit-out equipment for commercial refurbishments to the plant access rules that apply in a dense urban commercial zone.',
+    image: '/images/blog/tool-hire-b1-birmingham-city-centre-postcode-area-guide.webp',
+    imageAlt: 'Generator hire powering a commercial fit-out project in a Brindleyplace office conversion Birmingham B1',
+    datePublished: '2026-08-07',
+    metaTitle: 'Tool Hire B1: Birmingham City Centre Area Guide | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire in B1 — Birmingham city centre, Brindleyplace, Digbeth and Eastside. Local suppliers, delivery access and hire rates for B1 projects.',
+    primaryCta: 'Compare B1 Tool Hire',
+    faqs: b1Faqs,
+    Body: B1ToolHireBody,
   },
 ];
 
