@@ -13451,6 +13451,263 @@ function ManchesterDiggerHireBody() {
   );
 }
 
+/* Article 42 — Plant Hire Manchester: Compare Local Plant Hire Companies */
+
+const manchesterPlantCategoryTable: [string, string, string, string][] = [
+  ['Mini excavators (tracked)', '0.8t – 5t', '£95–£420/day', 'Residential groundworks, inner-city sites, drainage, landscaping'],
+  ['Mid-range excavators', '5t – 13t', '£350–£650/day', 'Commercial foundations, road works, utility trenching across Greater Manchester'],
+  ['Large excavators', '13t – 25t+', '£550–£900+/day', 'Major infrastructure — Metrolink works, A-road drainage, commercial basements'],
+  ['Mini dumpers (tracked)', '500 kg – 3t', '£90–£280/day', 'Spoil removal from residential and commercial sites'],
+  ['Site dumpers (large)', '6t – 10t', '£280–£480/day', 'High-volume earthmoving on Manchester development sites'],
+  ['Telehandlers', '7m – 17m lift', '£220–£480/day', 'Block and beam lifts, material handling on housebuilder sites'],
+  ['Road sweepers', 'Compact to truck-mounted', '£280–£650/day', 'Site entrance and access road cleaning — required on most managed sites'],
+  ['Compaction equipment', 'Wacker plates, rollers', '£45–£380/day', 'Sub-base and road base compaction across Greater Manchester'],
+  ['Screening plants', 'Tracked mobile screens', '£350–£700/day', 'Site-won material processing on larger earthworks contracts'],
+];
+
+const manchesterPlantHireOptionsTable: [string, string, string, string][] = [
+  ['Dry hire', 'Machine only — you provide a CPCS-carded operator', 'Contractors with their own carded operator', 'Baseline hire rate'],
+  ['Operated hire', 'Machine + CPCS operator supplied by the hire company', 'One-off projects, smaller contractors without own plant operator', 'Operator typically £200–£380/day additional'],
+];
+
+const manchesterPlantFaqs: Faq[] = [
+  ['What is the difference between tool hire and plant hire in Manchester?', 'Tool hire covers hand tools, access equipment, and small machinery — disc cutters, scaffold towers, mixers, generators. Plant hire covers larger self-propelled or towable machinery — excavators, dumpers, telehandlers, road sweepers. Many hire companies in Manchester offer both, but specialist plant hire companies focus on the heavier machinery with CPCS operators available.'],
+  ['Can I hire plant equipment without a trade account in Manchester?', 'Yes for most equipment. Some plant hire companies in Manchester require a business trade account for larger machines (telehandlers, larger excavators) due to the higher deposit and liability involved. For mini excavators and dumpers, most depots hire on a debit or credit card deposit basis without a formal trade account.'],
+  ['Do Manchester plant hire companies supply CPCS-carded operators?', 'Yes — most major plant hire companies serving Greater Manchester offer operated hire as an option. Operators are employed directly by the hire company and hold current CPCS cards for the relevant machine category. Specify operated hire when requesting your quote on Tooli.uk.'],
+  ['What documents do I need for plant hire in Manchester?', 'For dry hire: photo ID, company details (if applicable), and a credit or debit card for the deposit. For operated hire on managed sites: site address, site manager contact, CDM duty holder information, and any site induction requirements. LOLER certificates should be requested automatically for any lifting equipment.'],
+];
+
+function ManchesterPlantHireBody() {
+  return (
+    <>
+      {/* At a Glance */}
+      <section className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+        <h2 className="mb-4 text-lg font-bold text-[#030213]">Manchester Plant Hire at a Glance</h2>
+        <ul className="space-y-2">
+          {[
+            'Excavators: 1.5t to 20t+ available from Manchester depots — full range for residential to commercial',
+            'Dumpers: 1t to 6t tracked — strong demand from groundworkers across M and SK postcodes',
+            'Telehandlers: 7m to 17m lift height — available for commercial and housebuilder sites',
+            'Road sweepers: Greater Manchester road and site clearance — seasonal demand spikes',
+            'Delivery: most Greater Manchester plant hire companies cover a 30-mile radius from central depots',
+            'Operators: most depots can supply CPCS-carded operators alongside machine hire',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-700">
+              <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <H2>Plant Hire Categories Available in Manchester</H2>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Plant Category</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Common Sizes</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Day Rate Guide</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Key Manchester Applications</th>
+            </tr>
+          </thead>
+          <tbody>
+            {manchesterPlantCategoryTable.map(([category, sizes, rate, apps], i) => (
+              <tr key={category} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-medium text-[#030213]">{category}</td>
+                <td className="px-4 py-3 text-gray-700">{sizes}</td>
+                <td className="px-4 py-3 font-bold text-brand-primary">{rate}</td>
+                <td className="px-4 py-3 text-gray-600">{apps}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="text-xs text-gray-500">*VAT-inclusive guidance — operator costs are additional where specified. Compare Manchester plant hire quotes on Tooli.uk.</p>
+
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Compare Manchester Plant Hire Companies</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode to{' '}
+          <span className="font-bold text-white">compare now</span>{' '}
+          — excavators, dumpers, telehandlers and more from local Greater Manchester suppliers.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+
+      <Link
+        to="/blog/tool-hire-comparison-uk"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire Comparison UK: Compare Construction Equipment &amp; Plant Hire Suppliers</span>
+      </Link>
+
+      <H2>Plant Hire with Operator vs Dry Hire in Manchester</H2>
+      <Prose>
+        Manchester plant hire companies offer two fundamental options:
+      </Prose>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b-2 border-brand-primary/20 bg-brand-primary/5">
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Option</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">What It Means</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Best For</th>
+              <th className="px-4 py-3 text-left font-bold text-[#030213]">Cost Premium</th>
+            </tr>
+          </thead>
+          <tbody>
+            {manchesterPlantHireOptionsTable.map(([option, meaning, bestFor, cost], i) => (
+              <tr key={option} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-4 py-3 font-bold text-[#030213]">{option}</td>
+                <td className="px-4 py-3 text-gray-700">{meaning}</td>
+                <td className="px-4 py-3 text-gray-700">{bestFor}</td>
+                <td className="px-4 py-3 text-gray-600">{cost}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <Prose>
+        On most managed commercial sites across Manchester, operated hire from the plant company provides a clean audit
+        trail for CDM 2015 competence records — the operator's CPCS card details are held by the hire company.
+      </Prose>
+
+      <Link
+        to="/blog/mini-digger-hire-manchester-prices-and-local-availability"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Mini Digger Hire Manchester: Prices &amp; Local Availability</span>
+      </Link>
+
+      <img
+        src="/images/blog/plant-hire-manchester-compare-local.webp"
+        alt="Telehandler lifting materials on a housebuilder site in Wythenshawe South Manchester — plant hire Greater Manchester"
+        className="w-full rounded-2xl object-cover"
+      />
+
+      <H2>Key Manchester Construction Projects Driving Plant Hire Demand</H2>
+      <H3>Metrolink and Transport Infrastructure</H3>
+      <Prose>
+        Greater Manchester's ongoing Metrolink expansion and associated road infrastructure works create sustained
+        demand for utility-grade excavators, road sweepers, and compaction plant. Major civil engineering contractors
+        are the primary hirers for this work.
+      </Prose>
+
+      <Link
+        to="/blog/tool-hire-comparison-save-money"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">How Tool Hire Comparison Actually Saves Your Money (And How to Do It Properly)</span>
+      </Link>
+
+      <H3>Residential Housebuilder Sites</H3>
+      <Prose>
+        Volume housebuilder activity across the Greater Manchester green and brownfield belt — from Wythenshawe in
+        the south to Bury in the north — generates consistent demand for telehandlers, 13-tonne excavators, and
+        road sweepers on managed site contracts.
+      </Prose>
+
+      <H3>Salford Quays and Deansgate Commercial</H3>
+      <Prose>
+        The continued commercial development of Salford Quays (new office and residential towers) and the
+        Deansgate/St John's cultural corridor drives demand for high-reach plant, basement excavation equipment,
+        and larger cranes.
+      </Prose>
+
+      <Link
+        to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Skip Hire Sizes &amp; Prices UK: Full Comparison 2026</span>
+      </Link>
+
+      <H2>How to Compare Plant Hire Companies in Manchester</H2>
+      <CheckList items={[
+        'Use Tooli.uk to get quotes from multiple Greater Manchester plant hire companies in a single comparison — rates for the same 13-tonne excavator can vary by 15–20% across local depots.',
+        'Always specify: required machine size, required attachments, hire duration, delivery address, and whether you need an operator or are dry-hiring.',
+        'Confirm the company\'s insurance and CPCS verification process before booking — particularly for operated hire on managed sites.',
+        'Ask about LOLER inspection certificates for any lifting equipment — required under the Lifting Operations and Lifting Equipment Regulations 1998 and should be provided automatically on hire of telehandlers and cranes.',
+      ]} />
+
+      <Link
+        to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Scaffold Tower Hire UK: Prices, Sizes and PASMA Rules Explained</span>
+      </Link>
+
+      <Link
+        to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Do I Need a Permit for a Skip on the Road? The Direct Answer</span>
+      </Link>
+
+      <Link
+        to="/blog/tool-hire-birmingham"
+        className="flex items-center gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary/5 p-4 transition-colors hover:bg-brand-primary/10"
+      >
+        <ChevronRight className="h-5 w-5 shrink-0 text-brand-primary" />
+        <span className="text-sm font-bold text-brand-primary">Tool Hire in Birmingham: Compare Prices From Local Suppliers</span>
+      </Link>
+
+      <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+        <p className="mb-2 text-sm font-bold text-[#030213]">Useful Resources</p>
+        <ul className="space-y-2">
+          <li>
+            <a href="https://www.cpa.uk.net" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              Construction Plant-hire Association (CPA)
+            </a>
+            <span className="text-sm text-gray-600"> — UK plant hire trade body — find CPA-member companies operating in Greater Manchester</span>
+          </li>
+          <li>
+            <a href="https://www.hse.gov.uk/work-equipment-machinery/loler.htm" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              HSE LOLER 1998 — Lifting Equipment Inspections
+            </a>
+            <span className="text-sm text-gray-600"> — LOLER thorough examination requirements for telehandlers and lifting plant</span>
+          </li>
+          <li>
+            <a href="https://www.hse.gov.uk/construction/cdm/2015" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-brand-primary hover:underline">
+              HSE CDM 2015 — Competence and Plant on Site
+            </a>
+            <span className="text-sm text-gray-600"> — CDM 2015 guidance on plant operator competence requirements on managed sites</span>
+          </li>
+        </ul>
+      </div>
+
+      <FaqSection faqs={manchesterPlantFaqs} />
+
+      {/* CTA */}
+      <section className="rounded-2xl bg-brand-primary p-8 text-center text-white">
+        <h2 className="mb-3 text-2xl font-bold">Ready to Compare Manchester Plant Hire?</h2>
+        <p className="mb-6 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-white underline">compare now</a>{' '}
+          — excavators, telehandlers, dumpers, and sweepers from local Greater Manchester plant hire companies.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-white px-8 text-sm font-bold text-brand-primary transition-colors hover:bg-gray-100"
+        >
+          Compare Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
@@ -14227,6 +14484,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Manchester Digger Hire',
     faqs: manchesterDiggerFaqs,
     Body: ManchesterDiggerHireBody,
+  },
+  {
+    slug: 'plant-hire-manchester-compare-local-plant-hire-companies',
+    category: 'Plant Hire Guide',
+    title: 'Plant Hire Manchester: Compare Local Plant Hire Companies',
+    excerpt:
+      'Compare plant hire companies serving Greater Manchester. Excavators, dumpers, telehandlers, road sweepers, and compaction plant — dry hire or with CPCS operator. Full rate guide and comparison tool on Tooli.uk.',
+    intro:
+      'Plant hire in Manchester covers a different market to general tool hire — excavators, dumpers, telehandlers, road sweepers, and larger compaction equipment rather than hand tools and scaffold towers. Greater Manchester is served by a competitive network of plant hire companies ranging from national depots in Trafford and Salford to independent operators covering specific borough areas.',
+    image: '/images/blog/plant-hire-manchester-compare-local-plant-hire-companies.webp',
+    imageAlt: '13-tonne tracked excavator on a commercial construction site in Manchester city centre — plant hire Manchester',
+    datePublished: '2026-08-07',
+    metaTitle: 'Plant Hire Manchester: Compare Local Plant Hire Companies | Tooli.uk',
+    metaDescription:
+      'Compare plant hire companies serving Manchester and Greater Manchester. Groundwork plant, lifting equipment and site machinery — find the best local rate on Tooli.uk.',
+    primaryCta: 'Compare Manchester Plant Hire',
+    faqs: manchesterPlantFaqs,
+    Body: ManchesterPlantHireBody,
   },
 ];
 
