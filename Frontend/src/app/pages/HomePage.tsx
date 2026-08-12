@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { equipmentApi, Category, Location } from '../../context/equipment.api';
 import { PageMeta } from '../components/PageMeta';
+import { SearchWidget, SearchWidgetBadges } from '../components/SearchWidget';
 
 const blogSliderPosts = [
   {
@@ -564,148 +565,21 @@ export function HomePage() {
             className="max-w-4xl"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-5 md:mb-6 text-white leading-[1.15] md:leading-[1.2]">
-              Plant &amp; Tool Hire Comparison | Find the Best Rates Across the UK
+              <span className="text-[#e87525]">Plant &amp; Tool Hire Comparison</span> | Find the Best Rates Across the UK
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-white/90 mb-8 md:mb-10 max-w-2xl font-medium leading-relaxed">
               Tooli.uk is a UK plant and tool hire comparison platform. Find the cheapest rates on everything from mini diggers to scaffold towers, plate compactors to access platforms. Enter your location, select equipment, and compare real-time prices from local and national suppliers including HSS, Speedy, Brandon, Smiths and independent depots. Comparison is free and no account required. Prices shown include VAT.
             </p>
 
-            {/* Search Bar Component */}
-            <div className="bg-white rounded-2xl lg:rounded-[24px] shadow-2xl p-3 lg:p-2 max-w-4xl">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.5fr_1.5fr_1.5fr_auto] gap-2 lg:gap-1 items-center">
-                <div className="px-4 lg:px-5 py-3 border border-gray-100 lg:border-0 lg:border-r rounded-xl lg:rounded-none relative group/field">
-                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Equipment Category</Label>
-                  <SearchableSelect
-                    value={searchData.categoryId}
-                    onValueChange={(v) => {
-                      setSearchData({...searchData, categoryId: v});
-                      setShowValidationErrors(false);
-                    }}
-                    options={categories.map(cat => ({
-                      value: cat.category_id.toString(),
-                      label: cat.category_display_name,
-                    }))}
-                    placeholder="Select Category"
-                    searchPlaceholder="Search equipment..."
-                    emptyText="No equipment found."
-                    icon={<Search className="w-4 h-4 text-gray-400" />}
-                    triggerClassName={`h-10 lg:h-9 bg-transparent p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent ${
-                      showValidationErrors && !searchData.categoryId ? 'border-red-500 ring-1 ring-red-500' : 'border-none'
-                    }`}
-                    contentClassName="rounded-xl border-gray-100"
-                  />
-                  {searchData.categoryId && (
-                    <button 
-                      onClick={() => setSearchData({...searchData, categoryId: ''})}
-                      className="absolute right-4 top-[60%] -translate-y-1/2 p-1 text-gray-300 hover:text-brand-primary transition-colors"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="px-4 lg:px-5 py-3 border border-gray-100 lg:border-0 lg:border-r rounded-xl lg:rounded-none relative group/field">
-                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Location</Label>
-                  <SearchableSelect
-                    value={searchData.locationId}
-                    onValueChange={(v) => {
-                      setSearchData({...searchData, locationId: v});
-                      setShowValidationErrors(false);
-                    }}
-                    options={locations.map(loc => ({
-                      value: loc.location_id.toString(),
-                      label: `${loc.city_name}, ${loc.country}`,
-                    }))}
-                    placeholder="Select Location"
-                    searchPlaceholder="Search locations..."
-                    emptyText="No locations found."
-                    icon={<MapPin className="w-4 h-4 text-gray-400" />}
-                    triggerClassName={`h-10 lg:h-9 bg-transparent p-0 focus:ring-0 shadow-none text-sm sm:text-base font-bold pr-8 hover:bg-transparent ${
-                      showValidationErrors && !searchData.locationId ? 'border-red-500 ring-1 ring-red-500' : 'border-none'
-                    }`}
-                    contentClassName="rounded-xl border-gray-100"
-                  />
-                  {searchData.locationId && (
-                    <button 
-                      onClick={() => setSearchData({...searchData, locationId: ''})}
-                      className="absolute right-4 top-[60%] -translate-y-1/2 p-1 text-gray-300 hover:text-brand-primary transition-colors"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="px-4 lg:px-5 py-3 border border-gray-100 lg:border-0 rounded-xl lg:rounded-none relative group/field">
-                  <Label className="text-gray-900 font-extrabold text-[9px] uppercase tracking-[0.15em] mb-2 block">Dates</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button className="flex items-center w-full h-10 lg:h-9 text-left font-bold text-sm sm:text-base bg-transparent pr-8">
-                        <CalendarIcon className="w-4 h-4 text-gray-400 mr-2" />
-                        {dateRange?.from ? (
-                          dateRange.to ? (
-                            <span className="truncate">{format(dateRange.from, 'MMM d')} - {format(dateRange.to, 'MMM d')}</span>
-                          ) : (
-                            format(dateRange.from, 'PP')
-                          )
-                        ) : <span className="text-gray-300">Start - End date</span>}
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[calc(100vw-2rem)] max-w-[330px] p-0 rounded-xl border-gray-100" align="start">
-                      <Calendar
-                        mode="range"
-                        selected={dateRange}
-                        onSelect={setDateRange}
-                        initialFocus
-                        numberOfMonths={1}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {dateRange && (
-                    <button 
-                      onClick={() => setDateRange(undefined)}
-                      className="absolute right-4 top-[60%] -translate-y-1/2 p-1 text-gray-300 hover:text-brand-primary transition-colors"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-
-                <div className="p-0 lg:p-1">
-                  <Button 
-                    onClick={handleSearch}
-                    className="h-12 lg:h-14 px-8 lg:px-10 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl lg:rounded-[18px] text-base lg:text-lg transition-all shadow-lg shadow-orange-500/20 w-full"
-                  >
-                    Compare Prices
-                  </Button>
-                </div>
-              </div>
-              {showValidationErrors && (
-                <p className="px-3 pb-2 text-center text-xs font-semibold text-red-500">
-                  To filter, both Equipment Category and Location must be selected. Leave both empty to see all listings.
-                </p>
-              )}
-            </div>
-
-            {/* Badges below search */}
-            <div className="grid sm:flex sm:flex-wrap gap-3 sm:gap-8 mt-6 md:mt-8 ml-1">
-              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
-                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
-                  <CheckCircle className="w-3.5 h-3.5 text-white" />
-                </div>
-                Free to search
-              </div>
-              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
-                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
-                  <CheckCircle className="w-3.5 h-3.5 text-white" />
-                </div>
-                Local and national suppliers
-              </div>
-              <div className="flex items-center gap-2.5 text-white font-bold text-sm">
-                <div className="w-5 h-5 rounded-full bg-brand-success flex items-center justify-center">
-                  <CheckCircle className="w-3.5 h-3.5 text-white" />
-                </div>
-                No account needed
-              </div>
+            <SearchWidget showBadges={false} />
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+              <SearchWidgetBadges variant="dark" />
+              <Link
+                to="/how-it-works"
+                className="inline-flex h-11 items-center rounded-xl border border-white/30 bg-white/10 px-6 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20 shrink-0"
+              >
+                How Tooli Works
+              </Link>
             </div>
           </motion.div>
         </div>

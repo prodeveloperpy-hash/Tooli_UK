@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { ChevronRight, MapPin, Wrench } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { PageMeta } from '../components/PageMeta';
+import { SearchWidget, SearchWidgetBadges } from '../components/SearchWidget';
 import { locationPages } from '../data/locations';
 import { equipmentPages } from '../data/equipment';
 
@@ -111,24 +112,24 @@ export function LocationPage() {
               <p className="mt-6 max-w-3xl text-lg font-medium leading-relaxed text-gray-500">
                 {page.description}
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link to="/search">
-                  <Button className="h-12 rounded-xl bg-brand-primary px-6 font-bold text-white shadow-lg shadow-orange-500/10 hover:bg-brand-primary-hover">
-                    Compare Prices
-                  </Button>
-                </Link>
-                <Link to="/how-it-works">
-                  <Button variant="outline" className="h-12 rounded-xl border-gray-200 bg-white px-6 font-bold text-gray-900 hover:bg-gray-50">
+              <div className="mt-8">
+                <SearchWidget showBadges={false} />
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+                  <SearchWidgetBadges />
+                  <Link
+                    to="/how-it-works"
+                    className="inline-flex h-11 items-center rounded-xl bg-gray-900 px-6 text-sm font-bold text-white transition-colors hover:bg-gray-800 shrink-0"
+                  >
                     How Tooli Works
-                  </Button>
-                </Link>
+                  </Link>
+                </div>
               </div>
             </div>
 
             <img
               src={page.image}
               alt={`Construction equipment available for hire in ${page.name}`}
-              className="w-full rounded-2xl border border-gray-100 bg-gray-900 object-contain shadow-sm"
+              className="w-full rounded-2xl border border-gray-100 bg-white object-contain shadow-sm"
             />
           </div>
         </div>
@@ -139,15 +140,13 @@ export function LocationPage() {
           <div className="space-y-14">{page.content}</div>
 
           <aside className="lg:sticky lg:top-28 lg:self-start space-y-4">
-            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-              <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Compare {page.name} Hire Prices</h2>
-              <p className="mb-6 text-sm font-medium leading-relaxed text-gray-500">
-                Search by equipment type and location to compare local and national hire suppliers.
+            <div className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+              <h2 className="mb-2 text-base font-extrabold text-[#030213]">Compare {page.name} Hire Prices</h2>
+              <p className="mb-4 text-sm font-medium leading-relaxed text-gray-500">
+                Use the search above to compare local and national hire suppliers by equipment and dates.
               </p>
-              <Link to="/search">
-                <Button className="h-11 w-full rounded-xl bg-brand-primary px-5 text-sm font-bold text-white hover:bg-brand-primary-hover">
-                  Start Comparing
-                </Button>
+              <Link to="/search" className="text-sm font-bold text-brand-primary hover:underline flex items-center gap-1">
+                <ChevronRight className="h-4 w-4" /> Browse all listings
               </Link>
             </div>
 

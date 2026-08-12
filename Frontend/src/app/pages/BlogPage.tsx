@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CheckCircle, ChevronRight, MapPin, ShieldCheck, Wrench } from 'lucide-react';
 import { PageMeta } from '../components/PageMeta';
+import { SearchWidget, SearchWidgetBadges } from '../components/SearchWidget';
 import { equipmentPages } from '../data/equipment';
 import { locationPages } from '../data/locations';
 
@@ -16002,19 +16003,17 @@ export function BlogPostPage() {
                 {post.title}
               </h1>
               <p className="mt-6 max-w-3xl text-lg font-medium leading-relaxed text-gray-500">{post.intro}</p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  to="/search"
-                  className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
-                >
-                  {post.primaryCta}
-                </Link>
-                <Link
-                  to="/how-it-works"
-                  className="inline-flex h-12 items-center rounded-xl border border-gray-200 bg-white px-6 text-sm font-bold text-gray-900 transition-colors hover:bg-gray-50"
-                >
-                  How Tooli Works
-                </Link>
+              <div className="mt-8">
+                <SearchWidget showBadges={false} />
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+                  <SearchWidgetBadges />
+                  <Link
+                    to="/how-it-works"
+                    className="inline-flex h-11 items-center rounded-xl bg-gray-900 px-6 text-sm font-bold text-white transition-colors hover:bg-gray-800 shrink-0"
+                  >
+                    How Tooli Works
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -16035,16 +16034,16 @@ export function BlogPostPage() {
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <div className="space-y-6">
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                <h2 className="mb-4 text-xl font-extrabold text-[#030213]">Compare Faster With Tooli</h2>
-                <p className="mb-6 text-sm font-medium leading-relaxed text-gray-500">
-                  Search by equipment type and location to review supplier options for your next project.
+              <div className="rounded-2xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+                <h2 className="mb-2 text-base font-extrabold text-[#030213]">Compare Hire Prices</h2>
+                <p className="mb-4 text-sm font-medium leading-relaxed text-gray-500">
+                  Use the search at the top of the page to compare equipment hire prices from local and national suppliers.
                 </p>
                 <Link
                   to="/search"
-                  className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-brand-primary px-5 text-sm font-bold text-white transition-colors hover:bg-brand-primary-hover"
+                  className="text-sm font-bold text-brand-primary hover:underline flex items-center gap-1"
                 >
-                  Compare Equipment
+                  <ChevronRight className="h-4 w-4" /> Browse all listings
                 </Link>
               </div>
 
