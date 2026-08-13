@@ -487,6 +487,1143 @@ const excavatorContent = (
   </>
 );
 
+const airCompressorFaqs = [
+  {
+    question: 'What size air compressor do I need to hire?',
+    answer:
+      "It depends entirely on the tools you plan to run. Check the CFM (cubic feet per minute) rating of each tool, add them together if you're running more than one at a time, and add a 30% buffer. For a single nail gun, a small portable compressor (around 8 CFM) is plenty. For a pneumatic breaker, you'll need a towable site compressor delivering 30 CFM or more. If you're unsure, Tooli.uk suppliers can advise based on your specific job.",
+  },
+  {
+    question: 'Do I need a licence or training to use an air compressor?',
+    answer:
+      "No formal licence is required to operate a standard air compressor in the UK. However, under PUWER regulations, anyone using the equipment on a construction site must have received adequate training in its safe operation. For towable diesel compressors, you'll need a suitable towing vehicle and a valid driving licence for the combined weight.",
+  },
+  {
+    question: 'Can I hire an air compressor for just one day?',
+    answer:
+      'Yes. Most UK hire companies offer single-day hire for air compressors. This is ideal for one-off jobs like spray painting a room, powering a nail gun for a fencing project, or running a breaker for a small demolition task. Weekend hire is also available from many suppliers at a reduced combined rate.',
+  },
+  {
+    question: "What's the difference between CFM and PSI?",
+    answer:
+      "CFM (cubic feet per minute) measures the volume of air a compressor delivers. PSI (pounds per square inch) measures the pressure of that air. Most pneumatic construction tools need around 90 PSI to operate correctly. The key spec to match is CFM, because if the compressor can't deliver enough air volume, the tool will lose power even if the pressure is adequate.",
+  },
+  {
+    question: 'Are air compressors noisy?',
+    answer:
+      'Standard site compressors typically operate at 75–95 dB, which is comparable to a petrol lawnmower or louder. Silent and low-noise compressors (55–65 dB) are available for hire and are recommended for residential areas, indoor work, or sites near schools and hospitals. HSE noise regulations apply above 80 dB daily exposure.',
+  },
+  {
+    question: 'Can I hire a compressor with a breaker or spray gun included?',
+    answer:
+      "Most hire companies offer pneumatic tools as separate hire items. You can typically add a breaker, nail gun, spray gun, or sandblasting kit to your compressor hire booking. Check with the supplier that the compressor's CFM output matches the tools you're adding, otherwise performance will suffer.",
+  },
+  {
+    question: 'Is fuel included in the hire?',
+    answer:
+      "For diesel towable compressors, most suppliers deliver with a full tank and expect it returned full. If it comes back short, a refuelling surcharge applies. Electric compressors run off your site supply, so there's no fuel element. Petrol compressors usually arrive fuelled, but check with the supplier.",
+  },
+  {
+    question: 'What happens if the compressor breaks down during my hire?',
+    answer:
+      "Reputable hire companies will replace or repair the compressor at no extra cost if the breakdown is due to a mechanical fault (not user damage). Most offer a 24-hour breakdown line for site-critical equipment. Check the supplier's breakdown policy before booking, especially for long-term hires. Tooli.uk lists supplier support details alongside hire quotes.",
+  },
+];
+
+const airCompressorContent = (
+  <>
+    <Section>
+      <H2>At a Glance</H2>
+      <BulletList
+        items={[
+          'Air compressors are hired to power pneumatic tools, spray painting equipment, breakers, and air-driven machinery on UK job sites',
+          'Available in portable (electric or petrol), towable, and industrial sizes to suit everything from domestic painting jobs to major groundworks',
+          'Hire periods typically range from one day to long-term monthly agreements, with delivery and collection available from most suppliers',
+          'Choosing the right compressor depends on CFM (cubic feet per minute) output, tank size, power source, and the tools you need to run',
+          'Compressor hire remains one of the most cost-effective ways to access pneumatic power without capital outlay',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>What Is an Air Compressor and Why Hire One?</H2>
+      <Paragraph>
+        An air compressor draws in ambient air, compresses it, and stores it in a tank (receiver) under pressure. That pressurised air then drives pneumatic tools and equipment.
+      </Paragraph>
+      <Paragraph>
+        For most UK tradespeople, buying a large compressor makes no financial sense unless it's used daily. Hire gives you the exact spec for the job, with no storage, servicing, or MOT-style headaches once it goes back.
+      </Paragraph>
+      <Paragraph>
+        Common reasons to hire include one-off projects, short-term site requirements, or needing a larger capacity than your own kit provides.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Can You Do With a Hired Air Compressor?</H2>
+      <Paragraph>Air compressors are among the most versatile pieces of kit on any UK site. Here are the jobs they're most commonly hired for:</Paragraph>
+      <div className="space-y-4">
+        {(
+          [
+            {
+              title: 'Construction and Building',
+              items: [
+                'Powering pneumatic breakers and jackhammers for demolition and breaking out concrete',
+                'Running nail guns and staplers for timber framing, fencing, and first fix carpentry',
+                'Operating impact wrenches for steel erection and scaffolding',
+              ],
+            },
+            {
+              title: 'Decorating and Finishing',
+              items: [
+                'Spray painting walls, ceilings, metalwork, and external cladding',
+                'Applying textured coatings and renders with spray equipment',
+                'Blowing dust and debris from surfaces before painting or tiling',
+              ],
+            },
+            {
+              title: 'Mechanical and Workshop Use',
+              items: [
+                'Inflating vehicle and plant tyres on site',
+                'Running air-powered ratchets, die grinders, and cut-off tools',
+                'Cleaning equipment with air blow guns',
+              ],
+            },
+            {
+              title: 'Groundworks and Civil Engineering',
+              items: [
+                'Powering pneumatic rock drills and clay spades',
+                'Sand and grit blasting for surface preparation',
+                'Operating air-driven pumps on wet sites',
+              ],
+            },
+          ] as { title: string; items: string[] }[]
+        ).map((group) => (
+          <div key={group.title} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <H3>{group.title}</H3>
+            <div className="mt-3">
+              <BulletList items={group.items} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Air Compressor Available for Hire in the UK</H2>
+      <DataTable
+        headers={['Type', 'Power Source', 'Typical CFM Output', 'Best For']}
+        rows={[
+          ['Portable electric compressor', '240V / 110V mains', '5–15 CFM', 'Small workshops, domestic jobs, spray painting, nail guns'],
+          ['Portable petrol compressor', 'Petrol engine', '10–25 CFM', 'Remote sites without mains power, fencing, agricultural work'],
+          ['Towable diesel compressor', 'Diesel engine', '30–400+ CFM', 'Construction sites, road works, breakers, multiple tool operation'],
+          ['Silent/low-noise compressor', 'Electric (240V)', '5–12 CFM', 'Indoor work, residential areas, hospitals, schools'],
+          ['Industrial stationary compressor', '3-phase electric', '50–500+ CFM', 'Factories, large workshops, continuous production use'],
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Size and Output Guide</H2>
+      <DataTable
+        headers={['Compressor Size', 'Approximate CFM', 'Tools It Can Run']}
+        rows={[
+          ['Small portable (up to 50L tank)', '5–9 CFM', 'Nail gun, spray gun, stapler, blow gun, tyre inflator'],
+          ['Medium portable (50–100L tank)', '9–15 CFM', 'Impact wrench, small breaker, dual nail guns, spray painting rigs'],
+          ['Towable site compressor', '30–130 CFM', 'Pneumatic breaker, road drill, sandblasting, multiple tools simultaneously'],
+          ['Large towable / static', '130–400+ CFM', 'Rock drilling, multiple breakers, large-scale blasting, industrial air supply'],
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>How to Choose the Right Air Compressor for Hire</H2>
+      <Paragraph>Getting the wrong compressor wastes money and slows you down. Here are the six factors to get right before you book.</Paragraph>
+      <div className="space-y-3">
+        {(
+          [
+            {
+              title: 'CFM Requirement — Match It to Your Tools',
+              body: "Every pneumatic tool has a CFM (cubic feet per minute) rating. Your compressor must deliver at least that output at the tool's required PSI (usually 90 PSI for construction tools). Running two tools at once? Add both CFM ratings together, then add a 30% buffer. A compressor that's undersized will cycle constantly, overheat, and underperform.",
+            },
+            {
+              title: 'Power Source — Electric, Petrol, or Diesel?',
+              body: 'Electric (240V or 110V) is quieter and ideal for indoor work and sites with reliable mains supply. Petrol is portable and independent of mains power, good for rural or remote jobs. Diesel (towable) is the workhorse for construction sites — higher CFM output, runs all day, and handles multiple tools at once.',
+            },
+            {
+              title: 'Tank Size (Receiver Volume)',
+              body: "Larger tanks store more compressed air and reduce the frequency of the motor cycling on and off. For intermittent use (nail guns, inflation), a 24–50L tank is fine. For continuous-demand tools (spray guns, breakers), go 100L or above.",
+            },
+            {
+              title: 'Noise Output',
+              body: 'If working in residential areas, near schools, or inside occupied buildings, check the decibel (dB) rating. Silent compressors typically run at 55–65 dB. Standard site compressors can exceed 85 dB, triggering HSE noise regulations under the Control of Noise at Work Regulations 2005.',
+            },
+            {
+              title: 'Portability and Access',
+              body: 'Portable units with wheels suit vans and tight spaces. Towable compressors need a vehicle with a suitable tow hitch and adequate site access for delivery lorries.',
+            },
+            {
+              title: 'Hire Duration',
+              body: "Most suppliers offer day, weekend, week, and month rates. If your project runs longer than two weeks, ask about long-term hire discounts. Weekly rates typically offer better value per day than single-day bookings.",
+            },
+          ] as { title: string; body: string }[]
+        ).map((item, i) => (
+          <div key={item.title} className="flex gap-4 rounded-xl border border-gray-100 bg-white p-5">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-sm font-black text-white">
+              {i + 1}
+            </span>
+            <div>
+              <p className="font-extrabold text-gray-900">{item.title}</p>
+              <p className="mt-1 text-sm font-medium text-gray-500">{item.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <img
+      src="/images/air-compressor-compare-prices.webp"
+      alt="Portable electric air compressor with 50-litre tank being used for spray painting on a renovation project"
+      className="w-full max-h-72 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Safety, Regulations, and Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-orange-100 bg-orange-50 p-5">
+          <H3>HSE Requirements</H3>
+          <div className="mt-3 space-y-3">
+            <Paragraph>
+              Air compressors on UK construction sites must comply with the{' '}
+              <a
+                href="https://www.legislation.gov.uk/uksi/1998/2306/contents/made"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-brand-primary hover:underline"
+              >
+                Provision and Use of Work Equipment Regulations 1998 (PUWER)
+              </a>
+              . The equipment must be suitable for its intended use, maintained in safe condition, and used only by people who have received adequate training.
+            </Paragraph>
+            <Paragraph>
+              Pressure vessels (receivers/tanks) are covered by the Pressure Systems Safety Regulations 2000 (PSSR). The hire company is responsible for ensuring the compressor has a current written scheme of examination — check this is in place before accepting delivery.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Noise Regulations</H3>
+          <div className="mt-3">
+            <Paragraph>
+              The{' '}
+              <a
+                href="https://www.legislation.gov.uk/uksi/2005/1643/contents"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-brand-primary hover:underline"
+              >
+                Control of Noise at Work Regulations 2005
+              </a>{' '}
+              apply when compressor noise reaches or exceeds 80 dB(A) daily exposure. At 85 dB(A), hearing protection becomes mandatory. Consider hiring a silent or low-noise compressor for work in populated areas.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Electrical Safety</H3>
+          <div className="mt-3">
+            <Paragraph>
+              110V compressors should be powered via a site transformer (centre-tapped earth) on construction sites, in line with BS 7671 wiring regulations. Never use a 240V compressor on a construction site without a proper risk assessment.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>COSHH and Ventilation</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Running petrol or diesel compressors in enclosed or semi-enclosed spaces creates carbon monoxide and exhaust fume risks. Ensure adequate ventilation and follow COSHH assessment procedures.
+            </Paragraph>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and What's Included</H2>
+      <Paragraph>Most UK hire companies offer delivery and collection for air compressors, especially towable models. Here's what to expect:</Paragraph>
+      <div className="space-y-2">
+        {(
+          [
+            {
+              label: 'Delivery',
+              desc: 'Typically same-day or next-day from local depots. Towable units arrive on a flatbed or trailer. Portable units may arrive in a van or be available for self-collection.',
+            },
+            { label: 'Collection', desc: 'Arranged for the end of your hire period. Most suppliers offer flexible collection windows.' },
+            {
+              label: 'Fuel',
+              desc: "Diesel compressors are usually delivered with a full tank. You'll be expected to return them full or pay a refuelling charge.",
+            },
+            {
+              label: 'Hoses and fittings',
+              desc: 'Many suppliers provide standard airline hoses and quick-release couplings, but specialist fittings (e.g., for breakers or spray guns) may be charged separately.',
+            },
+            {
+              label: 'Accessories',
+              desc: 'Breaker steels, chisels, spray guns, and other pneumatic tools are typically hired as separate items.',
+            },
+          ] as { label: string; desc: string }[]
+        ).map((item) => (
+          <div key={item.label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{item.label}</p>
+            <p className="mt-0.5 text-sm font-medium text-gray-500">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Hire an Air Compressor Near You</H2>
+      <Paragraph>
+        Tooli.uk lists air compressor hire suppliers across the UK. Browse by city to compare availability and prices from local depots:
+      </Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {[
+          'London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh',
+          'Bristol', 'Liverpool', 'Sheffield', 'Cardiff', 'Newcastle', 'Nottingham',
+          'Leicester', 'Southampton', 'Brighton', 'Reading', 'Coventry', 'Derby',
+          'Northampton', 'Swindon',
+        ].map((city) => (
+          <span
+            key={city}
+            className="rounded-full border border-gray-200 bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700"
+          >
+            {city}
+          </span>
+        ))}
+      </div>
+      <Paragraph>
+        Can't see your area? Enter your postcode on Tooli.uk to find suppliers delivering to your location.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Frequently Asked Questions</H2>
+      <div className="grid gap-4">
+        {airCompressorFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Air Compressor Hire with Tooli.uk</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Choosing the right air compressor isn't simply about finding the lowest hire price. The most suitable machine depends on your CFM requirements, power source availability, noise restrictions, and project duration.
+        </Paragraph>
+        <Paragraph>
+          Tooli.uk makes it straightforward to compare air compressor hire from vetted depots across the UK — from portable electric compressors for spray painting and nail guns to towable diesel compressors for site breakers and blasting. Review machine sizes, supplier coverage, and hire rates in one place, then{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">
+            compare prices now
+          </a>{' '}
+          to find the right compressor delivered to your postcode.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
+const cherryPickerFaqs = [
+  {
+    question: 'Do I need an IPAF licence to hire a cherry picker?',
+    answer:
+      'For any commercial or construction site work, yes. Under UK health and safety law (Work at Height Regulations 2005 and PUWER 1998), operators must be competent. IPAF training is the industry-recognised standard, and most hire companies require a valid IPAF PAL Card before releasing a machine for self-drive hire. For private domestic use, it\'s not legally required, but strongly recommended.',
+  },
+  {
+    question: 'What\'s the difference between a cherry picker and a scissor lift?',
+    answer:
+      'A cherry picker (boom lift) has an articulated or telescopic arm that can reach up, over, and around obstacles, offering both vertical height and horizontal outreach. A scissor lift raises its platform vertically only, with no outreach capability. Cherry pickers suit tasks where you need to reach over a roof edge, a wall, or around a building. Scissor lifts are better for straight-up access on flat, level ground.',
+  },
+  {
+    question: 'How high can a hired cherry picker reach?',
+    answer:
+      'Working heights range from roughly 8 metres (trailer-mounted models) up to 70 metres or more (large truck-mounted platforms). The most commonly hired cherry pickers for construction and maintenance work in the UK offer working heights between 12 and 26 metres. Always confirm both working height and horizontal outreach with the supplier before booking.',
+  },
+  {
+    question: 'Can I hire a cherry picker for use in my garden?',
+    answer:
+      "Yes, trailer-mounted and spider-lift cherry pickers are regularly hired by homeowners for tree surgery, gutter cleaning, exterior painting, and chimney work. You'll need enough access width for the machine and firm ground for the outriggers. Some hire companies offer a basic induction if you don't have IPAF training.",
+  },
+  {
+    question: 'Is a cherry picker safer than scaffolding?',
+    answer:
+      "Both are safe when used correctly. Cherry pickers are often preferred for short-duration tasks because they avoid the time, cost, and fall risk associated with erecting and dismantling scaffolding. However, for longer jobs where multiple operatives need continuous access along a full elevation, scaffolding can be more practical. Your risk assessment should determine which is more suitable.",
+  },
+  {
+    question: 'What ground conditions does a cherry picker need?',
+    answer:
+      'Wheeled boom lifts need firm, level ground (tarmac, concrete, compacted hardcore). Tracked and spider-lift models can cope with soft ground, slopes, and uneven terrain. Truck-mounted cherry pickers operate from tarmac or hard-standing. Outriggers must always be deployed on solid ground or spreader plates. Never operate a cherry picker on ground that hasn\'t been assessed.',
+  },
+  {
+    question: 'Can I hire a cherry picker with an operator?',
+    answer:
+      "Yes. Operated hire is widely available, especially for truck-mounted and large telescopic models. The hire company supplies a trained, IPAF-certified operator who stays with the machine for the duration. This is often the most practical option for one-off tasks or if no one on your team holds the right IPAF category.",
+  },
+  {
+    question: 'What should I check before the cherry picker arrives on site?',
+    answer:
+      "Confirm the access route is wide enough, the ground is firm and level (or suitable for the machine type you've booked), there are no overhead obstructions like power lines or low branches, and you have adequate space for outrigger deployment. Check that operators on site hold valid IPAF PAL Cards for the correct category, and that full body harnesses and lanyards are available.",
+  },
+];
+
+const cherryPickerContent = (
+  <>
+    <Section>
+      <H2>At a Glance</H2>
+      <BulletList
+        items={[
+          'Cherry pickers (boom lifts / MEWPs) provide safe working-at-height access from roughly 8 metres to over 40 metres platform height',
+          'Available as articulated, telescopic, trailer-mounted, truck-mounted, or tracked models to suit different site conditions and access constraints',
+          'IPAF (International Powered Access Federation) training is required for most cherry picker operation on UK commercial and construction sites',
+          'Hire periods range from a single day to long-term monthly agreements, with operated and self-drive options available',
+          'Cherry picker hire is typically more cost-effective than scaffolding for short-duration or single-location height access tasks',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>What Is a Cherry Picker?</H2>
+      <Paragraph>
+        A cherry picker is a type of mobile elevating work platform (MEWP) with a hydraulic boom arm and a work basket (platform or cage) at the end. The operator stands in the basket and uses controls to raise, lower, extend, and position the platform precisely where access is needed.
+      </Paragraph>
+      <Paragraph>
+        The name "cherry picker" comes from their original use in orchards, but today they're standard kit on UK construction sites, for building maintenance, and across utilities, telecoms, and tree surgery work.
+      </Paragraph>
+      <Paragraph>
+        Unlike scaffolding, a cherry picker can be set up and repositioned in minutes, making it far more practical for short-duration or multi-location height access tasks.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Can You Do With a Hired Cherry Picker?</H2>
+      <Paragraph>Cherry pickers are hired across dozens of trades and industries in the UK. Here are the most common applications:</Paragraph>
+      <div className="space-y-4">
+        {(
+          [
+            {
+              title: 'Construction and Building',
+              items: [
+                'Installing and inspecting cladding, fascias, and soffits at height',
+                'Accessing roof areas for repair, survey, or gutter work without scaffolding',
+                'Positioning steel beams, curtain walling, and glazing panels',
+                'External painting and decorating above ladder-safe heights',
+              ],
+            },
+            {
+              title: 'Maintenance and Facilities',
+              items: [
+                'Cleaning gutters, windows, and building facades on commercial properties',
+                'Replacing external lighting, signage, and CCTV cameras',
+                'Inspecting and repairing flat roofs, parapet walls, and chimneys',
+                'Reaching overhead pipework and ductwork in large industrial buildings',
+              ],
+            },
+            {
+              title: 'Tree Surgery and Landscaping',
+              items: [
+                'Safe access for tree pruning, crown reduction, and dead-wooding',
+                'Reaching tall hedgerows and boundary trees',
+                'Installing festive or event lighting in trees and structures',
+              ],
+            },
+            {
+              title: 'Utilities and Telecoms',
+              items: [
+                'Overhead power line maintenance (specialist insulated models)',
+                'Telecoms mast and cable installation',
+                'Street lighting replacement and inspection',
+              ],
+            },
+            {
+              title: 'Film, Events, and Specialist Access',
+              items: [
+                'Camera positioning and rigging for film and TV production',
+                'Event lighting, sound, and staging installation',
+                'Building surveys, structural inspections, and heritage conservation work',
+              ],
+            },
+          ] as { title: string; items: string[] }[]
+        ).map((group) => (
+          <div key={group.title} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <H3>{group.title}</H3>
+            <div className="mt-3">
+              <BulletList items={group.items} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Cherry Picker Available for Hire</H2>
+      <DataTable
+        headers={['Type', 'Working Height', 'Best For', 'Access Requirements']}
+        rows={[
+          ['Trailer-mounted cherry picker', '8–25 m', 'Domestic and light commercial work, gutter cleaning, tree surgery', 'Towed behind a vehicle, compact footprint, suits driveways and narrow access'],
+          ['Self-propelled articulated boom', '12–40+ m', 'Construction sites, cladding, large building maintenance', 'Requires firm, level ground; wider footprint'],
+          ['Self-propelled telescopic boom', '16–45+ m', 'Maximum reach and height, overhead line work, tall structures', 'Large machine, needs solid ground and clear overhead space'],
+          ['Truck-mounted cherry picker', '12–70+ m', 'Street lighting, telecoms, motorway signage, high-rise maintenance', 'Arrives on a lorry, fast setup, road-legal; operated hire only'],
+          ['Tracked cherry picker', '10–30 m', 'Rough terrain, sloped ground, muddy sites, restricted access', 'Tracks distribute weight; ideal for soft or uneven ground'],
+          ['Spider lift (compact tracked)', '10–30 m', 'Indoor atriums, listed buildings, restricted doorways, heritage sites', 'Ultra-narrow, low weight, fits through standard doorways'],
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Working Height vs Outreach</H2>
+      <Paragraph>
+        Working height and horizontal outreach are two separate specs. A machine with a 20-metre working height might only have 9 metres of horizontal outreach.
+      </Paragraph>
+      <Paragraph>
+        If you need to reach over an obstacle (a wall, a parapet, a pitched roof), outreach matters as much as height. Articulated booms offer the best combination of height and outreach because the jointed arm can go up and over obstacles.
+      </Paragraph>
+    </Section>
+
+    <img
+      src="/images/cherry-picker-compare-prices.webp"
+      alt="Articulated cherry picker being used for cladding installation on a UK commercial building site"
+      className="w-full max-h-72 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>How to Choose the Right Cherry Picker for Hire</H2>
+      <div className="space-y-3">
+        {(
+          [
+            {
+              title: 'Required Working Height',
+              body: "Measure the maximum height you need to reach, then add roughly 2 metres for the basket height and operator's reach. That gives you the minimum platform height (not working height, which is typically quoted as platform height plus 2 m).",
+            },
+            {
+              title: 'Outreach and Positioning',
+              body: "If the machine can't sit directly below the work area (e.g., there's a building overhang, a wall, or an excavation in the way), you need horizontal outreach. Check the spec sheet for maximum outreach at the height you need, not just the headline figure.",
+            },
+            {
+              title: 'Ground Conditions',
+              body: 'Wheeled boom lifts need firm, level ground. If your site is muddy, sloped, or has soft surfaces, consider a tracked model or spider lift. Truck-mounted cherry pickers work best on tarmac or hard-standing.',
+            },
+            {
+              title: 'Access Width',
+              body: "Measure the narrowest point the machine needs to pass through — whether that's a gate, an alleyway, or a doorway. Spider lifts can be as narrow as 780 mm. Standard articulated booms are typically 1.5–2.5 metres wide.",
+            },
+            {
+              title: 'Indoor or Outdoor Use',
+              body: 'Indoor work requires an electric-powered or hybrid cherry picker (zero emissions, lower noise). Diesel models are unsuitable for enclosed spaces. Check ceiling heights and floor loading before booking.',
+            },
+            {
+              title: 'Self-Drive or Operated Hire',
+              body: 'Self-drive hire means you operate the machine yourself (IPAF training required). Operated hire means the supplier provides a trained operator with the machine, which is common for truck-mounted and large telescopic models.',
+            },
+          ] as { title: string; body: string }[]
+        ).map((item, i) => (
+          <div key={item.title} className="flex gap-4 rounded-xl border border-gray-100 bg-white p-5">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-sm font-black text-white">
+              {i + 1}
+            </span>
+            <div>
+              <p className="font-extrabold text-gray-900">{item.title}</p>
+              <p className="mt-1 text-sm font-medium text-gray-500">{item.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>IPAF Training and Operator Licences</H2>
+      <Paragraph>
+        For commercial and construction site use, IPAF (International Powered Access Federation) training is the industry-recognised standard in the UK. Under the{' '}
+        <a
+          href="https://www.legislation.gov.uk/uksi/2005/735/contents"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold text-brand-primary hover:underline"
+        >
+          Work at Height Regulations 2005
+        </a>{' '}
+        and{' '}
+        <a
+          href="https://www.legislation.gov.uk/uksi/1998/2306/contents/made"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold text-brand-primary hover:underline"
+        >
+          PUWER 1998
+        </a>
+        , anyone operating a MEWP must be competent. The relevant IPAF categories for cherry pickers are:
+      </Paragraph>
+      <DataTable
+        headers={['IPAF Category', 'Machine Type']}
+        rows={[
+          ['1b', 'Mobile vertical (personnel lift)'],
+          ['3a', 'Static boom (trailer-mounted)'],
+          ['3b', 'Mobile boom (self-propelled articulated or telescopic)'],
+        ]}
+      />
+      <Paragraph>
+        IPAF PAL Cards (Powered Access Licence) are valid for five years. Many hire companies will ask to see your IPAF card before releasing a cherry picker for self-drive hire. For domestic or private use, IPAF training is not a legal requirement but is strongly recommended.{' '}
+        <a
+          href="https://www.ipaf.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold text-brand-primary hover:underline"
+        >
+          Find your nearest IPAF training centre at ipaf.org.
+        </a>
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Safety Regulations and Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-orange-100 bg-orange-50 p-5">
+          <H3>Work at Height Regulations 2005</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Cherry picker use falls under the{' '}
+              <a
+                href="https://www.legislation.gov.uk/uksi/2005/735/contents"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-brand-primary hover:underline"
+              >
+                Work at Height Regulations 2005
+              </a>
+              , which require employers to ensure that work at height is properly planned, supervised, and carried out by competent people. A risk assessment is mandatory before any MEWP operation on a commercial site.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>LOLER 1998</H3>
+          <div className="mt-3">
+            <Paragraph>
+              The Lifting Operations and Lifting Equipment Regulations 1998 (LOLER) require that cherry pickers undergo a thorough examination by a competent person at least every six months. The hire company is responsible for this, and the current certificate should be supplied with the machine.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Ground Conditions and Stability</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Overturning is the single biggest risk with cherry pickers. Never operate on ground that hasn't been assessed for firmness and level. Outriggers must be fully deployed on solid ground or spreader plates. Never exceed the rated capacity of the basket.
+            </Paragraph>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and What's Included</H2>
+      <div className="space-y-2">
+        {(
+          [
+            {
+              label: 'Delivery',
+              desc: 'Most cherry pickers are delivered on a flatbed lorry or low-loader. Trailer-mounted models arrive behind a delivery vehicle or can be collected and towed. Delivery is typically next-day from local depots.',
+            },
+            { label: 'Collection', desc: 'Arranged for the end of hire. Some suppliers offer flexible or same-day collection.' },
+            {
+              label: 'Fuel',
+              desc: 'Diesel models are usually delivered full. Electric models arrive charged but require an on-site charging point for longer hires.',
+            },
+            {
+              label: 'Induction / Handover',
+              desc: 'Reputable suppliers will provide a site handover covering controls, emergency lowering, and safety checks. This is standard practice under IPAF guidance.',
+            },
+            {
+              label: 'Harness and lanyard',
+              desc: 'A full body harness and restraint lanyard are mandatory when operating a boom-type cherry picker. Some hire companies include these; others hire them separately. Always confirm before booking.',
+            },
+          ] as { label: string; desc: string }[]
+        ).map((item) => (
+          <div key={item.label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{item.label}</p>
+            <p className="mt-0.5 text-sm font-medium text-gray-500">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Hire a Cherry Picker Near You</H2>
+      <Paragraph>
+        Tooli.uk lists cherry picker hire suppliers across the UK. Browse by city to compare availability:
+      </Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {[
+          'London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh',
+          'Bristol', 'Liverpool', 'Sheffield', 'Cardiff', 'Newcastle', 'Nottingham',
+          'Leicester', 'Southampton', 'Brighton', 'Reading', 'Coventry', 'Derby',
+          'Swindon', 'Oxford',
+        ].map((city) => (
+          <span
+            key={city}
+            className="rounded-full border border-gray-200 bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700"
+          >
+            {city}
+          </span>
+        ))}
+      </div>
+      <Paragraph>
+        Enter your postcode on Tooli.uk to find cherry picker suppliers delivering to your location.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Frequently Asked Questions</H2>
+      <div className="grid gap-4">
+        {cherryPickerFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Cherry Picker Hire with Tooli.uk</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Choosing the right cherry picker means matching working height, outreach, ground conditions, and access width to your specific job — not just finding the nearest available machine.
+        </Paragraph>
+        <Paragraph>
+          Tooli.uk makes it straightforward to compare cherry picker hire from vetted suppliers across the UK — from compact trailer-mounted models for domestic tree surgery to self-propelled articulated booms for commercial building maintenance. Review machine types, working heights, and supplier options in one place, then{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">
+            compare prices now
+          </a>{' '}
+          to find the right machine delivered to your site.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
+const smallScissorLiftFaqs = [
+  {
+    question: 'What working height do small scissor lifts reach?',
+    answer:
+      'Small scissor lifts typically offer working heights between 3 and 8 metres (platform heights of 1.5–6 m). This covers most indoor ceiling work in standard UK commercial and residential buildings. For higher reach, you\'ll need a full-size electric scissor lift or a cherry picker.',
+  },
+  {
+    question: 'Will a small scissor lift fit through a standard doorway?',
+    answer:
+      'Most micro and push-around models are designed to pass through standard single doorways (838 mm or wider). The narrowest models are as slim as 650 mm when stowed. Always check the machine\'s stowed width against your narrowest access point before booking.',
+  },
+  {
+    question: 'Do I need IPAF training to hire a small scissor lift?',
+    answer:
+      'For commercial and construction sites, IPAF Category 1a (push-around) or 1b (self-propelled) training is the recognised UK industry standard. Most hire companies require a valid IPAF PAL Card before releasing a machine for self-drive hire. For domestic/private use, IPAF is not legally mandatory, but strongly recommended by HSE and hire suppliers.',
+  },
+  {
+    question: 'Can I use a small scissor lift outdoors?',
+    answer:
+      'Most small scissor lifts are rated for indoor use only. They lack the ground clearance, tyre tread, and weatherproofing for outdoor work. If you need low-level outdoor access, consider a compact rough-terrain scissor lift or a trailer-mounted cherry picker. Some compact electric models are rated for limited outdoor use on firm, level surfaces — check the manufacturer\'s rating before booking.',
+  },
+  {
+    question: 'How heavy is a small scissor lift?',
+    answer:
+      'Push-around personnel lifts can weigh as little as 400–500 kg. Self-propelled micro scissors typically weigh 900–1,500 kg. Compact electric models range from 1,500 to 3,000 kg. Always check floor loading capacity before positioning the machine, especially in upper-storey buildings, mezzanines, and older structures.',
+  },
+  {
+    question: "What's the difference between a scissor lift and a cherry picker?",
+    answer:
+      'A scissor lift goes straight up (vertical only), with no horizontal reach. A cherry picker (boom lift) has an articulated or telescopic arm that provides both vertical height and horizontal outreach, allowing it to reach over obstacles. For straight-up indoor access, a scissor lift is usually more compact and cost-effective. For work that requires reaching around or over structures, you need a cherry picker.',
+  },
+  {
+    question: 'Can two people work on a small scissor lift at once?',
+    answer:
+      'Most small scissor lift baskets are rated for one or two occupants, with total platform capacities of 200–350 kg (including tools and materials). Check the machine\'s rated capacity before allowing a second person onto the platform. Never exceed the stated limit.',
+  },
+  {
+    question: 'What pre-use checks should I carry out?',
+    answer:
+      'Before each use, check the battery charge level, inspect guardrails and gate for damage and secure latching, verify the emergency lowering system works, check wheels and tyres for damage, confirm the platform and deck extension (if fitted) are secure, and ensure the operating surface is clean, level, and free from obstructions overhead and below.',
+  },
+];
+
+const smallScissorLiftContent = (
+  <>
+    <Section>
+      <H2>At a Glance</H2>
+      <BulletList
+        items={[
+          'Small scissor lifts provide vertical-only access to working heights of roughly 3–8 metres, ideal for indoor maintenance, fit-out, and installation work',
+          'Compact enough to fit through standard single doorways (as narrow as 760 mm on some models) and operate in aisles, corridors, and confined spaces',
+          'Electric powered with zero emissions and low noise, making them suitable for occupied buildings, retail, hospitals, and schools',
+          'IPAF Category 1a or 1b training is strongly recommended for all MEWP operation on commercial sites',
+          'Small scissor lifts are the most commonly hired access platform for interior fit-out and refurbishment projects in the UK',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>What Is a Small Scissor Lift?</H2>
+      <Paragraph>
+        A small scissor lift is a compact mobile elevating work platform (MEWP) that raises its platform vertically using a criss-cross (scissor) mechanism. Unlike cherry pickers, scissor lifts go straight up, with no horizontal boom arm or outreach.
+      </Paragraph>
+      <Paragraph>
+        "Small" generally means machines with platform heights between 1.5 and 6 metres (working heights of 3–8 metres), designed for use indoors or in tight spaces. They're lighter, narrower, and quieter than full-size construction scissor lifts, and most run on battery-electric power.
+      </Paragraph>
+      <Paragraph>
+        Common trade names you'll see on UK hire desks include Skyjack, JLG, Genie, Haulotte, and Snorkel.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Can You Do With a Small Scissor Lift?</H2>
+      <Paragraph>Small scissor lifts are the go-to access platform for indoor and low-level work across a wide range of UK trades.</Paragraph>
+      <div className="space-y-4">
+        {(
+          [
+            {
+              title: 'Interior Fit-Out and Refurbishment',
+              items: [
+                'Installing suspended ceilings, ceiling tiles, and acoustic panels',
+                'Fitting overhead lighting, cable trays, and containment',
+                'Running M&E (mechanical and electrical) services above ceiling level',
+                'Sprinkler, fire alarm, and smoke detector installation',
+              ],
+            },
+            {
+              title: 'Electrical and Data',
+              items: [
+                'First and second fix electrical work at height in commercial buildings',
+                'Installing and maintaining overhead cable management, busbar, and trunking systems',
+                'Data cabling, network cabinet installation, and fibre runs in server rooms',
+              ],
+            },
+            {
+              title: 'Painting and Decorating',
+              items: [
+                'Interior painting and decorating at height in commercial and residential properties',
+                'Wallpapering, feature wall installation, and decorative finishing above standard ladder reach',
+                'Applying specialist coatings in atriums, stairwells, and double-height spaces',
+              ],
+            },
+            {
+              title: 'Maintenance and Facilities',
+              items: [
+                'HVAC duct cleaning, filter replacement, and air handling unit servicing',
+                'Changing high-level lighting, emergency lights, and exit signs',
+                'Cleaning high-level glazing, rooflights, and atrium panels from inside',
+                'General building maintenance in warehouses, retail units, and industrial premises',
+              ],
+            },
+            {
+              title: 'Retail and Hospitality',
+              items: [
+                'Shop fitting, signage installation, and display work',
+                'Stock management and picking at height in warehouse environments',
+                'Setting up event staging, AV rigs, and temporary lighting',
+              ],
+            },
+          ] as { title: string; items: string[] }[]
+        ).map((group) => (
+          <div key={group.title} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <H3>{group.title}</H3>
+            <div className="mt-3">
+              <BulletList items={group.items} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Small Scissor Lift Available for Hire</H2>
+      <DataTable
+        headers={['Type', 'Platform Height', 'Working Height', 'Stowed Width', 'Best For']}
+        rows={[
+          ['Push-around / personnel lift', '1.5–4 m', '3.5–6 m', '650–800 mm', 'Very tight spaces, single-person tasks, retail, light maintenance'],
+          ['Micro scissor lift (self-propelled)', '2–4 m', '4–6 m', '760–900 mm', 'Indoor fit-out, ceiling work, M&E, decorating in corridors'],
+          ['Compact electric scissor lift', '4–6 m', '6–8 m', '810–1,200 mm', 'Medium-height indoor work, warehouse maintenance, commercial fit-out'],
+          ['Narrow-aisle scissor lift', '3–5 m', '5–7 m', '760–810 mm', 'Racking aisles, storerooms, narrow corridors'],
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Push-Around vs Self-Propelled</H2>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-gray-100 bg-white p-5">
+          <H3>Push-Around (Manual)</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Lightweight platforms (some under 500 kg) that are manually wheeled into position on the ground before elevating. No drive function when raised. Ideal for short, simple tasks in clean environments.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-gray-100 bg-white p-5">
+          <H3>Self-Propelled</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Drive while elevated, controlled from the platform. Essential for jobs that require repositioning at height across a work area. Heavier, wider, and more capable, but still compact enough for most indoor environments.
+            </Paragraph>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <img
+      src="/images/small-scissor-lift-compare-prices.png"
+      alt="Compact electric scissor lift being used for suspended ceiling installation in a UK office refurbishment"
+      className="w-full max-h-72 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>How to Choose the Right Small Scissor Lift</H2>
+      <div className="space-y-3">
+        {(
+          [
+            {
+              title: 'Working Height Required',
+              body: 'Measure the highest point you need to reach, then subtract roughly 2 metres (your standing reach in the basket). That gives you the minimum platform height. Working height = platform height + 2 m. For most indoor ceiling work in standard UK commercial buildings (2.7–3.5 m ceiling height), a push-around or micro scissor lift with 3–5 m platform height is sufficient.',
+            },
+            {
+              title: 'Access Width',
+              body: 'Measure the narrowest doorway, corridor, or aisle the machine needs to pass through. Push-around lifts can be as narrow as 650 mm. Self-propelled micro scissors typically start at 760 mm. If your building has standard 838 mm (33-inch) single doors, you need a machine with a stowed width below that.',
+            },
+            {
+              title: 'Floor Loading',
+              body: 'Small scissor lifts are lighter than full-size construction models, but still concentrate weight on small wheel contact areas. Check the floor\'s load-bearing capacity before hire, especially in offices, retail units, mezzanines, and upper-storey buildings. The hire company can provide the machine\'s gross weight and point-loading data.',
+            },
+            {
+              title: 'Indoor vs Outdoor Use',
+              body: 'Most small scissor lifts are designed for indoor use only. They lack the ground clearance, tyre type, and weatherproofing for outdoor operation. If you need low-level access outdoors, consider a compact rough-terrain scissor lift or a trailer-mounted cherry picker instead.',
+            },
+            {
+              title: 'Platform Capacity',
+              body: 'Small scissor lift baskets typically carry 200–350 kg, which covers one or two people plus tools and materials. If you need to carry heavier loads (plasterboard stacks, long cable drums), check the rated capacity carefully.',
+            },
+            {
+              title: 'Power Source and Charging',
+              body: 'All small scissor lifts run on battery-electric power. Confirm whether the machine arrives fully charged, and whether you have access to a suitable charging point on site. Most charge from a standard 240V socket overnight.',
+            },
+          ] as { title: string; body: string }[]
+        ).map((item, i) => (
+          <div key={item.title} className="flex gap-4 rounded-xl border border-gray-100 bg-white p-5">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-sm font-black text-white">
+              {i + 1}
+            </span>
+            <div>
+              <p className="font-extrabold text-gray-900">{item.title}</p>
+              <p className="mt-1 text-sm font-medium text-gray-500">{item.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>IPAF Training and Operator Requirements</H2>
+      <Paragraph>
+        For commercial and construction site work,{' '}
+        <a href="https://www.ipaf.org" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">
+          IPAF (International Powered Access Federation)
+        </a>{' '}
+        training is the recognised industry standard for MEWP operation in the UK. The relevant categories for small scissor lifts are:
+      </Paragraph>
+      <DataTable
+        headers={['IPAF Category', 'Machine Type']}
+        rows={[
+          ['1a', 'Static vertical (push-around personnel lifts)'],
+          ['1b', 'Mobile vertical (self-propelled scissor lifts)'],
+        ]}
+      />
+      <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] p-5">
+        <H3>PASMA — Is It Relevant?</H3>
+        <div className="mt-3">
+          <Paragraph>
+            PASMA training covers mobile access towers (scaffold towers), not MEWPs. PASMA training does not qualify you to operate a scissor lift. The correct training standard for scissor lifts is IPAF.
+          </Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Safety Regulations and Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-2xl border border-orange-100 bg-orange-50 p-5">
+          <H3>Work at Height Regulations 2005</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Any work from a scissor lift platform falls under the{' '}
+              <a
+                href="https://www.legislation.gov.uk/uksi/2005/735/contents"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-brand-primary hover:underline"
+              >
+                Work at Height Regulations 2005
+              </a>
+              . Employers must ensure work at height is properly planned, appropriately supervised, and carried out by competent persons.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>LOLER 1998</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Scissor lifts must have a current LOLER thorough examination certificate (valid for 6 months). The hire company is responsible for this, and the certificate should accompany the machine on delivery.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Floor Surface and Slopes</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Never operate a small scissor lift on a slope exceeding the manufacturer's rated maximum (typically 1–3 degrees for indoor models). Ensure the floor surface is clean, dry, and free from debris.
+            </Paragraph>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Overhead Hazards</H3>
+          <div className="mt-3">
+            <Paragraph>
+              Before elevating, check for overhead obstructions: sprinkler heads, beams, light fittings, pipes, and ceiling structures. Crushing between the platform guardrail and a fixed overhead structure is a serious and well-documented risk.
+            </Paragraph>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and What's Included</H2>
+      <div className="space-y-2">
+        {(
+          [
+            {
+              label: 'Delivery',
+              desc: 'Small scissor lifts are usually delivered by van or flatbed, using a ramp or tail-lift. Self-propelled models can be driven off the delivery vehicle directly. Push-around models are light enough to be wheeled.',
+            },
+            { label: 'Collection', desc: 'Arranged at the end of hire. Check whether the supplier charges for same-day or next-day collection windows.' },
+            {
+              label: 'Charging',
+              desc: 'Machines arrive charged. You\'ll need a 240V socket on site for overnight charging during multi-day hires. Some depots supply a charger unit with the machine.',
+            },
+            {
+              label: 'Induction',
+              desc: 'Suppliers should provide a handover including controls familiarisation, emergency lowering procedure, pre-use checks, and safe operating envelope.',
+            },
+            {
+              label: 'Platform extensions',
+              desc: 'Some models have a fold-out deck extension for extra reach. Check whether this is fitted as standard or available as an add-on.',
+            },
+          ] as { label: string; desc: string }[]
+        ).map((item) => (
+          <div key={item.label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{item.label}</p>
+            <p className="mt-0.5 text-sm font-medium text-gray-500">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Small Scissor Lift vs Alternatives — Which to Hire?</H2>
+      <DataTable
+        headers={['Option', 'Vertical Reach', 'Outreach', 'Floor Impact', 'Best For']}
+        rows={[
+          ['Small scissor lift', '3–8 m', 'None (vertical only)', 'Low to medium', 'Indoor fit-out, ceilings, M&E, decorating'],
+          ['Podium step / low-level platform', 'Up to 2.5 m', 'None', 'Very low', 'Quick single-person tasks, light maintenance'],
+          ['Mobile access tower (PASMA)', 'Up to 12 m', 'None', 'Very low', 'Longer-duration work at a fixed location'],
+          ['Cherry picker (boom lift)', '8–45+ m', 'Yes (horizontal)', 'Higher', 'Outdoor, over obstacles, building facades'],
+          ['Full-size scissor lift', '8–18 m', 'Limited (1–2 m deck extension)', 'High', 'Construction sites, outdoor, higher reach'],
+        ]}
+      />
+      <Paragraph>
+        If you need outreach (reaching over or around an obstacle), a scissor lift won't do the job — you need a cherry picker. If you need straight-up indoor access in tight spaces, a small scissor lift is the most practical option.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Hire a Small Scissor Lift Near You</H2>
+      <Paragraph>
+        Tooli.uk lists small scissor lift hire suppliers across the UK. Browse by city to compare availability:
+      </Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {[
+          'London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh',
+          'Bristol', 'Liverpool', 'Sheffield', 'Cardiff', 'Newcastle', 'Nottingham',
+          'Leicester', 'Southampton', 'Brighton', 'Reading', 'Coventry', 'Derby',
+          'Swindon', 'Oxford',
+        ].map((city) => (
+          <span
+            key={city}
+            className="rounded-full border border-gray-200 bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700"
+          >
+            {city}
+          </span>
+        ))}
+      </div>
+      <Paragraph>Enter your postcode on Tooli.uk to find suppliers near you.</Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Frequently Asked Questions</H2>
+      <div className="grid gap-4">
+        {smallScissorLiftFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Small Scissor Lift Hire with Tooli.uk</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Choosing the right small scissor lift means matching working height, stowed width, floor loading, and power requirements to your specific indoor environment — not just picking the nearest available machine.
+        </Paragraph>
+        <Paragraph>
+          Tooli.uk makes it straightforward to compare small scissor lift hire from vetted suppliers across the UK — from ultra-narrow push-around lifts for occupied retail spaces to compact electric self-propelled models for commercial fit-out. Review machine specs, working heights, and supplier coverage in one place, then{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">
+            compare prices now
+          </a>{' '}
+          to find the right platform for your job.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const equipmentPages: EquipmentPageData[] = [
   {
     slug: 'excavator-hire-uk',
@@ -2076,6 +3213,75 @@ export const equipmentPages: EquipmentPageData[] = [
         </Section>
       </>
     ),
+  },
+  {
+    slug: 'air-compressor-hire-uk',
+    name: 'Air Compressor Hire UK',
+    path: '/equipment/air-compressor-hire-uk',
+    metaTitle: 'Air Compressor Hire | Compare Prices Locally | Tooli.uk',
+    metaDescription:
+      'Compare air compressor hire prices from local UK suppliers. Portable & industrial compressors for building sites, spray painting, and pneumatic tools. Get quotes on Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/air-compressor-hire-uk',
+    title: 'Air Compressor Hire — Compare UK Supplier Prices Near You',
+    description:
+      'Air compressor hire gives UK tradespeople and DIYers access to portable and industrial compressors without the cost of buying outright. Compressors power pneumatic tools like breakers, nail guns, impact wrenches, and spray guns on construction sites and renovation projects across the UK.',
+    image: '/images/air-compressor-hire-uk.webp',
+    imageAlt: 'Towable diesel air compressor on a UK construction site with pneumatic breaker hose attached',
+    faqs: airCompressorFaqs,
+    relatedEquipment: [
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+      { name: 'Compactor Hire UK', path: '/equipment/compactor-hire-uk' },
+      { name: 'Excavator Hire UK', path: '/equipment/excavator-hire-uk' },
+      { name: 'Dumper Hire UK', path: '/equipment/dumper-hire-uk' },
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+    ],
+    content: airCompressorContent,
+  },
+  {
+    slug: 'cherry-picker-hire-uk',
+    name: 'Cherry Picker Hire UK',
+    path: '/equipment/cherry-picker-hire-uk',
+    metaTitle: 'Cherry Picker Hire | Compare Local UK Prices | Tooli.uk',
+    metaDescription:
+      'Compare cherry picker hire prices from UK suppliers. Boom lifts and access platforms for construction, tree work, and maintenance. Get quotes fast on Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/cherry-picker-hire-uk',
+    title: 'Cherry Picker Hire — Compare Prices From UK Suppliers',
+    description:
+      'Cherry picker hire provides safe, temporary access to height for UK tradespeople, contractors, and property owners. Also known as boom lifts or mobile elevating work platforms (MEWPs), cherry pickers are hired for building maintenance, tree surgery, gutter cleaning, cladding installation, and overhead electrical work.',
+    image: '/images/cherry-picker-hire-uk.png',
+    imageAlt: 'Articulated cherry picker being used for cladding installation on a UK commercial building site',
+    faqs: cherryPickerFaqs,
+    relatedEquipment: [
+      { name: 'Scissor Lift Hire UK', path: '/equipment/scissor-lift-hire-uk' },
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+      { name: 'Air Compressor Hire UK', path: '/equipment/air-compressor-hire-uk' },
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+      { name: 'Excavator Hire UK', path: '/equipment/excavator-hire-uk' },
+    ],
+    content: cherryPickerContent,
+  },
+  {
+    slug: 'small-scissor-lift-hire-uk',
+    name: 'Small Scissor Lift Hire UK',
+    path: '/equipment/small-scissor-lift-hire-uk',
+    metaTitle: 'Small Scissor Lift Hire | Compare UK Prices | Tooli.uk',
+    metaDescription:
+      'Compare small scissor lift hire prices across UK suppliers. Electric, compact, and push-around models for indoor and low-level work. Get quotes on Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/small-scissor-lift-hire-uk',
+    title: 'Small Scissor Lift Hire — Compare UK Supplier Prices',
+    description:
+      'Small scissor lift hire gives UK tradespeople and facility managers safe, stable access to low and medium working heights without scaffolding or ladders. Electric-powered, zero-emission platforms designed for indoor use, tight spaces, and areas with floor-loading restrictions.',
+    image: '/images/small-scissor-lift-hire-uk.png',
+    imageAlt: 'Compact electric scissor lift being used for suspended ceiling installation in a UK office refurbishment',
+    faqs: smallScissorLiftFaqs,
+    relatedEquipment: [
+      { name: 'Scissor Lift Hire UK', path: '/equipment/scissor-lift-hire-uk' },
+      { name: 'Cherry Picker Hire UK', path: '/equipment/cherry-picker-hire-uk' },
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+      { name: 'Air Compressor Hire UK', path: '/equipment/air-compressor-hire-uk' },
+    ],
+    content: smallScissorLiftContent,
   },
 ];
 
