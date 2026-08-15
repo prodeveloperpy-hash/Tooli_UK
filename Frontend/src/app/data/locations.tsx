@@ -206,6 +206,12 @@ const londonContent = (
       </Paragraph>
     </Section>
 
+    <img
+      src="/images/tool-hire-london.webp"
+      alt="Tool hire and plant hire comparison in London — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
     <Section>
       <H2>Construction Equipment Available</H2>
       <Paragraph>Compare prices for hundreds of equipment types including:</Paragraph>
@@ -679,6 +685,12 @@ const manchesterContent = (
       </Paragraph>
     </Section>
 
+    <img
+      src="/images/tool-hire-manchester.png"
+      alt="Tool hire and plant hire comparison in Manchester — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
     <Section>
       <H2>Trades We Serve in Manchester</H2>
       <Paragraph>Manchester's trades are busy. Here's who Tooli.uk is built for in this city:</Paragraph>
@@ -862,6 +874,12 @@ const birminghamContent = (
         If your postcode isn't listed, run a search on Tooli.uk — our network extends into Staffordshire, Worcestershire, and Warwickshire borders.
       </Paragraph>
     </Section>
+
+    <img
+      src="/images/tool-hire-birmingham.webp"
+      alt="Tool hire and plant hire comparison in Birmingham — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
 
     <Section>
       <H2>Trades We Serve in Birmingham</H2>
@@ -1048,6 +1066,12 @@ const leedsContent = (
         </div>
       </div>
     </Section>
+
+    <img
+      src="/images/tool-hire-leeds.webp"
+      alt="Tool hire and plant hire comparison in Leeds — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
 
     <Section>
       <H2>Delivery and Collection Across Leeds</H2>
@@ -1295,6 +1319,12 @@ const glasgowContent = (
         </div>
       </div>
     </Section>
+
+    <img
+      src="/images/tool-hire-glasgow.webp"
+      alt="Tool hire and plant hire comparison in Glasgow — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
 
     <Section>
       <H2>Delivery and Collection Across Greater Glasgow</H2>
@@ -1551,6 +1581,12 @@ const bristolContent = (
         </div>
       </div>
     </Section>
+
+    <img
+      src="/images/tool-hire-bristol.webp"
+      alt="Tool hire and plant hire comparison in Bristol — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
 
     <Section>
       <H2>Delivery and Collection Across Greater Bristol</H2>
@@ -1828,6 +1864,12 @@ const liverpoolContent = (
         </div>
       </div>
     </Section>
+
+    <img
+      src="/images/tool-hire-liverpool.png"
+      alt="Tool hire and plant hire comparison in Liverpool — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
 
     <Section>
       <H2>Delivery and Collection Across Greater Liverpool and Merseyside</H2>
