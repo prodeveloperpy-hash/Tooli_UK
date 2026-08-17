@@ -2033,6 +2033,226 @@ const liverpoolContent = (
   </>
 );
 
+const readingFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Reading?',
+    answer:
+      'Some suppliers on the network offer same-day or next-morning delivery to central Reading postcodes (RG1, RG2, RG4). Availability depends on the equipment type and how early you request it. Compare and confirm at the checkout stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Reading suppliers offer trade accounts?',
+    answer:
+      "Yes. Most suppliers covering Reading offer trade credit accounts. You'll typically need a company name, address, and credit check. VAT receipts are issued as standard, which suits self-employed tradespeople on the Construction Industry Scheme (CIS).",
+  },
+  {
+    question: 'Can I hire a mini digger in Reading without a licence?',
+    answer:
+      "There's no statutory licence required to operate a mini digger under 3 tonnes on private land. That said, if you're working on a commercial site or operating for hire or reward, a CPCS (Construction Plant Competence Scheme) card is expected by most principal contractors. Check our mini digger hire guide for the full breakdown.",
+  },
+  {
+    question: 'Do suppliers deliver to Woodley, Earley, and Caversham?',
+    answer:
+      'Yes. These are well-served areas within the Reading delivery radius. RG5, RG6, and RG4 are standard coverage for most suppliers on Tooli.uk.',
+  },
+  {
+    question: "What's the minimum hire period?",
+    answer:
+      'Most suppliers quote a one-day minimum. Weekend rates (Saturday to Monday return) often work out cheaper than two separate day hires. Check each quote for specifics.',
+  },
+  {
+    question: 'Can I hire equipment for a one-off DIY project?',
+    answer:
+      "Absolutely. You don't need a trade account or a CSCS card for domestic DIY use on your own property. Some suppliers may ask for a damage deposit on higher-value plant.",
+  },
+];
+
+const readingContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Reading — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Need to hire tools or plant equipment in Reading? Tooli.uk compares prices from local and regional suppliers serving RG postcodes — so you get the best available rate without ringing round half a dozen depots. Whether you're a groundworker on a Reading development site, a landscaper working through Caversham and Tilehurst, or a homeowner extending on a Woodley semi, this page pulls together what you need to know before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers covering Reading and surrounding RG postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, floor sanders, pressure washers, concrete mixers, power floats',
+            'Delivery typically available across RG1–RG31 and into South Oxfordshire and North Hampshire fringes',
+            'Weekend hire available from most suppliers — confirm Sunday collection before booking',
+            'VAT receipts standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Reading Keeps Equipment Hire Busy All Year</H2>
+      <Paragraph>
+        Reading is one of the most active construction markets outside London. The town has been through sustained growth — new housing along the A33 corridor, commercial development around the station quarter, and a constant pipeline of domestic extensions and refurbs across its large owner-occupier suburbs.
+      </Paragraph>
+      <Paragraph>
+        Add in the landscaping season, which runs hard from March through October across well-off postcodes like Caversham Heights, Emmer Green, and Earley, and you've got year-round demand for plant and tools.
+      </Paragraph>
+      <Paragraph>
+        Local builders also pick up overspill work from nearby Wokingham, Bracknell, and Henley. That means equipment often travels. Suppliers covering Reading will usually deliver to RG1 through RG31, and many extend into RG40 (Wokingham), RG42 (Bracknell fringes), and OX11.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Most-Hired Equipment in Reading</H2>
+      <Paragraph>These are the categories most searched and booked across the Reading area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Reading']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, footings, utility trenches'],
+          ['Scaffold tower (aluminium)', 'Extensions, roof work, render and painting'],
+          ['Floor sander / edge sander', 'Pre-sale refurbs, Victorian terrace floors'],
+          ['Concrete mixer (130–180L)', 'Footings, driveways, patio bases'],
+          ['Pressure washer (hot or cold)', 'Driveway cleans, patio prep'],
+          ['Power float', 'New slab finishing on commercial and domestic sites'],
+          ['Dehumidifier / drying equipment', 'Flood remediation, plaster drying — high demand post-winter'],
+          ['Access platform (IPAF)', 'Commercial fit-out around the station and Oracle retail area'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-reading-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Reading — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Reading typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'Town centre and inner areas: RG1, RG2, RG4 (Caversham), RG5 (Woodley), RG6 (Earley)',
+          'Outer Reading: RG7 (Burghfield / Mortimer), RG8 (Pangbourne / Goring), RG10 (Twyford / Wargrave), RG14 (Newbury fringe)',
+          'West Reading and Tilehurst: RG30, RG31',
+        ]}
+      />
+      <Paragraph>
+        If you're working on a site just outside these postcodes, enter your full postcode on the comparison tool. Some suppliers will deliver to South Oxfordshire and the M4 corridor for larger orders.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Active in Reading?</H2>
+      <Paragraph>Reading's construction activity spans commercial and domestic. The trades most regularly hiring equipment here:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Major road schemes around the IDR (Inner Distribution Road) and new housing sites off the A33 and Basingstoke Road keep groundworkers busy. Mini diggers, dumper trucks, and vibrating rollers are the go-to kit.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The stock of post-war semis and 1930s detacheds across Tilehurst, Southcote, and Whitley generates constant single-storey and two-storey extension work.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Caversham Heights, Emmer Green, and Sonning are premium landscaping postcodes. Ride-on mowers, turf cutters, and mini diggers for pond and terrace work move fast in spring and early summer.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Pre-sale refurbs and buy-to-let turnover in the student belt around RG1/RG2 keeps decorators working all year. Access equipment and floor prep tools are regulars.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Electricians and plumbers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">First-fix work on new builds around the Kennet Island and Southcote developments. Cable rollers, pipe threading equipment, and pipe freezing kits.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Reading-Specific Things Worth Knowing Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Parking and site access</p>
+          <Paragraph>Central Reading is tight. If you're hiring a 3-tonne machine or a long-wheelbase lorry delivery, check access restrictions near the Oracle, Broad Street, and the pedestrianised town-centre grid. Most residential streets in RG1 and RG2 are permit zones.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">River Thames proximity</p>
+          <Paragraph>Sites near Caversham, Sonning, and Pangbourne may sit in Environment Agency flood zones. Check ground conditions before booking heavy plant. Groundmats are available from several suppliers on the network.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>
+            Reading Borough Council follows standard construction noise hours: 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday. Plan equipment returns and early starts accordingly. The{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE Control of Noise at Work Regulations 2005</a>
+            {' '}apply to prolonged use of high-decibel equipment on site.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend and bank holiday hire</p>
+          <Paragraph>Reading suppliers mostly operate Monday to Saturday. Sunday collection windows are limited. If you need equipment over a bank holiday weekend — common in spring landscaping season — book at least 3 days ahead.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Environment Agency flood zones</p>
+          <Paragraph>
+            Before booking heavy plant for riverside sites, check the{' '}
+            <a href="https://check-long-term-flood-risk.service.gov.uk/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Environment Agency flood map for planning</a>
+            . Ground conditions near the Thames in Caversham, Sonning, and Pangbourne can change quickly after heavy rain.
+          </Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Reading</H2>
+      <BulletList
+        items={[
+          'Tool hire for landscapers',
+          'Tool hire for groundworkers',
+          'Tool hire for builders and general contractors',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Reading</H2>
+      <div className="grid gap-4">
+        {readingFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Reading Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent the most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -2138,6 +2358,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/liverpool-hero.png',
     faqs: liverpoolFaqs,
     content: liverpoolContent,
+  },
+  {
+    slug: 'reading',
+    name: 'Reading',
+    path: '/locations/reading',
+    metaTitle: 'Tool Hire Reading | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Reading and the Thames Valley. Serving RG1–RG31, Caversham, Tilehurst, Woodley and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/reading',
+    title: 'Tool Hire in Reading — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers serving RG postcodes — get the best available rate without ringing round half a dozen depots.',
+    image: '/images/reading-hero.webp',
+    faqs: readingFaqs,
+    content: readingContent,
   },
 ];
 
