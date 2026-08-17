@@ -2474,6 +2474,239 @@ const nottinghamContent = (
   </>
 );
 
+const cambridgeFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Cambridge?',
+    answer:
+      'Some suppliers covering central Cambridge postcodes (CB1, CB2, CB4) offer same-day or next-morning delivery depending on equipment availability and how early you request it. Confirm delivery timescales at the quote stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Cambridge suppliers offer trade accounts?',
+    answer:
+      "Yes. Most suppliers on the network offer trade credit accounts. You'll need a company name, registered address, and a basic credit check. VAT receipts are issued as standard — useful for sole traders and CIS-registered subcontractors across Cambridgeshire.",
+  },
+  {
+    question: 'Do I need a licence to hire a mini digger in Cambridge?',
+    answer:
+      'No statutory licence is required to operate a mini digger under 3 tonnes on private land. On commercial sites or when working for hire or reward, most principal contractors expect a valid CPCS (Construction Plant Competence Scheme) card. See our mini digger hire guide for the full detail.',
+  },
+  {
+    question: 'Which postcodes do Cambridge suppliers deliver to?',
+    answer:
+      'Most suppliers cover CB1–CB5 as standard, with many extending into CB21–CB25 and parts of South Cambridgeshire. Enter your postcode on Tooli.uk to confirm exact coverage for your job.',
+  },
+  {
+    question: 'Are there restrictions on hiring heavy plant near Cambridge University buildings?',
+    answer:
+      "Suppliers can deliver to sites near university buildings, but access for large plant in the historic centre is often restricted by narrow streets and conservation area rules. Discuss delivery logistics with the supplier before confirming the booking.",
+  },
+  {
+    question: 'Can a homeowner hire equipment in Cambridge without a trade account?',
+    answer:
+      "Yes. You don't need a trade account for domestic use on your own property. Suppliers may ask for a damage deposit on higher-value items like mini diggers or access platforms.",
+  },
+  {
+    question: 'Is there extra demand for tool hire near the Cambridge Biomedical Campus?',
+    answer:
+      'Yes. The Biomedical Campus expansion in CB2 is one of the most active construction corridors in the East of England right now. Access platforms, groundworks plant, and M&E tools are in high demand in that area — book ahead wherever possible.',
+  },
+];
+
+const cambridgeContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Cambridge — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Need to hire tools or plant equipment in Cambridge? Tooli.uk compares prices from local and regional suppliers across CB postcodes — so you see the best available rate without ringing round every depot in Cambridgeshire. Whether you're a builder working through Chesterton or Queen Edith's, a groundworker on one of the city's growing development sites, or a homeowner extending a Victorian terrace in Romsey or Petersfield, this page has what you need before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers covering Cambridge and surrounding CB postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, concrete mixers, floor sanders, access platforms, pressure washers',
+            'Delivery typically available across CB1–CB5 and into Histon, Milton, Waterbeach, and Sawston',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Cambridge Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Cambridge punches well above its size when it comes to construction activity. The city has a dense stock of Victorian and Edwardian terraces in areas like Romsey, Petersfield, and Mill Road — all of which generate constant extension, loft conversion, and refurb work. Add in a fast-growing ring of newer suburbs in Trumpington, Cherry Hinton, and north Cambridge, and demand for tools and plant equipment is steady all year.
+      </Paragraph>
+      <Paragraph>
+        At the larger end, the Cambridge Biomedical Campus south of the city is one of the biggest drivers of construction activity in the East of England. Cambridgeshire County Council approved a partnership with Prologis to support the next two phases of expansion at the campus, representing up to £3 billion of private investment over the next two decades. That scale of commercial development keeps civils and M&amp;E trades busy well into the future.
+      </Paragraph>
+      <Paragraph>
+        Cambridge South station, which became operational in 2025, serves the Biomedical Campus directly and has triggered associated housing and commercial development along the southern corridor. Equipment often travels out from Cambridge city to Histon, Milton, Waterbeach, Sawston, and Saffron Walden — suppliers covering the city typically extend across most CB districts.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Cambridge?</H2>
+      <Paragraph>These are the categories most searched and booked across the Cambridge area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Cambridge']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, footings, drainage trenches on suburban sites'],
+          ['Scaffold tower (aluminium)', 'Loft conversions, chimney repointing, render on Victorian terraces'],
+          ['Concrete mixer (130–180L)', 'Slab bases, driveways, extension footings across CB1–CB4'],
+          ['Floor sander / edge sander', 'Victorian and Edwardian floorboard prep, pre-sale refurbs'],
+          ['Access platform (IPAF)', 'Biomedical Campus commercial fit-out and city-centre lab buildings'],
+          ['Pressure washer (hot or cold)', 'Driveway and patio cleans, limestone and brick façade prep'],
+          ['Dehumidifier / drying kit', 'Post-flood and new plaster drying — high demand after wet winters'],
+          ['Site lighting / generator', 'Winter working on exposed sites in South Cambridgeshire villages'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-cambridge-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Cambridge — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Cambridge typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'City centre and inner areas: CB1 (City Centre, Petersfield, Romsey, Cherry Hinton), CB2 (Newnham, Trumpington, Addenbrooke\'s), CB3 (Castle, Newnham, Grantchester), CB4 (Chesterton, Arbury, King\'s Hedges), CB5 (Abbey, Fen Ditton)',
+          'Commuter villages and outer areas: CB21 (Great Shelford, Fulbourn), CB22 (Sawston, Stapleford), CB23 (Comberton, Hardwick, Barton), CB24 (Histon, Milton, Waterbeach, Willingham), CB25 (Bottisham, Swaffham)',
+        ]}
+      />
+      <Paragraph>
+        If your site falls just outside these postcodes, enter your full postcode on the comparison tool. Several suppliers extend into SG and IP borders for larger plant orders.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active in Cambridge?</H2>
+      <Paragraph>Cambridge's construction workload spans domestic refurb, commercial laboratory fit-out, and civils. The trades hiring most regularly:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The dense Victorian and Edwardian housing stock in Romsey (CB1), Petersfield (CB1), and Mill Road generates substantial extension and loft conversion work. Scaffold towers, concrete mixers, and floor prep equipment are the daily staples.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Development sites around Trumpington (CB2) and the southern corridor feeding the Biomedical Campus keep groundwork crews in demand. Mini diggers, dumper trucks, and vibrating rollers feature heavily.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium postcodes including Newnham (CB3), Queen Edith's (CB1), and Grantchester drive high-value garden and landscaping projects from March through October. Turf cutters, mini diggers, and pressure washers are the most-requested kit.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Strong student-let and buy-to-let turnover across CB1 and CB4 means internal refurb work moves fast year-round. Access equipment, mixing drills, and floor sanders are regulars.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">M&amp;E contractors (electricians and plumbers)</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">First-fix activity on the Biomedical Campus expansion, Cambridge Research Park, and new residential developments around CB24 keeps mechanical and electrical trades active. Cable rollers, pipe threading tools, and vacuum excavators feature regularly.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Specialist conservation contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Cambridge has an unusually high concentration of listed buildings, college buildings, and conservation areas. Lightweight access platforms, low-vibration tools, and lime mortar mixing equipment are regular hires for specialist refurb work in the city centre.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Cambridge-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Conservation area restrictions</p>
+          <Paragraph>
+            Cambridge City Council has multiple conservation areas covering the historic city centre, the Backs, and surrounding college streets. If you're working in CB1, CB2, or CB3 near university buildings, check{' '}
+            <a href="https://www.cambridge.gov.uk/planning-and-building-control" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Cambridge City Council planning guidance</a>
+            {' '}before booking heavy plant. Access for large machinery is often restricted.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Narrow streets and restricted access</p>
+          <Paragraph>Roads in the historic core, including Mill Road, Tenison Road, and streets around the market, are tight. Lorry and plant deliveries into CB1 and CB2 need careful route planning. Check for road closures around the Biomedical Campus construction corridor in CB2.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Fenland ground conditions</p>
+          <Paragraph>
+            Sites in low-lying areas around the River Cam, Abbey (CB5), and parts of CB24 can have soft, waterlogged ground — particularly after wet winters. Ask suppliers about groundmats if working on sensitive ground. Check the{' '}
+            <a href="https://check-long-term-flood-risk.service.gov.uk/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Environment Agency flood map</a>
+            {' '}before booking heavy plant near the river.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>
+            Cambridge City Council follows standard construction noise guidance: 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday.{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE CONAW regulations</a>
+            {' '}cover prolonged high-decibel tool use — relevant for breaker and disc-cutter work in residential streets.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend and bank holiday availability</p>
+          <Paragraph>Cambridge suppliers mostly operate Monday to Saturday. Sunday collection is limited. Spring bank holidays see strong demand for landscaping equipment in the south and west of the city — book at least 3 to 4 days ahead.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Cambridge</H2>
+      <BulletList
+        items={[
+          'Tool hire for builders and general contractors',
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Specialist access equipment for conservation contractors',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Cambridge</H2>
+      <div className="grid gap-4">
+        {cambridgeFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Cambridge Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -2609,6 +2842,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/nottingham-hero.webp',
     faqs: nottinghamFaqs,
     content: nottinghamContent,
+  },
+  {
+    slug: 'cambridge',
+    name: 'Cambridge',
+    path: '/locations/cambridge',
+    metaTitle: 'Tool Hire Cambridge | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Cambridge and CB postcodes. Serving Chesterton, Trumpington, Cherry Hinton, Romsey and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/cambridge',
+    title: 'Tool Hire in Cambridge — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers across CB postcodes — see the best available rate without ringing round every depot in Cambridgeshire.',
+    image: '/images/cambridge-hero.webp',
+    faqs: cambridgeFaqs,
+    content: cambridgeContent,
   },
 ];
 
