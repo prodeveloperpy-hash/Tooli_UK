@@ -3402,6 +3402,243 @@ const newcastleContent = (
   </>
 );
 
+const edinburghFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Edinburgh?',
+    answer:
+      'Several suppliers covering central Edinburgh postcodes (EH1–EH7, EH9, EH10) offer same-day or next-morning delivery depending on equipment type and booking time. Confirm delivery timescales at the quote stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Edinburgh suppliers offer trade accounts?',
+    answer:
+      'Yes. Most suppliers on the network offer trade credit accounts for registered businesses. You will need a company name, registered address, and a basic credit check. VAT receipts are issued as standard and comply with Scottish tax requirements for CIS-registered contractors.',
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Edinburgh?',
+    answer:
+      'No statutory licence is required to operate a mini digger under 3 tonnes on private land. On commercial sites, most principal contractors require a valid CPCS (Construction Plant Competence Scheme) card. For access platform work, an IPAF card is expected on any commercial or public-facing site. See our mini digger hire guide for the full detail.',
+  },
+  {
+    question: 'What size digger should I hire for tenement back-court work in Edinburgh?',
+    answer:
+      'A 0.8-tonne micro digger is usually the right choice for Edinburgh tenement back courts. Standard 1.5-tonne machines often cannot fit through the close or rear gate. Measure your access width and height clearance before booking — most suppliers will help you confirm the right size for your site dimensions.',
+  },
+  {
+    question: 'Which Edinburgh postcodes do suppliers deliver to?',
+    answer:
+      'Most suppliers cover EH1–EH17 as standard, with many extending into EH18–EH30 and the wider Lothians. Enter your postcode on Tooli.uk to confirm exact coverage for your job.',
+  },
+  {
+    question: "Are there restrictions on using power tools near Edinburgh's listed buildings?",
+    answer:
+      "Using vibrating or percussive tools near listed structures can cause damage and may require prior consent from Historic Environment Scotland. Prolonged use of high-vibration equipment adjacent to sandstone or rubble-built walls carries a risk of structural disturbance. Always check with the relevant authority and your site manager before proceeding.",
+  },
+  {
+    question: 'Can a homeowner hire equipment in Edinburgh without a trade account?',
+    answer:
+      'Yes. You do not need a trade account for domestic use on your own property. Some suppliers may request a damage deposit on higher-value plant such as mini diggers or powered access platforms.',
+  },
+];
+
+const edinburghContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Edinburgh — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Need to hire tools or plant equipment in Edinburgh? Tooli.uk compares prices from local and regional suppliers across EH postcodes — so you get the best available rate without ringing round every depot in the Lothians. Whether you're a groundworker on one of Edinburgh's major waterfront regeneration sites, a builder refurbishing a tenement flat in Leith or Gorgie, or a homeowner extending a Victorian villa in Morningside or Corstorphine, this page gives you what you need before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers across Edinburgh and surrounding EH postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, stone cutting equipment, floor sanders, wacker plates, access platforms',
+            'Delivery typically available across EH1–EH17 and into Midlothian, East Lothian, and West Lothian commuter areas',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Edinburgh Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Edinburgh is one of the most active construction cities in Scotland. The city combines a massive pipeline of new-build development with relentless demand for specialist refurbishment work on its stone-built historic stock — and that combination keeps the hire market busy across every trade and skill level.
+      </Paragraph>
+      <Paragraph>
+        The headline story right now is Granton Waterfront. The £1.3 billion regeneration scheme will develop 120 acres of land into over 3,500 new homes, a primary school, healthcare facilities, and 20,000 square metres of commercial and cultural space. Construction phases are actively under way, with further phases progressing through 2026. It is one of the largest waterfront regeneration projects in Scotland.
+      </Paragraph>
+      <Paragraph>
+        Beyond Granton, the Meadowbank regeneration masterplan proposes 705 homes alongside commercial and community premises, with work expected to start on site in 2026. The Powderhall regeneration in EH7 is also progressing, with foundations laid on the latest phase. Across Edinburgh's suburbs, new housing sites in South Queensferry, Portobello, and the western fringe at the Gyle keep groundwork crews active well outside the city centre.
+      </Paragraph>
+      <Paragraph>
+        Equipment regularly travels from Edinburgh city into Midlothian (EH18–EH25), East Lothian (EH31–EH42), and West Lothian (EH27–EH55). Suppliers covering Edinburgh typically extend across these areas — confirm your postcode at the quote stage.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Edinburgh?</H2>
+      <Paragraph>These are the categories most searched and booked across the Edinburgh area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Edinburgh']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, tenement back-court drainage, new-build footings'],
+          ['Scaffold tower (aluminium)', 'Tenement stair towers, sandstone façade work, dormer and loft conversions'],
+          ['Stone cutter / disc cutter', 'Sandstone dressing, kerb cutting, heritage stonework repairs'],
+          ['Floor sander / edge sander', 'Original floorboard prep in Victorian and Edwardian tenements and villas'],
+          ['Wacker plate / vibrating roller', 'Driveway and patio sub-base compaction across suburban EH postcodes'],
+          ['Access platform (IPAF)', 'Commercial fit-out along Granton Waterfront and Leith development corridor'],
+          ['Pressure washer (hot or cold)', 'Sandstone cleaning, driveway prep, post-winter stonework across EH9–EH10'],
+          ['Dehumidifier / drying kit', 'Tenement refurbs, new plaster drying — consistent demand in older stock'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-edinburgh-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Edinburgh — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Edinburgh typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'City centre and inner areas: EH1 (Old Town, Royal Mile), EH2 (New Town, West End), EH3 (Stockbridge, Canonmills, Broughton), EH4 (Inverleith, Granton, Davidson\'s Mains), EH5 (Granton, Trinity, Wardie), EH6 (Leith, Bonnington), EH7 (Hillside, Pilrig, Restalrig)',
+          'South Edinburgh: EH8 (Southside, Newington, Canongate), EH9 (Marchmont, The Grange, Blackford), EH10 (Morningside, Bruntsfield, Fairmilehead), EH11 (Gorgie, Dalry, Stenhouse, Sighthill), EH16 (Liberton, Niddrie, Craigmillar)',
+          'West and north-west Edinburgh: EH12 (Murrayfield, Corstorphine, the Gyle), EH13 (Colinton, Oxgangs), EH14 (Balerno, Currie, Juniper Green)',
+          'East Edinburgh and coast: EH15 (Portobello, Joppa), EH17 (Gilmerton, Moredun), EH30 (South Queensferry)',
+          'Lothians commuter belt: EH20 (Loanhead), EH21 (Musselburgh), EH22 (Dalkeith), EH26 (Penicuik), EH28 (Newbridge, Ratho), EH29 (Kirkliston)',
+        ]}
+      />
+      <Paragraph>
+        Enter your full postcode on the comparison tool to confirm coverage and delivery availability for your area.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active in Edinburgh?</H2>
+      <Paragraph>
+        Edinburgh's construction workload is unlike any other UK city. The combination of active new-build development and an extraordinary density of A-listed, B-listed, and conservation-area properties creates demand across a uniquely wide range of trades and specialist skills.
+      </Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Edinburgh's stock of sandstone tenements across Leith (EH6), Gorgie (EH11), Dalry (EH11), Marchmont (EH9), and Newington (EH8) generates constant refurbishment, conversion, and extension work. Scaffold towers, concrete mixers, and floor prep tools are the daily staples on these sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Active development at Granton Waterfront (EH5), Meadowbank (EH7), Powderhall (EH7), and new housing sites around South Queensferry (EH30) and the western fringe keeps civils crews in continuous demand. Mini diggers, dumper trucks, and vibrating rollers feature on all these sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium residential postcodes including Morningside (EH10), The Grange (EH9), Murrayfield (EH12), and Colinton (EH13) drive high-value garden projects from April through September. Mini diggers for terracing, turf cutters, and pressure washers are among the most-requested kit in these areas.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Stonemasons and specialist refurb contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Edinburgh has a higher concentration of listed buildings and conservation area properties than virtually any city in the UK. Cutting, dressing, and pointing sandstone and whinstone requires specialist tools — disc cutters, angle grinders with dust suppression, and lime mortar mixers are regular hires for this work.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">High student-let and short-term let turnover across EH8, EH9, and EH6 keeps decorators and plasterers active year-round. Access equipment, mixing drills, and floor sanders move consistently through the hire network in these postcodes.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Edinburgh's exposure to Atlantic weather systems and persistent wind-driven rain means roofing is a year-round trade. Scaffold towers are essential on Edinburgh's pitched stone-slated roofs — particularly for ridge tile, lead flashing, and chimney stack work on tenements and Victorian villas.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Edinburgh-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Listed buildings and conservation areas</p>
+          <Paragraph>
+            Edinburgh has an extraordinarily dense concentration of A-listed and B-listed buildings, particularly across EH1, EH2, EH3, EH9, and EH10. If you are working on or adjacent to a listed structure, check with{' '}
+            <a href="https://www.historicenvironment.scot/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Historic Environment Scotland</a>
+            {' '}and the City of Edinburgh Council planning department before proceeding. Certain work requires listed building consent regardless of the equipment you use.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Tenement back-court access</p>
+          <Paragraph>Edinburgh tenements typically have shared back courts accessible through a close or a rear gate. Access for mini diggers and larger plant is often tight or impossible without prior arrangement with other owners. A micro digger (0.8 tonne) is often the right call for back-court drainage and groundworks — discuss site dimensions with the supplier before confirming.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Sandstone dust</p>
+          <Paragraph>
+            Cutting, drilling, and grinding Edinburgh's sandstone generates respirable crystalline silica (RCS) dust — a serious health risk under{' '}
+            <a href="https://www.hse.gov.uk/coshh/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE COSHH regulations</a>
+            . Water suppression and appropriate RPE (respiratory protective equipment) are legally required during prolonged cutting. This applies to disc cutters, angle grinders, and core drills used on stonework.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Tram network delivery restrictions</p>
+          <Paragraph>Edinburgh's tram network runs from the airport through the city centre and out to Newhaven. Deliveries near Haymarket, Princes Street, and the Leith Walk corridor need to account for restricted vehicle access alongside tram routes — plan delivery windows carefully, particularly for morning and evening peak hours.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Scottish weather and daylight</p>
+          <Paragraph>Edinburgh's working construction season runs shorter than most English cities. Effective daylight hours on site from October through February can be as short as seven to eight hours. Site lighting and generator hire sees consistently strong demand from autumn onward. Plan concrete pours around frost risk from November through March.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Edinburgh</H2>
+      <BulletList
+        items={[
+          'Tool hire for builders and general contractors',
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Tool hire for roofers',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for stonemasons and heritage contractors',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Edinburgh</H2>
+      <div className="grid gap-4">
+        {edinburghFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Edinburgh Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -3597,6 +3834,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/newcastle-hero.webp',
     faqs: newcastleFaqs,
     content: newcastleContent,
+  },
+  {
+    slug: 'edinburgh',
+    name: 'Edinburgh',
+    path: '/locations/edinburgh',
+    metaTitle: 'Tool Hire Edinburgh | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Edinburgh and EH postcodes. Serving Leith, Morningside, Stockbridge, Portobello, Corstorphine and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/edinburgh',
+    title: 'Tool Hire in Edinburgh — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers covering EH postcodes — get the best available rate without ringing round every depot in the Lothians.',
+    image: '/images/edinburgh-hero.webp',
+    faqs: edinburghFaqs,
+    content: edinburghContent,
   },
 ];
 
