@@ -2253,6 +2253,227 @@ const readingContent = (
   </>
 );
 
+const nottinghamFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Nottingham?',
+    answer:
+      'Some suppliers covering central Nottingham postcodes (NG1, NG2, NG7, NG9) offer same-day or next-morning delivery depending on equipment availability and request timing. Use the Tooli.uk comparison tool and confirm delivery timescales at the quote stage.',
+  },
+  {
+    question: 'Do Nottingham suppliers offer trade accounts?',
+    answer:
+      "Yes. Most suppliers on the network offer trade credit accounts for businesses. You'll typically need a company name, registered address, and basic credit check. VAT receipts are issued as standard — useful for sole traders and CIS-registered subcontractors.",
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Nottingham?',
+    answer:
+      "There's no legal requirement to hold a licence to operate a mini digger under 3 tonnes on private land. However, on commercial sites or when working for hire or reward, most principal contractors expect a valid CPCS (Construction Plant Competence Scheme) card. See our full mini digger hire guide for the detail.",
+  },
+  {
+    question: 'Which postcodes do Nottingham suppliers deliver to?',
+    answer:
+      'Most suppliers cover NG1–NG16 as standard, with many extending to NG17, NG18, NG24, and into parts of Derbyshire and Leicestershire. Enter your postcode on Tooli.uk for accurate coverage confirmation.',
+  },
+  {
+    question: "What's the minimum hire period for tools in Nottingham?",
+    answer:
+      'Most suppliers operate a one-day minimum. Weekend rates (Saturday pickup, Monday return) often offer better value than booking two separate day hires. Check each quote for specific terms.',
+  },
+  {
+    question: 'Can a homeowner hire plant equipment in Nottingham without a trade account?',
+    answer:
+      "Yes. You don't need a trade account for domestic use on your own property. Suppliers may request a damage deposit on higher-value plant such as mini diggers or access platforms.",
+  },
+  {
+    question: 'Is there high demand for equipment hire around the Broad Marsh development?',
+    answer:
+      'Yes. The Broad Marsh regeneration and surrounding city-centre activity drives strong commercial equipment demand in NG1 and NG2. If you\'re working near the site, book early — particularly for access platforms and groundworks kit.',
+  },
+];
+
+const nottinghamContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Nottingham — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Looking to hire tools or plant equipment in Nottingham? Tooli.uk compares prices from local and regional suppliers covering NG postcodes — so you get the best available rate without ringing round depot after depot. Whether you're a groundworker on one of Nottingham's major regeneration sites, a builder working through West Bridgford and Beeston, or a homeowner tackling a loft conversion in Arnold or Mapperley, this page gives you what you need before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers across Nottingham and surrounding NG postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, concrete mixers, wacker plates, floor sanders, access platforms',
+            'Delivery typically available across NG1–NG16 and into Long Eaton, Hucknall, and Bingham',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Nottingham Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Nottingham is one of the most active construction cities in the East Midlands right now. The city has a £4 billion development programme across its city centre, covering 14 major schemes — including the long-running Broad Marsh regeneration and The Island Quarter mixed-use development. That scale of activity creates sustained demand for plant hire, groundworks equipment, and site tools across the whole NG postcode region.
+      </Paragraph>
+      <Paragraph>
+        But it's not just the big schemes. Nottingham's suburbs — Wollaton, West Bridgford, Mapperley, Beeston — are full of 1930s semis, Victorian terraces, and post-war stock that generates constant extension, refurb, and landscaping work. Add in a large student population generating buy-to-let turnover and a growing commuter belt, and you've got year-round demand from trades at every level.
+      </Paragraph>
+      <Paragraph>
+        Equipment often travels from Nottingham city out to Hucknall (NG15), Long Eaton (NG10), and Bingham (NG13). Suppliers covering the city typically extend across most NG districts without additional delivery cost — but always confirm your postcode at the quote stage.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Nottingham?</H2>
+      <Paragraph>These are the categories most searched and booked across the Nottingham area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Nottingham']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, footings, drainage on new builds'],
+          ['Scaffold tower (aluminium)', 'Extensions, loft conversions, render and external decorating'],
+          ['Concrete mixer (130–180L)', 'Slab bases, driveways, footings on domestic sites'],
+          ['Wacker plate / vibrating roller', 'Driveway and patio sub-base compaction'],
+          ['Floor sander / edge sander', 'Pre-sale refurbs, Victorian terrace and Edwardian floor prep'],
+          ['Access platform (IPAF)', 'Commercial fit-out around the city centre and Island Quarter'],
+          ['Pressure washer (hot or cold)', 'Driveway cleans, patio prep, post-winter stonework'],
+          ['Site lighting / generator', 'Winter and autumn working hours on exposed sites'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-nottingham-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Nottingham — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Nottingham typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'City centre and inner areas: NG1 (City Centre), NG2 (West Bridgford, Trent Bridge, The Meadows), NG3 (Mapperley, Carlton, St Ann\'s), NG7 (Lenton, Radford, Hyson Green)',
+          'Suburban Nottingham: NG4 (Gedling, Netherfield), NG5 (Sherwood, Arnold, Bestwood), NG6 (Bulwell, Basford), NG8 (Wollaton, Bilborough, Aspley), NG9 (Beeston, Chilwell, Stapleford)',
+          'Commuter and outer areas: NG10 (Long Eaton, Sawley), NG11 (Clifton, Ruddington), NG12 (Radcliffe-on-Trent, Cotgrave), NG15 (Hucknall, Ravenshead), NG16 (Kimberley, Eastwood)',
+        ]}
+      />
+      <Paragraph>
+        If your site sits just outside these postcodes, enter your full postcode on the comparison tool. Many suppliers will extend into DE and LE borders for larger plant orders.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active in Nottingham?</H2>
+      <Paragraph>Nottingham's construction workload spans civils, domestic, and commercial. The trades hiring most regularly in the area:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Regeneration activity around Broad Marsh, The Island Quarter, and new housing schemes on the city fringe keeps groundwork crews busy. Mini diggers, dumper trucks, trench boxes, and vibrating rollers are constant requirements.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The dense stock of Victorian terraces in St Ann's, Sneinton, and Hyson Green, combined with large detacheds in West Bridgford and Wollaton, generates substantial extension and refurb work. Concrete mixers, scaffold towers, and skip hire support most of these jobs.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium postcodes like West Bridgford (NG2), Wollaton (NG8), and Mapperley Park drive strong landscaping demand from March to October. Mini diggers for terracing, turf cutters, and pressure washers are the most-requested kit.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">High student-let turnover in the NG7 corridor (Lenton, Radford, Forest Fields) means constant internal refurb work. Access equipment, mixing drills, and floor prep tools move fast year-round.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Electricians and plumbers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">First-fix activity on the Island Quarter and Trent Basin developments keeps M&amp;E trades busy. Cable rollers, pipe threading equipment, and vacuum excavators all feature.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Nottingham-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">City centre access restrictions</p>
+          <Paragraph>The Nottingham City Centre Zone has tram infrastructure running through core streets. If you're delivering large plant into NG1 or near the Broad Marsh site, check access routes carefully. The tram network limits heavy vehicle movement on several city-centre roads.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Trent flooding</p>
+          <Paragraph>
+            Sites close to the River Trent in NG2 (The Meadows, Trent Bridge) and NG11 (Clifton) can sit within{' '}
+            <a href="https://check-long-term-flood-risk.service.gov.uk/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Environment Agency flood risk zones</a>
+            . Check ground conditions before booking heavy plant and ask suppliers about groundmats if working on soft or waterlogged ground.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>
+            Nottingham City Council follows standard construction noise guidelines: 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday.{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE CONAW regulations</a>
+            {' '}apply to sustained use of high-decibel equipment — relevant for breaker and wacker plate work on domestic sites in residential streets.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend and extended hire</p>
+          <Paragraph>Most Nottingham-area suppliers operate Monday to Saturday. Sunday collection is limited. Spring and early summer bank holidays see high demand for landscaping equipment — book at least 3 to 4 days ahead to avoid availability gaps.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Nottingham</H2>
+      <BulletList
+        items={[
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Tool hire for builders and general contractors',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Nottingham</H2>
+      <div className="grid gap-4">
+        {nottinghamFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Nottingham Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -2373,6 +2594,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/reading-hero.webp',
     faqs: readingFaqs,
     content: readingContent,
+  },
+  {
+    slug: 'nottingham',
+    name: 'Nottingham',
+    path: '/locations/nottingham',
+    metaTitle: 'Tool Hire Nottingham | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Nottingham and the NG postcodes. Serving West Bridgford, Beeston, Arnold, Hucknall and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/nottingham',
+    title: 'Tool Hire in Nottingham — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers covering NG postcodes — get the best available rate without ringing round depot after depot.',
+    image: '/images/nottingham-hero.webp',
+    faqs: nottinghamFaqs,
+    content: nottinghamContent,
   },
 ];
 
