@@ -2940,6 +2940,234 @@ const sheffieldContent = (
   </>
 );
 
+const essexFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Essex?',
+    answer:
+      'Several suppliers across Essex offer same-day or next-morning delivery to major towns including Chelmsford, Basildon, Colchester, and Southend. Availability depends on equipment type and booking time. Confirm at the quote stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Essex suppliers offer trade accounts?',
+    answer:
+      "Yes. Most suppliers on the network offer trade credit accounts for registered businesses. You'll need a company name, address, and a basic credit check. VAT receipts are issued as standard — useful for CIS-registered sole traders and subcontractors working across Essex.",
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Essex?',
+    answer:
+      'No statutory licence is required to operate a mini digger under 3 tonnes on private land. On commercial sites or when working for hire or reward, most principal contractors expect a valid CPCS (Construction Plant Competence Scheme) card. See our mini digger hire guide for the full breakdown.',
+  },
+  {
+    question: 'Does Essex clay affect what mini digger I should hire?',
+    answer:
+      'Yes. Heavy shrink-swell clay in central and north Essex can make digging slower and harder on lighter machines. A 1.5-tonne mini digger may struggle on dense clay sites — a 3-tonne machine with a ditching bucket is often more appropriate. Discuss ground conditions with the supplier before confirming.',
+  },
+  {
+    question: 'Can I hire equipment to be delivered across the Essex and East London border?',
+    answer:
+      "Yes. Several suppliers on the Tooli.uk network cover both Essex and the IG, RM, and E postcode areas. Note that deliveries into Greater London may be subject to ULEZ restrictions depending on the supplier's vehicle. Confirm this at the quote stage.",
+  },
+  {
+    question: "What's the minimum hire period for tools in Essex?",
+    answer:
+      'Most suppliers operate on a one-day minimum. Weekend rates (Saturday pickup, Monday return) often offer better value than two separate day hires. Check each quote for specific terms.',
+  },
+  {
+    question: 'Can a homeowner hire equipment in Essex without a trade account?',
+    answer:
+      "Yes. You don't need a trade account for domestic DIY use on your own property. Some suppliers may request a damage deposit on higher-value plant such as mini diggers or access platforms.",
+  },
+];
+
+const essexContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Essex — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Looking to hire tools or plant equipment anywhere in Essex? Tooli.uk compares prices from local and regional suppliers across the county — covering CM, SS, CO, IG, RM, and EN postcodes — so you get the best available rate without ringing round every depot from Harlow to Clacton. Whether you're a groundworker on a new housing site in Chelmsford, a builder refurbing a 1960s semi in Basildon, a landscaper working through the commuter belt, or a homeowner taking on a project in Colchester, this page is your starting point.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers across all major Essex towns and postcodes',
+            'Most hired equipment countywide: mini diggers, scaffold towers, concrete mixers, wacker plates, floor sanders, access platforms, pressure washers',
+            'Delivery available across CM, SS, CO, RM, IG, EN postcode areas and into bordering Hertfordshire, Suffolk, and East London',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Essex Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Essex is one of the busiest construction counties in England. The construction sector employs around 56,000 people locally — significantly higher than national averages — driven by housing and infrastructure growth across Chelmsford, Basildon, Southend, Colchester, and Harlow.
+      </Paragraph>
+      <Paragraph>
+        The county's proximity to London is a key driver. Essex is commuter-belt territory for a large slice of the capital's workforce, which keeps house prices high, refurb activity constant, and new-build development moving fast. Major infrastructure projects are also accelerating, including the Longfield Solar Farm north-east of Chelmsford, due to get underway from 2026, capable of powering over 96,000 homes annually.
+      </Paragraph>
+      <Paragraph>
+        On the housing side, development activity is spread across the county. Chelmsford has a strong pipeline of new-build sites — including the Beaulieu Park development in Boreham, which opened its own railway station in October 2025 to serve the growing community. Harlow, Basildon, and Colchester all have active housebuilding programmes. Equipment regularly travels across county borders into East London, Hertfordshire, and Suffolk, and most suppliers covering Essex will extend into those areas for larger orders.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Essex?</H2>
+      <Paragraph>These are the categories most searched and booked across the county:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Essex']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'New-build groundworks, garden footings, drainage on commuter-belt sites'],
+          ['Scaffold tower (aluminium)', 'Extensions, loft conversions, fascia and render work on 1960s–80s stock'],
+          ['Concrete mixer (130–180L)', 'Driveways, extension footings, patio bases across suburban Essex'],
+          ['Wacker plate / vibrating roller', 'Driveway and patio sub-base compaction — high demand across the county'],
+          ['Floor sander / edge sander', 'Pre-sale refurbs and buy-to-let turnover, particularly in SS and RM postcodes'],
+          ['Access platform (IPAF)', 'Commercial fit-out on industrial estates and new-build business parks'],
+          ['Pressure washer (hot or cold)', 'Driveway cleans, block paving, patio prep — one of the most-hired items'],
+          ['Dehumidifier / drying kit', 'New plaster drying, flood remediation — consistent year-round demand'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-essex-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Essex — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Towns and Postcodes We Cover Across Essex</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Essex cover the full county and its bordering areas:</Paragraph>
+      <BulletList
+        items={[
+          'West Essex: Harlow (CM17–CM20), Epping (CM16), Chigwell (IG7), Loughton (IG10), Waltham Abbey (EN9)',
+          'Central Essex: Chelmsford (CM1–CM3), Brentwood (CM13–CM15), Billericay (CM11–CM12), Ingatestone (CM4), Witham (CM8)',
+          'South Essex: Basildon (SS13–SS16), Wickford (SS12), Rayleigh (SS6), Southend-on-Sea (SS0–SS3), Leigh-on-Sea (SS9), Canvey Island (SS8)',
+          'East and North Essex: Colchester (CO1–CO6), Braintree (CM7), Halstead (CO9), Clacton-on-Sea (CO15–CO16), Harwich (CO12), Saffron Walden (CB10–CB11)',
+          'Essex borders: Romford (RM1–RM7), Grays and Thurrock (RM16–RM20), Great Dunmow (CM6)',
+        ]}
+      />
+      <Paragraph>
+        Enter your full postcode on the comparison tool to confirm coverage and available delivery slots for your area.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active Across Essex?</H2>
+      <Paragraph>Essex's construction workload is broad — covering everything from high-density London-fringe development to rural agricultural builds. The trades hiring most regularly:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The post-war housing stock across Basildon (SS postcodes), Harlow (CM17–CM20), and South Essex generates constant refurb and extension work. The newer commuter-belt towns of Brentwood and Billericay see regular high-spec single-storey extensions and loft conversions. Concrete mixers, scaffold towers, and groundworks kit are the daily staples.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">New-build housing sites around Chelmsford, Colchester, and the Thames Estuary corridor in Thurrock generate consistent demand for mini diggers, dumper trucks, and vibrating rollers. Infrastructure work on roads, drainage, and utility connections is active across the county.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium commuter-belt postcodes including Shenfield (CM15), Hutton (CM13), Rayleigh (SS6), and the rural villages around Epping and Brentwood drive high-value garden and landscaping projects. Turf cutters, mini diggers for terracing, and pressure washers are in strong demand from March through October.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The sheer volume of buy-to-let and rental property across SS and RM postcodes — particularly around Southend, Romford, and Basildon — keeps decorators and plasterers active year-round. Floor prep tools, access equipment, and mixing drills move constantly.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Essex's coastal exposure and wind-driven rain along the estuary makes roofing work a year-round trade, not a seasonal one. Scaffold towers and roof ladders are among the most hired items across CO and SS postcode areas.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Essex-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">London ULEZ and low-emission zones</p>
+          <Paragraph>If you or your supplier are delivering equipment from or through East London, check whether the vehicle meets ULEZ standards. Older diesel vans and lorries face charges in the Greater London zone. Some Essex-based suppliers route around this — confirm delivery routes if you're near the IG or RM postcode borders.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Coastal and flood-prone ground</p>
+          <Paragraph>
+            Sites near the Thames Estuary, along the Essex coast, and around rivers in the Chelmer and Colne valleys can sit in{' '}
+            <a href="https://check-long-term-flood-risk.service.gov.uk/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Environment Agency flood-risk zones</a>
+            . Check ground conditions before booking heavy plant on soft or clay-heavy ground. Ask suppliers about groundmats for waterlogged sites.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Clay soil across much of the county</p>
+          <Paragraph>Essex is notorious for its shrink-swell clay, particularly in central and north Essex. Deep footings are standard. Mini diggers working in CM and CO postcodes will often encounter heavy clay — factor this into project timelines and bucket selection.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>
+            Each district council across Essex generally follows{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE CONAW standards</a>
+            : 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday. Check with your local authority if working near residential streets or in conservation areas, particularly in older town centres like Colchester and Saffron Walden.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend availability</p>
+          <Paragraph>Most Essex suppliers operate Monday to Saturday. Sunday collection is limited. Landscaping season in late spring and early summer sees demand spike across the county — book at least 3 to 4 days ahead for diggers and turf cutters.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve Across Essex</H2>
+      <BulletList
+        items={[
+          'Tool hire for builders and general contractors',
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Tool hire for roofers',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Essex</H2>
+      <div className="grid gap-4">
+        {essexFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices Across Essex Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -3105,6 +3333,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/sheffield-hero.webp',
     faqs: sheffieldFaqs,
     content: sheffieldContent,
+  },
+  {
+    slug: 'essex',
+    name: 'Essex',
+    path: '/locations/essex',
+    metaTitle: 'Tool Hire Essex | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Essex. Serving Chelmsford, Basildon, Colchester, Southend, Harlow, Brentwood and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/essex',
+    title: 'Tool Hire in Essex — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers across the county — covering CM, SS, CO, IG, RM, and EN postcodes — without ringing round every depot from Harlow to Clacton.',
+    image: '/images/essex-hero.webp',
+    faqs: essexFaqs,
+    content: essexContent,
   },
 ];
 
