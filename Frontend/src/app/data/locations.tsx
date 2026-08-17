@@ -3168,6 +3168,240 @@ const essexContent = (
   </>
 );
 
+const newcastleFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Newcastle?',
+    answer:
+      'Several suppliers covering central Newcastle postcodes (NE1, NE2, NE3, NE4, NE6) offer same-day or next-morning delivery depending on equipment type and how early you request it. Confirm delivery timescales at the quote stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Newcastle suppliers offer trade accounts?',
+    answer:
+      "Yes. Most suppliers on the network offer trade credit accounts for registered businesses. You'll need a company name, address, and a basic credit check. VAT receipts are issued as standard — useful for CIS-registered sole traders and subcontractors working across Tyne and Wear.",
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Newcastle?',
+    answer:
+      'No statutory licence is required to operate a mini digger under 3 tonnes on private land. On commercial sites or when working for hire or reward, most principal contractors will expect a valid CPCS (Construction Plant Competence Scheme) card. See our full mini digger hire guide for the detail.',
+  },
+  {
+    question: 'Which postcodes do Newcastle suppliers deliver to?',
+    answer:
+      'Most suppliers cover NE1–NE16 as standard, with many extending into NE20–NE30 and across into Gateshead, South Tyneside, and Northumberland. Enter your postcode on Tooli.uk to confirm exact coverage for your job.',
+  },
+  {
+    question: 'Is there extra demand for equipment hire near the Forth Yards development?',
+    answer:
+      "Yes. The Forth Yards corridor in NE1 and NE4 is one of the most active construction areas in the North East right now. Groundworks plant, access platforms, and civils equipment are in consistent demand in that area — book ahead wherever possible.",
+  },
+  {
+    question: 'What\'s the best scaffold tower for working on a Tyneside flat?',
+    answer:
+      "Most Tyneside flat refurb work requires an aluminium tower in the 3-metre to 5-metre working height range. Check that the tower fits within the plot width and that outriggers can be set on a stable surface. Some rear lanes have uneven ground — discuss site conditions with the supplier before confirming.",
+  },
+  {
+    question: 'Can a homeowner hire equipment in Newcastle without a trade account?',
+    answer:
+      "Yes. You don't need a trade account for domestic use on your own property. Suppliers may request a damage deposit on higher-value plant such as mini diggers or access platforms.",
+  },
+];
+
+const newcastleContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Newcastle upon Tyne — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Need to hire tools or plant equipment in Newcastle upon Tyne? Tooli.uk compares prices from local and regional suppliers across NE postcodes — so you get the best available rate without ringing round every depot in the North East. Whether you're a groundworker on one of Newcastle's major regeneration sites, a builder working through Gosforth or Heaton, or a homeowner extending a Tyneside flat in Jesmond or Fenham, this page gives you what you need before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers across Newcastle and surrounding NE postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, concrete mixers, wacker plates, floor sanders, access platforms',
+            'Delivery typically available across NE1–NE16 and into Gateshead, Wallsend, North Shields, Whitley Bay, and South Tyneside',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Newcastle Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Newcastle upon Tyne is one of the most active construction cities in the North of England. The city has a significant pipeline of regeneration work across its centre and waterfront — and strong domestic demand driven by a large stock of Victorian and Edwardian terraces, Tyneside flats, and interwar semis across its suburbs.
+      </Paragraph>
+      <Paragraph>
+        The biggest development story right now is Forth Yards. Homes England is leading a £950 million redevelopment of 21 hectares of brownfield land west of Newcastle Central station, expected to deliver around 2,500 homes and 15,000 square metres of commercial space. The scheme is identified as a key priority in the North East Devolution Deal and will keep civils and groundwork crews active in NE1 and NE4 for years ahead.
+      </Paragraph>
+      <Paragraph>
+        Alongside Forth Yards, major construction works on the Pottery Lane development — Newcastle's largest multifamily scheme, delivering more than 500 build-to-rent homes — are progressing through 2025 and 2026. Commercial activity around Northumbria University's expanding city campus and the HMRC headquarters on Pilgrim Street adds further demand across the NE1 corridor.
+      </Paragraph>
+      <Paragraph>
+        Equipment regularly travels from Newcastle city out to Gateshead, Wallsend, North Shields, and Cramlington. Suppliers covering the city typically extend across most NE postcode districts — confirm your postcode at the quote stage.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Newcastle?</H2>
+      <Paragraph>These are the categories most searched and booked across the Newcastle area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Newcastle']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, extension footings, drainage on Tyneside terraces'],
+          ['Scaffold tower (aluminium)', 'Tyneside flat refurbs, chimney and gable-end work, loft conversions'],
+          ['Concrete mixer (130–180L)', 'Driveways, slab bases, extension footings across suburban Newcastle'],
+          ['Wacker plate / vibrating roller', 'Driveway and patio sub-base compaction — consistent demand across NE3 and NE6'],
+          ['Floor sander / edge sander', 'Victorian floorboard prep, Tyneside flat refurbs, pre-sale turnover'],
+          ['Access platform (IPAF)', 'Commercial fit-out across the Quayside, Forth Yards, and Pilgrim Street'],
+          ['Pressure washer (hot or cold)', 'Driveway cleans, sandstone and brick façade prep, patio work'],
+          ['Site lighting / generator', "Winter and autumn working — Newcastle's short daylight hours bite hard on site"],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-newcastle-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Newcastle upon Tyne — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Newcastle typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'City centre and inner areas: NE1 (City Centre, Quayside, Ouseburn), NE2 (Jesmond), NE3 (Gosforth), NE4 (Fenham, Elswick, Benwell), NE5 (Blakelaw, Cowgate, Denton Burn), NE6 (Heaton, Byker, Walker)',
+          'North and west Newcastle: NE7 (High Heaton), NE12 (Killingworth), NE13 (Woolsington, Dinnington), NE15 (Lemington, Heddon-on-the-Wall)',
+          'Gateshead and South Tyne: NE8 (Gateshead town centre), NE9 (Low Fell), NE10 (Felling, Wardley), NE11 (Team Valley)',
+          'Outer areas: NE16 (Whickham, Swalwell), NE20 (Ponteland), NE27 (Shiremoor), NE28 (Wallsend), NE29 (North Shields), NE30 (Tynemouth, Cullercoats)',
+        ]}
+      />
+      <Paragraph>
+        If your site falls outside these postcodes, enter your full postcode on the comparison tool. Several suppliers extend into DH, SR, and NE postcode borders for larger plant orders.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active in Newcastle?</H2>
+      <Paragraph>Newcastle's construction workload spans regeneration civils, domestic refurb, and commercial fit-out. The trades hiring most regularly in the area:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The vast stock of Tyneside flats and Victorian terraces across Heaton (NE6), Fenham (NE4), Byker (NE6), and Jesmond (NE2) generates constant extension, refurb, and conversion work. Scaffold towers, concrete mixers, and floor prep tools are the daily staples on these sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Regeneration activity at Forth Yards, Pottery Lane, and new housing sites on Newcastle's western and northern fringes keeps groundwork crews in continuous demand. Mini diggers, dumper trucks, trench shields, and vibrating rollers are essential kit across these sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium residential postcodes including Gosforth (NE3), Jesmond (NE2), and Ponteland (NE20) drive high-value garden projects from April through September. Mini diggers for terracing, turf cutters, and pressure washers are among the most-requested equipment in these areas.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">High student-let and buy-to-let turnover across the NE2 and NE6 corridors — serving Newcastle University and Northumbria University — keeps decorators and plasterers active year-round. Access equipment, mixing drills, and floor sanders move constantly.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Newcastle's exposure to North Sea weather and persistent wind-driven rain makes roofing a year-round trade. Scaffold towers are the most-hired item for roofers across the city, particularly for work on pitched slate roofs on Victorian and Edwardian stock.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Conversion specialists</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Tyneside flats are a housing type unique to Newcastle and the wider Tyne and Wear area. Converting, splitting, and refurbishing them is a specialist niche. Lightweight access equipment, floor preparation tools, and soundproofing kit are regular hires for this type of work.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Newcastle-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Tyneside flat access</p>
+          <Paragraph>Tyneside flats — two-storey properties split into upper and lower flats — are unique to this part of the North East. They sit on narrow plots with limited rear access. Before booking a mini digger or large plant delivery, check rear lane access. Many streets in Heaton, Fenham, and Byker have rear lanes that can accommodate a small machine, but not a full-size lorry delivery.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">River Tyne and flood zones</p>
+          <Paragraph>
+            Sites close to the River Tyne in NE1 (Quayside, Ouseburn), NE8 (Gateshead waterfront), and NE28 (Wallsend) can sit within{' '}
+            <a href="https://check-long-term-flood-risk.service.gov.uk/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Environment Agency flood-risk zones</a>
+            . Check ground conditions before booking heavy plant on low-lying riverside sites. Ask suppliers about groundmats for soft or waterlogged ground.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Metro network access restrictions</p>
+          <Paragraph>The Tyne and Wear Metro runs through central Newcastle and across to Gateshead. Deliveries to sites near Monument (NE1), Heaton (NE6), and Chillingham Road need to account for restricted vehicle access near Metro stops and pedestrian zones.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Wind and winter working</p>
+          <Paragraph>Newcastle's exposure to North Sea wind and cold winters affects site conditions significantly from October through March. Equipment such as site heaters, dehumidifiers, and drying equipment sees strong demand from autumn onward. Plan for shorter working days and factor in frost protection for fresh concrete pours.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>
+            Newcastle City Council follows standard construction noise guidance: 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday. This applies across residential and commercial sites.{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE CONAW regulations</a>
+            {' '}cover sustained high-decibel tool use — relevant for breaker work on stone and concrete in residential streets.
+          </Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Newcastle</H2>
+      <BulletList
+        items={[
+          'Tool hire for builders and general contractors',
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Tool hire for roofers',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Newcastle</H2>
+      <div className="grid gap-4">
+        {newcastleFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Newcastle Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -3348,6 +3582,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/essex-hero.webp',
     faqs: essexFaqs,
     content: essexContent,
+  },
+  {
+    slug: 'newcastle',
+    name: 'Newcastle upon Tyne',
+    path: '/locations/newcastle',
+    metaTitle: 'Tool Hire Newcastle | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Newcastle upon Tyne and NE postcodes. Serving Gosforth, Jesmond, Heaton, Gateshead and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/newcastle',
+    title: 'Tool Hire in Newcastle upon Tyne — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers covering NE postcodes — get the best available rate without ringing round every depot in Tyne and Wear.',
+    image: '/images/newcastle-hero.webp',
+    faqs: newcastleFaqs,
+    content: newcastleContent,
   },
 ];
 
