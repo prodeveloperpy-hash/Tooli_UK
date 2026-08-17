@@ -2707,6 +2707,239 @@ const cambridgeContent = (
   </>
 );
 
+const sheffieldFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Sheffield?',
+    answer:
+      'Some suppliers covering central Sheffield postcodes (S1, S2, S3, S6, S10) offer same-day or next-morning delivery depending on equipment type and booking time. Confirm delivery timescales at the quote stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Sheffield suppliers offer trade accounts?',
+    answer:
+      "Yes. Most suppliers on the network offer trade credit accounts for registered businesses. You'll need a company name, address, and basic credit check. VAT receipts are standard — useful for CIS-registered sole traders and subcontractors across South Yorkshire.",
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Sheffield?',
+    answer:
+      'No statutory licence is required to operate a mini digger under 3 tonnes on private land. On commercial sites or when working for hire or reward, most principal contractors expect a valid CPCS (Construction Plant Competence Scheme) card. See our full mini digger hire guide for the detail.',
+  },
+  {
+    question: 'Which postcodes do Sheffield suppliers deliver to?',
+    answer:
+      "Most suppliers cover S1–S17 as standard, with many extending into S20, S35, S36, and across into Rotherham and Barnsley. Enter your postcode on Tooli.uk to confirm exact coverage for your job.",
+  },
+  {
+    question: 'Can I hire a scaffold tower for stone chimney work in Sheffield?',
+    answer:
+      "Yes. Aluminium scaffold towers are one of the most-hired items in Sheffield, particularly for chimney repointing and gable-end work on stone terraces. Check height and outrigger requirements with the supplier before booking, and ensure the tower is erected on stable, level ground.",
+  },
+  {
+    question: 'Can a homeowner hire equipment in Sheffield without a trade account?',
+    answer:
+      "Absolutely. You don't need a trade account for domestic use on your own property. Some suppliers may request a damage deposit on higher-value plant such as mini diggers or access platforms.",
+  },
+  {
+    question: 'Is there extra demand for equipment hire around the Attercliffe regeneration area?',
+    answer:
+      'Yes. The Attercliffe corridor in S9 is one of the most active development areas in Sheffield right now. Groundworks plant, dumper trucks, and access equipment are in consistent demand in that postcode — booking ahead is advisable.',
+  },
+];
+
+const sheffieldContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Sheffield — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Need to hire tools or plant equipment in Sheffield? Tooli.uk compares prices from local and regional suppliers covering S postcodes — so you get the best available rate without ringing round every depot in South Yorkshire. Whether you're a groundworker on one of Sheffield's growing regeneration sites, a builder working through Ecclesall or Walkley, or a homeowner extending a stone terrace in Crookes or Nether Edge, this page has what you need before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers across Sheffield and surrounding S postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, concrete mixers, wacker plates, floor sanders, access platforms',
+            'Delivery typically available across S1–S17 and into Chapeltown, Stocksbridge, Dronfield, and Rotherham fringes',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Sheffield Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Sheffield is one of the most active construction cities in Yorkshire right now. The city has a significant pipeline of regeneration activity across its centre and inner suburbs — and the domestic refurb market is just as strong, driven by a large stock of stone-built Victorian and Edwardian terraces across the west and south of the city.
+      </Paragraph>
+      <Paragraph>
+        Sheffield City Council's plans include around 20,000 homes within the city centre, with around 2,000 homes currently under construction or in active development and more than 10,000 further housing starts planned across the short, medium, and longer-term pipeline. That scale keeps groundwork and civils crews busy across multiple sites simultaneously.
+      </Paragraph>
+      <Paragraph>
+        Sheffield City Council and Homes England are also moving forward with plans for a £300 million residential-led regeneration of the Moorfoot Gateway site in the city centre — one of several schemes reshaping Sheffield's urban core. Attercliffe, to the east, is at the centre of a major regeneration programme that could deliver up to 3,000 new homes and around 1,500 jobs over the next decade, with transport and public realm works already under way.
+      </Paragraph>
+      <Paragraph>
+        Equipment regularly travels from Sheffield city out to Rotherham, Barnsley, Chesterfield, and Dronfield. Suppliers covering Sheffield typically extend across most S postcode districts — confirm your postcode at the quote stage.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Sheffield?</H2>
+      <Paragraph>These are the categories most searched and booked across the Sheffield area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Sheffield']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, extension footings, drainage on stone-built terraces'],
+          ['Scaffold tower (aluminium)', 'Stone-clad exteriors, chimney work, loft conversions across S6, S10, S11'],
+          ['Concrete mixer (130–180L)', 'Extension footings, driveways, slab bases across suburban Sheffield'],
+          ['Wacker plate / vibrating roller', 'Driveway sub-base compaction, patio prep, brownfield remediation'],
+          ['Floor sander / edge sander', 'Victorian and Edwardian floorboard prep, pre-sale refurbs'],
+          ['Access platform (IPAF)', 'Commercial fit-out in the city centre and Attercliffe development corridor'],
+          ['Pressure washer (hot or cold)', 'Yorkshire stone cleaning, driveway cleans, patio prep'],
+          ['Site lighting / generator', 'Winter and late-autumn working on exposed hillside sites'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-sheffield-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Sheffield — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Sheffield typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'City centre and inner areas: S1 (City Centre), S2 (Arbourthorne, Heeley, Highfield), S3 (Broomhall, Burngreave, Neepsend), S4 (Grimesthorpe, Pitsmoor), S9 (Attercliffe, Darnall, Meadowhall)',
+          'West and south-west Sheffield: S6 (Hillsborough, Walkley, Fox Hill), S7 (Abbeydale, Nether Edge, Millhouses), S8 (Beauchief, Greenhill, Woodseats), S10 (Broomhill, Crookes, Fulwood, Ranmoor), S11 (Ecclesall, Greystones, Hunter\'s Bar, Sharrow Vale)',
+          'North and outer Sheffield: S5 (Firth Park, Shiregreen, Southey), S12 (Gleadless, Hackenthorpe, Intake), S17 (Dore, Totley, Bradway), S35 (Chapeltown, Ecclesfield, High Green), S36 (Stocksbridge, Penistone)',
+        ]}
+      />
+      <Paragraph>
+        If your site falls outside these postcodes, enter your full postcode on the comparison tool. Suppliers often extend into Rotherham (S60–S65), Barnsley (S70–S75), and North Derbyshire (S40–S45) for larger plant orders.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active in Sheffield?</H2>
+      <Paragraph>Sheffield's construction workload spans civils, domestic refurb, and commercial. The trades hiring most regularly in the area:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The vast stock of stone-built Victorian and Edwardian terraces across Walkley (S6), Crookes (S10), Nether Edge (S7), and Ecclesall (S11) generates constant extension, loft conversion, and full refurb work. Concrete mixers, scaffold towers, and groundworks kit are the daily staples.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Regeneration activity across Attercliffe (S9), the Moorfoot Gateway, and new housing sites on Sheffield's eastern and northern fringes keeps groundwork crews active. Mini diggers, dumper trucks, and vibrating rollers are in continuous demand.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium south-west Sheffield postcodes including Dore (S17), Ecclesall (S11), Fulwood (S10), and Millhouses (S7) drive high-value garden and landscaping projects. The hilly terrain means groundworks are a key part of most landscaping jobs — mini diggers and dumper trucks move frequently in this area from March through October.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Buy-to-let and student-let turnover in S10 (around Sheffield Hallam and the University of Sheffield) and S2 keeps decorators and plasterers working year-round. Access equipment, mixing drills, and floor prep tools are regulars.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Sheffield's elevation and exposure to Pennine weather means roofing work is active across the city. Scaffold towers, tile cutters, and lead welding equipment are common hires across S6, S10, and S11.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers on brownfield sites</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Former industrial land in Attercliffe, Tinsley, and Neepsend is in active remediation and development. Heavy plant, rock breakers, and crusher-run spreading equipment feature on these sites.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Sheffield-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Hills and access</p>
+          <Paragraph>Sheffield is one of the hilliest cities in England. Steep gradients across S6, S10, and S11 can affect delivery routes and machine stability on site. Check access before booking tracked plant — not all wheeled equipment handles Sheffield's steeper streets. Discuss site gradients with suppliers at the quote stage.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Yorkshire stone work</p>
+          <Paragraph>
+            Much of Sheffield's housing stock is stone-built. Cutting, drilling, and dressing Yorkshire stone generates more dust and noise than brick. Check{' '}
+            <a href="https://www.hse.gov.uk/noise/index.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE CONAW guidance on noise</a>
+            {' '}and dust when using disc cutters and angle grinders on stonework for extended periods. Appropriate RPE (respiratory protective equipment) is required on site.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Supertram network</p>
+          <Paragraph>Sheffield's Supertram runs through central and eastern parts of the city. Deliveries to sites near Hillsborough, Attercliffe, and the city centre need to account for tram route crossings and restricted vehicle access on certain corridors.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>
+            Sheffield City Council follows standard construction noise guidance: 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday. This applies across residential and commercial sites.{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE CONAW regulations</a>
+            {' '}apply to sustained high-decibel equipment use on site.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend and bank holiday hire</p>
+          <Paragraph>Sheffield suppliers mostly operate Monday to Saturday. Sunday collection is limited. Spring and early summer sees high demand for landscaping plant in S11 and S17 — book 3 to 4 days ahead to secure availability.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Sheffield</H2>
+      <BulletList
+        items={[
+          'Tool hire for builders and general contractors',
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Tool hire for roofers',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Sheffield</H2>
+      <div className="grid gap-4">
+        {sheffieldFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Sheffield Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -2857,6 +3090,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/cambridge-hero.webp',
     faqs: cambridgeFaqs,
     content: cambridgeContent,
+  },
+  {
+    slug: 'sheffield',
+    name: 'Sheffield',
+    path: '/locations/sheffield',
+    metaTitle: 'Tool Hire Sheffield | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Sheffield and S postcodes. Serving Ecclesall, Hillsborough, Walkley, Attercliffe, Dore and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/sheffield',
+    title: 'Tool Hire in Sheffield — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers covering S postcodes — get the best available rate without ringing round every depot in South Yorkshire.',
+    image: '/images/sheffield-hero.webp',
+    faqs: sheffieldFaqs,
+    content: sheffieldContent,
   },
 ];
 
