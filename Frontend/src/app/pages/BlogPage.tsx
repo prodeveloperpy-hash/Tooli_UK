@@ -15573,6 +15573,328 @@ function WinterMiniDiggerBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article — Avoid These 5 Common Mistakes When Hiring Plant Equipment */
+/* ------------------------------------------------------------------ */
+
+const plantHireMistakesFaqs: Faq[] = [
+  [
+    'What is the most common mistake when hiring plant equipment?',
+    'Hiring the wrong size machine — specifically undersizing to save on day rate, then spending more in total because the underpowered machine takes significantly longer to complete the job. On any job involving more than 20 cubic metres of material movement or foundation depths beyond 600mm, the larger machine is usually cheaper overall.',
+  ],
+  [
+    'How do I avoid damage disputes when hiring a mini digger?',
+    'Photograph every side of the machine — including undercarriage and bucket — before leaving the depot yard. Note the fuel level and take a photo of the gauge. Note any existing damage on the hire agreement in writing, countersigned by depot staff if possible. Repeat the process on return, at the depot, with a timestamp. This eliminates almost every deposit dispute.',
+  ],
+  [
+    'Why is the total cost of plant hire higher than the day rate?',
+    'Because delivery, fuel, damage waiver, and deposit are usually not included in the headline day rate. On a single-day mini digger hire, these additions typically add £115–£210 on top of the base rate. Always request a total cost breakdown — hire rate, delivery (return trip), and any mandatory extras — before comparing suppliers.',
+  ],
+  [
+    'How much cheaper is it to compare plant hire prices before booking?',
+    'In our experience comparing across the Tooli.uk supplier network, rates for the same equipment vary by 15–25% between depots in the same city. On a two-week 3-tonne digger hire, that difference is typically £200–£350. The comparison takes under five minutes on Tooli.uk.',
+  ],
+  [
+    'Do I need to measure access before hiring a mini digger?',
+    'Yes — always. A mini digger that cannot reach the work area through your access point is useless and will be collected without being used, at your cost. Measure the narrowest point of the entire route (not just the gate opening). A 0.8-tonne micro digger needs approximately 750–850mm. A 1.5-tonne needs 1,000–1,200mm. A 3-tonne needs 1,350–1,600mm.',
+  ],
+  [
+    'What checks should I do before using hire plant equipment?',
+    'Run through: fuel level (photograph it), all-round visual inspection for existing damage (photograph it), arm and bucket function (test cycle before loading onto the trailer), track condition (check for damage or abnormal wear), and cab condition (seals, windows, any operator safety features). Note any findings on the hire agreement in writing. This takes ten minutes and is the most important pre-use step.',
+  ],
+];
+
+function PlantHireMistakesBody() {
+  return (
+    <>
+      <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+        <p>
+          Most plant hire problems are entirely avoidable. The wrong machine size, a missed access measurement, a delivery surcharge that wasn't in the quote, a machine returned dirty that wipes out your cost saving — these are not bad luck. They are predictable errors that experienced hirers learn to avoid after one expensive lesson. This guide gives you that lesson before it costs you anything.
+        </p>
+      </section>
+
+      <img
+        src="/images/blog/avoid-5-common-mistakes-when-hiring-plant.webp"
+        alt="Avoid these 5 common mistakes when hiring plant equipment — guide for UK builders and groundworkers"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <H2>5 Mistakes at a Glance</H2>
+        <div className="space-y-3">
+          {[
+            'Mistake 1: Hiring the wrong size — too small costs more than going bigger would have',
+            'Mistake 2: Not measuring access — a machine that won\'t fit through the gate is useless',
+            'Mistake 3: Ignoring the full cost — delivery, fuel, deposit and damage waiver add up',
+            'Mistake 4: Skipping the pre-use inspection — damage from the previous hirer becomes yours',
+            'Mistake 5: Not comparing suppliers — rates for the same machine vary 15–25% locally',
+          ].map((item) => (
+            <div key={item} className="flex items-start gap-3 rounded-xl bg-white p-4">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-100 text-xs font-extrabold text-red-600">✗</span>
+              <span className="font-medium text-gray-600">{item}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Why Plant Hire Goes Wrong</H2>
+        <Prose>
+          <p>
+            UK plant hire is a straightforward transaction on paper: you book a machine, it arrives, you use it, it gets collected. In practice, the difference between a hire that runs smoothly and one that costs significantly more than budgeted almost always comes down to one of five predictable errors. Here they are, in order of how often they occur.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>Mistake 1 — Hiring the Wrong Size Machine</H2>
+        <Prose>
+          <p>
+            Undersizing is the most expensive plant hire mistake there is. An underpowered machine takes longer, works harder, breaks down more often, and sometimes simply cannot complete the job — leaving you to either extend the hire or upgrade mid-project at full day-rate cost.
+          </p>
+          <p>
+            The calculation people get wrong is this: they compare the day rate on a 1.5-tonne digger (£170) against a 3-tonne (£250) and book the cheaper one. What they don't factor in is that the 3-tonne machine, with its larger bucket and deeper reach, finishes the same foundation trench in half the time. Two days on the 1.5-tonne costs more — in hire fees and in their own time — than one day on the 3-tonne.
+          </p>
+          <p>
+            Read our{' '}
+            <Link to="/blog/1-5-tonne-vs-3-tonne-digger-which-one-do-you-actually-need" className="font-bold text-brand-primary hover:underline">1.5t vs 3t mini digger guide</Link>
+            {' '}for a job-by-job decision matrix.
+          </p>
+        </Prose>
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-[#F8F9FC]">
+                {['Job', 'Hire the 1.5t', 'Hire the 3t'].map((h) => (
+                  <th key={h} className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wide text-gray-700">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {[
+                ['Patio preparation (30 m²)', '✓ Correct size', 'Overkill — waste of money'],
+                ['Extension strip foundation', 'Borderline', '✓ Correct size'],
+                ['Drainage run (40 m)', 'Possible', '✓ Faster and cheaper overall'],
+                ['Garden clearance (tight access)', '✓ Correct size', 'May not fit the gate'],
+                ['Foundation for two-storey build', 'Too small', '✓ Correct size — possibly larger'],
+              ].map(([job, small, large]) => (
+                <tr key={job} className="bg-white">
+                  <td className="px-4 py-3 font-bold text-gray-900">{job}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{small}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{large}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <H2>Mistake 2 — Not Measuring Site Access Before Booking</H2>
+        <Prose>
+          <p>
+            A mini digger that cannot reach your work area is worthless. Every year, hire companies collect machines that were delivered but never used because the hirer didn't check whether the machine would fit through the access point.
+          </p>
+          <p>
+            The numbers to know: a 0.8-tonne micro digger needs approximately 750–850mm of clear access. A standard 1.5-tonne machine needs 1,000–1,200mm. A 3-tonne needs 1,350–1,600mm. A standard timber garden gate opening is typically 900–1,000mm — narrower than a 1.5-tonne machine.
+          </p>
+          <p>
+            The fix: measure the narrowest point of the entire access route, not just the gate opening. Include any overhanging structures, downpipes, or fencing that reduces effective width. If the measurement is marginal, contact the depot with the exact figure and ask them to confirm the machine's transport width for the specific model in stock.
+          </p>
+        </Prose>
+        <div className="mt-6 space-y-3">
+          <p className="font-extrabold text-gray-900">Access measurement checklist</p>
+          {[
+            ['Gate opening', 'Clear width, not frame to frame'],
+            ['Narrowest point along the full route', 'Including any overhanging structures or fencing'],
+            ['Overhead clearance', 'For raised sections or low structures'],
+            ['Ground surface on the route', 'Soft lawn, gravel, concrete — affects whether trackway is needed'],
+            ['Turning space at the work area', 'Can the machine turn around, or does it need to reverse out?'],
+          ].map(([step, note], i) => (
+            <div key={step} className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-extrabold text-white">{i + 1}</div>
+              <div>
+                <p className="font-extrabold text-gray-900">{step}</p>
+                <p className="mt-0.5 text-sm font-medium text-gray-500">{note}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <img
+        src="/images/blog/avoid-5-common-plant-hire-mistakes.webp"
+        alt="Avoid the 5 most common plant hire mistakes — checklist for UK hirers on Tooli.uk"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Mistake 3 — Looking Only at the Day Rate and Ignoring Total Cost</H2>
+        <Prose>
+          <p>
+            The hire rate is the starting point, not the finish line. Delivery, collection, fuel, damage waiver, and the deposit can add 40–80% to the headline day rate on a short hire.
+          </p>
+          <p>
+            Here is what a typical one-day 1.5-tonne mini digger hire actually costs when you add everything together:
+          </p>
+        </Prose>
+        <div className="mt-6 overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-[#F8F9FC]">
+                {['Cost Item', 'Typical Amount', 'Notes'].map((h) => (
+                  <th key={h} className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wide text-gray-700">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {[
+                ['Machine hire (day rate)', '£170–£220', 'The number you compared on'],
+                ['Delivery (return)', '£80–£140', 'Often not in the headline quote'],
+                ['Diesel fuel', '£20–£40', 'Your responsibility — return with same level'],
+                ['Damage waiver', '£15–£30', 'Optional but advisable for one-off hirers'],
+                ['Deposit (held on card)', '£250–£500', 'Not a charge — released on return — but eats card headroom'],
+                ['TOTAL actual spend', '£285–£430', 'vs the £170–£220 you quoted on'],
+              ].map(([item, amount, notes]) => (
+                <tr key={item} className={item.startsWith('TOTAL') ? 'bg-[#F8F9FC] font-extrabold' : 'bg-white'}>
+                  <td className="px-4 py-3 font-bold text-gray-900">{item}</td>
+                  <td className="px-4 py-3 font-medium text-gray-700">{amount}</td>
+                  <td className="px-4 py-3 font-medium text-gray-500">{notes}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          The fix: compare total cost — hire rate plus delivery plus fuel estimate. See our{' '}
+          <Link to="/blog/mini-digger-hire-cost-uk" className="font-bold text-brand-primary hover:underline">mini digger hire cost guide</Link>
+          {' '}for a full breakdown of what actually affects the final bill.
+        </p>
+      </section>
+
+      <section>
+        <H2>Mistake 4 — Not Doing a Pre-Use Inspection on Collection</H2>
+        <Prose>
+          <p>
+            The moment a hire machine leaves the depot yard and enters your possession, you are liable for any new damage. Damage that was already there when you collected it — a dented skip, a cracked track link, a chipped cab — becomes a dispute on return if you didn't document it before you drove away.
+          </p>
+          <p>
+            Most hirers skip the pre-use inspection because they're in a hurry, they don't want to seem difficult, or they assume the hire company checks the machine between hires. Some do — many don't.
+          </p>
+          <p>
+            Under{' '}
+            <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">PUWER 1998 Regulation 4</a>
+            , work equipment must be suitable for the conditions of use — and a pre-use inspection is the operator's confirmation of that. It is not just good practice; it is the statutory baseline.
+          </p>
+        </Prose>
+        <div className="mt-6 space-y-3">
+          <p className="font-extrabold text-gray-900">Do all of these before leaving the depot yard</p>
+          {[
+            'Photograph every side of the machine, including the undercarriage and bucket teeth',
+            'Check and photograph the fuel gauge — note the level, you\'ll need to match it on return',
+            'Run the machine briefly — check arm, bucket, and tracks operate normally before loading onto the trailer',
+            'Note any existing damage in writing on the hire agreement — get the depot to countersign if possible',
+            'Check the tyres or tracks for visible damage, missing segments, or abnormal wear',
+          ].map((item) => (
+            <div key={item} className="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-4">
+              <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+              <span className="font-medium text-gray-600">{item}</span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          Also see the{' '}
+          <a href="https://www.hse.gov.uk/construction/safetytopics/plant.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE plant and equipment safety guidance</a>
+          {' '}for pre-use inspection obligations on construction sites.
+        </p>
+      </section>
+
+      <section>
+        <H2>Mistake 5 — Booking the First Supplier Without Comparing</H2>
+        <Prose>
+          <p>
+            Hire rates for identical equipment vary by 15–25% between depots in the same city. That gap is not explained by quality difference — it is simply a pricing difference that exists because most hirers don't compare.
+          </p>
+          <p>
+            On a one-day hire, 20% is the difference between £170 and £210 — meaningful but not dramatic. On a two-week hire of a 3-tonne machine, 20% is the difference between £1,400 and £1,680. The price comparison takes three minutes. The potential saving is substantial.
+          </p>
+          <p>
+            Local independent hire companies are often 10–20% cheaper than national chains for standard equipment. For more on how comparison works in practice, see our{' '}
+            <Link to="/blog/tool-hire-comparison-uk" className="font-bold text-brand-primary hover:underline">tool hire comparison guide</Link>
+            {' '}and the{' '}
+            <Link to="/blog/mini-digger-hire-london-prices-local-availability" className="font-bold text-brand-primary hover:underline">mini digger hire London prices guide</Link>
+            {' '}— which shows the real rate spread across a single city.
+          </p>
+        </Prose>
+      </section>
+
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <H2>The Checklist: Before You Book Any Plant</H2>
+        <div className="space-y-3">
+          {[
+            ['Size', 'Have you confirmed the machine is the right size for the job volume and access width?'],
+            ['Access', 'Have you measured the narrowest point of the access route and confirmed the machine fits?'],
+            ['Total cost', 'Have you added delivery, fuel, damage waiver, and deposit to the day rate comparison?'],
+            ['Comparison', 'Have you compared at least 3 local suppliers before booking?'],
+            ['Inspection plan', 'Have you noted to photograph the machine and check the fuel gauge on collection?'],
+            ['Licence / PUWER', 'Have you confirmed the operator is competent and, for commercial sites, carded?'],
+            ['Return condition', 'Do you know what state the machine needs to be returned in (fuel level, cleanliness)?'],
+          ].map(([label, question]) => (
+            <div key={label} className="flex items-start gap-3 rounded-xl bg-white p-4">
+              <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+              <div>
+                <span className="font-extrabold text-gray-900">{label}: </span>
+                <span className="font-medium text-gray-500">{question}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          For more context on{' '}
+          <Link to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer" className="font-bold text-brand-primary hover:underline">skip permits</Link>
+          ,{' '}
+          <Link to="/blog/scaffold-tower-hire-uk-prices-sizes-pasma-rules-explained" className="font-bold text-brand-primary hover:underline">scaffold tower PASMA rules</Link>
+          , and other compliance considerations — see the related guides in the sidebar.
+        </p>
+      </section>
+
+      <section>
+        <H2>One Final Point: Return Condition Matters</H2>
+        <Prose>
+          <p>
+            Most hirers focus all their energy on collection and use. The return is where the unexpected charges happen. Machines returned dirty attract cleaning fees (typically £30–£80). Machines returned with a lower fuel level than collected are topped up at above-pump prices. Machines returned with new scratches or dents trigger deposit deductions.
+          </p>
+          <p>
+            Clean the bucket and undercarriage before returning. Top up the fuel. Photograph the machine again on return, at the depot yard, with a timestamp. This three-part routine costs you twenty minutes and eliminates almost every return dispute.
+          </p>
+          <p>
+            The{' '}
+            <a href="https://www.cpa.uk.net/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Construction Plant-hire Association (CPA)</a>
+            {' '}publishes standard hire agreement guidance — it's worth reading the return condition clauses before you sign any hire agreement.
+          </p>
+        </Prose>
+      </section>
+
+      <FaqSection faqs={plantHireMistakesFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Plant Hire Prices Now</h2>
+        <p className="mb-5 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Avoid mistake five before you start. Tooli.uk compares plant hire prices from local depots and national chains across the UK — so you see the real rate spread before you commit to anyone. Enter your postcode to{' '}
+          <a href="/search" className="font-bold text-white underline hover:text-white/80">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Prices Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -16492,6 +16814,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare Prices Now',
     faqs: winterDiggerFaqs,
     Body: WinterMiniDiggerBody,
+  },
+  {
+    slug: 'avoid-these-5-common-mistakes-when-hiring-plant-equipment',
+    category: 'Equipment Hire',
+    title: 'Avoid These 5 Common Mistakes When Hiring Plant Equipment',
+    excerpt:
+      'The wrong machine size, a missed access measurement, hidden delivery charges, no pre-use inspection, and not comparing suppliers. Here is how to avoid all five before they cost you.',
+    intro:
+      'Most plant hire problems are entirely avoidable. The wrong machine size, a missed access measurement, a delivery surcharge that wasn\'t in the quote, a machine returned dirty that wipes out your cost saving — these are not bad luck. They are predictable errors that experienced hirers learn to avoid after one expensive lesson.',
+    image: '/images/blog/avoid-5-common-mistakes-when-hiring-plant.webp',
+    imageAlt: 'Avoid these 5 common mistakes when hiring plant equipment — guide for UK builders and groundworkers on Tooli.uk',
+    datePublished: '2026-08-18',
+    metaTitle: '5 Common Plant Hire Mistakes to Avoid | Tooli.uk',
+    metaDescription:
+      'Most plant hire problems are avoidable. Here are the 5 mistakes UK builders, groundworkers, and DIY hirers make most often — and how to sidestep every one.',
+    primaryCta: 'Compare Prices Now',
+    faqs: plantHireMistakesFaqs,
+    Body: PlantHireMistakesBody,
   },
 ];
 
