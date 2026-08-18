@@ -62,19 +62,42 @@ function buildPostSchema(post: {
   image: string;
   datePublished: string;
   faqs: Faq[];
+  breadcrumbMiddle?: { name: string; item?: string };
+  itemList?: { name: string; description: string }[];
 }): Record<string, unknown> {
   const url = `https://www.tooli.uk/blog/${post.slug}`;
+  const breadcrumbItems: Record<string, unknown>[] = [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
+  ];
+  if (post.breadcrumbMiddle) {
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: post.breadcrumbMiddle.name,
+      ...(post.breadcrumbMiddle.item ? { item: post.breadcrumbMiddle.item } : {}),
+    });
+  } else {
+    breadcrumbItems.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Blog',
+      item: 'https://www.tooli.uk/blog',
+    });
+  }
+  breadcrumbItems.push({
+    '@type': 'ListItem',
+    position: breadcrumbItems.length + 1,
+    name: post.title,
+    item: url,
+  });
+
   const graph: Record<string, unknown>[] = [
     ORGANIZATION_NODE,
     WEBSITE_NODE,
     {
       '@type': 'BreadcrumbList',
       '@id': `${url}#breadcrumb`,
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.tooli.uk/' },
-        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.tooli.uk/blog' },
-        { '@type': 'ListItem', position: 3, name: post.title, item: url },
-      ],
+      itemListElement: breadcrumbItems,
     },
     {
       '@type': 'Article',
@@ -14965,6 +14988,289 @@ function B1ToolHireBody() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Article — Best Tool Hire Companies UK                               */
+/* ------------------------------------------------------------------ */
+
+const bestHireCompaniesFaqs: Faq[] = [
+  [
+    'What is the best tool hire company in the UK?',
+    'There is no single best company for every hirer. HSS and Speedy Services offer the widest range and national coverage. Brandon Hire Station is consistently better-rated by trades for depot service quality, particularly in the South. Jewson Tool Hire is most useful for existing Jewson materials customers. For any project, comparing prices across suppliers on Tooli.uk before booking typically saves 15–25% versus going direct to one company.',
+  ],
+  [
+    'Is HSS or Speedy better for tool hire?',
+    'HSS and Speedy now operate under the same group following Speedy\'s acquisition of HSS in 2022. Both have national depot networks, online booking, and trade accounts. HSS tends to have a broader consumer-facing presence; Speedy is more commercially focused. For regular trade hirers, Speedy\'s trade account infrastructure is generally more developed. For one-off hires, compare both against local independents on Tooli.uk.',
+  ],
+  [
+    'Is Brandon Hire Station better than HSS for tradespeople?',
+    'In most trade forum discussions and independent reviews, Brandon Hire Station rates higher than HSS for service quality and equipment condition at depot level. Coverage is the main trade-off — Brandon is less present in Scotland, Northern England, and parts of the Midlands than HSS or Speedy. If there is a Brandon depot within a reasonable distance of your site, it is typically the better-rated choice for trade hirers.',
+  ],
+  [
+    'Can I hire tools from Jewson without a Jewson account?',
+    'Yes — Jewson tool hire is available to non-account customers at most branches. However, without a trade account you\'ll pay walk-in rates, which are not always competitive against dedicated hire depots. The convenience argument for Jewson (one trip for materials and hire) is strongest if you already have a Jewson materials account.',
+  ],
+  [
+    'How much cheaper is local independent tool hire vs national chains?',
+    'In our experience comparing across the Tooli.uk network, local independent hire depots are typically 10–20% cheaper than national chains for standard equipment categories (mini diggers, scaffold towers, cement mixers, skip hire). The gap is most pronounced in cities outside London where depot density is high. Compare independently before defaulting to a national chain.',
+  ],
+  [
+    'Does Tooli.uk compare all UK tool hire companies?',
+    "Tooli.uk compares prices and availability from hire depots across the UK — including national chains (HSS, Speedy, Brandon) and local independent hire companies. We're a comparison platform, not a hire company — we don't own any equipment and have no commercial relationship with any supplier that influences the comparison results. Our goal is to show you the most accurate current price from every relevant depot near you.",
+  ],
+];
+
+function BestHireCompaniesBody() {
+  return (
+    <>
+      <section className="space-y-5 text-base font-medium leading-relaxed text-gray-500 md:text-lg">
+        <p>
+          There is no single best tool hire company in the UK. The right one depends on where you are, what you need, how often you hire, and whether you're a sole trader chasing VAT invoices or a homeowner who hires a cement mixer once a year. This guide compares the four companies most UK tradespeople and DIY hirers encounter — HSS, Speedy Services, Brandon Hire Station, and Jewson Tool Hire — honestly, on the criteria that actually matter when you're booking a tool for next Monday morning.
+        </p>
+      </section>
+
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <H2>At a Glance: Quick Verdict</H2>
+        <div className="space-y-3">
+          {[
+            ['HSS', 'Best for range and online booking — nationwide but inconsistent depot service'],
+            ['Speedy Services', 'Best for trade accounts and commercial site supply — strong national coverage'],
+            ['Brandon Hire Station', 'Best for trade relationship and local knowledge — strongest in South and West'],
+            ['Jewson Tool Hire', 'Convenient if you\'re already a Jewson materials customer — tool range is secondary'],
+            ['Tooli.uk', 'Compares all of them plus local independents — so you\'re not locked into one supplier'],
+          ].map(([company, verdict]) => (
+            <div key={company} className="flex items-start gap-3 rounded-xl bg-white p-4">
+              <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+              <div>
+                <span className="font-extrabold text-gray-900">{company}: </span>
+                <span className="font-medium text-gray-500">{verdict}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>Why the Company You Choose Matters More Than You Think</H2>
+        <Prose>
+          <p>
+            Hire rates for the same piece of equipment vary by 15–25% between depots in the same city. The 1.5-tonne mini digger you need on Thursday is either in stock at a depot three miles away or it isn't. The depot that lets you return on Monday morning instead of Saturday afternoon is worth more than a slightly lower day rate. These are the details a simple star rating or 'best of' list can't tell you.
+          </p>
+          <p>
+            What follows is an honest account of what each major company does well, where they fall short, and who they actually suit.
+          </p>
+          <p>
+            The same principle applies whether you're hiring a{' '}
+            <Link to="/blog/scaffold-tower-hire-cost-uk-what-you-pay-in-2026" className="font-bold text-brand-primary hover:underline">scaffold tower</Link>
+            ,{' '}
+            <Link to="/blog/wacker-plate-hire-cost-uk-what-you-pay-in-2026" className="font-bold text-brand-primary hover:underline">wacker plate</Link>
+            , or larger plant — the supplier matters as much as the equipment.
+          </p>
+        </Prose>
+      </section>
+
+      <section>
+        <H2>The Four Main Players — Compared</H2>
+
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-gray-100 p-6">
+            <H3>HSS Hire</H3>
+            <Prose>
+              <p>
+                <span className="font-extrabold text-gray-900">Strengths:</span>{' '}
+                HSS has one of the widest tool and equipment ranges of any UK hire company, with a well-built online booking system that lets you browse, compare, and reserve equipment without picking up the phone. Their national depot network means that for most UK postcodes, an HSS depot is within reasonable reach.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Weaknesses:</span>{' '}
+                Depot service quality varies considerably between locations. Customer feedback on trade forums consistently highlights inconsistency — the depot experience in one city bears little resemblance to another. Pricing for one-off hirers without a trade account can be significantly higher than comparable local independents. Their recent restructuring (HSS entered administration in 2022 and was acquired by Speedy Services) has affected some depot operations and stock levels.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Best for:</span>{' '}
+                Hirers who need online booking convenience and a wide range, who have flexibility on collection point, and who are comfortable navigating a national chain.
+              </p>
+            </Prose>
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 p-6">
+            <H3>Speedy Services</H3>
+            <Prose>
+              <p>
+                <span className="font-extrabold text-gray-900">Strengths:</span>{' '}
+                Speedy is one of the UK's two largest tool and plant hire companies — with over 200 service centres and a strong trade account offering that suits regular commercial hirers. Their safety and compliance training offering is more developed than most competitors. For construction companies with multiple sites across the UK, Speedy's national account management is genuinely useful.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Weaknesses:</span>{' '}
+                For one-off DIY and infrequent trade hirers, Speedy's trade-account focus means the walk-in experience is not always well-tuned to individual hirers. Online reviews flag customer service variability at depot level. Note that HSS now operates under the Speedy Services group — so these two brands share much of their operational infrastructure.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Best for:</span>{' '}
+                Regular commercial hirers, construction companies with multiple active sites, and safety-conscious trade businesses that value the compliance training offering.
+              </p>
+            </Prose>
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 p-6">
+            <H3>Brandon Hire Station</H3>
+            <Prose>
+              <p>
+                <span className="font-extrabold text-gray-900">Strengths:</span>{' '}
+                Brandon is consistently well-regarded by tradespeople for the quality of their depot relationships. Their staff tend to be experienced, their equipment is well-maintained, and their willingness to work with trade customers on availability and pricing is above average for a national chain. Brandon's online reviews are meaningfully better than the two larger players across most trade forums we've checked.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Weaknesses:</span>{' '}
+                Coverage is less even than HSS or Speedy — Brandon is stronger in the South of England and South West than it is in Scotland, the North West, or the Midlands. Their online booking system is functional but less polished than HSS. Range is solid but not as extensive as the big two on specialist plant and access equipment.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Best for:</span>{' '}
+                Trade businesses in the South, South West, and parts of the Midlands who value a consistent depot relationship over pure price. Regular hirers who want to be recognised as a customer rather than a transaction.
+              </p>
+            </Prose>
+          </div>
+
+          <div className="rounded-2xl border border-gray-100 p-6">
+            <H3>Jewson Tool Hire</H3>
+            <Prose>
+              <p>
+                <span className="font-extrabold text-gray-900">Strengths:</span>{' '}
+                The main advantage of Jewson's tool hire offering is convenience — if you're already a Jewson account customer buying materials, picking up a hired disc cutter or cement mixer from the same branch saves a separate trip. For builders who already run a Jewson materials account, adding tool hire to that relationship is straightforward.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Weaknesses:</span>{' '}
+                Tool hire is not Jewson's core business — materials are. The hire range is significantly narrower than a dedicated hire company, availability varies by branch, and staff expertise on hire equipment is uneven. For anything beyond the most common items (cement mixers, disc cutters, breakers, kango hammers), you're better placed with a dedicated hire depot.
+              </p>
+              <p>
+                <span className="font-extrabold text-gray-900">Best for:</span>{' '}
+                Jewson materials account customers who need common, low-complexity hire items on the same trip as a materials order. Not the right choice for specialist plant or equipment that needs specialist handover and expertise.
+              </p>
+            </Prose>
+          </div>
+        </div>
+      </section>
+
+      <img
+        src="/images/best-tool-hire-companies-uk-comparison.webp"
+        alt="Best tool hire companies in the UK — honest comparison of HSS, Speedy, Brandon Hire Station and Jewson for tradespeople and DIY"
+        className="w-full rounded-2xl border border-gray-100 object-cover shadow-sm"
+      />
+
+      <section>
+        <H2>Side-by-Side Comparison</H2>
+        <p className="mb-4 text-sm font-medium text-gray-500">
+          All assessments based on publicly available information and industry reputation. Pricing varies by location and account status. Verify current rates directly or{' '}
+          <Link to="/search" className="font-bold text-brand-primary hover:underline">compare on Tooli.uk</Link>
+          .
+        </p>
+        <div className="overflow-x-auto rounded-2xl border border-gray-100">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-[#F8F9FC]">
+                {['Company', 'Coverage', 'Online Booking', 'Trade Accounts', 'Range', 'Best Known For', 'Watch Out For'].map((h) => (
+                  <th key={h} className="px-4 py-3 text-left text-xs font-extrabold uppercase tracking-wide text-gray-700">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {[
+                ['HSS Hire', 'National — 200+ depots', 'Excellent', 'Yes', 'Very wide', 'Range and online booking', 'Inconsistent depot quality; now part of Speedy group'],
+                ['Speedy Services', 'National — 200+ service centres', 'Good', 'Yes — trade focus', 'Very wide + safety training', 'Commercial accounts; safety compliance', 'Walk-in experience variable; complex for one-off hirers'],
+                ['Brandon Hire Station', 'South & Midlands strongest', 'Functional', 'Yes', 'Wide', 'Trade relationships; equipment condition', 'Less coverage in Scotland and North West'],
+                ['Jewson Tool Hire', 'Branch-dependent (builders merchant network)', 'Limited', 'Via Jewson account', 'Narrow — common items only', 'Materials + hire combined trip', 'Not suited to specialist plant; range gaps'],
+              ].map(([company, ...cells]) => (
+                <tr key={company} className="bg-white">
+                  <td className="px-4 py-3 font-extrabold text-gray-900">{company}</td>
+                  {cells.map((cell, i) => (
+                    <td key={i} className="px-4 py-3 font-medium text-gray-500">{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-4 text-sm font-medium text-gray-500">
+          Before committing, it's worth checking{' '}
+          <a href="https://www.trustpilot.com/category/construction" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">independent Trustpilot reviews</a>
+          {' '}for any hire company. For compliance background, the{' '}
+          <a href="https://www.hse.gov.uk/work-equipment-machinery/puwer.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE PUWER guidance</a>
+          {' '}sets out hire company obligations on the equipment they let out.
+        </p>
+      </section>
+
+      <section>
+        <H2>Where Tooli.uk Fits In</H2>
+        <Prose>
+          <p>
+            None of the companies above compare themselves to each other honestly. That's not a criticism — it's just not what their websites are for.
+          </p>
+          <p>
+            Tooli.uk is a comparison platform. We don't own any equipment, any depots, or any vans. What we do is compare current hire rates from national chains and local independent depots across the UK — so you can see the actual price difference for the same piece of equipment before you commit to anyone.
+          </p>
+          <p>
+            On a week's mini digger hire, comparing three suppliers on Tooli.uk typically saves between £60 and £180 versus booking the first name you find. On a longer hire or larger plant, the difference is larger.
+          </p>
+          <p>
+            This applies to any category — whether you're looking at{' '}
+            <Link to="/blog/skip-hire-sizes-prices-uk-full-comparison-2026" className="font-bold text-brand-primary hover:underline">skip hire</Link>
+            ,{' '}
+            <Link to="/blog/dehumidifier-hire-uk-prices-which-size-to-choose" className="font-bold text-brand-primary hover:underline">dehumidifier hire</Link>
+            , or{' '}
+            <Link to="/blog/plant-hire-london-compare-local-plant-hire-companies" className="font-bold text-brand-primary hover:underline">plant hire in London</Link>
+            . Comparing first always pays off.
+          </p>
+        </Prose>
+      </section>
+
+      <section className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 md:p-8">
+        <H2>Useful References</H2>
+        <div className="space-y-3">
+          {[
+            ['Construction Plant-hire Association (CPA)', 'https://www.cpa.uk.net/', 'The UK plant hire trade body — industry standards, depot finder, and operator guidance for all major hire companies'],
+            ['HSE — Hiring Out Work Equipment (PUWER)', 'https://www.hse.gov.uk/work-equipment-machinery/puwer.htm', 'Legal duties on hire companies and hirers under PUWER 1998 — relevant background for understanding hire company obligations'],
+            ['Companies House — Verify UK Hire Companies', 'https://find-and-update.company-information.service.gov.uk/', 'Check the trading status and registration of any UK hire company before setting up a trade account'],
+            ['Trustpilot — UK Tool Hire Company Reviews', 'https://www.trustpilot.com/category/construction', 'Independent customer reviews for HSS, Speedy, Brandon Hire Station, and Jewson — cross-reference before committing'],
+          ].map(([name, href, desc]) => (
+            <div key={name} className="rounded-xl border border-gray-100 bg-white p-4">
+              <a href={href} target="_blank" rel="noopener noreferrer" className="font-extrabold text-brand-primary hover:underline">{name}</a>
+              <p className="mt-1 text-sm font-medium text-gray-500">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <H2>The Honest Bottom Line</H2>
+        <Prose>
+          <p>
+            If you hire regularly for commercial sites across the UK, Speedy's national account structure is worth the admin of setting it up. If you're in the South of England and want a depot that treats you like a customer, Brandon is the most consistently well-regarded option. If you need the widest range and don't mind navigating a corporate booking system, HSS remains the broadest platform. If you're already a Jewson materials customer and just need a cement mixer, Jewson's convenience is genuine — but don't go there for a telehandler.
+          </p>
+          <p>
+            For everything else: compare first. The right supplier depends on your postcode, your project, and what's actually in stock on the day you need it. That applies whether you need to{' '}
+            <Link to="/blog/do-i-need-a-permit-for-a-skip-on-the-road-the-direct-answer" className="font-bold text-brand-primary hover:underline">arrange a skip permit</Link>
+            ,{' '}
+            <Link to="/blog/do-you-need-pasma-to-hire-scaffold-tower-in-the-uk" className="font-bold text-brand-primary hover:underline">check PASMA requirements for a scaffold tower</Link>
+            , or simply find the cheapest mini digger in your postcode.
+          </p>
+        </Prose>
+      </section>
+
+      <FaqSection faqs={bestHireCompaniesFaqs} />
+
+      <section className="rounded-2xl bg-[#030213] p-6 text-white md:p-8">
+        <h2 className="mb-4 text-3xl font-extrabold">Compare Tool Hire Prices Now</h2>
+        <p className="mb-5 text-base font-medium leading-relaxed text-white/75 md:text-lg">
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-white underline hover:text-white/80">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </p>
+        <Link
+          to="/search"
+          className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+        >
+          Compare Prices Now
+        </Link>
+      </section>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Blog post registry                                                  */
 /* ------------------------------------------------------------------ */
 
@@ -15848,6 +16154,24 @@ export const blogPosts: BlogPost[] = [
     primaryCta: 'Compare B1 Tool Hire',
     faqs: b1Faqs,
     Body: B1ToolHireBody,
+  },
+  {
+    slug: 'best-tool-hire-companies-in-the-uk-honest-comparison-for-trades-and-diy',
+    category: 'Hire Company Comparisons',
+    title: 'Best Tool Hire Companies in the UK — Honest Comparison for Trades and DIY',
+    excerpt:
+      'HSS, Speedy Services, Brandon Hire Station, Jewson — honestly compared on price, range, coverage and service for UK trades and DIY. Which one actually suits you?',
+    intro:
+      'There is no single best tool hire company in the UK. The right one depends on where you are, what you need, how often you hire, and whether you\'re a sole trader chasing VAT invoices or a homeowner who hires a cement mixer once a year. This guide compares the four companies most UK tradespeople and DIY hirers encounter — honestly, on the criteria that actually matter.',
+    image: '/images/best-tool-hire-companies-uk.webp',
+    imageAlt: 'Best tool hire companies in the UK — honest comparison for tradespeople and DIY hirers on Tooli.uk',
+    datePublished: '2026-08-18',
+    metaTitle: 'Best Tool Hire Companies UK 2026: Honest Comparison | Tooli.uk',
+    metaDescription:
+      'HSS, Speedy, Brandon Hire Station, Jewson — honestly compared on price, range, coverage and service for UK trades and DIY. See which suits you on Tooli.uk.',
+    primaryCta: 'Compare Prices Now',
+    faqs: bestHireCompaniesFaqs,
+    Body: BestHireCompaniesBody,
   },
 ];
 
