@@ -3871,6 +3871,243 @@ const belfastContent = (
   </>
 );
 
+const leicesterFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Leicester?',
+    answer:
+      'Several suppliers covering central Leicester postcodes (LE1–LE5) offer same-day or next-morning delivery depending on equipment type and booking time. Confirm delivery timescales at the quote stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Leicester suppliers offer trade accounts?',
+    answer:
+      'Yes. Most suppliers on the network offer trade credit accounts for registered businesses. You will need a company name, registered address, and a basic credit check. VAT receipts are issued as standard — useful for CIS-registered sole traders and subcontractors working across Leicestershire.',
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Leicester?',
+    answer:
+      'No statutory licence is required to operate a mini digger under 3 tonnes on private land. On commercial sites or when working for hire or reward, most principal contractors will expect a valid CPCS (Construction Plant Competence Scheme) card. See our full mini digger hire guide for the detail.',
+  },
+  {
+    question: 'Does Roman archaeology affect groundworks in Leicester city centre?',
+    answer:
+      "It can. Sites within the historic walled area of Roman Leicester — broadly the area bounded by Highcross, the Jewry Wall, and the Cultural Quarter — may require an archaeological watching brief as a planning condition before groundworks begin. Check your planning permission and contact Leicester City Council's planning department if you are uncertain. This requirement does not typically affect suburban sites outside LE1.",
+  },
+  {
+    question: 'Which LE postcodes do Leicester suppliers deliver to?',
+    answer:
+      'Most suppliers cover LE1–LE9 as standard, with many extending into LE10–LE19 and surrounding Leicestershire towns. Enter your postcode on Tooli.uk to confirm exact coverage for your job.',
+  },
+  {
+    question: 'What size mini digger should I hire for a Leicester terrace garden?',
+    answer:
+      'Most rear gardens on Leicester Victorian terraces are accessed via a rear entry or side access gate. A 1.5-tonne tracked mini digger fits most standard rear access gates and can handle Leicestershire clay reasonably well. If rear access is very tight — under 80cm — a 0.8-tonne micro digger may be needed. Measure your access before booking.',
+  },
+  {
+    question: 'Can a homeowner hire equipment in Leicester without a trade account?',
+    answer:
+      'Yes. You do not need a trade account for domestic use on your own property. Some suppliers may request a damage deposit on higher-value plant such as mini diggers or powered access platforms.',
+  },
+];
+
+const leicesterContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Leicester — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Need to hire tools or plant equipment in Leicester? Tooli.uk compares prices from local and regional suppliers across LE postcodes — so you get the best available rate without ringing round every depot in the East Midlands. Whether you're a groundworker breaking ground on one of Leicester's growing regeneration sites, a builder working through Oadby or Birstall, or a homeowner extending a red-brick terrace in Evington or Clarendon Park, this page gives you what you need before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers across Leicester and surrounding LE postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, concrete mixers, wacker plates, floor sanders, access platforms',
+            'Delivery typically available across LE1–LE9 and into commuter towns including Loughborough, Hinckley, Wigston, Market Harborough, and Coalville',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Leicester Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Leicester is one of the most consistently active construction cities in the East Midlands. The city combines a busy pipeline of new-build and regeneration schemes with very strong domestic refurb demand — driven by a large stock of Victorian and interwar terraces and semis across its inner and outer suburbs.
+      </Paragraph>
+      <Paragraph>
+        On the regeneration front, planning permission has been secured for the major redevelopment of the historic Corah Works site in Leicester, which will transform the former factory complex into a mixed-use urban community featuring around 1,000 homes, with plans to retain and restore key heritage elements including the 1865 Old Textile Building façade and two landmark chimneys. The scheme connects the city centre to Abbey Park and is one of Leicester's most significant brownfield projects.
+      </Paragraph>
+      <Paragraph>
+        Elsewhere, Leicester City Council has selected Clegg Construction as delivery partner for the £18.8 million redevelopment of the Stocking Farm estate in the north-west of the city, which will deliver 50 new energy-efficient family homes on a 3.34-acre site. The city's Leicester Station entrance is also mid-way through a £22 million remodel to create a new gateway to the city centre.
+      </Paragraph>
+      <Paragraph>
+        Equipment regularly travels from Leicester city out to Loughborough (LE11–LE12), Hinckley (LE10), Wigston (LE18), and Market Harborough (LE16). Suppliers covering Leicester typically extend across most LE postcode districts — confirm your postcode at the quote stage.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Leicester?</H2>
+      <Paragraph>These are the categories most searched and booked across the Leicester area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Leicester']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, extension footings, drainage on terrace and semi sites'],
+          ['Scaffold tower (aluminium)', 'Extensions, loft conversions, chimney and gable-end work on red-brick terraces'],
+          ['Concrete mixer (130–180L)', 'Driveways, slab bases, extension footings across suburban Leicester'],
+          ['Wacker plate / vibrating roller', 'Driveway and patio sub-base compaction — consistently high demand across LE postcodes'],
+          ['Floor sander / edge sander', 'Victorian and Edwardian floorboard prep, pre-sale refurbs across LE2 and LE5'],
+          ['Access platform (IPAF)', 'Commercial fit-out on the city centre regeneration corridor and university campuses'],
+          ['Pressure washer (hot or cold)', 'Red-brick cleaning, driveway prep, patio and block paving work'],
+          ['Dehumidifier / drying kit', 'New plaster drying, older terrace renovation — steady year-round demand'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-leicester-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Leicester — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Leicester typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'City centre and inner Leicester: LE1 (City Centre, Highcross, Cultural Quarter), LE2 (Clarendon Park, Knighton, Stoneygate, Oadby, Glen Parva), LE3 (Braunstone, Glenfield, Westcotes, Fosse Park), LE4 (Belgrave, Birstall, Thurmaston, Beaumont Leys), LE5 (Hamilton, Evington, Humberstone)',
+          'Suburban and outer Leicester: LE6 (Groby, Ratby), LE7 (Syston, Birstall, Rothley, Queniborough), LE8 (Blaby, Countesthorpe, Whetstone, Fleckney), LE9 (Kirby Muxloe, Narborough, Earl Shilton, Broughton Astley)',
+          'Wider LE commuter towns: LE10 (Hinckley, Burbage), LE11–LE12 (Loughborough, Shepshed), LE16 (Market Harborough), LE17 (Lutterworth), LE18 (Wigston, South Wigston), LE19 (Enderby, Meridian Business Park)',
+        ]}
+      />
+      <Paragraph>
+        Enter your full postcode on the comparison tool to confirm coverage and available delivery slots for your area.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active in Leicester?</H2>
+      <Paragraph>Leicester's construction workload spans domestic refurb, regeneration civils, and commercial fit-out. The trades we see hiring most frequently:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The dense stock of Victorian and Edwardian red-brick terraces across Clarendon Park (LE2), Evington (LE5), Belgrave (LE4), and the inner west of the city generates constant extension, loft conversion, and refurb work. Concrete mixers, scaffold towers, and floor prep tools are the daily staples on these sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Regeneration activity at Corah Works, the Leicester Station remodel, and new housing sites across the city's north and west fringe keep groundwork crews active. Mini diggers, dumper trucks, and vibrating rollers are in regular use across LE1, LE3, and LE4 sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium south Leicester postcodes including Stoneygate (LE2), Knighton (LE2), and Oadby (LE2) drive high-value garden and landscaping projects from March through October. Mini diggers for terracing, turf cutters, and pressure washers are among the most-requested equipment in these areas.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Strong student-let and buy-to-let turnover in the university corridor around De Montfort University and the University of Leicester — across LE1, LE2, and LE3 — keeps decorators and plasterers active year-round. Access equipment, mixing drills, and floor sanders move consistently.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Leicester's largely flat terrain and exposure to midland weather keeps roofing work steady through autumn and winter. Scaffold towers are among the most-hired items for roofers working on pitched clay tile roofs across the Victorian terrace stock in LE2 and LE5.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Heritage and conservation contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Leicester has a remarkable density of Roman remains beneath its city centre, and a growing programme of heritage-led regeneration including the Corah Works scheme. Lime mortar mixers, lightweight access platforms, and low-vibration tools are regular hires for specialist work in the Cultural Quarter and along the Abbey Park corridor.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Leicester-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Roman archaeology beneath the city centre</p>
+          <Paragraph>
+            Leicester is one of the most extensively excavated Roman cities in the UK. Any significant groundworks in LE1 — particularly in the historic walled area around Highcross, the Jewry Wall, and the Cultural Quarter — may require an archaeological watching brief as a planning condition. Check your planning consent carefully before you start digging. Contact{' '}
+            <a href="https://www.leicester.gov.uk/planning-and-building/planning/apply-for-planning-permission/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Leicester City Council's planning department</a>
+            {' '}if you are uncertain.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">River Soar flood zones</p>
+          <Paragraph>
+            Sites near the River Soar in LE1, LE2, LE3, and along the Soar Valley corridor through Birstall (LE4) and Oadby (LE2) can sit within{' '}
+            <a href="https://check-long-term-flood-risk.service.gov.uk/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Environment Agency flood-risk zones</a>
+            . Check ground conditions before booking heavy plant on low-lying riverside sites. Ask suppliers about groundmats for waterlogged ground.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Lias clay across much of Leicestershire</p>
+          <Paragraph>Leicestershire sits on a bed of blue Lias clay in many areas — particularly south and west of the city. This heavy, shrink-swell clay can cause problems for foundations and drainage trenches, especially in dry summers followed by wet winters. Factor in appropriate bucket selection and discuss ground conditions with your supplier when hiring mini diggers for deeper work.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>
+            Leicester City Council follows standard construction noise guidance: 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday.{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE CONAW regulations</a>
+            {' '}apply to sustained high-decibel tool use — relevant for breaker work and disc cutting on brick and concrete in residential streets across inner Leicester.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend hire availability</p>
+          <Paragraph>Most Leicester suppliers operate Monday to Saturday. Sunday collection is limited. Spring and early summer sees demand spike for landscaping equipment across south Leicester — book 3 to 4 days ahead to secure availability on mini diggers and turf cutters.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Leicester</H2>
+      <BulletList
+        items={[
+          'Tool hire for builders and general contractors',
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Tool hire for roofers',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Leicester</H2>
+      <div className="grid gap-4">
+        {leicesterFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Leicester Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -4096,6 +4333,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/belfast-hero.webp',
     faqs: belfastFaqs,
     content: belfastContent,
+  },
+  {
+    slug: 'leicester',
+    name: 'Leicester',
+    path: '/locations/leicester',
+    metaTitle: 'Tool Hire Leicester | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Leicester and LE postcodes. Serving Oadby, Birstall, Wigston, Hinckley, Loughborough and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/leicester',
+    title: 'Tool Hire in Leicester — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers covering LE postcodes — get the best available rate without ringing round every depot in the East Midlands.',
+    image: '/images/leicester-hero.webp',
+    faqs: leicesterFaqs,
+    content: leicesterContent,
   },
 ];
 
