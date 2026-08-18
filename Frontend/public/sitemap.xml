@@ -361,6 +361,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://www.tooli.uk/blog/can-you-use-a-mini-digger-in-winter-what-uk-hirers-need-to-know</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Equipment pages -->
   <url>
