@@ -3639,6 +3639,238 @@ const edinburghContent = (
   </>
 );
 
+const belfastFaqs = [
+  {
+    question: 'Can I get same-day tool hire delivery in Belfast?',
+    answer:
+      'Several suppliers covering central Belfast postcodes (BT1–BT9, BT12, BT13) offer same-day or next-morning delivery depending on equipment type and booking time. Confirm delivery timescales at the quote stage on Tooli.uk.',
+  },
+  {
+    question: 'Do Belfast suppliers offer trade accounts?',
+    answer:
+      'Yes. Most suppliers on the network offer trade credit accounts for registered businesses. You will need a company name, registered address, and a basic credit check. VAT receipts are issued as standard and comply with Northern Ireland tax requirements for CIS-registered contractors and self-employed tradespeople.',
+  },
+  {
+    question: 'Do I need a licence to operate a mini digger in Belfast?',
+    answer:
+      'No statutory licence is required to operate a mini digger under 3 tonnes on private land. On commercial sites, most principal contractors require a valid CPCS (Construction Plant Competence Scheme) card. IPAF certification is expected for any powered access platform work on commercial or publicly accessible sites. See our mini digger hire guide for the full breakdown.',
+  },
+  {
+    question: 'Does HSENI regulate construction in Northern Ireland differently to the HSE in Great Britain?',
+    answer:
+      "Yes. Health and safety on construction sites in Northern Ireland falls under HSENI rather than HSE. The CDM Regulations (Northern Ireland) 2016 apply here, which differ in some procedural details from CDM 2015 used in England, Scotland, and Wales. HSENI's guidance is available at hseni.gov.uk and is the authoritative source for NI construction compliance.",
+  },
+  {
+    question: 'Which BT postcodes do Belfast suppliers deliver to?',
+    answer:
+      'Most suppliers cover BT1–BT17 as standard, with many extending into BT18, BT27, BT28, BT36, BT37, and BT38. Enter your postcode on Tooli.uk to confirm exact coverage for your job.',
+  },
+  {
+    question: "What's the best approach for hiring plant on a basalt rock site in north Belfast?",
+    answer:
+      'If you are working in BT13, BT14, or BT15 and encounter hard basalt at shallow depth, a rock breaker attachment for a mini digger is usually the most efficient option. Some suppliers include breaker attachments as an optional extra — confirm availability and attachment compatibility when requesting your quote.',
+  },
+  {
+    question: 'Can a homeowner hire equipment in Belfast without a trade account?',
+    answer:
+      'Yes. You do not need a trade account for domestic use on your own property. Some suppliers may request a damage deposit on higher-value plant such as mini diggers or powered access platforms.',
+  },
+];
+
+const belfastContent = (
+  <>
+    <Section>
+      <H2>Tool Hire in Belfast — Compare Prices From Local Suppliers</H2>
+      <Paragraph>
+        Need to hire tools or plant equipment in Belfast? Tooli.uk compares prices from local and regional suppliers across BT postcodes — so you get the best available rate without ringing round every depot in Northern Ireland. Whether you're a groundworker on one of Belfast's major regeneration sites, a builder working through Malone or Newtownabbey, a roofer covering the south Belfast terraces, or a homeowner tackling an extension in Castlereagh or Holywood, this page gives you what you need before you book.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Tooli.uk compares tool and plant hire suppliers across Belfast and surrounding BT postcodes',
+            'Most hired equipment locally: mini diggers, scaffold towers, concrete mixers, wacker plates, floor sanders, access platforms',
+            'Delivery typically available across BT1–BT17 and into Greater Belfast including Lisburn, Newtownabbey, Carrickfergus, Newtownards, and Holywood',
+            'Weekend hire available from most suppliers — confirm Sunday collection windows before booking',
+            'VAT receipts issued as standard; trade accounts available with most suppliers on the network',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Why Belfast Keeps the Hire Market Busy</H2>
+      <Paragraph>
+        Belfast is one of the most active construction cities in the United Kingdom right now. The city is in the middle of a significant development phase — with major schemes moving from planning into active delivery across the waterfront, city centre, and suburban fringe.
+      </Paragraph>
+      <Paragraph>
+        The Belfast City Region is promoting a £5 billion pipeline of investment opportunities, focused on housing growth, town and city centre regeneration, mixed-use development, and infrastructure — a scale of activity that is sustaining consistent demand for plant, tools, and equipment hire across every BT postcode.
+      </Paragraph>
+      <Paragraph>
+        The single biggest development in the city is Loftlines in the Titanic Quarter. The £150 million scheme will deliver 778 new homes — Belfast's first major residential development to be built in 25 years — including the city's first build-to-rent apartments, social homes, and discounted rental properties. Construction is active and phases are completing through 2026.
+      </Paragraph>
+      <Paragraph>
+        Alongside Loftlines, the Weavers Cross transport-led regeneration scheme — Belfast's new central transport hub — is progressing in BT12, bringing 1.5 million square feet of mixed-use development to the city centre. The Casement Park GAA redevelopment in west Belfast, valued at £128 million, is also among the top construction projects currently active in Northern Ireland. This breadth of activity across commercial, residential, and sports infrastructure keeps trades busy across the full BT postcode range.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Equipment Do Tradespeople Hire Most in Belfast?</H2>
+      <Paragraph>These are the categories most searched and booked across the Belfast area:</Paragraph>
+      <DataTable
+        headers={['Equipment', 'Common Use in Belfast']}
+        rows={[
+          ['Mini digger (1.5t–3t)', 'Garden groundworks, extension footings, drainage on terrace and semi sites'],
+          ['Scaffold tower (aluminium)', 'Terrace refurbs, chimney and gable-end work, render on bay-fronted villas'],
+          ['Concrete mixer (130–180L)', 'Driveways, extension footings, patio bases across south and east Belfast'],
+          ['Wacker plate / vibrating roller', 'Driveway and patio sub-base compaction — consistently high demand across BT postcodes'],
+          ['Floor sander / edge sander', 'Victorian and Edwardian floorboard prep, pre-sale refurbs across BT7 and BT9'],
+          ['Access platform (IPAF)', 'Titanic Quarter and Weavers Cross commercial fit-out, university quarter work'],
+          ['Pressure washer (hot or cold)', 'Brick and render cleaning, driveway prep, patio work — high demand year-round'],
+          ['Dehumidifier / drying kit', 'New plaster drying, flood remediation — strong demand in older terrace stock'],
+        ]}
+      />
+    </Section>
+
+    <img
+      src="/images/tool-hire-belfast-compare-prices.webp"
+      alt="Tool hire and plant hire comparison in Belfast — compare local and national suppliers on Tooli.uk"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Postcodes and Areas We Cover</H2>
+      <Paragraph>Suppliers on the Tooli.uk network serving Belfast typically cover:</Paragraph>
+      <BulletList
+        items={[
+          'City centre and inner Belfast: BT1 (City Centre), BT2 (City Centre), BT3 (Duncrue, Titanic Quarter), BT4 (Sydenham, Belmont, Stormont), BT5 (Castlereagh, Knock, Gilnahirk), BT6 (Cregagh, Knockbreda), BT7 (Ormeau, University Quarter)',
+          'South and west Belfast: BT8 (Carryduff, Knockbreda, Newtownbreda), BT9 (Malone, Lisburn Road, Stranmillis), BT10 (Finaghy), BT11 (Andersonstown), BT12 (Falls Road, Sandy Row, Weavers Cross), BT13 (Shankill Road, Woodvale, Glencairn), BT17 (Dunmurry, Derriaghy)',
+          'North Belfast: BT14 (Ballysillan, Crumlin Road), BT15 (North Belfast, Skegoneill)',
+          'Greater Belfast commuter area: BT16 (Dundonald), BT18 (Holywood), BT19 (Bangor east), BT27 (Lisburn), BT28 (Lisburn south), BT36 (Newtownabbey), BT37 (Newtownabbey north), BT38 (Carrickfergus)',
+        ]}
+      />
+      <Paragraph>
+        Enter your full postcode on the comparison tool to confirm coverage and delivery availability for your area.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>What Trades Are Most Active in Belfast?</H2>
+      <Paragraph>Belfast's construction workload spans waterfront regeneration, domestic refurb, and commercial fit-out. The trades we see hiring most regularly:</Paragraph>
+      <div className="space-y-3">
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Builders and general contractors</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">The large stock of bay-fronted Victorian and Edwardian terraces across south Belfast (BT7, BT9), east Belfast (BT5, BT6), and north Belfast (BT14, BT15) generates constant extension, refurb, and conversion work. Concrete mixers, scaffold towers, and floor prep tools are the daily staples.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers and civils crews</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Active development at the Titanic Quarter (BT3), Weavers Cross (BT12), and housing sites across the Greater Belfast fringe keeps groundwork crews busy. Mini diggers, dumper trucks, and vibrating rollers feature consistently across these sites.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Landscapers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Premium south Belfast postcodes including Malone (BT9), Stranmillis (BT9), Belmont (BT4), and Holywood (BT18) drive high-value garden and landscaping projects. Mini diggers for terracing, turf cutters, and pressure washers are the most-requested kit in these areas from March through October.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Decorators and plasterers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">High student-let and private rental turnover in the university quarter (BT7) around Queen's University, and buy-to-let stock across BT6 and BT5, keeps decorators and plasterers active throughout the year. Access equipment, mixing drills, and floor sanders move consistently.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Roofers</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Belfast's Atlantic weather and persistent rain makes roofing a year-round trade. Scaffold towers are among the most-hired items across the city, particularly for ridge tile, lead valley, and chimney stack work on the extensive Victorian terrace stock in south and east Belfast.</p>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+          <p className="text-sm font-black text-gray-800">Groundworkers on brownfield sites</p>
+          <p className="mt-1 text-sm font-medium text-gray-500">Former industrial land across BT3, BT12, and the inner north of the city is in active remediation and development. Heavy plant, rock breakers, and trench support equipment feature regularly on these sites.</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Belfast-Specific Things to Know Before You Book</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">HSENI — Northern Ireland's construction regulator</p>
+          <Paragraph>
+            Health and safety on construction sites in Northern Ireland is regulated by the{' '}
+            <a href="https://www.hseni.gov.uk/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Health and Safety Executive for Northern Ireland (HSENI)</a>
+            , not the GB-based HSE. The{' '}
+            <a href="https://www.hseni.gov.uk/articles/cdm-regulations" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Construction (Design and Management) Regulations (Northern Ireland) 2016</a>
+            {' '}apply to all notifiable construction projects here — these differ in some procedural respects from CDM 2015 used in England, Scotland, and Wales. Principal contractors and clients working across the GB/NI border should be aware of this distinction.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Noise and working hours</p>
+          <Paragraph>Belfast City Council expects construction operations to follow standard noise guidance: 08:00–18:00 Monday to Friday, 08:00–13:00 Saturday. HSENI noise at work regulations apply to sustained high-decibel equipment use — relevant for breaker, disc cutter, and wacker plate work in residential streets across south and east Belfast.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Basalt and blue granite ground conditions</p>
+          <Paragraph>Parts of north and west Belfast sit on basalt rock — the same geology as the Antrim Plateau. Sites in BT13, BT14, and BT15 can encounter hard rock at shallow depth. If you are digging footings in these areas, a rock breaker attachment may be needed alongside a standard mini digger bucket. Discuss ground conditions with your supplier before confirming the booking.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Access in south Belfast</p>
+          <Paragraph>The Lisburn Road (BT9) and Ormeau Road (BT7) corridors are busy arterial routes with limited parking and no-loading restrictions during peak hours. Large lorry deliveries to sites along these roads need careful timing — aim for early morning drops before 08:00 where possible.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <p className="mb-2 font-extrabold text-gray-900">Weekend hire availability</p>
+          <Paragraph>Most Belfast suppliers operate Monday to Saturday. Sunday collection is limited across BT postcodes. Spring and early summer sees strong demand for landscaping equipment in south and east Belfast — book 3 to 4 days ahead to secure availability.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Trades We Serve in and Around Belfast</H2>
+      <BulletList
+        items={[
+          'Tool hire for builders and general contractors',
+          'Tool hire for groundworkers',
+          'Tool hire for landscapers',
+          'Tool hire for roofers',
+          'Plant hire for plasterers and drylining',
+          'Tool hire for decorators',
+          'Equipment hire for electricians and plumbers',
+          'Weekend hire for homeowners and DIYers',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>FAQ: Tool Hire in Belfast</H2>
+      <div className="grid gap-4">
+        {belfastFaqs.map((faq) => (
+          <div key={faq.question} className="rounded-2xl border border-gray-100 bg-white p-5">
+            <h4 className="mb-2 text-lg font-extrabold text-gray-900">{faq.question}</h4>
+            <p className="font-medium leading-relaxed text-gray-500">{faq.answer}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Compare Tool Hire Prices in Belfast Now</H2>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Tooli.uk doesn't own depots or vans. We compare quotes from verified local suppliers so you see the real market rate — not just whoever spent most on Google Ads. Enter your postcode and the equipment you need to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          . Takes 60 seconds. No account required.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const locationPages: LocationPageData[] = [
   {
     slug: 'london',
@@ -3849,6 +4081,21 @@ export const locationPages: LocationPageData[] = [
     image: '/images/edinburgh-hero.webp',
     faqs: edinburghFaqs,
     content: edinburghContent,
+  },
+  {
+    slug: 'belfast',
+    name: 'Belfast',
+    path: '/locations/belfast',
+    metaTitle: 'Tool Hire Belfast | Compare Local Prices | Tooli.uk',
+    metaDescription:
+      'Compare tool and plant hire prices across Belfast and BT postcodes. Serving Lisburn Road, Titanic Quarter, Malone, Newtownabbey, Lisburn and beyond. Find the best rate fast.',
+    canonicalUrl: 'https://www.tooli.uk/locations/belfast',
+    title: 'Tool Hire in Belfast — Compare Prices From Local Suppliers',
+    description:
+      'Compare tool hire and plant hire prices from local and regional suppliers covering BT postcodes — get the best available rate without ringing round every depot in Northern Ireland.',
+    image: '/images/belfast-hero.webp',
+    faqs: belfastFaqs,
+    content: belfastContent,
   },
 ];
 
