@@ -3,7 +3,6 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /accounts/
-Disallow: /dashboard/
 Disallow: /static/admin/
 Disallow: /*?utm_
 Disallow: /*?ref=
@@ -15,7 +14,6 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /accounts/
-Disallow: /dashboard/
 Crawl-delay: 2
 
 User-agent: GPTBot
@@ -32,7 +30,6 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /accounts/
-Disallow: /dashboard/
 Disallow: /*?utm_
 Disallow: /*?ref=
 Crawl-delay: 10
