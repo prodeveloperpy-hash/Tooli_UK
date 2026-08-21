@@ -2233,6 +2233,210 @@ const concreteBreakercontent = (
   </>
 );
 
+const plateCompactorFaqs = [
+  {
+    question: 'What is a wacker plate?',
+    answer:
+      'A wacker plate is the UK trade name for a plate compactor (vibratory plate). "Wacker" comes from the manufacturer Wacker Neuson, but the term is used generically across the UK for any vibrating flat-plate compaction machine. Hire companies list them as "plate compactor," "wacker plate," or "vibrating plate" interchangeably.',
+  },
+  {
+    question: 'Do I need a wacker plate for laying a patio?',
+    answer:
+      'Yes. Compacting the sub-base (typically MOT Type 1 or crushed stone) before laying paving is essential for preventing settlement, sinking, and uneven surfaces. A wacker plate is the correct tool for this. Without compaction, your patio will move.',
+  },
+  {
+    question: 'How long does it take to compact a driveway sub-base?',
+    answer:
+      'A medium forward-only plate compactor covers roughly 200–400 m² per hour in a single pass. A standard domestic driveway (30–50 m²) takes 15–30 minutes per compaction pass. You will typically need 3–6 passes to reach adequate density, depending on layer thickness and material.',
+  },
+  {
+    question: 'Forward or reversible — which wacker plate do I need?',
+    answer:
+      'Forward-only is sufficient for most patio, driveway, and surface compaction jobs. Reversible is necessary for trench backfill (where you cannot turn the machine) and for deeper compaction on thick sub-base layers. If in doubt, a forward-only plate handles the majority of domestic and light commercial work.',
+  },
+  {
+    question: 'Can I use a plate compactor on tarmac?',
+    answer:
+      'Yes. Fit a rubber paving mat (base plate protector) to prevent the plate from marking or scuffing the hot tarmac surface. Without the mat, the bare steel plate will leave marks and pull aggregate from the surface.',
+  },
+  {
+    question: 'How heavy is a plate compactor?',
+    answer:
+      'Light forward-only models weigh 50–70 kg. Medium models are 70–100 kg. Heavy forward plates reach 100–150 kg. Reversible compactors start at around 130 kg and go up to 500+ kg for heavy-duty models. Factor in the machine weight when planning transport and manual handling.',
+  },
+];
+
+const plateCompactorContent = (
+  <>
+    <Section>
+      <H2>Plate Compactor Hire Comparison — Wacker Plate Hire Across the UK</H2>
+      <Paragraph>
+        Plate compactor hire (commonly called wacker plate hire in the UK trades) gives builders, groundworkers, landscapers, and DIYers access to vibrating compaction equipment for levelling and firming sub-bases, hardcore, sand, gravel, and tarmac. Plate compactors are available as forward-only, reversible, and heavy-duty models, powered by petrol or diesel, with plate widths from 400 mm to 900 mm. No licence or operator card is required, but HSE hand-arm vibration (HAV) regulations apply to every user. Tooli.uk compares plate compactor hire prices from vetted UK suppliers so you can compact the right area at the right rate.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Plate compactors (wacker plates) compact granular materials like MOT Type 1, sand, gravel, and tarmac before laying patios, driveways, roads, and foundations',
+            'Available as forward-only (lighter, simpler) and reversible (heavier, more productive, essential for trench work)',
+            'Petrol models dominate UK hire; diesel options are available for larger commercial jobs',
+            'HSE Hand-Arm Vibration (HAV) exposure limits apply — check trigger times for every machine before use',
+            'Based on Tooli.uk network data, wacker plates are the single most hired item for patio, driveway, and groundwork projects across the UK',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <img
+      src="/images/plate-compactor-hire-comparison-uk.webp"
+      alt="Forward-only petrol plate compactor being used to compact MOT Type 1 sub-base on a UK patio project"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>What Can You Do With a Hired Plate Compactor?</H2>
+      <div className="space-y-3">
+        {[
+          ['Patio and Driveway Preparation', 'Compacting MOT Type 1 sub-base, crushed stone, or sharp sand before laying paving slabs, block paving, resin-bound surfaces, or natural stone. This is the number one reason UK homeowners and landscapers hire a wacker plate.'],
+          ['Trench Backfill', 'Compacting backfill material in service trenches (drainage, gas, water, electric) in layers to prevent settlement. Reversible compactors are preferred for trench work because they can move forwards and backwards without turning.'],
+          ['Foundation Sub-Bases', 'Compacting hardcore and stone beneath strip foundations, raft foundations, and floor slabs. Building control may require proof of adequate compaction before concrete is poured.'],
+          ['Tarmac and Asphalt', 'Compacting fresh tarmac on driveways, paths, car parks, and road patches. A plate compactor levels and densifies the tarmac layer before it cools and sets.'],
+          ['Landscaping and Garden Projects', 'Compacting ground for raised bed bases, shed foundations, greenhouse bases, artificial grass sub-bases, and garden path preparation.'],
+        ].map(([title, desc]) => (
+          <div key={title} className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+            <p className="text-sm font-black text-gray-800">{title}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Plate Compactor Available for Hire</H2>
+      <DataTable
+        headers={['Type', 'Plate Width', 'Weight', 'Best For']}
+        rows={[
+          ['Light forward-only', '400–450 mm', '50–70 kg', 'Patios, garden paths, small areas, sand beds'],
+          ['Medium forward-only', '450–550 mm', '70–100 kg', 'Driveways, sub-bases, larger patio areas'],
+          ['Heavy forward-only', '550–700 mm', '100–150 kg', 'Road sub-bases, car parks, large commercial areas'],
+          ['Reversible plate compactor', '450–600 mm', '130–250 kg', 'Trenches, backfill, confined spaces, deep compaction'],
+          ['Heavy reversible', '600–900 mm', '250–500+ kg', 'Major earthworks, road construction, deep sub-base layers'],
+        ]}
+      />
+      <div className="rounded-xl border border-gray-100 bg-white p-4">
+        <p className="font-extrabold text-gray-900">Forward-Only vs Reversible — Which Do You Need?</p>
+        <Paragraph>
+          Forward-only compactors move in one direction. They are lighter, cheaper to hire, and perfectly adequate for patios, drives, and surface-level compaction. Reversible compactors can travel forwards and backwards using a directional control — essential for trench work (where you cannot turn the machine around) and for achieving deeper compaction on thicker layers.
+        </Paragraph>
+      </div>
+    </Section>
+
+    <img
+      src="/images/plate-compactor-hire-comparison.webp"
+      alt="Reversible plate compactor working in a service trench for drainage backfill"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>How to Choose the Right Plate Compactor</H2>
+      <div className="space-y-3">
+        {[
+          ['Material being compacted', 'Granular materials (MOT Type 1, gravel, crushed stone, sand) compact well with standard forward plates. Cohesive materials (clay, mixed fills) need a heavier machine or a trench rammer. Tarmac needs a plate with a water-sprinkle system or a paving mat to prevent sticking.'],
+          ['Area size', 'Small patios and paths (under 20 m²) suit a light 50–70 kg plate. Larger driveways and sub-bases (20–100 m²) need a medium or heavy plate for productivity. Anything over 100 m² may justify a ride-on roller instead.'],
+          ['Depth of layer', 'Plate compactors work in layers. A standard forward plate compacts 150–200 mm depth per pass. For deeper layers, use a heavier reversible model or compact in multiple passes. Over-thick layers will not compact properly regardless of machine weight.'],
+          ['Trench or open area', 'If you are compacting inside a trench, you need a reversible plate or a trench rammer (upright compactor). Forward-only plates cannot reverse out of a trench without being physically lifted.'],
+          ['Vibration exposure', 'Plate compactors transmit significant hand-arm vibration. Check the declared vibration value and calculate your daily trigger time under the Control of Vibration at Work Regulations 2005. Heavier machines do not always produce more vibration — check the individual model data.'],
+        ].map(([label, detail]) => (
+          <div key={label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{label}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{detail}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Safety, Regulations, and HSE Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Hand-Arm Vibration (HAV)</H3>
+          <Paragraph>
+            Plate compactors are among the highest-vibration tools commonly hired in the UK. Under{' '}
+            <a href="https://www.hse.gov.uk/vibration/hav/index.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE HAV regulations</a>
+            , the exposure action value is 2.5 m/s² and the exposure limit value is 5 m/s² (daily 8-hour reference). A typical medium plate compactor with a declared vibration level of 8–12 m/s² reaches the action value in roughly 30–60 minutes and the exposure limit in 1–3 hours. Plan operator rotation, use anti-vibration gloves, and take regular breaks.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Noise</H3>
+          <Paragraph>
+            Most plate compactors produce 85–100 dB in operation. Hearing protection is mandatory above 85 dB under the{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Control of Noise at Work Regulations 2005</a>
+            . On residential jobs, check local council noise restrictions and limit operating hours accordingly.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Manual Handling</H3>
+          <Paragraph>
+            Even light plate compactors weigh 50+ kg. Loading, unloading, and manoeuvring them onto vans or trailers requires proper lifting technique or mechanical handling. Reversible plates (130–500+ kg) must be moved with plant, ramps, or a tail-lift vehicle. Follow{' '}
+            <a href="https://www.hse.gov.uk/manual-handling/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE manual handling guidelines</a>
+            .
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>COSHH — Dust</H3>
+          <Paragraph>Compacting dry crushed stone or sand can generate dust. Dampen the surface before compacting to suppress airborne particles. Where silica-bearing materials (concrete rubble, sandstone) are being compacted, use RPE (FFP2 minimum).</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Fuel Safety</H3>
+          <Paragraph>Petrol models require safe fuel handling and storage on site. Keep fuel containers closed and away from the operating area. Never refuel a hot machine.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and What's Included</H2>
+      <BulletList
+        items={[
+          'Delivery: Light plates (under 100 kg) can be self-collected by van. Heavier and reversible models need tail-lift or flatbed delivery. Most depots offer same-day or next-day.',
+          'Fuel: Petrol machines are usually delivered fuelled. Return full or pay a refuelling surcharge.',
+          "Paving mats: For tarmac or block paving compaction, a rubber paving mat (base plate protector) prevents surface damage. Some suppliers include one; others charge separately. Always check.",
+          'Compaction plates: The standard base plate is supplied. Trench plates and extension plates may be available as add-ons for specific models.',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Compare Plate Compactor Hire Near You</H2>
+      <Paragraph>Tooli.uk compares wacker plate and plate compactor hire from suppliers across the UK. Browse by city:</Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh', 'Bristol', 'Liverpool', 'Sheffield', 'Cardiff', 'Newcastle', 'Nottingham', 'Leicester', 'Southampton', 'Brighton'].map((city) => (
+          <span key={city} className="rounded-full bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700">{city}</span>
+        ))}
+      </div>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          {' '}— forward-only and reversible wacker plate hire from local depots and national suppliers, side by side.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const equipmentPages: EquipmentPageData[] = [
   {
     slug: 'excavator-hire-uk',
@@ -3961,6 +4165,30 @@ export const equipmentPages: EquipmentPageData[] = [
       { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
     ],
     content: concreteBreakercontent,
+  },
+  {
+    slug: 'plate-compactor-hire-comparison-uk',
+    name: 'Plate Compactor Hire',
+    path: '/equipment/plate-compactor-hire-comparison-uk',
+    metaTitle: 'Plate Compactor Hire UK — Wacker Plate Rates (2026) | Tooli.uk',
+    metaDescription:
+      'Compare wacker plate and plate compactor hire from UK suppliers. Petrol & diesel, forward & reversible. No-obligation local quotes. Compare free on Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/plate-compactor-hire-comparison-uk',
+    title: 'Plate Compactor Hire Comparison — Wacker Plate Hire Across the UK',
+    description:
+      'Compare plate compactor and wacker plate hire from local and national UK suppliers. Forward-only and reversible models, petrol and diesel, available by the day, weekend, or week.',
+    image: '/images/plate-compactor-hire-comparison-uk.webp',
+    imageAlt:
+      'Forward-only petrol plate compactor being used to compact MOT Type 1 sub-base on a UK patio project',
+    faqs: plateCompactorFaqs,
+    relatedEquipment: [
+      { name: 'Excavator Hire UK', path: '/equipment/excavator-hire-uk' },
+      { name: 'Cement Mixer Hire UK', path: '/equipment/cement-mixer-hire-comparison-uk' },
+      { name: 'Concrete Breaker Hire UK', path: '/equipment/concrete-breaker-hire-comparison-uk' },
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+    ],
+    content: plateCompactorContent,
   },
 ];
 
