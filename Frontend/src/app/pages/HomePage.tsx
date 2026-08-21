@@ -487,9 +487,18 @@ export function HomePage() {
           '@context': 'https://schema.org',
           '@graph': [
             {
+              '@type': 'WebSite',
+              '@id': 'https://www.tooli.uk/#website',
+              name: 'Tooli UK',
+              alternateName: 'tooli.uk',
+              url: 'https://www.tooli.uk/',
+              publisher: { '@id': 'https://www.tooli.uk/#organization' },
+            },
+            {
               '@type': 'Organization',
               '@id': 'https://www.tooli.uk/#organization',
-              name: 'Tooli.uk',
+              name: 'Tooli UK',
+              alternateName: 'tooli.uk',
               url: 'https://www.tooli.uk',
               logo: {
                 '@type': 'ImageObject',
@@ -510,7 +519,7 @@ export function HomePage() {
               '@type': 'WebPage',
               '@id': 'https://www.tooli.uk/#webpage',
               url: 'https://www.tooli.uk/',
-              name: 'Tool Hire Comparison | Compare UK Prices | Tooli.uk',
+              name: 'Tool Hire Comparison | Compare UK Prices | Tooli UK',
               description: 'Compare tool hire and plant hire prices across the UK. Free, no account needed.',
               isPartOf: { '@id': 'https://www.tooli.uk/#website' },
               about: { '@id': 'https://www.tooli.uk/#organization' },

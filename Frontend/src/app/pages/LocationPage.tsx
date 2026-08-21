@@ -13,8 +13,8 @@ function buildLocationSchema(page: (typeof locationPages)[number]): Record<strin
       {
         '@type': 'Organization',
         '@id': 'https://www.tooli.uk/#organization',
-        name: 'Tooli',
-        alternateName: 'Tooli.uk',
+        name: 'Tooli UK',
+        alternateName: 'tooli.uk',
         url: 'https://www.tooli.uk',
         logo: 'https://www.tooli.uk/images/logo.webp',
         email: 'info@tooli.uk',

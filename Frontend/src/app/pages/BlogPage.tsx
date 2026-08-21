@@ -13,8 +13,8 @@ import { locationPages } from '../data/locations';
 const ORGANIZATION_NODE = {
   '@type': 'Organization',
   '@id': 'https://www.tooli.uk/#organization',
-  name: 'Tooli',
-  alternateName: 'Tooli.uk',
+  name: 'Tooli UK',
+  alternateName: 'tooli.uk',
   url: 'https://www.tooli.uk',
   logo: {
     '@type': 'ImageObject',
@@ -37,7 +37,8 @@ const ORGANIZATION_NODE = {
 const WEBSITE_NODE = {
   '@type': 'WebSite',
   '@id': 'https://www.tooli.uk/#website',
-  name: 'Tooli',
+  name: 'Tooli UK',
+  alternateName: 'tooli.uk',
   url: 'https://www.tooli.uk',
   description: 'Compare tool hire and plant hire prices across the UK. Free to use, no account required.',
   publisher: {
