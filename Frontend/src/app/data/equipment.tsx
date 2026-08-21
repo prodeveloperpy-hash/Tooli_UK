@@ -1624,6 +1624,199 @@ const smallScissorLiftContent = (
   </>
 );
 
+const forkliftFaqs = [
+  {
+    question: 'Do I need a licence to operate a hired forklift in the UK?',
+    answer:
+      "There is no single 'forklift licence' in UK law. You need accredited training (RTITB, ITTSAR, or an employer in-house scheme meeting HSE ACOP L117) and written authorisation from your employer for the specific truck category. Most hire companies require evidence of training before releasing a machine.",
+  },
+  {
+    question: "What's the difference between a forklift and a telehandler?",
+    answer:
+      'A forklift lifts vertically using a fixed mast. A telehandler uses a telescopic boom that extends forward and upward, giving it greater reach and height, but typically on rougher terrain. Telehandlers are standard on construction sites; forklifts dominate in warehouses and yards.',
+  },
+  {
+    question: 'Can I hire a forklift with an operator?',
+    answer:
+      'Yes. Operated hire is available from most UK suppliers, especially for telehandlers and large counterbalance trucks. The supplier provides a trained, insured operator for the duration of the hire.',
+  },
+  {
+    question: 'What LOLER checks should I expect?',
+    answer:
+      'The hire company must supply a current LOLER thorough examination certificate with every forklift. This must be completed by a competent person every 12 months (or every 6 months if the machine lifts people). Check the certificate date and serial number against the machine delivered.',
+  },
+  {
+    question: 'Can I use an electric forklift outdoors?',
+    answer:
+      "Electric counterbalance forklifts can work outdoors on firm, level surfaces (tarmac, concrete). They're not suited to muddy, uneven, or wet ground. For outdoor site work on rough terrain, hire a diesel counterbalance, telehandler, or rough terrain forklift.",
+  },
+  {
+    question: 'How much space does a forklift need to turn?',
+    answer:
+      'Turning circles vary by model. A compact counterbalance might turn in under 2 metres. A large diesel truck needs 3–4 metres. Reach trucks are designed for narrow aisles (as little as 2.5 m). Check the spec sheet for the minimum aisle width before booking.',
+  },
+];
+
+const forkliftContent = (
+  <>
+    <Section>
+      <H2>What Is Forklift Hire?</H2>
+      <Paragraph>
+        Forklift hire in the UK covers counterbalance, reach, telehandler, and rough terrain models, available by the day, week, or month from local and national suppliers. Hire is the standard route for builders, warehouse operators, and site managers who need lifting capacity without the capital cost, maintenance liability, or LOLER inspection obligations of ownership. All forklift operators on UK worksites must hold a valid training certificate, most commonly accredited by RTITB or ITTSAR, and the machine itself must carry a current LOLER thorough examination.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Forklift hire is available as counterbalance, reach truck, telehandler, rough terrain, and truck-mounted models across the UK',
+            'Operators must hold an accredited training certificate (RTITB, ITTSAR, or employer in-house under ACOP L117) before operating any forklift on a UK worksite',
+            'Machines must carry a current LOLER thorough examination certificate (valid 12 months, or 6 months for equipment lifting people)',
+            'Hire periods run from single days to long-term contracts, with delivery, collection, and operated hire widely available',
+            'Comparing at least three local suppliers on Tooli.uk typically saves 15–25% on equivalent hire periods',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <img
+      src="/images/forklift-hire-comparison-uk.webp"
+      alt="Diesel counterbalance forklift unloading pallets of bricks on a UK construction site"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>What Can You Do With a Hired Forklift?</H2>
+      <Paragraph>Forklifts handle material movement and lifting tasks that would be unsafe, impractical, or impossibly slow by hand.</Paragraph>
+      <div className="space-y-4">
+        {[
+          ['Construction Sites', 'Moving pallets of bricks, blocks, bagged materials, steel beams, and timber packs around site. Offloading deliveries from flatbed lorries. Placing materials at first-floor level using a telehandler with a raised boom.'],
+          ['Warehousing and Distribution', 'Loading and unloading HGVs. Moving racked stock. Picking and placing pallets in high-bay racking (reach trucks). Short-term warehouse overflow and seasonal peaks are the most common reasons for hire over purchase.'],
+          ['Events, Retail, and Fit-Out', 'Positioning heavy plant, staging, equipment, and display units. Unloading containers. Moving large quantities of stock during shop refits.'],
+          ['Agriculture and Landscaping', 'Moving bulk bags of aggregate, topsoil, and green waste. Loading trailers. Rough terrain forklifts and telehandlers suit farm yards, uneven ground, and outdoor hardstanding.'],
+        ].map(([title, desc]) => (
+          <div key={title} className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+            <p className="text-sm font-black text-gray-800">{title}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Forklift Available for Hire</H2>
+      <DataTable
+        headers={['Type', 'Lift Capacity', 'Lift Height', 'Best For']}
+        rows={[
+          ['Counterbalance (electric)', '1.5–5 t', '3–6 m', 'Warehouses, indoor environments, clean floors, loading bays'],
+          ['Counterbalance (diesel/LPG)', '1.5–7 t', '3–7 m', 'Outdoor yards, construction sites, heavy loads'],
+          ['Reach truck', '1–2.5 t', 'Up to 12 m', 'High-bay racking, narrow aisle warehousing'],
+          ['Telehandler', '2.5–4 t', '6–20 m', 'Construction sites, agriculture, high placement, rough ground'],
+          ['Rough terrain forklift', '2–5 t', '3–6 m', 'Unpaved sites, muddy ground, outdoor events'],
+          ['Truck-mounted (Moffett/Palfinger)', '1–3 t', '3–4 m', 'Self-delivery, multi-drop deliveries, remote sites'],
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>How to Choose the Right Forklift for Hire</H2>
+      <div className="space-y-3">
+        {[
+          ['Lift capacity', 'Calculate the heaviest single load you\'ll move, including the pallet or attachment weight. Never hire a forklift rated at exactly your maximum load — allow a margin.'],
+          ['Lift height', 'How high does the load need to go? Ground-level moves need 3 m mast clearance. Loading onto scaffolding, first-floor slabs, or high racking needs 6–12 m.'],
+          ['Ground conditions', 'Smooth warehouse floors suit electric counterbalance. Gravel, mud, and slopes need rough terrain or telehandler. Using the wrong machine on the wrong surface is a stability risk and a PUWER breach.'],
+          ['Power source', 'Electric forklifts produce zero emissions and low noise (ideal indoors). Diesel and LPG models offer greater power but need ventilation. Most indoor hire is electric; most site hire is diesel or telehandler.'],
+          ['Access and turning circle', 'Measure your narrowest doorway, aisle, or turning point. Reach trucks and compact counterbalances have tighter turning circles than standard trucks.'],
+          ['Attachments', 'Side-shifts, fork extensions, rotating clamps, crane jibs, and man-baskets (LOLER-examined) are available as hire add-ons. Confirm compatibility with the specific machine model.'],
+        ].map(([label, detail]) => (
+          <div key={label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{label}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{detail}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <img
+      src="/images/forklift-hire-comparison.webp"
+      alt="Electric reach truck operating in a narrow-aisle UK warehouse for pallet racking"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Operator Licensing and UK Regulations</H2>
+      <H3>Who Can Operate a Hired Forklift?</H3>
+      <Paragraph>
+        Under the Provision and Use of Work Equipment Regulations 1998 (PUWER) and the{' '}
+        <a href="https://www.hse.gov.uk/pubns/priced/l117.pdf" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE Approved Code of Practice L117</a>
+        , every forklift operator must be trained, assessed, and authorised by their employer. The most widely recognised accreditation bodies are RTITB, ITTSAR, and employer in-house schemes that meet ACOP L117 standards. There is no single "forklift licence" in UK law — what matters is evidence of competent, accredited training, valid for the category of truck being operated.
+      </Paragraph>
+      <div className="space-y-3 mt-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-4">
+          <p className="font-extrabold text-gray-900">LOLER Thorough Examination</p>
+          <Paragraph>
+            Under the{' '}
+            <a href="https://www.legislation.gov.uk/uksi/1998/2307/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Lifting Operations and Lifting Equipment Regulations 1998 (LOLER)</a>
+            , every forklift must have a current thorough examination certificate. The hire company is responsible for providing this. Check that the certificate is in date and covers the specific machine delivered.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-4">
+          <p className="font-extrabold text-gray-900">PUWER Compliance</p>
+          <Paragraph>The machine must be suitable for its intended use, in safe working order, and accompanied by adequate operator information. If the forklift arrives damaged, with worn tyres, fluid leaks, or missing safety devices, reject it and contact the supplier.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Site Requirements, and Fuel</H2>
+      <BulletList
+        items={[
+          'Delivery: Counterbalance forklifts arrive on a flatbed with ramps. Telehandlers may self-drive off a low-loader. Electric reach trucks need tail-lift delivery. Most depots offer same-day or next-day.',
+          'Charging (electric): You\'ll need a 240V or 3-phase charging point on site. Machines arrive charged; overnight charging is required for multi-day hires.',
+          'Fuel (diesel/LPG): Diesel forklifts are typically delivered with a full tank. LPG trucks use standard propane bottles, available from the hire company or your own gas supplier.',
+          'Operated hire: Available for short-term jobs. The supplier provides a trained operator with the machine — this eliminates your training and supervision obligations under PUWER.',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Forklift Hire vs Buying — When Hire Makes Sense</H2>
+      <Paragraph>
+        Hire is the sharper option when you need a forklift for a defined project, a seasonal peak, or a one-off heavy delivery. You avoid capital outlay, LOLER examination costs, maintenance, insurance, and depreciation. Based on Tooli.uk comparison data, hire typically breaks even against purchase at around 200–220 working days per year for a standard counterbalance. Below that threshold, hire wins.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Compare Forklift Hire Near You</H2>
+      <Paragraph>Tooli.uk compares forklift hire from suppliers across the UK. Browse by city:</Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh', 'Bristol', 'Liverpool', 'Sheffield', 'Newcastle', 'Nottingham', 'Leicester'].map((city) => (
+          <span key={city} className="rounded-full bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700">{city}</span>
+        ))}
+      </div>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          {' '}— counterbalance, telehandler, and rough terrain forklift hire from local depots and national suppliers, side by side.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const equipmentPages: EquipmentPageData[] = [
   {
     slug: 'excavator-hire-uk',
@@ -3282,6 +3475,29 @@ export const equipmentPages: EquipmentPageData[] = [
       { name: 'Air Compressor Hire UK', path: '/equipment/air-compressor-hire-uk' },
     ],
     content: smallScissorLiftContent,
+  },
+  {
+    slug: 'forklift-hire-comparison-uk',
+    name: 'Forklift Hire',
+    path: '/equipment/forklift-hire-comparison-uk',
+    metaTitle: 'Forklift Hire Comparison UK — Best Rates (2026) | Tooli.uk',
+    metaDescription:
+      'Compare forklift hire rates from 100+ UK suppliers in seconds. Counterbalance, telehandler & rough terrain. No obligation quotes, local depots. Try Tooli.uk free.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/forklift-hire-comparison-uk',
+    title: 'Forklift Hire Comparison — Find the Best UK Rates Near You',
+    description:
+      'Compare forklift hire prices across vetted UK suppliers — counterbalance, reach truck, telehandler, and rough terrain models available by the day, week, or month.',
+    image: '/images/forklift-hire-comparison-uk.webp',
+    imageAlt: 'Diesel counterbalance forklift unloading pallets of bricks on a UK construction site',
+    faqs: forkliftFaqs,
+    relatedEquipment: [
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+      { name: 'Excavator Hire UK', path: '/equipment/excavator-hire-uk' },
+      { name: 'Scissor Lift Hire UK', path: '/equipment/scissor-lift-hire-uk' },
+      { name: 'Cherry Picker Hire UK', path: '/equipment/cherry-picker-hire-uk' },
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+    ],
+    content: forkliftContent,
   },
 ];
 
