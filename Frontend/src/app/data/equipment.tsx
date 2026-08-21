@@ -1817,6 +1817,219 @@ const forkliftContent = (
   </>
 );
 
+const cementMixerFaqs = [
+  {
+    question: 'What size cement mixer should I hire?',
+    answer:
+      'For most domestic and single-trade jobs (patios, fence posts, garden walls), a 130–150L full-bag electric mixer is the standard choice. For larger pours or bricklaying gangs, go 200L or above. For small patch repairs and post holes, a 60–90L half-bag mixer is sufficient.',
+  },
+  {
+    question: 'Do I need training to use a cement mixer?',
+    answer:
+      'No formal licence or training certificate is required. However, you should be familiar with safe operation (never reach into a running drum, keep loose clothing clear, use the correct PPE for cement handling). HSE COSHH guidance applies to anyone working with cement products.',
+  },
+  {
+    question: 'Can I mix plaster in a cement mixer?',
+    answer:
+      'Standard drum mixers are designed for concrete, mortar, and render. For gypsum plaster, self-levelling compound, or resin-bound materials, a forced-action (paddle) mixer gives a better, lump-free consistency. Check with the hire supplier.',
+  },
+  {
+    question: 'How do I clean a cement mixer after use?',
+    answer:
+      'Add water and a few shovels of gravel to the drum and run the mixer for two to three minutes. Tip out the slurry, rinse, and repeat if needed. Never let cement dry inside the drum.',
+  },
+  {
+    question: 'Electric or petrol — which should I hire?',
+    answer:
+      "If you have mains power, go electric. It's quieter, lighter, and has no fuel costs. Petrol is only necessary when working on sites without power supply or in remote outdoor locations.",
+  },
+  {
+    question: 'Can I hire a cement mixer for just one day?',
+    answer:
+      'Yes. Single-day hire is the most common booking type for cement mixers, especially for DIY projects. Weekend hire is also widely available and typically better value than two separate day hires.',
+  },
+];
+
+const cementMixerContent = (
+  <>
+    <Section>
+      <H2>Cement Mixer Hire Comparison — Find the Cheapest UK Rates</H2>
+      <Paragraph>
+        Cement mixer hire in the UK covers electric and petrol models from 60-litre portable drums up to 300-litre site mixers, available by the day, weekend, week, or month. Cement mixers are one of the most commonly hired pieces of kit across UK construction, used for mixing concrete, mortar, screed, and render on jobs ranging from garden patios to house extensions. No licence or formal training is required to operate a standard cement mixer, though HSE guidance on manual handling and COSHH applies when working with cement-based products.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Cement mixers are hired in drum sizes from 60 litres (wheelbarrow-scale batches) to 300 litres (site-scale continuous mixing)',
+            'Available as 240V electric (domestic and indoor jobs) or petrol-engine models (sites without mains power)',
+            'No licence or operator card is needed, but users must follow HSE COSHH guidance on cement dust and wet cement skin contact',
+            'Half-bag and full-bag mixers refer to how many 25 kg bags of cement the drum handles per batch',
+            'Weekend hire rates for a standard 130L electric mixer are typically 30–40% cheaper than two single-day hires',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <img
+      src="/images/cement-mixer-hire-comparison-uk.webp"
+      alt="130-litre electric cement mixer on a UK patio laying job with wheelbarrow alongside"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>What Can You Do With a Hired Cement Mixer?</H2>
+      <div className="space-y-3">
+        {[
+          ['Concrete Work', 'Mixing concrete for footings, fence post holes, shed bases, step foundations, and small slab pours. For anything over 2–3 m³, volumetric or ready-mix delivery is usually more practical, but a hired mixer handles small to medium pours efficiently.'],
+          ['Mortar for Bricklaying and Blockwork', 'Mixing mortar for brick and block walls, garden walls, retaining walls, and pointing. A 130–150L mixer keeps a single bricklayer supplied. Larger gangs need a 200L+ drum or two smaller mixers running in parallel.'],
+          ['Rendering and Plastering', 'Mixing scratch coat and top coat render. Some plasterers prefer a forced-action mixer for plaster and render consistency, but a standard drum mixer handles traditional sand-and-cement render well.'],
+          ['Screeding', 'Mixing sand-and-cement floor screed for levelling floors before tiling, carpet, or vinyl. For large floor areas, a screed pump hire is more efficient, but a mixer handles room-by-room work.'],
+          ['Landscaping and Groundworks', 'Mixing concrete for fence post bases, gate post footings, raised bed foundations, and drainage channel bedding. Garden landscapers and groundworkers regularly hire cement mixers for short-duration site work.'],
+        ].map(([title, desc]) => (
+          <div key={title} className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+            <p className="text-sm font-black text-gray-800">{title}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Cement Mixer Available for Hire</H2>
+      <DataTable
+        headers={['Type', 'Drum Size', 'Power', 'Best For']}
+        rows={[
+          ['Portable electric (half-bag)', '60–90 L', '240V mains', 'Small domestic jobs, patching, repairs, fence posts'],
+          ['Standard electric (full-bag)', '130–150 L', '240V mains', 'Patios, garden walls, small footings, single-trade work'],
+          ['Large electric', '180–200 L', '240V mains', 'Larger domestic and light commercial, bricklaying gangs'],
+          ['Petrol site mixer', '200–300 L', 'Petrol engine', 'Sites without mains power, larger commercial work'],
+          ['Diesel site mixer', '200–300 L', 'Diesel engine', 'Heavy commercial sites, continuous mixing'],
+        ]}
+      />
+      <div className="rounded-xl border border-gray-100 bg-white p-4">
+        <p className="font-extrabold text-gray-900">What does "half-bag" and "full-bag" mean?</p>
+        <Paragraph>A "half-bag" mixer handles half a standard 25 kg bag of cement per batch (plus sand and water). A "full-bag" mixer handles a full 25 kg bag per batch. Full-bag (130–150L) is the most popular hire size in the UK for trade and DIY work.</Paragraph>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>How to Choose the Right Cement Mixer</H2>
+      <div className="space-y-3">
+        {[
+          ['Batch size', 'How much mixed material do you need per pour? A 130L drum produces roughly 90–100L of usable mix per batch (drums are never filled to capacity). For continuous bricklaying, that\'s enough to keep one tradesperson productive.'],
+          ['Power source', 'If you have mains power on site, electric is quieter, lighter, and simpler. No mains? Hire a petrol model. For 110V site supply, check the supplier stocks site-compatible voltage.'],
+          ['Portability', 'Smaller electric mixers weigh 40–60 kg and have wheels for one-person movement. Large site mixers (200L+) weigh 100–200 kg and need two people or a forklift to reposition.'],
+          ['Material type', 'Standard drum mixers handle concrete, mortar, and render. For plasters, self-levelling compounds, or resin-bound mixes, you may need a forced-action (paddle) mixer instead. Check with the supplier if mixing anything other than standard cement-based products.'],
+          ['Duration', 'Most suppliers offer day, weekend, week, and month rates. If your project runs beyond a few days, weekly hire almost always works out cheaper per day than daily bookings.'],
+        ].map(([label, detail]) => (
+          <div key={label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{label}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{detail}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <img
+      src="/images/cement-mixer-hire-comparison.webp"
+      alt="Petrol site cement mixer running on a residential extension build with mortar being loaded"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>Safety and HSE Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>COSHH — Cement Dust and Skin Contact</H3>
+          <Paragraph>
+            Cement is a{' '}
+            <a href="https://www.hse.gov.uk/coshh/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">COSHH-controlled substance</a>
+            . Wet cement and dry cement dust cause serious skin burns (cement dermatitis) and respiratory irritation. HSE guidance requires:
+          </Paragraph>
+          <BulletList
+            items={[
+              'Wearing waterproof gloves and long sleeves when handling cement and mixed mortar',
+              'Using a dust mask (FFP2 minimum) when opening bags and dry-mixing',
+              'Washing cement off skin immediately',
+              'Storing cement bags under cover to prevent bag degradation and uncontrolled dust release',
+            ]}
+          />
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Manual Handling</H3>
+          <Paragraph>
+            Loading sand and aggregate into a mixer involves repetitive heavy lifting. Follow{' '}
+            <a href="https://www.hse.gov.uk/manual-handling/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE manual handling guidelines</a>
+            : use a shovel rather than lifting bags overhead, position materials close to the mixer, and take regular breaks.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Electrical Safety</H3>
+          <Paragraph>240V electric mixers used outdoors must be connected via an RCD (residual current device). On construction sites, 110V site-supply models are preferable under BS 7671 wiring regulations. Never use a damaged cable or extension lead.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Noise</H3>
+          <Paragraph>
+            Petrol and diesel mixers can exceed 85 dB, triggering the{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Control of Noise at Work Regulations 2005</a>
+            . Wear hearing protection when operating a petrol mixer for extended periods, and inform neighbours on residential jobs.
+          </Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and Practical Notes</H2>
+      <BulletList
+        items={[
+          'Delivery: Smaller electric mixers fit in a van and are available for self-collection from most depots. Larger site mixers are delivered by flatbed or tail-lift vehicle.',
+          "Collection: Arranged at the end of hire. Clean the drum before return to avoid cleaning charges.",
+          "Fuel: Petrol models are usually delivered fuelled. You'll be expected to return them with a full tank or pay a refuelling charge.",
+          "Cleaning: Always clean the drum, paddles, and chute after each use and especially before return. Dried concrete inside the drum is the number one cause of additional charges on cement mixer hires.",
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Cement Mixer Hire vs Buying</H2>
+      <Paragraph>
+        For tradespeople who mix daily, owning a mixer is the obvious choice. For DIYers running a one-off project (a patio, a garden wall, a shed base) or small builders who only need a mixer intermittently, hire avoids the purchase cost, storage space, and the inevitable seized drum that comes from leaving a mixer in a damp garage for six months. The breakeven point sits at roughly 25–30 hire days per year for a standard 130L electric model.
+      </Paragraph>
+    </Section>
+
+    <Section>
+      <H2>Compare Cement Mixer Hire Near You</H2>
+      <Paragraph>Tooli.uk compares cement mixer hire from suppliers across the UK. Browse by city:</Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh', 'Bristol', 'Liverpool', 'Sheffield', 'Newcastle', 'Nottingham', 'Leicester'].map((city) => (
+          <span key={city} className="rounded-full bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700">{city}</span>
+        ))}
+      </div>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          {' '}— electric and petrol cement mixer hire from local depots and national suppliers, side by side.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const equipmentPages: EquipmentPageData[] = [
   {
     slug: 'excavator-hire-uk',
@@ -3498,6 +3711,29 @@ export const equipmentPages: EquipmentPageData[] = [
       { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
     ],
     content: forkliftContent,
+  },
+  {
+    slug: 'cement-mixer-hire-comparison-uk',
+    name: 'Cement Mixer Hire',
+    path: '/equipment/cement-mixer-hire-comparison-uk',
+    metaTitle: 'Cement Mixer Hire Comparison — Best UK Rates (2026) | Tooli.uk',
+    metaDescription:
+      'Compare cement mixer hire from local UK suppliers. Electric & petrol, 60L to 300L drums. No-obligation quotes, same-day availability. Compare free on Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/cement-mixer-hire-comparison-uk',
+    title: 'Cement Mixer Hire Comparison — Find the Cheapest UK Rates',
+    description:
+      'Compare cement mixer hire prices from local and national UK suppliers. Electric and petrol models, 60L to 300L drum sizes, available by the day, weekend, week, or month.',
+    image: '/images/cement-mixer-hire-comparison-uk.webp',
+    imageAlt: '130-litre electric cement mixer on a UK patio laying job with wheelbarrow alongside',
+    faqs: cementMixerFaqs,
+    relatedEquipment: [
+      { name: 'Excavator Hire UK', path: '/equipment/excavator-hire-uk' },
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+      { name: 'Compactor Hire UK', path: '/equipment/compactor-hire-uk' },
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+      { name: 'Air Compressor Hire UK', path: '/equipment/air-compressor-hire-uk' },
+    ],
+    content: cementMixerContent,
   },
 ];
 
