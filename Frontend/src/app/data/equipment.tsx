@@ -2437,6 +2437,225 @@ const plateCompactorContent = (
   </>
 );
 
+const miniDiggerFaqs = [
+  {
+    question: 'Do I need a CPCS card to hire a mini digger?',
+    answer:
+      'For work on commercial construction sites operating under CDM 2015, yes. A CPCS or NPORS card for Category A58 (Compact Excavator below 5t) is the standard requirement. For private domestic use on your own property, no formal certification is legally required, though hire companies may ask about your experience.',
+  },
+  {
+    question: 'What size mini digger fits through a garden gate?',
+    answer:
+      'Micro diggers (0.8–1 tonne) can be as narrow as 700 mm, which fits through most standard garden gates (typically 900 mm wide). A 1.5-tonne machine is usually 990–1,200 mm wide and may need the gate removed or a wider access point. Always measure before booking.',
+  },
+  {
+    question: 'How deep can a mini digger dig?',
+    answer:
+      'A 1.5-tonne mini digger typically digs to 2.0–2.5 m depth. A 3-tonne machine reaches 3–3.5 m. A 5–6 tonne midi digger reaches 4–4.5 m. For standard domestic foundations (900 mm–1.2 m), a 1.5-tonne machine is more than sufficient.',
+  },
+  {
+    question: 'Should I hire a mini digger with an operator?',
+    answer:
+      "If you're experienced and hold the relevant CPCS or NPORS card, self-drive is cheaper. If you've never operated a digger, operated hire is strongly recommended. An experienced operator will typically complete the work faster and with less risk of damage to the machine, underground services, or surrounding property.",
+  },
+  {
+    question: 'What attachments can I hire with a mini digger?',
+    answer:
+      'Common hire attachments include grading (ditching) buckets, breaker/peckers, auger drives (for post holes and piling), grab buckets, riddle buckets, and thumb grabs. Confirm compatibility with the specific machine model before booking. Attachments are priced separately.',
+  },
+  {
+    question: 'Can I use a mini digger to dig foundations for an extension?',
+    answer:
+      'Yes. A 1.5–3 tonne mini digger handles the vast majority of domestic foundation excavations. Building control will inspect the trench depth and formation before concrete is poured. Ensure you have located all underground services with a CAT scanner before digging.',
+  },
+];
+
+const miniDiggerContent = (
+  <>
+    <Section>
+      <H2>Mini Digger Hire Comparison — Best UK Rates From Local Suppliers</H2>
+      <Paragraph>
+        Mini digger hire in the UK covers micro excavators (under 1 tonne) through to 6-tonne midi excavators, available for self-drive or operated hire by the day, week, or month. Mini diggers are the most commonly hired piece of plant on UK building and landscaping sites, used for digging foundations, trenches, drainage runs, driveways, and garden projects. Operating a mini digger on a commercial construction site in the UK typically requires a CPCS (Construction Plant Competence Scheme) or NPORS card, though no licence is needed for private domestic use. Tooli.uk compares mini digger hire prices from vetted local and national suppliers so you can find the right machine and the best rate for your postcode.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Mini diggers (mini excavators) range from 0.8-tonne micro diggers that fit through garden gates to 6-tonne machines for serious groundworks',
+            'Available as self-drive (you operate) or operated hire (supplier provides a trained driver) across the UK',
+            'CPCS or NPORS certification is the industry standard for operating on commercial and construction sites',
+            'Tracked models are standard; wheeled mini diggers are available for road-legal travel between close sites',
+            'Based on Tooli.uk network data, mini digger hire is the highest-volume plant hire category in the UK, with the 1.5-tonne being the most frequently booked size class',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <img
+      src="/images/mini-digger-hire-comparison-uk.webp"
+      alt="1.5-tonne mini digger excavating strip foundations for a UK house extension"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>What Can You Do With a Hired Mini Digger?</H2>
+      <div className="space-y-3">
+        {[
+          ['Foundations and Footings', 'Digging strip foundations, pad foundations, and trench-fill footings for house extensions, garages, garden rooms, and outbuildings. A 1.5–3 tonne mini digger handles the vast majority of domestic and small commercial foundation work.'],
+          ['Drainage and Services', 'Excavating trenches for foul and surface water drainage, soakaways, septic tank installation, water mains connections, and cable ducting. Trench depths of 1–2.5 metres are well within the capability of a 1.5-tonne machine.'],
+          ['Driveways and Hard Landscaping', 'Stripping topsoil, excavating to formation level, shaping sub-bases, and grading surfaces for driveways, patios, paths, and parking areas.'],
+          ['Garden Landscaping', 'Digging ponds, levelling ground, creating terraces, moving soil and aggregate, and excavating for retaining walls, raised beds, and planting areas. Micro diggers (0.8–1 t) fit through standard garden gates and side passages.'],
+          ['Demolition and Site Clearance', 'Pulling down low walls, breaking out old concrete (with breaker attachment), removing tree stumps, and clearing overgrown land.'],
+          ['Utility and Civil Works', 'Digging for gas, electric, water, and telecoms installations. Excavating road crossings, footpath reinstatements, and chamber bases.'],
+        ].map(([title, desc]) => (
+          <div key={title} className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+            <p className="text-sm font-black text-gray-800">{title}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Mini Digger Available for Hire</H2>
+      <DataTable
+        headers={['Size Class', 'Operating Weight', 'Dig Depth', 'Best For']}
+        rows={[
+          ['Micro digger (0.8–1 t)', '700–1,000 kg', '1.2–1.7 m', 'Garden access, tight spaces, indoor demolition, small trenches'],
+          ['Mini excavator (1.5 t)', '1,400–1,700 kg', '2.0–2.5 m', 'Domestic foundations, drainage, driveways, landscaping'],
+          ['Mini excavator (2.5–3 t)', '2,500–3,200 kg', '2.8–3.5 m', 'Larger foundations, deeper services, commercial groundworks'],
+          ['Midi excavator (4–6 t)', '4,000–6,000 kg', '3.5–4.5 m', 'Deep drainage, road works, larger site clearance, demolition'],
+        ]}
+      />
+      <div className="rounded-xl border border-gray-100 bg-white p-4">
+        <p className="font-extrabold text-gray-900">Zero Tail Swing vs Conventional</p>
+        <Paragraph>
+          Zero tail swing (ZTS) mini diggers have a cab that does not overhang the tracks when rotating — critical for working against walls, fences, and in confined spaces. Most modern hire-fleet machines are ZTS. Conventional tail swing machines overhang by 200–400 mm, which limits use next to boundaries. If you are digging next to a house wall, fence, or neighbouring property, specify zero tail swing when booking.
+        </Paragraph>
+      </div>
+    </Section>
+
+    <img
+      src="/images/mini-digger-hire-comparison.webp"
+      alt="Micro digger being tracked through a narrow garden side passage for landscaping work"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>How to Choose the Right Mini Digger</H2>
+      <div className="space-y-3">
+        {[
+          ['Dig depth required', 'Measure the deepest excavation you need. Standard domestic foundations are 900 mm–1.2 m deep, which any 1.5-tonne machine handles easily. Deeper drainage runs (2–3 m) need a 2.5–3 tonne machine. Anything over 4 m depth pushes into midi excavator territory.'],
+          ['Access width', 'Micro diggers can be as narrow as 700 mm (fits through a standard garden gate). A 1.5-tonne machine is typically 990–1,200 mm wide. Measure your narrowest access point, including gates, side passages, and gaps between buildings.'],
+          ['Ground conditions', 'All mini diggers run on rubber tracks, which distribute weight well on soft ground. However, very wet, boggy, or sloped sites may need a machine with steel tracks or wider track pads. Rubber tracks also reduce damage to existing driveways and lawns compared to steel.'],
+          ['Attachments needed', 'Standard hire includes a digging bucket (typically 300–450 mm width). Grading buckets, breaker attachments, auger drives, grab buckets, and riddle buckets are available as add-ons. Confirm attachment compatibility with the specific machine model before booking.'],
+          ['Self-drive or operated', 'Self-drive hire is cheaper, but you need competence (and CPCS or NPORS for site work). Operated hire costs more per day but includes a trained driver who knows the machine, which can increase productivity and reduce the risk of accidental damage.'],
+        ].map(([label, detail]) => (
+          <div key={label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{label}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{detail}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>CPCS, NPORS, and Operator Requirements</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Do You Need a CPCS Card?</H3>
+          <Paragraph>
+            On UK construction sites operating under CDM 2015, clients and principal contractors typically require all plant operators to hold a valid{' '}
+            <a href="https://cpcs.uk.com/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">CPCS card</a>
+            {' '}for the relevant machine category.
+          </Paragraph>
+          <DataTable
+            headers={['CPCS Category', 'Machine']}
+            rows={[
+              ['A58 — Compact Excavator (below 5t)', 'All mini and micro excavators below 5 tonnes'],
+              ['A59 — Excavator 180° (above 5t)', 'Larger machines; not typically classed as "mini"'],
+            ]}
+          />
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>NPORS as an Alternative</H3>
+          <Paragraph>NPORS (National Plant Operators Registration Scheme) is an accepted alternative to CPCS on many sites, particularly for non-CITB-registered employers. Check with the site's principal contractor which scheme they accept.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Private and Domestic Use</H3>
+          <Paragraph>For work on your own property (digging a garden pond, laying a patio base, trenching for a drainage pipe), no formal certification is required. However, hire companies may ask about your experience and some require a signed declaration of competence before releasing a machine.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Safety, Regulations, and Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>PUWER 1998</H3>
+          <Paragraph>The mini digger must be suitable for its intended use, in safe working order, and operated by a competent person. The hire company is responsible for maintenance and thorough examination; you are responsible for daily pre-use checks and competent operation.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Excavation Safety</H3>
+          <Paragraph>
+            Any trench deeper than 1.2 metres should be shored, battered back, or benched to prevent collapse, following{' '}
+            <a href="https://www.hse.gov.uk/construction/safetytopics/excavations.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE excavation guidance</a>
+            . Never enter an unsupported trench, even briefly. Underground services (gas, electric, water, telecoms) must be located using a CAT (cable avoidance tool) and Genny before any excavation. See{' '}
+            <a href="https://www.hse.gov.uk/pubns/books/hsg47.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSG47 — Avoiding Danger from Underground Services</a>
+            .
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Delivery Access</H3>
+          <Paragraph>Mini diggers arrive on a flatbed lorry with a ramp or low-loader trailer. The delivery vehicle needs adequate road width, overhead clearance, and a firm surface for off-loading. Confirm delivery access when booking.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and What's Included</H2>
+      <BulletList
+        items={[
+          'Delivery: Flatbed or low-loader, typically same-day or next-day from local depots. Self-collection by trailer is available from some suppliers.',
+          'Fuel: Diesel machines are usually delivered with a full tank. Return full or pay a refuelling charge.',
+          'Buckets: A standard digging bucket (300–450 mm) is included. Additional bucket widths, grading buckets, and breaker attachments are hired separately.',
+          'CAT scanner: Some suppliers include a cable avoidance tool; many do not. Hire one separately if working near underground services.',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Compare Mini Digger Hire Near You</H2>
+      <Paragraph>Tooli.uk compares mini digger hire from suppliers across the UK. Browse by city:</Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh', 'Bristol', 'Liverpool', 'Sheffield', 'Cardiff', 'Newcastle', 'Nottingham', 'Leicester', 'Southampton', 'Brighton'].map((city) => (
+          <span key={city} className="rounded-full bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700">{city}</span>
+        ))}
+      </div>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          {' '}— micro, mini, and midi excavator hire from local depots and national suppliers, side by side.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const equipmentPages: EquipmentPageData[] = [
   {
     slug: 'excavator-hire-uk',
@@ -4189,6 +4408,29 @@ export const equipmentPages: EquipmentPageData[] = [
       { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
     ],
     content: plateCompactorContent,
+  },
+  {
+    slug: 'mini-digger-hire-comparison-uk',
+    name: 'Mini Digger Hire',
+    path: '/equipment/mini-digger-hire-comparison-uk',
+    metaTitle: 'Mini Digger Hire UK — Compare Rates Locally (2026) | Tooli.uk',
+    metaDescription:
+      'Compare mini digger hire from UK suppliers. 0.8t to 6t micro and mini excavators. Self-drive or operated. Same-day local quotes. Compare free on Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/mini-digger-hire-comparison-uk',
+    title: 'Mini Digger Hire Comparison — Best UK Rates From Local Suppliers',
+    description:
+      'Compare mini digger hire prices from local and national UK suppliers. Micro, mini, and midi excavators from 0.8t to 6t, self-drive or operated, by the day, week, or month.',
+    image: '/images/mini-digger-hire-comparison-uk.webp',
+    imageAlt: '1.5-tonne mini digger excavating strip foundations for a UK house extension',
+    faqs: miniDiggerFaqs,
+    relatedEquipment: [
+      { name: 'Excavator Hire UK', path: '/equipment/excavator-hire-uk' },
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+      { name: 'Plate Compactor Hire UK', path: '/equipment/plate-compactor-hire-comparison-uk' },
+      { name: 'Concrete Breaker Hire UK', path: '/equipment/concrete-breaker-hire-comparison-uk' },
+      { name: 'Cement Mixer Hire UK', path: '/equipment/cement-mixer-hire-comparison-uk' },
+    ],
+    content: miniDiggerContent,
   },
 ];
 
