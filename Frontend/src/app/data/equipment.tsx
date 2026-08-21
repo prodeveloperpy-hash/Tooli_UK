@@ -2030,6 +2030,209 @@ const cementMixerContent = (
   </>
 );
 
+const concreteBreakerfaqs = [
+  {
+    question: 'Do I need a licence to use a concrete breaker?',
+    answer:
+      'No licence is required for hand-held electric, petrol, or pneumatic breakers. You do need a CPCS card to operate an excavator-mounted hydraulic breaker, because that requires operating the excavator itself. HSE expects all operators to be competent and trained in safe use, vibration awareness, and relevant PPE.',
+  },
+  {
+    question: 'What size breaker do I need to break up a concrete patio?',
+    answer:
+      'A standard unreinforced patio slab (75–100 mm thick) can be broken with a medium electric breaker (12–16 kg). If the slab is thicker than 150 mm, reinforced with mesh or rebar, or poured onto a deep sub-base, step up to a heavy-duty breaker (20–30 kg) or consider a hydraulic excavator-mounted breaker for speed.',
+  },
+  {
+    question: 'How long can I use a breaker before hitting vibration limits?',
+    answer:
+      "It depends on the machine's declared vibration value. A typical heavy electric breaker with a vibration level of 15–20 m/s² reaches the HSE action value (2.5 m/s²) in roughly 15–30 minutes and the exposure limit (5 m/s²) in 1–2 hours. Lighter breakers with lower vibration levels allow longer daily use. Always check the specific machine's data sheet.",
+  },
+  {
+    question: 'Electric or petrol breaker — which should I hire?',
+    answer:
+      "Electric (110V) is the default for most UK site work. It's lighter, produces no exhaust fumes, and can be used indoors. Petrol breakers suit remote outdoor jobs with no power supply, road works, and agricultural sites.",
+  },
+  {
+    question: 'What PPE do I need when using a concrete breaker?',
+    answer:
+      'At minimum: hearing protection (mandatory above 85 dB), eye protection (safety glasses or goggles), dust mask (FFP3 if breaking concrete due to silica risk), steel-toecap boots, heavy-duty gloves, and anti-vibration gloves. A hard hat is required on all UK construction sites.',
+  },
+  {
+    question: 'Can I hire a breaker for just a few hours?',
+    answer:
+      "Most hire companies charge a minimum of one day. Some offer half-day rates, but these aren't universal. If your job genuinely needs only a couple of hours, a day hire is still your most practical option.",
+  },
+];
+
+const concreteBreakercontent = (
+  <>
+    <Section>
+      <H2>Concrete Breaker Hire Comparison — Best UK Rates Near You</H2>
+      <Paragraph>
+        Concrete breaker hire in the UK covers electric, petrol, pneumatic, and hydraulic breakers for demolition, breaking out concrete, cutting tarmac, and removing hard landscaping. Also known as demolition hammers, Kango hammers, or jackhammers, breakers are available in light-duty (5–10 kg) to heavy-duty (30+ kg) sizes for jobs ranging from chasing walls to breaking up reinforced concrete slabs. No licence is required to operate a hand-held breaker, but HSE regulations on vibration (HAV), noise, and dust apply to every UK job. Tooli.uk compares breaker hire prices from local and national suppliers so you can find the right machine without overpaying.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Breakers are available as electric (240V / 110V), petrol, pneumatic (requires a compressor), and hydraulic (excavator-mounted) models',
+            'Light-duty electric breakers (5–12 kg) handle chasing, tile removal, and light concrete; heavy-duty breakers (25–35 kg) handle reinforced slabs, foundations, and road surfaces',
+            'HSE Hand-Arm Vibration (HAV) Regulations 2005 limit daily exposure to 2.5 m/s² action value and 5 m/s² exposure limit — trigger times vary by machine',
+            'No formal licence is needed for hand-held breakers, but excavator-mounted hydraulic breakers require CPCS or equivalent plant certification',
+            'Based on Tooli.uk network data, electric breakers account for over 70% of hire bookings, with pneumatic models most popular on larger commercial sites',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <img
+      src="/images/concrete-breaker-hire-comparison-uk.webp"
+      alt="Tradesperson using a heavy-duty electric breaker to break up a reinforced concrete slab on a UK building site"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>What Can You Do With a Hired Concrete Breaker?</H2>
+      <div className="space-y-3">
+        {[
+          ['Demolition and Strip-Out', 'Breaking up concrete floors, slabs, paths, drives, and footings. Removing concrete lintels, steps, and bases. Stripping concrete render from walls.'],
+          ['Groundworks', 'Breaking through existing hard surfaces to dig foundations, drainage trenches, and service runs. Removing old kerbs, channels, and concrete haunching.'],
+          ['Road and Pavement Work', 'Cutting out tarmac and asphalt for utility repairs, drain access, and reinstatement. Breaking up pavement slabs and concrete road surfaces.'],
+          ['Interior Renovation', 'Chasing channels in brick, block, and concrete walls for electrical and plumbing runs. Removing ceramic floor tiles and adhesive beds. Breaking out internal partition walls and concrete screeds.'],
+          ['Landscaping', 'Removing old concrete patios, bases, and hard landscaping features. Breaking up concrete fence post bases and old footings.'],
+        ].map(([title, desc]) => (
+          <div key={title} className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+            <p className="text-sm font-black text-gray-800">{title}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Concrete Breaker Available for Hire</H2>
+      <DataTable
+        headers={['Type', 'Weight', 'Power Source', 'Best For']}
+        rows={[
+          ['Light electric (SDS-max / Kango)', '5–12 kg', '240V / 110V', 'Chasing, tile removal, light blockwork, thin slabs'],
+          ['Medium electric demolition hammer', '12–20 kg', '110V site supply', 'General concrete slabs, paths, brick walls, medium demolition'],
+          ['Heavy electric breaker', '20–35 kg', '110V site supply', 'Thick concrete, reinforced slabs, foundations, heavy demolition'],
+          ['Petrol breaker', '20–30 kg', 'Petrol engine', 'Remote sites, road work, no power supply available'],
+          ['Pneumatic breaker', '15–35 kg', 'Air compressor (separate hire)', 'Large commercial sites, continuous heavy breaking, road works'],
+          ['Hydraulic breaker (excavator-mounted)', 'N/A — mounted', 'Excavator hydraulics', 'Major demolition, rock breaking, large-scale groundworks'],
+        ]}
+      />
+      <div className="rounded-xl border border-gray-100 bg-white p-4">
+        <p className="font-extrabold text-gray-900">Kango vs Breaker — What's the Difference?</p>
+        <Paragraph>"Kango" is a brand name (originally Kango Wolf) that has become a generic term in UK trades for any hand-held electric demolition hammer. When a hire company lists "Kango hammer," they mean a medium-duty electric breaker in the 5–15 kg range. It is the same equipment category.</Paragraph>
+      </div>
+    </Section>
+
+    <img
+      src="/images/concrete-breaker-hire-comparison.webp"
+      alt="Medium electric Kango hammer being used to chase a channel in a block wall for electrical conduit"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>How to Choose the Right Breaker</H2>
+      <div className="space-y-3">
+        {[
+          ['Material you are breaking', "Unreinforced concrete paths and garden slabs can be broken with a medium electric breaker (12–16 kg). Reinforced concrete, thick footings, and structural slabs need a heavy-duty model (20–35 kg) or a hydraulic excavator-mounted breaker. Brick and block walls break easily with a light Kango."],
+          ['Access and space', 'Indoor work and tight spaces suit lighter electric breakers. Outdoor ground-level work with vehicle access opens the door to heavier pneumatic or petrol models.'],
+          ['Power supply', 'If you have 110V site power, electric is the default choice. No power? Petrol breakers or pneumatic models (with a separate compressor hire) are the alternatives. For major demolition, an excavator with a hydraulic breaker attachment is the most productive option.'],
+          ['Vibration exposure', 'Every hand-held breaker produces hand-arm vibration (HAV). Under the Control of Vibration at Work Regulations 2005, the exposure action value is 2.5 m/s² and the exposure limit value is 5 m/s² (8-hour reference period). Heavier breakers generally have higher vibration levels and shorter daily trigger times. Check the supplier\'s vibration data and plan operator rotation accordingly.'],
+          ['Chisel and point selection', 'Breakers accept different steels — flat chisel (for cutting lines and channels), point (for general breaking), spade (for clay and soft material), and asphalt cutter. Most hire companies supply a point and flat chisel as standard. Specialist steels may carry an additional charge.'],
+        ].map(([label, detail]) => (
+          <div key={label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{label}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{detail}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Safety, Regulations, and HSE Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Hand-Arm Vibration (HAV) — The Critical One</H3>
+          <Paragraph>
+            HAV is the single biggest health risk from breaker use. Prolonged exposure causes Hand-Arm Vibration Syndrome (HAVS, also known as vibration white finger), which is permanent and irreversible. Under{' '}
+            <a href="https://www.hse.gov.uk/vibration/hav/index.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE HAV regulations</a>
+            , employers must assess vibration exposure, provide low-vibration equipment where possible, limit daily use, and carry out health surveillance for exposed workers. The hire company should supply the breaker's declared vibration value (m/s²) so you can calculate trigger times.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Dust and Silica (COSHH)</H3>
+          <Paragraph>
+            Breaking concrete generates respirable crystalline silica (RCS) dust, a serious long-term health hazard causing silicosis. HSE workplace exposure limits apply. Use water suppression, dust extraction, or RPE (FFP3 minimum for silica dust) when breaking concrete. See{' '}
+            <a href="https://www.hse.gov.uk/construction/healthrisks/dust-and-fumes/silica.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE silica dust guidance</a>
+            .
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Noise</H3>
+          <Paragraph>
+            Most breakers exceed 85 dB in operation, making hearing protection mandatory under the{' '}
+            <a href="https://www.legislation.gov.uk/uksi/2005/1643/contents" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">Control of Noise at Work Regulations 2005</a>
+            . Inform neighbours and consider restricted working hours on residential jobs.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Electrical Safety</H3>
+          <Paragraph>110V breakers connected through a centre-tapped earth transformer are required on UK construction sites under BS 7671. Never use a 240V breaker on an open site without proper risk assessment and RCD protection.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Excavator-Mounted Breakers</H3>
+          <Paragraph>Hydraulic breakers mounted on excavators require the operator to hold a valid CPCS (Construction Plant Competence Scheme) card for the excavator category. The breaker attachment must be compatible with the excavator's hydraulic flow and pressure ratings.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and Practical Notes</H2>
+      <BulletList
+        items={[
+          'Delivery: Light and medium breakers fit in a car boot or van and are available for self-collection. Heavy breakers (20 kg+) and pneumatic models are typically delivered.',
+          'Steels: Most suppliers include a point and flat chisel. Specialist steels (asphalt cutters, clay spades) may be hired separately. Check before booking.',
+          'Compressor (pneumatic breakers): Pneumatic breakers need a separate compressor hire. Ensure the compressor delivers enough CFM at the required PSI for the breaker model. The supplier can advise.',
+          'Cleaning: Return the breaker clean and free of concrete debris. Excessive caked-on concrete may attract a cleaning charge.',
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Compare Concrete Breaker Hire Near You</H2>
+      <Paragraph>Tooli.uk compares concrete breaker hire from suppliers across the UK. Browse by city:</Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh', 'Bristol', 'Liverpool', 'Sheffield', 'Cardiff', 'Newcastle', 'Nottingham', 'Leicester', 'Southampton', 'Brighton'].map((city) => (
+          <span key={city} className="rounded-full bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700">{city}</span>
+        ))}
+      </div>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          {' '}— electric, petrol, and pneumatic concrete breaker hire from local depots and national suppliers, side by side.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const equipmentPages: EquipmentPageData[] = [
   {
     slug: 'excavator-hire-uk',
@@ -3734,6 +3937,30 @@ export const equipmentPages: EquipmentPageData[] = [
       { name: 'Air Compressor Hire UK', path: '/equipment/air-compressor-hire-uk' },
     ],
     content: cementMixerContent,
+  },
+  {
+    slug: 'concrete-breaker-hire-comparison-uk',
+    name: 'Concrete Breaker Hire',
+    path: '/equipment/concrete-breaker-hire-comparison-uk',
+    metaTitle: 'Concrete Breaker Hire UK — Compare Local Rates (2026) | Tooli.uk',
+    metaDescription:
+      'Compare concrete breaker hire from UK suppliers. Electric, petrol & pneumatic. Kango hammers to hydraulic breakers. Same-day quotes, local depots. Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/concrete-breaker-hire-comparison-uk',
+    title: 'Concrete Breaker Hire Comparison — Best UK Rates Near You',
+    description:
+      'Compare concrete breaker hire prices from local and national UK suppliers. Electric, petrol, pneumatic, and hydraulic models for demolition, groundworks, and renovation.',
+    image: '/images/concrete-breaker-hire-comparison-uk.webp',
+    imageAlt:
+      'Tradesperson using a heavy-duty electric breaker to break up a reinforced concrete slab on a UK building site',
+    faqs: concreteBreakerfaqs,
+    relatedEquipment: [
+      { name: 'Excavator Hire UK', path: '/equipment/excavator-hire-uk' },
+      { name: 'Air Compressor Hire UK', path: '/equipment/air-compressor-hire-uk' },
+      { name: 'Cement Mixer Hire UK', path: '/equipment/cement-mixer-hire-comparison-uk' },
+      { name: 'Compactor Hire UK', path: '/equipment/compactor-hire-uk' },
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+    ],
+    content: concreteBreakercontent,
   },
 ];
 
