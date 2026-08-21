@@ -2656,6 +2656,229 @@ const miniDiggerContent = (
   </>
 );
 
+const boomLiftFaqs = [
+  {
+    question: "What's the difference between a boom lift and a scissor lift?",
+    answer:
+      "A boom lift has an articulated or telescopic arm that provides both vertical height and horizontal outreach, allowing operators to reach over and around obstacles. A scissor lift goes straight up with no outreach. Boom lifts suit tasks where the machine can't sit directly below the work area. Scissor lifts suit straight-up vertical access on flat ground.",
+  },
+  {
+    question: 'Do I need IPAF training to hire a boom lift?',
+    answer:
+      "For self-drive hire on commercial and construction sites, yes. IPAF Category 3b (Mobile Boom) is the recognised standard. Most hire companies require a valid IPAF PAL Card before releasing a machine. If no one on your team holds 3b, hire the machine with an operator.",
+  },
+  {
+    question: 'How high can a boom lift reach?',
+    answer:
+      'Articulated booms typically reach 12–28 metres working height. Telescopic booms reach 20–45+ metres. The most commonly hired size for UK construction work is 16–20 metres. Always confirm both working height and outreach at height with the supplier.',
+  },
+  {
+    question: 'Can I use a boom lift indoors?',
+    answer:
+      'Yes, but only an electric or hybrid-powered model. Diesel boom lifts produce exhaust fumes and noise levels unsuitable for enclosed spaces. Check ceiling heights, floor loading capacity, and access doorway dimensions before booking an indoor boom lift.',
+  },
+  {
+    question: 'What wind speed stops boom lift work?',
+    answer:
+      'Most boom lifts have a maximum operating wind speed of 28 mph (Beaufort Force 6). Above this, the platform must be lowered and operations suspended. Wind speeds at height are often significantly stronger than at ground level, so operators should monitor conditions continuously.',
+  },
+  {
+    question: 'Is a harness compulsory in a boom lift?',
+    answer:
+      "Yes. A full body harness and short restraint lanyard are mandatory for all boom lift operation in the UK. The harness is anchored to the basket's designated attachment point. This is a non-negotiable safety requirement under IPAF, HSE guidance, and most site safety plans.",
+  },
+];
+
+const boomLiftContent = (
+  <>
+    <Section>
+      <H2>Boom Lift Hire Comparison — Articulated &amp; Telescopic Rates Across the UK</H2>
+      <Paragraph>
+        Boom lift hire in the UK covers articulated and telescopic mobile elevating work platforms (MEWPs) for safe access to heights between 12 and 45+ metres. Boom lifts are hired for construction, cladding, building maintenance, steel erection, and industrial access where scaffolding is impractical or too slow to erect. IPAF Category 3b training is required for self-drive operation on UK commercial sites. Hire is available by the day, week, or month, with self-drive and operated options from local and national suppliers. Tooli.uk compares boom lift hire prices across vetted UK suppliers to help you find the right working height and outreach for your project.
+      </Paragraph>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6 space-y-3">
+        <p className="text-sm font-black uppercase tracking-wide text-brand-primary">At a Glance</p>
+        <ul className="space-y-2">
+          {[
+            'Boom lifts provide working heights from 12 metres to over 45 metres, with horizontal outreach that lets operators reach over and around obstacles',
+            'Available as articulated (jointed arm for up-and-over reach) and telescopic (straight arm for maximum height and reach)',
+            'IPAF Category 3b (Mobile Boom) is the recognised operator training standard for self-drive boom lifts on UK commercial and construction sites',
+            'Diesel, electric, and hybrid power options are available, with electric models required for indoor or emission-sensitive environments',
+            'Based on Tooli.uk network data, the 16–20 metre articulated boom is the most frequently hired size class for UK construction and maintenance work',
+          ].map((item) => (
+            <li key={item} className="flex items-start gap-2 text-sm font-medium text-gray-600">
+              <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Section>
+
+    <img
+      src="/images/boom-lift-hire-comparison-uk.webp"
+      alt="Diesel articulated boom lift being used for cladding installation on a UK commercial building"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>What Can You Do With a Hired Boom Lift?</H2>
+      <div className="space-y-3">
+        {[
+          ['Construction and Structural Work', 'Installing steel frames, cladding panels, curtain walling, and external building envelopes at height. Positioning roofing materials, fascia boards, and rainwater goods above scaffold-safe reach. Accessing structural connections for inspection, bolting, and welding.'],
+          ['Building Maintenance and Repair', 'Reaching external facades, windows, gutters, and roof edges for cleaning, repair, and repainting. Accessing hard-to-reach areas on commercial and industrial buildings where scaffolding would take days to erect for a job lasting hours.'],
+          ['Industrial and Warehouse Access', 'Reaching overhead crane rails, purlins, roof structures, and high-level M&E services in factories, warehouses, and distribution centres. Inspecting and repairing internal steelwork, sprinkler systems, and lighting at height.'],
+          ['Utilities and Infrastructure', 'Working on overhead power lines (with specialist insulated models), telecoms masts, motorway signage, bridge structures, and street lighting installations.'],
+          ['Tree Surgery and Estate Maintenance', 'Accessing tall trees for pruning, reduction, and dead-wooding from a stable platform rather than a climbing harness. Maintaining estate buildings, church spires, and heritage structures.'],
+        ].map(([title, desc]) => (
+          <div key={title} className="rounded-xl border border-gray-100 bg-[#F8F9FC] px-4 py-3">
+            <p className="text-sm font-black text-gray-800">{title}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Types of Boom Lift Available for Hire</H2>
+      <DataTable
+        headers={['Type', 'Working Height', 'Outreach', 'Best For']}
+        rows={[
+          ['Electric articulated boom', '12–20 m', '6–10 m', 'Indoor industrial, warehouses, zero-emission zones'],
+          ['Diesel articulated boom', '12–28 m', '8–16 m', 'Construction sites, external building work, multi-level access'],
+          ['Diesel telescopic boom', '20–45+ m', '12–25 m', 'Maximum height, tall structures, tower blocks, bridges'],
+          ['Hybrid boom lift', '14–22 m', '7–12 m', 'Sites needing both indoor and outdoor capability'],
+          ['Rough terrain boom', '14–40 m', '10–22 m', 'Unprepared ground, muddy sites, slopes, outdoor events'],
+          ['Trailer boom (compact)', '10–18 m', '6–9 m', 'Residential, light commercial, tow-behind convenience'],
+        ]}
+      />
+      <div className="rounded-xl border border-gray-100 bg-white p-4">
+        <p className="font-extrabold text-gray-900">Articulated vs Telescopic — Which Do You Need?</p>
+        <Paragraph>
+          Articulated booms have a jointed arm that bends at one or more knuckle points, letting the platform go up, over, and down to reach behind obstacles like parapets, overhangs, or lower roof sections — the standard choice when the work area is not directly above the machine. Telescopic booms have a single straight arm for maximum height and distance in a straight line, ideal where the machine can be positioned with a clear path to the work. If you need to reach over a roof edge or around a building corner, go articulated. For pure height and distance, go telescopic.
+        </Paragraph>
+      </div>
+    </Section>
+
+    <img
+      src="/images/boom-lift-hire-comparison.webp"
+      alt="Telescopic boom lift at full extension accessing the upper floors of a high-rise construction site"
+      className="w-full max-h-80 rounded-2xl border border-gray-100 object-cover shadow-sm"
+    />
+
+    <Section>
+      <H2>How to Choose the Right Boom Lift</H2>
+      <div className="space-y-3">
+        {[
+          ['Working height', 'Measure the maximum point you need to reach. Add 2 metres to account for platform height and operator standing reach. That is your minimum working height spec. Always confirm with the hire supplier.'],
+          ['Outreach', "If the boom can't sit directly below the work area, horizontal outreach is critical. Check the outreach at the specific height you need, not just the maximum headline figure. Outreach decreases as height increases."],
+          ['Ground conditions', 'Wheeled diesel booms need firm, level ground (concrete, tarmac, compacted stone). Rough terrain models handle mud, slopes, and uneven surfaces. Electric models suit smooth indoor floors. Never operate on ground that has not been assessed for stability.'],
+          ['Indoor vs outdoor', 'Indoor work requires an electric or hybrid boom (zero emissions, low noise). Diesel models produce exhaust fumes and noise levels unsuitable for enclosed or occupied spaces.'],
+          ['Platform capacity', 'Standard boom lift baskets carry 200–280 kg (typically two people plus tools). If you are lifting heavier materials alongside the operator, check the rated platform capacity before booking.'],
+          ['Transport and setup', 'Larger boom lifts arrive on low-loaders and need adequate site access for off-loading. Check road width, gate clearances, overhead cables, and ground-bearing capacity for the delivery vehicle and the boom lift itself.'],
+        ].map(([label, detail]) => (
+          <div key={label} className="rounded-xl border border-gray-100 bg-white p-4">
+            <p className="font-extrabold text-gray-900">{label}</p>
+            <p className="mt-1 text-sm font-medium text-gray-500">{detail}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section>
+      <H2>IPAF Training and Operator Certification</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>What IPAF Category Do You Need?</H3>
+          <DataTable
+            headers={['IPAF Category', 'Machine Type']}
+            rows={[
+              ['3a', 'Static boom (trailer-mounted, outrigger-stabilised)'],
+              ['3b', 'Mobile boom (self-propelled articulated and telescopic)'],
+            ]}
+          />
+          <Paragraph>
+            Category 3b is required for all self-propelled boom lifts (the most commonly hired type). The course takes one day and includes theory, practical operation, and assessment.{' '}
+            <a href="https://www.ipaf.org/" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">IPAF PAL Cards</a>
+            {' '}are valid for five years. Most UK hire companies require a valid IPAF 3b PAL Card before releasing a boom lift for self-drive hire.
+          </Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Harness and Restraint</H3>
+          <Paragraph>A full body harness and short restraint lanyard are mandatory when operating any boom lift. The harness prevents the operator from being ejected from the basket during a jolt, collision, or ground-level impact. Some hire companies include harnesses; others hire them separately. Confirm before booking.</Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Safety, Regulations, and Compliance</H2>
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Work at Height Regulations 2005</H3>
+          <Paragraph>All boom lift operations must be planned, supervised, and carried out by competent persons. A site-specific risk assessment covering ground conditions, overhead hazards (power lines, structures), weather limits (wind speed), and rescue procedures is required before first use.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>PUWER 1998</H3>
+          <Paragraph>The boom lift must be suitable for its intended use, properly maintained, and used only by trained operators. Pre-use daily checks (controls, guardrails, emergency lowering, hydraulic hoses, tyres) are the operator's responsibility.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>LOLER 1998</H3>
+          <Paragraph>Every boom lift requires a current LOLER thorough examination certificate (valid for 6 months). The hire company supplies this, and it should be on the machine at delivery. Check the certificate serial number matches the machine.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Wind Speed Limits</H3>
+          <Paragraph>Most boom lifts have a maximum safe operating wind speed of 28 mph (45 km/h, approximately Beaufort Force 6). Above this, the platform must be lowered and the machine stowed. Operators must monitor conditions throughout the shift, especially at height where wind speeds are higher than at ground level.</Paragraph>
+        </div>
+        <div className="rounded-xl border border-gray-100 bg-white p-5">
+          <H3>Overhead Power Lines</H3>
+          <Paragraph>
+            Working near overhead power lines carries a risk of electrocution.{' '}
+            <a href="https://www.hse.gov.uk/pubns/gs6.htm" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-primary hover:underline">HSE guidance GS6</a>
+            {' '}sets exclusion zones around power lines. Contact the distribution network operator (DNO) before any boom lift work near overhead cables. Specialist insulated boom lifts are available for work on or near live lines, but these require additional operator training.
+          </Paragraph>
+        </div>
+      </div>
+    </Section>
+
+    <Section>
+      <H2>Delivery, Collection, and What's Included</H2>
+      <BulletList
+        items={[
+          "Delivery: Boom lifts arrive on a low-loader or flatbed. Large machines may need escort vehicles for road transport. Most depots offer same-day or next-day delivery.",
+          "Fuel/charge: Diesel booms are usually delivered with a full tank. Electric booms arrive charged; you'll need a 240V or 3-phase charging point on site for multi-day hires.",
+          "Harness: Check whether a full body harness and restraint lanyard are included or hired separately.",
+          "Induction: Suppliers should provide a machine handover covering controls, emergency lowering, rated capacity, and safe operating limits.",
+        ]}
+      />
+    </Section>
+
+    <Section>
+      <H2>Compare Boom Lift Hire Near You</H2>
+      <Paragraph>Tooli.uk compares boom lift hire from suppliers across the UK. Browse by city:</Paragraph>
+      <div className="flex flex-wrap gap-2">
+        {['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Edinburgh', 'Bristol', 'Liverpool', 'Sheffield', 'Cardiff', 'Newcastle', 'Nottingham', 'Leicester', 'Southampton', 'Brighton'].map((city) => (
+          <span key={city} className="rounded-full bg-[#F8F9FC] px-3 py-1.5 text-sm font-bold text-gray-700">{city}</span>
+        ))}
+      </div>
+      <div className="rounded-2xl border border-gray-100 bg-[#F8F9FC] p-6">
+        <Paragraph>
+          Enter your postcode on Tooli.uk to{' '}
+          <a href="/search" className="font-bold text-brand-primary hover:underline">compare prices now</a>
+          {' '}— articulated and telescopic boom lift hire from local depots and national suppliers, side by side.
+        </Paragraph>
+        <div className="mt-5">
+          <a
+            href="/search"
+            className="inline-flex h-12 items-center rounded-xl bg-brand-primary px-6 text-sm font-bold text-white shadow-lg shadow-orange-500/10 transition-colors hover:bg-brand-primary-hover"
+          >
+            Compare Prices Now
+          </a>
+        </div>
+      </div>
+    </Section>
+  </>
+);
+
 export const equipmentPages: EquipmentPageData[] = [
   {
     slug: 'excavator-hire-uk',
@@ -4431,6 +4654,29 @@ export const equipmentPages: EquipmentPageData[] = [
       { name: 'Cement Mixer Hire UK', path: '/equipment/cement-mixer-hire-comparison-uk' },
     ],
     content: miniDiggerContent,
+  },
+  {
+    slug: 'boom-lift-hire-comparison-uk',
+    name: 'Boom Lift Hire',
+    path: '/equipment/boom-lift-hire-comparison-uk',
+    metaTitle: 'Boom Lift Hire UK — Compare Local Rates (2026) | Tooli.uk',
+    metaDescription:
+      'Compare boom lift hire from UK suppliers. Articulated & telescopic, 12m to 45m+. IPAF-ready, self-drive or operated. Local quotes in seconds. Tooli.uk.',
+    canonicalUrl: 'https://www.tooli.uk/equipment/boom-lift-hire-comparison-uk',
+    title: 'Boom Lift Hire Comparison — Articulated & Telescopic Rates Across the UK',
+    description:
+      'Compare articulated and telescopic boom lift hire from local and national UK suppliers. 12m to 45m+ working height, diesel, electric, and hybrid models, by the day, week, or month.',
+    image: '/images/boom-lift-hire-comparison-uk.webp',
+    imageAlt: 'Diesel articulated boom lift being used for cladding installation on a UK commercial building',
+    faqs: boomLiftFaqs,
+    relatedEquipment: [
+      { name: 'Scissor Lift Hire UK', path: '/equipment/scissor-lift-hire-uk' },
+      { name: 'Cherry Picker Hire UK', path: '/equipment/cherry-picker-hire-uk' },
+      { name: 'Telehandler Hire UK', path: '/equipment/telehandler-hire-uk' },
+      { name: 'Forklift Hire UK', path: '/equipment/forklift-hire-comparison-uk' },
+      { name: 'Generator Hire UK', path: '/equipment/generator-hire-uk' },
+    ],
+    content: boomLiftContent,
   },
 ];
 
