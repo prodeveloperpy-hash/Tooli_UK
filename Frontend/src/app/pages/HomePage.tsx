@@ -577,7 +577,7 @@ export function HomePage() {
               <span className="text-[#e87525]">Plant &amp; Tool Hire Comparison</span> | Find the Best Rates Across the UK
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-white/90 mb-8 md:mb-10 max-w-2xl font-medium leading-relaxed">
-              Tooli.uk is a UK plant and tool hire comparison platform. Find the cheapest rates on everything from mini diggers to scaffold towers, plate compactors to access platforms. Enter your location, select equipment, and compare real-time prices from local and national suppliers including HSS, Speedy, Brandon, Smiths and independent depots. Comparison is free and no account required. Prices shown include VAT.
+              Compare local plant hire suppliers, check availability, and get equipment delivered fast
             </p>
 
             <SearchWidget showBadges={false} />
@@ -767,6 +767,9 @@ export function HomePage() {
             <div>
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#030213] mb-5">Best Tool Hire Company UK - National Chains vs Local Depots</h2>
               <p className="text-gray-500 font-medium leading-relaxed mb-4">
+                Tooli.uk is a UK plant and tool hire comparison platform. Find the cheapest rates on everything from mini diggers to scaffold towers, plate compactors to access platforms. Enter your location, select equipment, and compare real-time prices from local and national suppliers including HSS, Speedy, Brandon, Smiths and independent depots. Comparison is free and no account required. Prices shown exclude VAT.
+              </p>
+              <p className="text-gray-500 font-medium leading-relaxed mb-4">
                 There is no single best tool hire company for every job, location, and budget. National chains offer broad coverage and standard processes. Independent depots often undercut national chains by 10 to 20% on standard equipment.
               </p>
               <p className="text-gray-500 font-medium leading-relaxed">
@@ -776,9 +779,6 @@ export function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Blog Slider */}
-      <BlogSlider />
 
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
@@ -793,6 +793,9 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Blog Slider */}
+      <BlogSlider />
     </div>
   );
 }
