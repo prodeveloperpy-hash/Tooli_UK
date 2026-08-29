@@ -252,6 +252,17 @@ export function Navbar() {
                 </div>
               )}
 
+              {!user && (
+                <div className="flex flex-col gap-0.5 mb-2 pb-2 border-b border-gray-100">
+                  <Link to="/signup" className="text-sm font-bold px-3 py-1.5 hover:bg-gray-50 rounded-lg" onClick={() => setMobileMenuOpen(false)}>
+                    List Your Equipment
+                  </Link>
+                  <Link to="/login" className="text-sm font-bold px-3 py-1.5 text-brand-primary hover:bg-brand-primary/5 rounded-lg" onClick={() => setMobileMenuOpen(false)}>
+                    Log in
+                  </Link>
+                </div>
+              )}
+
               <Link to="/" className="text-sm font-bold px-3 py-1.5 hover:bg-gray-50 rounded-lg flex items-center" onClick={() => setMobileMenuOpen(false)}>
                 Home
               </Link>
@@ -299,7 +310,7 @@ export function Navbar() {
               
               <div className="h-px bg-gray-100 my-1 mx-3" />
               
-              {user ? (
+              {user && (
                 <>
                   <Link to="/dashboard" className="text-sm font-bold px-3 py-1.5 flex items-center gap-2.5 hover:bg-gray-50 rounded-lg" onClick={() => setMobileMenuOpen(false)}>
                     <LayoutDashboard className="w-4 h-4 text-gray-500" />
@@ -319,15 +330,6 @@ export function Navbar() {
                     <LogOut className="w-4 h-4" />
                     Logout
                   </button>
-                </>
-              ) : (
-                <>
-                  <Link to="/signup" className="text-sm font-bold px-3 py-1.5 hover:bg-gray-50 rounded-lg" onClick={() => setMobileMenuOpen(false)}>
-                    List Your Equipment
-                  </Link>
-                  <Link to="/login" className="text-sm font-bold px-3 py-1.5 text-brand-primary hover:bg-brand-primary/5 rounded-lg" onClick={() => setMobileMenuOpen(false)}>
-                    Log in
-                  </Link>
                 </>
               )}
             </div>
