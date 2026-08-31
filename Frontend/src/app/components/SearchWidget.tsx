@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Calendar } from './ui/calendar';
 import { SearchableSelect } from './ui/searchable-select';
 import { equipmentApi, Category, Location } from '../../context/equipment.api';
+import { pushDataLayerEvent } from '../utils/analytics';
 
 const BADGES = ['Free to search', 'Local and national suppliers', 'No account needed'];
 
@@ -58,6 +59,15 @@ export function SearchWidget({ showBadges = true }: { showBadges?: boolean }) {
       return;
     }
     setShowValidationErrors(false);
+    const category = categories.find(item => item.category_id.toString() === searchData.categoryId);
+    const location = locations.find(item => item.location_id.toString() === searchData.locationId);
+    pushDataLayerEvent('equipment_search', {
+      equipment_category: category?.category_display_name || searchData.categoryId,
+      location: location ? `${location.city_name}, ${location.country}` : searchData.locationId,
+      hire_period: dateRange?.from
+        ? `${format(dateRange.from, 'yyyy-MM-dd')} to ${format(dateRange.to || dateRange.from, 'yyyy-MM-dd')}`
+        : 'not_selected',
+    });
     const params = new URLSearchParams();
     if (searchData.categoryId) params.append('category', searchData.categoryId);
     if (searchData.locationId) params.append('location', searchData.locationId);

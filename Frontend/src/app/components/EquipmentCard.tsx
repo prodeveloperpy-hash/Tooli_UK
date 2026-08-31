@@ -7,6 +7,7 @@ import { equipmentApi, Equipment } from '../../context/equipment.api';
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { pushDataLayerEvent } from '../utils/analytics';
 
 interface EquipmentCardProps {
   equipment: Equipment;
@@ -39,6 +40,29 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
   }, [isDetailOpen, equipment.equipment_id, detailedEquipment]);
   
   const displayPrice = primaryPrice?.price || '0.00';
+
+  const handleViewDeal = (selectedEquipment: Equipment = equipment) => {
+    const url = selectedEquipment.redirect_url;
+    if (!url) return;
+
+    const selectedLocation = searchedLocationId
+      ? selectedEquipment.locations?.find(location => location.location_id.toString() === searchedLocationId)
+      : selectedEquipment.locations?.[0];
+    const price = selectedEquipment.prices?.[0];
+
+    pushDataLayerEvent('view_deal', {
+      supplier_name: selectedEquipment.organization_name || 'Tooli Supplier',
+      equipment_name: selectedEquipment.name,
+      equipment_category: selectedEquipment.category_display_name || 'Equipment',
+      location: selectedLocation ? `${selectedLocation.city_name}, ${selectedLocation.country}` : 'United Kingdom',
+      hire_price: Number(price?.price || 0),
+      hire_period: 'week',
+      currency: price?.currency || 'GBP',
+      supplier_destination_url: url,
+    });
+
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
 
   const renderLocationInfo = () => {
     const locs = equipment.locations || [];
@@ -193,8 +217,7 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                   <Button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      const url = (detailedEquipment || equipment).redirect_url;
-                      if (url) window.open(url, '_blank');
+                      handleViewDeal(detailedEquipment || equipment);
                     }}
                     disabled={!(detailedEquipment || equipment).redirect_url}
                     className="w-full h-14 lg:h-16 bg-brand-primary hover:bg-brand-primary-hover text-white font-black text-lg rounded-2xl shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none"
@@ -279,7 +302,7 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                   <Button 
                     onClick={(e) => { 
                       e.stopPropagation(); 
-                      equipment.redirect_url && window.open(equipment.redirect_url, '_blank'); 
+                      handleViewDeal();
                     }}
                     disabled={!equipment.redirect_url}
                     size="sm"
@@ -339,7 +362,7 @@ export function EquipmentCard({ equipment, view = 'grid', searchedLocationId }: 
                   </div>
                 </div>
                 <Button 
-                  onClick={(e) => { e.stopPropagation(); equipment.redirect_url && window.open(equipment.redirect_url, '_blank'); }}
+                  onClick={(e) => { e.stopPropagation(); handleViewDeal(); }}
                   disabled={!equipment.redirect_url}
                   className="w-full bg-brand-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:cursor-not-allowed"
                 >

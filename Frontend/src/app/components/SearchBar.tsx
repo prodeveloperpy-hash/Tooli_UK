@@ -8,6 +8,7 @@ import { Search, Calendar as CalendarIcon, MapPin } from 'lucide-react';
 import { format, parse } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { equipmentApi, Category, Location } from '../../context/equipment.api';
+import { pushDataLayerEvent } from '../utils/analytics';
 
 interface SearchBarProps {
   className?: string;
@@ -73,6 +74,15 @@ export function SearchBar({ className = '', onSearch }: SearchBarProps) {
       return;
     }
     setShowValidationErrors(false);
+    const category = categories.find(item => item.category_id.toString() === categoryId);
+    const location = locations.find(item => item.location_id.toString() === locationId);
+    pushDataLayerEvent('equipment_search', {
+      equipment_category: category?.category_display_name || categoryId,
+      location: location ? `${location.city_name}, ${location.country}` : locationId,
+      hire_period: dateRange?.from
+        ? `${format(dateRange.from, 'yyyy-MM-dd')} to ${format(dateRange.to || dateRange.from, 'yyyy-MM-dd')}`
+        : 'not_selected',
+    });
     onSearch?.();
     updateURL(categoryId, locationId, dateRange);
   };
